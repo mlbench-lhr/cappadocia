@@ -364,7 +364,7 @@ export default function DreamsAndGoals() {
               key={opt}
               role="button"
               tabIndex={0}
-              className="cursor-pointer px-[12px] py-[8px] rounded-[8px] flex items-center gap-1 bg-[#5AD2A6]"
+              className="cursor-pointer px-[12px] py-[8px] rounded-[8px] flex items-center gap-1 bg-[#B32053]"
             >
               {opt}
               <X
@@ -602,7 +602,7 @@ export default function DreamsAndGoals() {
               key={opt}
               role="button"
               tabIndex={0}
-              className="cursor-pointer px-[12px] py-[8px] rounded-[8px] flex items-center gap-1 bg-[#5AD2A6]"
+              className="cursor-pointer px-[12px] py-[8px] rounded-[8px] flex items-center gap-1 bg-[#B32053]"
             >
               {opt}
               <X
@@ -688,7 +688,7 @@ export default function DreamsAndGoals() {
           {values.map((val) => (
             <div
               key={val}
-              className="px-[12px] py-[6px] rounded-[8px] flex items-center gap-[6px] bg-[#5ad2a6] font-[500]"
+              className="px-[12px] py-[6px] rounded-[8px] flex items-center gap-[6px] bg-[#B32053] font-[500]"
             >
               <span>{val}</span>
               <X

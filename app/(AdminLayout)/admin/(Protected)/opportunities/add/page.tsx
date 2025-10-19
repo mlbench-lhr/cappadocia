@@ -362,7 +362,7 @@ export default function AddOpp() {
                 {formData.majors.map((major) => (
                   <span
                     key={major}
-                    className="bg-[#5AD2A6] text-[#00583F] px-3 py-1 rounded-xl text-sm flex items-center gap-2"
+                    className="bg-[#B32053] text-[white] px-3 py-1 rounded-xl text-sm flex items-center gap-2"
                   >
                     {major}
                     <button

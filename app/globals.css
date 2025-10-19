@@ -140,9 +140,9 @@
 }
 
 .primary-button {
-  color: #00583f;
+  color: white;
   text-align: center;
-  background-color: #5ad2a6;
+  background-color: #b32053;
   height: 46px;
   font-size: 16px;
   font-style: normal;
@@ -151,7 +151,7 @@
   letter-spacing: 0.08px;
   cursor: pointer;
   border-radius: 8px;
-  background: var(--Schemes-Primary-Container, #5ad2a6);
+  background: var(--Schemes-Primary-Container, #b32053);
 }
 
 .green-secondary-button {
@@ -164,8 +164,8 @@
   gap: var(--Components-Button-Gap-Between, 10px);
   cursor: pointer;
   border-radius: 8px;
-  border: 1px solid var(--Schemes-Primary-Container, #5ad2a6);
-  color: var(--Schemes-Primary-Container, #5ad2a6);
+  border: 1px solid var(--Schemes-Primary-Container, #b32053);
+  color: var(--Schemes-Primary-Container, #b32053);
   text-align: center;
   font-size: 16px;
   font-style: normal;
@@ -381,7 +381,7 @@ body {
   border-radius: 8px;
   border: 6px solid var(--Schemes-Surface-Container-Lowest, #fff);
   background: linear-gradient(180deg, rgba(189, 237, 219, 0) 0%, #bdeddb 100%),
-    linear-gradient(180deg, #5ad2a6 0%, rgba(90, 210, 166, 0) 100%);
+    linear-gradient(180deg, #b32053 0%, rgba(90, 210, 166, 0) 100%);
   background-blend-mode: normal, normal;
 }
 .rounded-icon {
@@ -551,8 +551,8 @@ button {
   align-items: center;
   gap: var(--Utilities-Spacing-2, 8px);
   border-radius: var(--Components-Button-Border-Radius, 8px);
-  background: var(--Schemes-Primary-Container, #5ad2a6);
-  color: var(--Schemes-On-Primary-Container, #00583f);
+  background: var(--Schemes-Primary-Container, #b32053);
+  color: var(--Schemes-On-Primary-Container, white);
   text-align: center;
 
   /* material-theme/label/large */
@@ -805,7 +805,7 @@ button {
 }
 
 .fc .fc-day-today .fc-daygrid-day-number {
-  background-color: #5ad2a6 !important;
+  background-color: #b32053 !important;
 }
 .fc-event.event-4DB6AC {
   background-color: rgba(77, 182, 172, 0.5) !important;
@@ -899,15 +899,15 @@ button {
   }
 }
 .swal2-confirm {
-  background-color: #5ad2a6 !important;
+  background-color: #b32053 !important;
   color: black;
   border-radius: 8px;
 }
 
 .swal2-cancel {
-  border: 2px solid #5ad2a6;
+  border: 2px solid #b32053;
   background-color: transparent !important;
-  color: #5ad2a6;
+  color: #b32053;
   border-radius: 8px;
 }
 .cursor-not-allowedImp {

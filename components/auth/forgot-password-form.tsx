@@ -39,7 +39,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
         icon: "error",
         title: "Error",
         text: error,
-        confirmButtonColor: "#5ad2a6",
+        confirmButtonColor: "#B32053",
       });
     }
   }, [error]);
@@ -70,7 +70,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           icon: "success",
           title: "OTP Sent",
           text: "OTP sent to your email!",
-          confirmButtonColor: "#5ad2a6",
+          confirmButtonColor: "#B32053",
         });
       }
     } catch {
@@ -96,7 +96,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           icon: "success",
           title: "OTP Resent",
           text: "OTP resent to your email!",
-          confirmButtonColor: "#5ad2a6",
+          confirmButtonColor: "#B32053",
         });
       }
     } catch {
@@ -132,7 +132,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           icon: "success",
           title: "OTP Verified",
           text: "OTP verified successfully!",
-          confirmButtonColor: "#5ad2a6",
+          confirmButtonColor: "#B32053",
         });
       } else {
         setError(data.error || "Invalid OTP. Please try again.");
@@ -177,7 +177,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           icon: "success",
           title: "Password Reset",
           text: "Your password has been reset successfully!",
-          confirmButtonColor: "#5ad2a6",
+          confirmButtonColor: "#B32053",
         });
       }
     } catch {

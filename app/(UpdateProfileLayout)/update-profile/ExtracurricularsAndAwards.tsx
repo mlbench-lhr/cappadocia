@@ -334,7 +334,7 @@ export default function ExtracurricularsAndAwards() {
       text: "You won’t be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#5AD2A6",
+      confirmButtonColor: "#B32053",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
@@ -359,7 +359,7 @@ export default function ExtracurricularsAndAwards() {
       text: "This activity will be removed!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#5AD2A6",
+      confirmButtonColor: "#B32053",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
@@ -486,7 +486,7 @@ export default function ExtracurricularsAndAwards() {
                           {field.gradeLevel.map((item) => (
                             <div
                               key={item}
-                              className="font-[500] text-[14px] p-[8px] bg-[#5AD2A6] w-fit rounded-[8px]"
+                              className="font-[500] text-[14px] p-[8px] bg-[#B32053] w-fit rounded-[8px]"
                             >
                               Grade {item}
                             </div>
@@ -572,7 +572,7 @@ export default function ExtracurricularsAndAwards() {
                           {field.grade.map((item) => (
                             <div
                               key={item}
-                              className="font-[500] text-[14px] p-[8px] bg-[#5AD2A6] w-fit rounded-[8px]"
+                              className="font-[500] text-[14px] p-[8px] bg-[#B32053] w-fit rounded-[8px]"
                             >
                               Grade {item}
                             </div>
@@ -672,7 +672,7 @@ export default function ExtracurricularsAndAwards() {
                           }}
                           className={`cursor-pointer px-[12px] py-[8px] rounded-[8px] transition-colors label-style ${
                             isSelected
-                              ? "bg-[#5AD2A6] text-white"
+                              ? "bg-[#B32053] text-white"
                               : "bg-[#F5FBF5] text-black"
                           }`}
                         >
@@ -879,7 +879,7 @@ export default function ExtracurricularsAndAwards() {
                         }}
                         className={`cursor-pointer px-[12px] py-[8px] rounded-[8px] transition-colors label-style ${
                           isSelected
-                            ? "bg-[#5AD2A6] text-white"
+                            ? "bg-[#B32053] text-white"
                             : "bg-[#F5FBF5] text-black"
                         }`}
                       >
@@ -917,7 +917,7 @@ export default function ExtracurricularsAndAwards() {
                           }
                           className={`cursor-pointer px-[12px] py-[8px] rounded-[8px] transition-colors label-style ${
                             selected
-                              ? "bg-[#5AD2A6] text-white"
+                              ? "bg-[#B32053] text-white"
                               : "bg-[#F5FBF5] text-black"
                           }`}
                         >

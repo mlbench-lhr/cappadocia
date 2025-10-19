@@ -26,7 +26,7 @@ const chartConfig = {
   },
   Completed: {
     label: "Completed",
-    color: "#5AD2A6",
+    color: "#B32053",
   },
   "Over Due": {
     label: "Over Due",
@@ -48,7 +48,7 @@ export function ChartPieDonutText() {
       {
         milestone: "Completed",
         visitors: Number(overview.milestoneOverview.completed) || 0,
-        fill: "#5AD2A6",
+        fill: "#B32053",
       },
       {
         milestone: "Over Due",
@@ -128,7 +128,7 @@ export function ChartPieDonutText() {
                           <tspan
                             x={cx}
                             y={cy - 5}
-                            className="fill-[#5AD2A6] text-[28px] font-[600]"
+                            className="fill-[#B32053] text-[28px] font-[600]"
                           >
                             {totalVisitors.toLocaleString()}
                           </tspan>
@@ -161,7 +161,7 @@ export function ChartPieDonutText() {
         <div className="flex items-center gap-1">
           <span
             className="inline-block w-3 h-3 rounded-full"
-            style={{ backgroundColor: "#5AD2A6" }}
+            style={{ backgroundColor: "#B32053" }}
           />
           Completed : {Number(overview.milestoneOverview.completed)}%
         </div>

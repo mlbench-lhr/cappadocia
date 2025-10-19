@@ -22,7 +22,7 @@ export default function MileStoneDateDialog({
 }) {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [refreshToken, setRefreshToken] = useState<boolean>(true);
-  
+
   const handleSubmit = async () => {
     try {
       const res = await fetch(`/api/milestones/${id}`, {
@@ -73,14 +73,14 @@ export default function MileStoneDateDialog({
           <div className="w-full flex justify-between items-center text-[14px] font-[500] mt-[16px] border-b-4 border-[#F5FBF5]">
             <div
               className={`w-[49.5%] flex justify-center items-center pb-[8px] ${
-                refreshToken ? "border-b-4 border-[#5AD2A6]" : ""
+                refreshToken ? "border-b-4 border-[#B32053]" : ""
               }`}
             >
               Refresh Date
             </div>
             <div
               className={`w-[49.5%] flex justify-center items-center pb-[8px] ${
-                !refreshToken ? "border-b-4 border-[#5AD2A6]" : ""
+                !refreshToken ? "border-b-4 border-[#B32053]" : ""
               }`}
             >
               Enter Due Date

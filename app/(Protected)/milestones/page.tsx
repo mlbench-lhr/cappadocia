@@ -209,7 +209,7 @@ export default function MilestonesPage() {
           <div className="w-full h-[20px] flex justify-start gap-[16px] items-center">
             <div className="w-full h-[10px] flex justify-start items-center bg-[#D8E6DD] rounded-[100px]">
               <div
-                className={`h-[10px] flex justify-start gap-[8px] items-center bg-[#5AD2A6] rounded-[100px]`}
+                className={`h-[10px] flex justify-start gap-[8px] items-center bg-[#B32053] rounded-[100px]`}
                 style={{ width: `${progress?.progressPercent}%` }}
               ></div>
             </div>

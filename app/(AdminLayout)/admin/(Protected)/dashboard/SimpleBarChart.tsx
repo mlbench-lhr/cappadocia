@@ -106,7 +106,7 @@ export const SimpleBarChart = ({
             >
               <div className="w-6 flex flex-col items-center">
                 <div
-                  className={`w-full rounded-t-md ${"bg-[#5AD2A6]"}`}
+                  className={`w-full rounded-t-md ${"bg-[#B32053]"}`}
                   style={{
                     height: `${getBarHeight(item.value)}px`,
                     transition: "height 0.3s ease",

@@ -28,7 +28,7 @@ export default function MilestoneChat() {
   const userId = useAppSelector((s) => s.auth.user?.id);
 
   const handleSubmit = async (msgP: string) => {
-    setMsg("")
+    setMsg("");
     if (!msgP.trim()) return;
     setChat((prev) => [...prev, { type: "user", message: msgP }]);
     setChat((prev) => [
@@ -144,7 +144,7 @@ export default function MilestoneChat() {
                 handleSubmit(msg);
               }}
               disabled={loading || milestoneLoading}
-              className="hover:bg-[#5AD2A6] z-[1] text-black w-[32px] h-[32px] rounded-full bg-[#5AD2A6] flex items-center justify-center me-3"
+              className="hover:bg-[#B32053] z-[1] text-black w-[32px] h-[32px] rounded-full bg-[#B32053] flex items-center justify-center me-3"
             >
               <Send size={16} />
             </Button>

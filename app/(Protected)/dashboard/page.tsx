@@ -121,7 +121,7 @@ export default function DashboardPage() {
               <div className="w-full lg:w-fit h-[20px] flex justify-start gap-[16px] items-center">
                 <div className="w-full lg:w-[500px] h-[10px] flex justify-start items-center bg-[#D8E6DD] rounded-[100px]">
                   <div
-                    className={`h-[10px] flex justify-start gap-[8px] items-center bg-[#5AD2A6] rounded-[100px]`}
+                    className={`h-[10px] flex justify-start gap-[8px] items-center bg-[#B32053] rounded-[100px]`}
                     style={{ width: `${tilesData?.progressPercent}%` }}
                   ></div>
                 </div>

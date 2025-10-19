@@ -145,9 +145,9 @@ export function TestimonialSection() {
             className="flex transition-transform duration-300 ease-in-out"
             style={{
               transform: `translateX(-${
-                                    isClient && window.innerWidth < 1024?
-                currentPage * (100 / (cardsPerPage + 0.1)):
-                currentPage * (100 / (cardsPerPage - 0.05))
+                isClient && window.innerWidth < 1024
+                  ? currentPage * (100 / (cardsPerPage + 0.1))
+                  : currentPage * (100 / (cardsPerPage - 0.05))
               }%)`,
             }}
           >
@@ -180,7 +180,7 @@ export function TestimonialSection() {
         <div className="flex justify-between items-center mt-8 gap-6 w-full">
           <button
             onClick={prevPage}
-            className="flex justify-center items-center rounded-full transition-colors cursor-pointer text-[#006C4F] border-[1px] border-[#00583f] w-[24px] h-[24px] md:w-[32px] md:h-[32px]"
+            className="flex justify-center items-center rounded-full transition-colors cursor-pointer text-[#006C4F] border-[1px] border-[white] w-[24px] h-[24px] md:w-[32px] md:h-[32px]"
             aria-label="Previous testimonials"
           >
             <ArrowLeft size={20} />
@@ -204,7 +204,7 @@ export function TestimonialSection() {
             className={`flex justify-center items-center rounded-full transition-colors cursor-pointer border-[1px] w-[24px] h-[24px] md:w-[32px] md:h-[32px] rotate-180 ${
               currentPage === totalPages - 1
                 ? "bg-[#006C4F] text-white border-green-600"
-                : "border-[#00583f] text-[#006C4F]"
+                : "border-[white] text-[#006C4F]"
             }`}
             aria-label="Next testimonials"
           >
