@@ -40,9 +40,11 @@ export default function app() {
             className="h-[45px] w-[350px] bg-white text-center"
             style={{ borderColor: "white" }}
           />
-          <Button className="" variant={"main_green_button"}>
-            Get Connected
-          </Button>
+          <Link href={"/blogs"}>
+            <Button className="" variant={"main_green_button"}>
+              Get Connected
+            </Button>
+          </Link>
         </div>
         <Link href={"/blogs"}>
           <Button className="mt-6" variant={"main_green_button"}>
