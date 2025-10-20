@@ -15,7 +15,7 @@ export default function app() {
           className="w-auto h-[110px]"
         />
         <Image
-          src={"/Baloon.png"}
+          src={"/baloon.png"}
           width={200}
           height={72}
           alt="Logo"
