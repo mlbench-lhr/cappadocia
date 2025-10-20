@@ -337,7 +337,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
               <button
                 onClick={handleResendOtp}
                 disabled={resendTimer > 0 || resendLoading}
-                className="text-[#006C4F] font-[500] hover:underline"
+                className="text-[#B32053] font-[500] hover:underline"
               >
                 {resendLoading
                   ? "Sending..."

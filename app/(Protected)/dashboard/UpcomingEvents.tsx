@@ -126,7 +126,7 @@ export default function UpcomingEvents() {
                       className="w-full flex flex-col md:flex-row justify-between items-start md:items-center gap-[16px] py-[16px] border-b box-border-color last:border-b-0"
                     >
                       <div className="w-fit flex justify-start items-center md:items-start gap-[16px]">
-                        <div className="w-[12px] h-[12px] bg-[#006C4F] rounded-full mt-0 md:mt-2"></div>
+                        <div className="w-[12px] h-[12px] bg-[#B32053] rounded-full mt-0 md:mt-2"></div>
                         <div className="w-fit flex flex-col justify-start items-start gap-[4px]">
                           <div className="heading-text-style-5">
                             {item.category}: {item.title}

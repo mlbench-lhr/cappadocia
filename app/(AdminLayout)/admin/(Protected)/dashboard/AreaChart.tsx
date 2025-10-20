@@ -3,11 +3,7 @@
 import { Dot } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
@@ -34,11 +30,13 @@ export function ChartAreaGradient() {
   return (
     <Card className="border-none shadow-none p-0">
       <CardHeader className="p-0 flex justify-start leading-[0px] items-center gap-[16px] flex-wrap">
-        <span className="text-[16px] md:text-[20px] font-[500]">Total Users</span>
+        <span className="text-[16px] md:text-[20px] font-[500]">
+          Total Users
+        </span>
         <span className="text-[14px] font-[500]">Total Milestones</span>
         <span className="text-[14px] font-[500] text-[#D5DCD6]">|</span>
         <div className="p-0 flex justify-start leading-[0px] items-center gap-[7px]">
-          <Dot color="" className="w-[6px] h-[6px] bg-[#006C4F] rounded-full" />
+          <Dot color="" className="w-[6px] h-[6px] bg-[#B32053] rounded-full" />
           <span className="text-[12px] font-[500]">Total Users</span>
         </div>
         <div className="p-0 flex justify-start leading-[0px] items-center gap-[7px]">

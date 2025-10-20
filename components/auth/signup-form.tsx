@@ -85,7 +85,7 @@ export function SignupForm() {
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+        confirmButtonColor: "#22c55e", // match shadcn green if you want
       });
     }
   }, [error]);
@@ -290,7 +290,7 @@ export function SignupForm() {
           Already have an account?{" "}
           <Link
             href="/auth/login"
-            className="text-[#006C4F] font-[500] hover:underline"
+            className="text-[#B32053] font-[500] hover:underline"
           >
             Login
           </Link>

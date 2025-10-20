@@ -175,7 +175,7 @@ const StatCard: React.FC<StatCardProps> = ({
       </div>
 
       <div className="flex flex-col justify-center gap-[50px] items-end w-fit">
-        {trendColorVar === "#006C4F" ? (
+        {trendColorVar === "#B32053" ? (
           <Image
             src={greenGraphLine}
             width={80}
@@ -334,50 +334,50 @@ const Dashboard: React.FC = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <StatCard
-            icon={<Users color="#006C4F" />}
+            icon={<Users color="#B32053" />}
             title="Total Users"
             value={overview?.sinceLastMonth?.users?.total}
             trend={overview?.sinceLastMonth?.users?.percent}
             trendColorVar={
-              overview.sinceLastMonth.users.increased ? "#006C4F" : "#BA1A1A"
+              overview.sinceLastMonth.users.increased ? "#B32053" : "#BA1A1A"
             }
             lineColorVar={
-              overview.sinceLastMonth.users.increased ? "#006C4F" : "#BA1A1A"
+              overview.sinceLastMonth.users.increased ? "#B32053" : "#BA1A1A"
             }
             points={[3]}
             isLoading={loading}
           />
           <StatCard
-            icon={<Sprout color="#006C4F" />}
+            icon={<Sprout color="#B32053" />}
             title="Total Opportunities"
             value={overview?.sinceLastMonth?.opportunities?.total}
             trend={overview?.sinceLastMonth?.opportunities?.percent}
             trendColorVar={
               overview.sinceLastMonth.opportunities.increased
-                ? "#006C4F"
+                ? "#B32053"
                 : "#BA1A1A"
             }
             lineColorVar={
               overview.sinceLastMonth.opportunities.increased
-                ? "#006C4F"
+                ? "#B32053"
                 : "#BA1A1A"
             }
             points={[3]}
             isLoading={loading}
           />
           <StatCard
-            icon={<Trophy color="#006C4F" />}
+            icon={<Trophy color="#B32053" />}
             title="Completed Milestones"
             value={overview?.sinceLastMonth?.milestones?.total}
             trend={overview?.sinceLastMonth?.milestones?.percent}
             trendColorVar={
               overview.sinceLastMonth.milestones.increased
-                ? "#006C4F"
+                ? "#B32053"
                 : "#BA1A1A"
             }
             lineColorVar={
               overview.sinceLastMonth.milestones.increased
-                ? "#006C4F"
+                ? "#B32053"
                 : "#BA1A1A"
             }
             points={[3]}

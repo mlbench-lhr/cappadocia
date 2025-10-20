@@ -30,7 +30,9 @@ export default function app() {
                   width={36}
                   height={36}
                   alt=""
-                  src={"/blogs/blog hero.png"}
+                  src={
+                    "/blogs imgs/source/ben-den-engelsen-7TU5JJAwPyU-unsplash1.jpg"
+                  }
                   className="w-[25px] h-[25px] md:w-[36px] md:h-[36px] rounded-full overflow-hidden object-cover"
                 />
                 <h3 className="text-[12px] md:text-[16px] text-[#97989F] font-[500]">
@@ -48,7 +50,7 @@ export default function app() {
               height={600}
               alt=""
               src={
-                "/blogs/Capapdocia_img/source/8861f38d3fffbc5030644caaea473452e354175b.jpg"
+                "/blogs imgs/source/8861f38d3fffbc5030644caaea473452e354175b.jpg"
               }
               className="w-full h-auto md:h-[465px] rounded-[12px] overflow-hidden object-cover"
             />
@@ -134,7 +136,7 @@ export default function app() {
             height={600}
             alt=""
             src={
-              "/blogs/Capapdocia_img/source/0f03870af943da8d5ccab1d4966d4c629d2c1895.jpg"
+              "/blogs imgs/source/0f03870af943da8d5ccab1d4966d4c629d2c1895.jpg"
             }
             className="w-full h-auto md:h-[465px] rounded-[12px] overflow-hidden object-cover"
           />

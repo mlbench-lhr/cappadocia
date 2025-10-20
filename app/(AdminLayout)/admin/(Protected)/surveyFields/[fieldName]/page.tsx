@@ -153,7 +153,7 @@ export default function FieldEntriesPage() {
           </Button>
           <Button
             size="icon"
-            className="w-fit h-fit bg-[#006C4F] p-[5px] rounded-[4px]"
+            className="w-fit h-fit bg-[#B32053] p-[5px] rounded-[4px]"
             onClick={() => {
               setEditMode(true);
               setCurrentEntry(item);

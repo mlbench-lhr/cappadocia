@@ -99,7 +99,7 @@ export default function AllMilestones() {
       render: (item) => (
         <Link
           href={`/admin/milestones/detail/${item.id}`}
-          className="text-[#006C4F] underline"
+          className="text-[#B32053] underline"
         >
           View Details
         </Link>

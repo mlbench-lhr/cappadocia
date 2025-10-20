@@ -35,10 +35,10 @@ const columns: Column[] = [
     header: "Action",
     accessor: "role",
     render: (item) => (
-      <div className="bg-[#006C4F] w-fit h-fit p-[5px] rounded-[4px]">
+      <div className="bg-[#B32053] w-fit h-fit p-[5px] rounded-[4px]">
         <Link
           href={`/admin/surveyFields/${item.name}`}
-          className="bg-[#006C4F] w-fit h-fit"
+          className="bg-[#B32053] w-fit h-fit"
         >
           <PencilLine color="white" size={12} />
         </Link>

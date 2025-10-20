@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import logo from "@/public/logo.svg";
 import { usePathname } from "next/navigation";
-import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
-import { Menu, X } from "lucide-react"; // Ensure you have Lucide icons installed
+import { Menu } from "lucide-react";
+import Image from "next/image";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -15,25 +15,48 @@ export function Navigation() {
   const navLinks = (
     <>
       <Link
-        href="/"
-        className={pathname === "/" ? "text-[#006c4f] font-[500]" : ""}
+        href="/blogs"
+        className={
+          pathname === "/blogs"
+            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
+            : "text-[16px] font-[500]"
+        }
         onClick={() => setIsMobileMenuOpen(false)}
       >
         Home
       </Link>
       <Link
         href="/About"
-        className={pathname === "/About" ? "text-[#006c4f] font-[500]" : ""}
+        className={
+          pathname === "/About"
+            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
+            : "text-[16px] font-[500]"
+        }
         onClick={() => setIsMobileMenuOpen(false)}
       >
-        About
+        About Us
+      </Link>
+      <Link
+        href="/ToursAndActivities"
+        className={
+          pathname === "/ToursAndActivities"
+            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
+            : "text-[16px] font-[500]"
+        }
+        onClick={() => setIsMobileMenuOpen(false)}
+      >
+        Tours & Activities
       </Link>
       <Link
         href="/Contact"
-        className={pathname === "/Contact" ? "text-[#006c4f] font-[500]" : ""}
+        className={
+          pathname === "/Contact"
+            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
+            : "text-[16px] font-[500]"
+        }
         onClick={() => setIsMobileMenuOpen(false)}
       >
-        Contact Us
+        Contact
       </Link>
     </>
   );
@@ -45,29 +68,41 @@ export function Navigation() {
     >
       <div className="flex justify-between items-center w-full">
         {/* Logo */}
-        <Link href="/" className="flex items-center space-x-2">
-          <img src={logo.src} alt="Logo" />
-        </Link>
+
+        <div className="flex items-center justify-start gap-3">
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="focus:outline-none cursor-pointer"
+            >
+              {<Menu size={28} />}
+            </button>
+          </div>
+          <Link href="/" className="flex items-center space-x-2">
+            <Image
+              width={200}
+              height={72}
+              src={logo.src}
+              alt="Logo"
+              className="w-[130px] h-[50px] md:w-[200px] md:h-[72px]"
+            />
+          </Link>
+        </div>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex gap-[48px] items-center">{navLinks}</div>
+        <div className="flex justify-end items-center gap-0 md:gap-6 lg:gap-[100px]">
+          <div className="hidden md:flex gap-6 lg:gap-[48px] items-center">
+            {navLinks}
+          </div>
 
-        {/* Desktop Button */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Button asChild variant={"main_green_button"}>
-            <Link href="/dashboard">Get Started</Link>
-          </Button>
+          {/* Desktop Button */}
+          <div className="flex items-center space-x-4">
+            <Button asChild variant={"main_green_button"}>
+              <Link href="/dashboard">Login Now</Link>
+            </Button>
+          </div>
         </div>
-
         {/* Hamburger (Mobile) */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="focus:outline-none cursor-pointer"
-          >
-            {<Menu size={28} />}
-          </button>
-        </div>
       </div>
 
       {isMobileMenuOpen && (
@@ -84,13 +119,6 @@ export function Navigation() {
       >
         <div className="flex flex-col items-start px-6 space-y-6 py-6">
           {navLinks}
-          <Button
-            asChild
-            variant={"main_green_button"}
-            className="w-[120px] rounded-[8px]"
-          >
-            <Link href="/dashboard">Get Started</Link>
-          </Button>
         </div>
       </div>
     </nav>

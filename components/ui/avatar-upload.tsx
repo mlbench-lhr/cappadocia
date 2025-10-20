@@ -98,11 +98,11 @@ export function AvatarUpload({
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 {opportunity ? (
-                  <Sprout className="w-8 h-8 text-[#006C4F]" />
+                  <Sprout className="w-8 h-8 text-[#B32053]" />
                 ) : milestone ? (
-                  <Trophy className="w-8 h-8 text-[#006C4F]" />
+                  <Trophy className="w-8 h-8 text-[#B32053]" />
                 ) : (
-                  <User className="w-8 h-8 text-[#006C4F]" />
+                  <User className="w-8 h-8 text-[#B32053]" />
                 )}
               </div>
             )}

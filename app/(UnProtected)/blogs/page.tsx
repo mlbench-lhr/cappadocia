@@ -1,11 +1,11 @@
-import { HeroSection } from "@/components/hero-section";
-import { TestimonialSection } from "@/components/TestimonialSection";
+import { HeroSection } from "@/app/(UnProtected)/blogs/hero-section";
+import { CardSection } from "@/app/(UnProtected)/blogs/cards-section";
 
 export default function app() {
   return (
     <div className="w-full">
       <HeroSection />
-      <TestimonialSection />
+      <CardSection />
     </div>
   );
 }

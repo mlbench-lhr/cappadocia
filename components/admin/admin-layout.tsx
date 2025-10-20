@@ -242,8 +242,8 @@ export function Sidebar() {
                 href={href}
                 className={`w-full text-start px-3 py-2 rounded-md h-[36px] flex items-center gap-2 cursor-pointer ${
                   pathname.includes(href)
-                    ? "text-[#006C4F]"
-                    : "hover:text-[#006C4F]"
+                    ? "text-[#B32053]"
+                    : "hover:text-[#B32053]"
                 }`}
               >
                 <Icon size={16} />
@@ -281,8 +281,8 @@ export function Sidebar() {
                   href={href}
                   className={`w-full text-start px-3 py-2 rounded-md h-[36px] flex items-center gap-2 cursor-pointer ${
                     pathname.includes(href)
-                      ? "text-[#006C4F]"
-                      : "hover:text-[#006C4F]"
+                      ? "text-[#B32053]"
+                      : "hover:text-[#B32053]"
                   }`}
                 >
                   <Icon size={16} />

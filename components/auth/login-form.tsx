@@ -202,7 +202,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
                   ? "/admin/auth/forgot-password"
                   : "/auth/forgot-password"
               }
-              className="text-[#006C4F] hover:underline w-full text-end"
+              className="text-[#B32053] hover:underline w-full text-end"
             >
               Forgot Password?
             </Link>
@@ -251,7 +251,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
               Don't have an account?{" "}
               <Link
                 href="/auth/signup"
-                className="text-[#006C4F] font-[500] hover:underline"
+                className="text-[#B32053] font-[500] hover:underline"
               >
                 Sign Up
               </Link>

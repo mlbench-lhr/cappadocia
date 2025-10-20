@@ -730,7 +730,7 @@ export default function AcademicInfo() {
                   className="col-span-12 sm:col-span-6 lg:col-span-4 flex bg-[#D8E6DD] rounded-[8px] py-[8px] px-[16px] items-center justify-between"
                 >
                   <div className="flex items-center space-x-2">
-                    <File className="w-4 h-4" color="#006C4F" />{" "}
+                    <File className="w-4 h-4" color="#B32053" />{" "}
                     <span className="text-sm truncate w-[120px]">
                       {file.split("/").pop()}
                     </span>

@@ -74,7 +74,7 @@ export function AdminSidebar() {
                 variant={"ghost"}
                 className={cn(
                   "w-full justify-start tex-[16px]",
-                  isActive ? "text-[#006C4F] font-[600]" : "font-[400]"
+                  isActive ? "text-[#B32053] font-[600]" : "font-[400]"
                 )}
               >
                 <Link href={item.href}>

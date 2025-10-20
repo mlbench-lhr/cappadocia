@@ -89,7 +89,7 @@ export default function AllUsers() {
       render: (item) => (
         <Link
           href={`/admin/users/detail/${item.id}`}
-          className="text-[#006C4F] underline"
+          className="text-[#B32053] underline"
         >
           View Details
         </Link>

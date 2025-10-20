@@ -8,7 +8,7 @@ export default function app() {
     <div className="bg-[#FFF9F9] w-full h-screen py-8">
       <div className="w-full flex flex-col justify-start items-center">
         <Image
-          src={"/updatedLogo.svg"}
+          src={"/logo.svg"}
           width={200}
           height={72}
           alt="Logo"

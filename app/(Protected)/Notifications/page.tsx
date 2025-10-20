@@ -227,7 +227,7 @@ const NotificationBox = ({ item }: { item: Notification }) => {
             }
           />
         ) : (
-          <div className="rounded-full overflow-hidden w-[48px] h-[48px] bg-[#006C4F] flex justify-center items-center">
+          <div className="rounded-full overflow-hidden w-[48px] h-[48px] bg-[#B32053] flex justify-center items-center">
             <Image
               src={imgSrc}
               alt=""

@@ -81,7 +81,7 @@ export default function UpdateProfile() {
                 <div
                   className={`w-[20px] md:w-[24px] h-[20px] md:h-[24px] rounded-full flex justify-center items-center font-[500] text-[11px] lg:text-[16px] ${
                     updateProfileStep === index || index < updateProfileStep
-                      ? "text-white bg-[#006C4F]"
+                      ? "text-white bg-[#B32053]"
                       : "text-black bg-[#D5DCD6]"
                   }`}
                 >
@@ -98,7 +98,7 @@ export default function UpdateProfile() {
                 <div
                   className={`w-[38px] md:w-[66px] h-[1px] border-t-[1px] ${
                     index < updateProfileStep
-                      ? "border-[#006C4F]"
+                      ? "border-[#B32053]"
                       : "border-[#D5DCD6]"
                   } ms-2 me-[16px] mb-0`}
                 ></div>

@@ -96,7 +96,7 @@ export default function VerifyEmailPage() {
         icon: "error",
         title: "Oops...",
         text: "An unexpected error occurred",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+        confirmButtonColor: "#22c55e", // match shadcn green if you want
       });
     } finally {
       setLoading(false);
@@ -143,7 +143,7 @@ export default function VerifyEmailPage() {
         icon: "error",
         title: "Error",
         text: "Failed to resend OTP",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+        confirmButtonColor: "#22c55e", // match shadcn green if you want
       });
     } finally {
       setResendLoading(false);
@@ -236,7 +236,7 @@ export default function VerifyEmailPage() {
                   <button
                     onClick={handleResendOtp}
                     disabled={resendTimer > 0 || resendLoading || !email}
-                    className="text-[#006C4F] font-[500] hover:underline"
+                    className="text-[#B32053] font-[500] hover:underline"
                   >
                     {resendLoading
                       ? "Sending..."
