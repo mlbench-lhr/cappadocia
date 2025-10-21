@@ -1069,6 +1069,11 @@ button {
     padding-bottom: 20px;
   }
 }
+@media (max-width: 640px) {
+  .logo {
+    height: 60px;
+  }
+}
 
 @media (max-height: 720px) {
   .balloon {

@@ -1,13 +1,14 @@
-import axios from "axios"
+import axios from "axios";
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "",
+  baseURL:
+    process.env.NODE_ENV === "development" ? "http://localhost:3001" : "",
   timeout: 100000,
   headers: {
     "Content-Type": "application/json",
   },
-})
+});
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
@@ -16,18 +17,18 @@ api.interceptors.request.use(
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("auth_token="))
-      ?.split("=")[1]
+      ?.split("=")[1];
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
-    return config
+    return config;
   },
   (error) => {
-    return Promise.reject(error)
-  },
-)
+    return Promise.reject(error);
+  }
+);
 
 // Response interceptor to handle auth errors
 api.interceptors.response.use(
@@ -35,11 +36,12 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // Clear auth token and redirect to login
-      document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"
+      document.cookie =
+        "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       // window.location.href = "/auth/login"
     }
-    return Promise.reject(error)
-  },
-)
+    return Promise.reject(error);
+  }
+);
 
-export default api
+export default api;
