@@ -255,7 +255,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import UpcomingEvents from "./UpcomingEvents";
-import { setGeneratedBlogs } from "@/lib/store/slices/blogslice";
+import { setGeneratedBlogs } from "@/lib/store/slices/blogSlice";
 import { getSeason } from "@/lib/helper/timeFunctions";
 
 function TilesSkeleton() {

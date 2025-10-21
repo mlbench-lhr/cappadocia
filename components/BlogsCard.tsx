@@ -5,7 +5,6 @@ import skipped from "@/public/x-circle.svg";
 import in_progress from "@/public/circle-ellipsis.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { BlogsCardType } from "@/lib/types/blogs";
 import { Button } from "./ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,12 +14,13 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import {
   removeGeneratedBlog,
   setGeneratedBlogs,
-} from "@/lib/store/slices/blogslice";
+} from "@/lib/store/slices/blogSlice";
 import { useRouter } from "next/navigation";
 import {
   setOpportunities,
   setQueryValue,
 } from "@/lib/store/slices/opportunitySlice";
+import { BlogsCardType } from "@/lib/types/blog";
 const statusIcons: Record<string, any> = {
   done,
   not_started,

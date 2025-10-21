@@ -9,17 +9,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
+import AddDialog from "./AddDialog/page";
 
 export default function AllBlogs() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<{
-    users: any[];
+    blogs: any[];
     total: number;
     page: number;
     limit: number;
     totalPages: number;
   }>({
-    users: [],
+    blogs: [],
     total: 0,
     page: 1,
     limit: 10,
@@ -40,7 +41,7 @@ export default function AllBlogs() {
   }, [searchTerm]);
 
   useEffect(() => {
-    async function getUsers() {
+    async function getblogs() {
       try {
         setLoading(true);
         const params = new URLSearchParams({
@@ -49,46 +50,31 @@ export default function AllBlogs() {
           ...(debouncedSearch && { search: debouncedSearch }),
         });
 
-        let allUsers = await axios.get(`/api/admin/blogs?${params.toString()}`);
-        setData(allUsers.data);
+        let allblogs = await axios.get(`/api/admin/blogs?${params.toString()}`);
+        setData(allblogs.data);
         setLoading(false);
       } catch (error) {
         console.log("error----", error);
         setLoading(false);
       }
     }
-    getUsers();
+    getblogs();
   }, [currentPage, debouncedSearch]);
 
   const columns: Column[] = [
     {
-      header: "User Name",
-      accessor: "fullName",
-      type: "userProfile",
-      imageAccessor: "avatar",
-      nameAccessor: "fullName",
-      subtitleAccessor: "id",
+      header: "Sr No",
+      accessor: "srNo",
     },
     {
       header: "Blogs Title",
       accessor: "title",
     },
     {
-      header: "Added On",
+      header: "Published On",
       accessor: "createdAt",
       render: (item) => (
         <span>{moment(item.createdAt).format("MMM DD, YYYY")}</span>
-      ),
-    },
-    {
-      header: "Status",
-      accessor: "status",
-      render: (item) => (
-        <span className={`capitalize ${item.status}`}>
-          {item.status
-            ?.replace("not_started", "Not Started")
-            ?.replace("in_progress", "In Progress")}
-        </span>
       ),
     },
     {
@@ -128,18 +114,11 @@ export default function AllBlogs() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <Link
-                href={`/admin/blogs/addFields`}
-                className="col-span-2 md:col-span-1"
-              >
-                <Button variant={"main_green_button"} className="w-full">
-                  Add Blog
-                </Button>
-              </Link>
+              <AddDialog />{" "}
             </div>
           </div>
           <DynamicTable
-            data={data.users}
+            data={data.blogs}
             columns={columns}
             itemsPerPage={7}
             onRowClick={(item) => console.log("Clicked:", item)}

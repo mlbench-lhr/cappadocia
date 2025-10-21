@@ -1,7 +1,6 @@
 "use client";
 import image1 from "@/public/Ellipse 11.png";
 import BlogsCard from "@/components/BlogsCard";
-import { BlogsCardType } from "@/lib/types/blogs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -11,6 +10,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft } from "lucide-react";
 import moment from "moment";
+import { BlogsCardType } from "@/lib/types/blog";
 
 export default function BlogCard() {
   const { id } = useParams();
