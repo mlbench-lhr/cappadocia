@@ -9,7 +9,7 @@ import { Toaster } from "sonner";
 import { ReduxProvider } from "@/components/providers/redux-provider";
 
 export const metadata: Metadata = {
-  title: "Opportunitree",
+  title: "Cappadocia",
   description:
     "A comprehensive educational platform for students, teachers, and administrators",
 };

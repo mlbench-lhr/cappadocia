@@ -114,7 +114,7 @@ export function SignupForm() {
           Create your account
         </CardTitle>
         <CardDescription className="text-center plan-text-style-3">
-          Join OpportuniTree and start growing your opportunities{" "}
+          Join Cappadocia and start growing your opportunities{" "}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

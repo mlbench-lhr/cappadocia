@@ -41,7 +41,7 @@ export function RoleCards() {
             className="plan-text-style-2 w-full lg:w-[1000px]"
             style={{ textAlign: "center" }}
           >
-            OpportuniTree works by allowing students to create detailed profiles
+            Cappadocia works by allowing students to create detailed profiles
             showcasing their skills, achievements, and interests. Students can
             track applications, manage participation, and receive personalized
             recommendations, making it easier to discover and engage in

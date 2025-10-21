@@ -384,69 +384,6 @@ const Dashboard: React.FC = () => {
             isLoading={loading}
           />
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-          <div className="lg:col-span-2 bg-white h-full rounded-xl border border-gray-200 p-6">
-            {loading2 ? (
-              <ChartSkeleton />
-            ) : (
-              <>
-                <div className="flex items-center justify-between h-[85px] border-b border-gray-300 pb-[20px]">
-                  <h2 className="text-[20px] font-[500] text-gray-900">
-                    Milestone Completion Rate
-                  </h2>
-                  <div className="flex items-center space-x-2">
-                    <Select
-                      value={selectedPeriod}
-                      onValueChange={handlePeriodChange}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue placeholder="Select Grade Level" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="7">Last 07 Days</SelectItem>
-                        <SelectItem value="30">Last 30 Days</SelectItem>
-                        <SelectItem value="90">Last 90 Days</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                {/* Chart Container - Replace ResponsiveContainer with SimpleBarChart */}
-                <div className="w-full h-[calc(100%-85px)]">
-                  <SimpleBarChart
-                    data={milestonesCompletion}
-                    isLoading={loading2}
-                  />
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Latest Added Users */}
-          <div className="bg-white rounded-xl border border-gray-200 p-4 lg:p-6">
-            {usersLoading ? (
-              <UsersListSkeleton />
-            ) : (
-              <>
-                <h2 className="text-[20px] font-[500] text-gray-900 mb-[20px]">
-                  Latest Added Users
-                </h2>
-                <div className="space-y-0">
-                  {latestUsers.length > 0 ? (
-                    latestUsers.map((user, index) => (
-                      <UserCard key={`${user.id}-${index}`} user={user} />
-                    ))
-                  ) : (
-                    <div className="text-center text-gray-500 py-8">
-                      <p>No users found</p>
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 h-[400px] pb-10">
           {/* Total Annotations Chart */}
           <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6">

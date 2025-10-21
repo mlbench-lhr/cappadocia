@@ -223,13 +223,13 @@ export function Sidebar() {
         <aside
           className={`gap-[40px] hidden md:flex flex-col bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
         >
-          <div className="flex items-start justify-between font-semibold w-full">
-            <Link href="/admin/dashboard">
-              <Image src={logo.src} alt="logo" width={59} height={32} />
+          <div className="flex items-center justify-between font-semibold w-full ">
+            <Link href="/admin/dashboard" className="">
+              <Image src={logo.src} alt="logo" width={150} height={40} className="w-[90px] h-[40px] md:w-[150px] md:h-[40px]" />
             </Link>
             <button
               onClick={() => dispatch(toggleCollapse())}
-              className={`hidden ${!isCollapsed && "md:inline-flex"} mt-1`}
+              className={`hidden ${!isCollapsed && "md:inline-flex"}`}
             >
               <X className="h-[16px] w-[16px]" />
             </button>
@@ -240,7 +240,7 @@ export function Sidebar() {
               <Link
                 key={name}
                 href={href}
-                className={`w-full text-start px-3 py-2 rounded-md h-[36px] flex items-center gap-2 cursor-pointer ${
+                className={`w-full text-start px-2 py-2 rounded-md h-[36px] flex items-center gap-2 cursor-pointer ${
                   pathname.includes(href)
                     ? "text-[#B32053]"
                     : "hover:text-[#B32053]"

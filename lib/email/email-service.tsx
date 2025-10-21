@@ -1,4 +1,4 @@
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 
 // Create transporter with environment variables
 const createTransporter = () => {
@@ -10,21 +10,21 @@ const createTransporter = () => {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
     },
-  })
-}
+  });
+};
 
 export const sendPasswordResetEmail = async (email: string, otp: string) => {
   try {
-    const transporter = createTransporter()
+    const transporter = createTransporter();
 
     const mailOptions = {
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: email,
       subject: "Password Reset OTP",
-html: `
+      html: `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
-      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1758176120/logo_png_lajh7e.png" alt="Opportunitree Logo" 
+      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1758176120/logo_png_lajh7e.png" alt="Cappadocia Logo" 
            style="max-width: 120px; margin-bottom: 10px;" />
     </div>
     <h2 style="color: #333;">Password Reset Request</h2>
@@ -41,29 +41,29 @@ html: `
       This OTP will expire in 10 minutes. If you didn't request this reset, please ignore this email.
     </p>
   </div>
-`
-    }
+`,
+    };
 
-    await transporter.sendMail(mailOptions)
-    console.log(`Password reset OTP sent to ${email}`)
+    await transporter.sendMail(mailOptions);
+    console.log(`Password reset OTP sent to ${email}`);
   } catch (error) {
-    console.error("Error sending password reset email:", error)
-    throw new Error("Failed to send password reset email")
+    console.error("Error sending password reset email:", error);
+    throw new Error("Failed to send password reset email");
   }
-}
+};
 
 export const sendVerificationEmail = async (email: string, otp: string) => {
   try {
-    const transporter = createTransporter()
+    const transporter = createTransporter();
 
     const mailOptions = {
       from: process.env.SMTP_FROM || process.env.SMTP_USER,
       to: email,
       subject: "Verify Your Email Address",
-html: `
+      html: `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
-      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1758176120/logo_png_lajh7e.png" alt="Opportunitree Logo" 
+      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1758176120/logo_png_lajh7e.png" alt="Cappadocia Logo" 
            style="max-width: 120px; margin-bottom: 10px;" />
     </div>
     <h2 style="color: #333;">Welcome! Please Verify Your Email</h2>
@@ -79,13 +79,13 @@ html: `
       This OTP will expire in 10 minutes. If you didn't create this account, please ignore this email.
     </p>
   </div>
-`
-    }
+`,
+    };
 
-    await transporter.sendMail(mailOptions)
-    console.log(`Verification OTP sent to ${email}`)
+    await transporter.sendMail(mailOptions);
+    console.log(`Verification OTP sent to ${email}`);
   } catch (error) {
-    console.error("Error sending verification email:", error)
-    throw new Error("Failed to send verification email")
+    console.error("Error sending verification email:", error);
+    throw new Error("Failed to send verification email");
   }
-}
+};
