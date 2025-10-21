@@ -5,33 +5,33 @@ import Link from "next/link";
 
 export default function app() {
   return (
-    <div className="bg-[#FFF9F9] w-full h-screen py-8 px-4">
+    <div className="bg-[#FFF9F9] w-full h-screen px-4 getStartedPage">
       <div className="w-full flex flex-col justify-start items-center">
         <Image
           src={"/logo.svg"}
           width={200}
           height={72}
           alt="Logo"
-          className="w-auto h-[110px]"
+          className="logo w-auto"
         />
         <Image
           src={"/baloon.png"}
           width={200}
           height={72}
           alt="Logo"
-          className="w-auto h-[50px h-auto"
+          className="w-auto balloon"
         />
-        <h1 className="font-[700] text-2xl md:text-[43px] text-[#B32054] leading-normal text-center mt-4">
+        <h1 className="font-[700] heading1 text-[#B32054] leading-normal text-center mt-4">
           Discover Cappadocia Like Never Before
         </h1>
-        <h2 className="font-[700] text-xl md:text-[33px] text-[rgba(0,0,0,0.50)] leading-normal text-center mt-4">
+        <h2 className="font-[700] heading2 text-[rgba(0,0,0,0.50)] leading-normal text-center mt-4">
           Stay Tuned!
         </h2>
         <p className="font-[400] text-sm md:text-[18px] text-[rgba(0,0,0,0.50)] leading-normal text-center mt-4">
           Get early access, exclusive offers, and travel inspiration directly to
           your inbox.
         </p>
-        <h3 className="font-[700] text-xl md:text-[26px] text-[rgba(0,0,0,1)] leading-normal text-center mt-5">
+        <h3 className="font-[700] heading3 text-[rgba(0,0,0,1)] leading-normal text-center mt-5">
           Be the First to Know When We Launch
         </h3>
         <div className="w-full flex gap-2.5 justify-center items-center mt-8 flex-col md:flex-row">

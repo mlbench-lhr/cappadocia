@@ -1013,3 +1013,67 @@ button {
     display: none;
   }
 }
+
+.getStartedPage {
+  padding-top: 32px;
+  padding-bottom: 32px;
+}
+.balloon {
+  height: 300px;
+}
+.logo {
+  height: 110px;
+}
+.heading1 {
+  font-size: 43px;
+}
+.heading2 {
+  font-size: 33px;
+}
+.heading3 {
+  font-size: 26px;
+}
+
+@media (max-height: 900px) {
+  .balloon {
+    height: 250px;
+  }
+  .logo {
+    height: 90px;
+  }
+  .heading1 {
+    font-size: 30px;
+  }
+  .heading2 {
+    font-size: 25px;
+  }
+  .heading3 {
+    font-size: 20px;
+  }
+  .getStartedPage {
+    padding-top: 12px;
+    padding-bottom: 20px;
+  }
+}
+
+@media (max-height: 720px) {
+  .balloon {
+    height: 150px;
+  }
+  .logo {
+    height: 70px;
+  }
+  .heading1 {
+    font-size: 20px;
+  }
+  .heading2 {
+    font-size: 18px;
+  }
+  .heading3 {
+    font-size: 16px;
+  }
+  .getStartedPage {
+    padding-top: 4px;
+    padding-bottom: 0px;
+  }
+}
