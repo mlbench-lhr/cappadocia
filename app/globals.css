@@ -673,6 +673,20 @@ button {
   }
 }
 @media (max-width: 768px) {
+  .primary-button {
+    color: white;
+    text-align: center;
+    background-color: #b32053;
+    height: 46px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 0px;
+    letter-spacing: 0.08px;
+    cursor: pointer;
+    border-radius: 8px;
+    background: var(--Schemes-Primary-Container, #b32053);
+  }
   .section-box-1 {
     border-radius: 16px;
     border: none;
@@ -1061,7 +1075,7 @@ button {
     height: 150px;
   }
   .logo {
-    height: 70px;
+    height: 60px;
   }
   .heading1 {
     font-size: 20px;
