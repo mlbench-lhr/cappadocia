@@ -28,6 +28,7 @@ export default function AllBlogs() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [refreshData, setRefreshData] = useState(1);
   const [debouncedSearch, setDebouncedSearch] = useState("");
 
   // Debounce search term to avoid too many API calls
@@ -59,7 +60,7 @@ export default function AllBlogs() {
       }
     }
     getblogs();
-  }, [currentPage, debouncedSearch]);
+  }, [currentPage, refreshData, debouncedSearch]);
 
   const columns: Column[] = [
     {
@@ -82,7 +83,7 @@ export default function AllBlogs() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/admin/blogs/detail/${item.id}`}
+          href={`/admin/blogs/detail/${item._id}`}
           className="text-[#B32053] underline"
         >
           View Details
@@ -114,7 +115,7 @@ export default function AllBlogs() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <AddDialog />{" "}
+              <AddDialog setRefreshData={setRefreshData} />{" "}
             </div>
           </div>
           <DynamicTable

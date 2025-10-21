@@ -10,14 +10,14 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export default function AddDialog() {
+export default function AddDialog({ setRefreshData }: any) {
   return (
     <Dialog>
       <DialogTrigger>
         <Button variant={"main_green_button"}>Add Blog</Button>
       </DialogTrigger>
       <DialogContent className="min-w-[600px]">
-        <SimplifiedFormComponent />
+        <SimplifiedFormComponent setRefreshData={setRefreshData} />
       </DialogContent>
     </Dialog>
   );
@@ -32,11 +32,13 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 interface SimplifiedFormProps {
+  setRefreshData: any;
   onSubmit?: (data: FormData) => Promise<void>;
   initialData?: Partial<FormData>;
 }
 
 export function SimplifiedFormComponent({
+  setRefreshData,
   onSubmit: onSubmitProp,
   initialData,
 }: SimplifiedFormProps) {
@@ -81,6 +83,7 @@ export function SimplifiedFormComponent({
         const responseData = await res.json();
         console.log("API response:", responseData);
       }
+      setRefreshData((s: any) => s + 1);
     } catch (err) {
       console.error("submit error", err);
     }
