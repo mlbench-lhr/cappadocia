@@ -40,7 +40,7 @@ export default function app() {
             className="h-[45px] w-full md:w-[350px] bg-white text-center"
             style={{ borderColor: "white" }}
           />
-          <div className="grid grid-cols-2 gap-2.5 w-full md:w-fit">
+          <div className="grid md:flex grid-cols-2 gap-2.5 w-full md:w-fit">
             <Link href={"/blogs"} className="col-span-1 md:w-fit">
               <Button className="w-full md:w-fit" variant={"main_green_button"}>
                 Get Connected
