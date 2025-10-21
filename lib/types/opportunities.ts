@@ -18,9 +18,9 @@ export interface OpportunitiesCardType {
   dueDate: Date;
   saved: boolean;
   ignored: boolean;
-  addedToMilestone: boolean;
+  addedToBlog: boolean;
   appliedBy: string[];
-  milestoneAddedBy: string[];
+  blogAddedBy: string[];
   savedBy: string[];
   ignoredBy: string[];
   price: number;

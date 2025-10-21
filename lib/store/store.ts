@@ -4,7 +4,7 @@ import sidebarSlice from "./slices/sidebarSlice";
 import generalSlice from "./slices/generalSlice";
 import adminSlice from "./slices/adminSlice";
 import opportunitySlice from "./slices/opportunitySlice";
-import milestoneSlice from "./slices/milestoneSlice";
+import blogslice from "./slices/blogSlice";
 import calendarSlice from "./slices/calendarSlice";
 import notificationSlice from "./slices/notificationSlice";
 
@@ -15,7 +15,7 @@ export const store = configureStore({
     general: generalSlice,
     admin: adminSlice,
     opportunity: opportunitySlice,
-    milestone: milestoneSlice,
+    blog: blogslice,
     calendar: calendarSlice,
     notification: notificationSlice,
   },

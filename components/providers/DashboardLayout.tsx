@@ -7,7 +7,7 @@ import logo from "@/public/logo.svg";
 import bell from "@/public/bell.svg";
 import dashboardIcon from "@/public/layout-dashboard.svg";
 import opportunityIcon from "@/public/sprout.svg";
-import milestoneIcon from "@/public/trophy.svg";
+import blogIcon from "@/public/trophy.svg";
 import calendarIcon from "@/public/calendar-days.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
@@ -34,7 +34,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/auth-helpers";
 import { setReduxUser } from "@/lib/store/slices/authSlice";
 import { useMediaQuery } from "react-responsive";
-import MilestoneTierDialog from "../MilestoneTierDialog";
 import DeleteAccountDialog from "../DeleteAccountDialog";
 
 const IconMenu = ({ className = "" }: { className?: string }) => (
@@ -278,15 +277,15 @@ export function Sidebar() {
               {!isCollapsed && "Opportunities"}
             </Link>
             <Link
-              href={"/milestones"}
+              href={"/blogs"}
               className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                pathname.includes("milestones")
+                pathname.includes("blogs")
                   ? "bg-[#F5FBF5]"
                   : "hover:bg-[#F5FBF5]"
               }`}
             >
-              <Image src={milestoneIcon.src} alt="" width={16} height={16} />
-              {!isCollapsed && "Milestones"}
+              <Image src={blogIcon.src} alt="" width={16} height={16} />
+              {!isCollapsed && "Blogs"}
             </Link>
             <Link
               href={"/calendar"}
@@ -359,15 +358,15 @@ export function Sidebar() {
                 {!isCollapsed && "Opportunities"}
               </Link>
               <Link
-                href={"/milestones"}
+                href={"/blogs"}
                 className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                  pathname.includes("milestones")
+                  pathname.includes("blogs")
                     ? "bg-[#F5FBF5]"
                     : "hover:bg-[#F5FBF5]"
                 }`}
               >
-                <Image src={milestoneIcon.src} alt="" width={16} height={16} />
-                {!isCollapsed && "Milestones"}
+                <Image src={blogIcon.src} alt="" width={16} height={16} />
+                {!isCollapsed && "Blogs"}
               </Link>
               <Link
                 href={"/calendar"}
@@ -447,15 +446,15 @@ export function Sidebar() {
               Opportunities
             </Link>
             <Link
-              href={"/milestones"}
+              href={"/blogs"}
               className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                pathname.includes("milestones")
+                pathname.includes("blogs")
                   ? "bg-[#F5FBF5]"
                   : "hover:bg-[#F5FBF5]"
               }`}
             >
-              <Image src={milestoneIcon.src} alt="" width={16} height={16} />
-              Milestones
+              <Image src={blogIcon.src} alt="" width={16} height={16} />
+              Blogs
             </Link>
             <Link
               href={"/calendar"}
@@ -552,7 +551,6 @@ export default function DashboardLayout({
         <main
           className={`flex-1 py-[20px] px-[20px] md:py-[32px] md:px-[38px] element`}
         >
-          <MilestoneTierDialog />
           {children}
         </main>
       </div>

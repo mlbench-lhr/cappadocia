@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 
 export interface NotificationType extends Document {
   name: string;
-  type: "Milestone" | "Opportunity";
+  type: "Blog" | "Opportunity";
   endDate: Date;
   image?: string;
   relatedId: string;
@@ -14,7 +14,7 @@ export interface NotificationType extends Document {
 const NotificationSchema = new Schema<NotificationType>(
   {
     name: { type: String, required: true },
-    type: { type: String, enum: ["Milestone", "Opportunity"], required: true },
+    type: { type: String, enum: ["Blog", "Opportunity"], required: true },
     endDate: { type: Date, required: true },
     image: { type: String },
     relatedId: { type: String, required: true },

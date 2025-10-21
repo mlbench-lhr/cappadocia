@@ -36,8 +36,8 @@ const navigation = [
     icon: Sprout,
   },
   {
-    name: "Milestones",
-    href: "/admin/milestones",
+    name: "Blogs",
+    href: "/admin/blogs",
     icon: Trophy,
   },
   {

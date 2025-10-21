@@ -3,25 +3,16 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "@/public/logo.svg";
-import bell from "@/public/bell.svg";
-import dashboardIcon from "@/public/layout-dashboard.svg";
-import opportunityIcon from "@/public/sprout.svg";
-import milestoneIcon from "@/public/trophy.svg";
-import calendarIcon from "@/public/calendar-days.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { RootState } from "@/lib/store/store";
-import pencil from "@/public/pencil.svg";
-import logOutIcon from "@/public/log-out.svg";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
 import {
   closeSidebar,
   toggleCollapse,
-  toggleSetting,
   toggleSidebar,
 } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
@@ -31,11 +22,9 @@ import {
   Lock,
   Menu,
   Pencil,
-  Settings,
-  Sprout,
+  PencilLine,
   Trophy,
-  User,
-  Users,
+  UserCheck,
   X,
 } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
@@ -185,14 +174,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/auth-helpers";
 import { setReduxUser } from "@/lib/store/slices/authSlice";
 import { useMediaQuery } from "react-responsive";
-import MilestoneTierDialog from "../MilestoneTierDialog";
 
 const sidebarOptions = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "All Users", href: "/admin/users", icon: Users },
-  { name: "Opportunities", href: "/admin/opportunities", icon: Sprout },
-  { name: "Milestones", href: "/admin/milestones", icon: Trophy },
-  { name: "Profile Survey", href: "/admin/surveyFields", icon: Users },
+  { name: "Blogs", href: "/admin/blogs", icon: PencilLine },
 ];
 
 const mobileProfileOptions = [
@@ -225,7 +210,13 @@ export function Sidebar() {
         >
           <div className="flex items-center justify-between font-semibold w-full ">
             <Link href="/admin/dashboard" className="">
-              <Image src={logo.src} alt="logo" width={150} height={40} className="w-[90px] h-[40px] md:w-[150px] md:h-[40px]" />
+              <Image
+                src={logo.src}
+                alt="logo"
+                width={150}
+                height={40}
+                className="w-[90px] h-[40px] md:w-[150px] md:h-[40px]"
+              />
             </Link>
             <button
               onClick={() => dispatch(toggleCollapse())}
@@ -398,7 +389,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <Navbar />
 
         <main
-          className={`flex-1 py-[20px] px-[20px] md:py-[32px] md:px-[38px] element`}
+          className={`flex-1 py-[20px] px-[20px] md:py-[32px] md:px-[38px] element bg-[#F9FAFB]`}
         >
           {children}
         </main>

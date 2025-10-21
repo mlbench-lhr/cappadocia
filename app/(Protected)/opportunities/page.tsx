@@ -27,7 +27,7 @@ import {
 import { setQueryValue } from "@/lib/store/slices/opportunitySlice";
 import Swal from "sweetalert2";
 
-export default function MilestonesPage() {
+export default function BlogsPage() {
   const filterArray1: string[] = [
     "All Opportunities",
     "Internships",

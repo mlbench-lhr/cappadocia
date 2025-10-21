@@ -18,7 +18,7 @@ const roles = [
     number: "02",
   },
   {
-    heading: "Plan & Track Milestones",
+    heading: "Plan & Track Blogs",
     text: "Set your academic and career goals, track your progress effortlessly, and visualize your readiness with clear, real-time updates that keep you motivated.",
     icon: listCheckIcon,
     number: "03",

@@ -38,21 +38,21 @@ export function ChartPieDonutText() {
   const overview = useAppSelector((s) => s.admin.overview);
 
   const chartData = React.useMemo(() => {
-    if (!overview?.milestoneOverview) return [];
+    if (!overview?.blogOverview) return [];
     return [
       {
-        milestone: "In Progress",
-        visitors: Number(overview.milestoneOverview.inProgress) || 0,
+        blog: "In Progress",
+        visitors: Number(overview.blogOverview.inProgress) || 0,
         fill: "#00ACC0",
       },
       {
-        milestone: "Completed",
-        visitors: Number(overview.milestoneOverview.completed) || 0,
+        blog: "Completed",
+        visitors: Number(overview.blogOverview.completed) || 0,
         fill: "#B32053",
       },
       {
-        milestone: "Over Due",
-        visitors: Number(overview.milestoneOverview.overdue) || 0,
+        blog: "Over Due",
+        visitors: Number(overview.blogOverview.overdue) || 0,
         fill: "#D5DCD6",
       },
     ];
@@ -65,9 +65,7 @@ export function ChartPieDonutText() {
   return (
     <Card className="w-full flex flex-col border-0 p-0 shadow-none items-center justify-center relative">
       <CardHeader className="items-center p-0 w-full">
-        <CardTitle className="text-[20px] font-[500]">
-          Milestones Overview
-        </CardTitle>
+        <CardTitle className="text-[20px] font-[500]">Blogs Overview</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -82,7 +80,7 @@ export function ChartPieDonutText() {
             <Pie
               data={chartData}
               dataKey="visitors"
-              nameKey="milestone"
+              nameKey="blog"
               innerRadius={110}
               strokeWidth={70}
               style={{ margin: "0px", padding: "0px" }}
@@ -137,7 +135,7 @@ export function ChartPieDonutText() {
                             y={cy + 20}
                             className="fill-muted-foreground text-[11px]"
                           >
-                            Milestones Added
+                            Blogs Added
                           </tspan>
                         </text>
                       </g>
@@ -156,21 +154,21 @@ export function ChartPieDonutText() {
             className="inline-block w-3 h-3 rounded-full"
             style={{ backgroundColor: "#00ACC0" }}
           />
-          In Progress : {Number(overview.milestoneOverview.inProgress)}%
+          In Progress : {Number(overview.blogOverview.inProgress)}%
         </div>
         <div className="flex items-center gap-1">
           <span
             className="inline-block w-3 h-3 rounded-full"
             style={{ backgroundColor: "#B32053" }}
           />
-          Completed : {Number(overview.milestoneOverview.completed)}%
+          Completed : {Number(overview.blogOverview.completed)}%
         </div>
         <div className="flex items-center gap-1">
           <span
             className="inline-block w-3 h-3 rounded-full"
             style={{ backgroundColor: "#D5DCD6" }}
           />
-          Over Due : {Number(overview.milestoneOverview.overdue)}%
+          Over Due : {Number(overview.blogOverview.overdue)}%
         </div>
       </div>
     </Card>

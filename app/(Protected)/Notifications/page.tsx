@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Bell, ChevronLeft, Users, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import notIcon1 from "@/public/notIcon.svg";
-import notIcon2 from "@/public/notIcon Milestone.svg";
+import notIcon2 from "@/public/notIcon Blog.svg";
 import Image from "next/image";
 import axios from "axios";
 import moment from "moment";
@@ -270,7 +270,7 @@ export const getIcon: any = {
   Clubs: "🏆",
   "Community Service": "🤝",
   "Summer Program": "🎓",
-  milestone: "🤖",
+  blog: "🤖",
 };
 
 export const getColor: any = {
@@ -279,5 +279,5 @@ export const getColor: any = {
   Clubs: "rgba(77, 182, 172, 0.5)",
   "Community Service": "rgba(179, 157, 219, 0.5)",
   "Summer Program": "rgba(255, 140, 102, 0.5)",
-  milestone: "rgba(179, 157, 219, 0.5)",
+  blog: "rgba(179, 157, 219, 0.5)",
 };

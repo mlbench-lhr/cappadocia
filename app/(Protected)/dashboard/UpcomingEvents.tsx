@@ -31,11 +31,11 @@ export default function UpcomingEvents() {
     title: string;
     endDate: string;
     daysLeft: number;
-    type: "opportunity" | "milestone";
+    type: "opportunity" | "blog";
     category: string;
     icon: string;
     color: string;
-    source: "opportunity" | "milestone";
+    source: "opportunity" | "blog";
   }
 
   interface EventsData {

@@ -38,9 +38,9 @@ const initialFormState: OpportunitiesCardType = {
   dueDate: new Date(),
   saved: false,
   ignored: false,
-  addedToMilestone: false,
+  addedToBlog: false,
   appliedBy: [],
-  milestoneAddedBy: [],
+  blogAddedBy: [],
   savedBy: [],
   ignoredBy: [],
   price: 0,
@@ -78,13 +78,13 @@ export default function AddOpp() {
           });
 
           if (res.ok) {
-            console.log(`Milestone ${item?._id} marked as skipped`);
+            console.log(`Blog ${item?._id} marked as skipped`);
           } else {
-            console.error("Failed to skip milestone");
+            console.error("Failed to skip blog");
           }
           router.push(`/admin/opportunities`);
         } catch (err) {
-          console.error("Error skipping milestone:", err);
+          console.error("Error skipping blog:", err);
         } finally {
           setDeleteLoading(false);
         }

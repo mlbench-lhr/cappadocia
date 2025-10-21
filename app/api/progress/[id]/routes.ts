@@ -1,5 +1,5 @@
-// app/api/milestones/progress/route.ts
-import Milestone from "@/lib/mongodb/models/Milestone";
+// app/api/blogs/progress/route.ts
+import Blog from "@/lib/mongodb/models/Blog";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, { params }: any) {
@@ -11,13 +11,13 @@ export async function GET(req: Request, { params }: any) {
     const season = url.searchParams.get("season");
     console.log("id---", id);
 
-    const milestones = await Milestone.find({
+    const blogs = await Blog.find({
       gradeLevel: grade,
       season, // ensure your schema has this field
     });
 
-    const total = milestones.length;
-    const completed = milestones.filter((m) => m.completed).length;
+    const total = blogs.length;
+    const completed = blogs.filter((m) => m.completed).length;
     const progressPercent = total ? (completed / total) * 100 : 0;
 
     return NextResponse.json({ total, completed, progressPercent });

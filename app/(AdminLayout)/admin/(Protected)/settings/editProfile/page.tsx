@@ -31,7 +31,7 @@ export function EditProfile() {
         }),
       });
     } catch (error) {
-      console.error("Error fetching milestone fields", error);
+      console.error("Error fetching blog fields", error);
     } finally {
       setSubmitLoading(false);
     }

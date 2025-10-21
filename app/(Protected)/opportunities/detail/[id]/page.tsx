@@ -8,7 +8,7 @@ import { OpportunitiesCardType } from "@/lib/types/opportunities";
 import thumbsDown from "@/public/thumbs-down.svg";
 import star from "@/public/star.svg";
 import applyIcon from "@/public/arrow-up-right-square.svg";
-import milestoneIcon from "@/public/calendar-days (2).svg";
+import blogIcon from "@/public/calendar-days (2).svg";
 import Link from "next/link";
 import { Calendar } from "@/components/ui/calendar";
 
@@ -29,8 +29,8 @@ export default function OpportunitiesCard() {
   const [saved, setSaved] = useState(
     item?.savedBy?.find((item) => item === user?.id) ? true : false
   );
-  const [milestoneAddedBy, setMilestoneAddedBy] = useState(
-    item?.milestoneAddedBy?.find((item) => item === user?.id) ? true : false
+  const [blogAddedBy, setBlogAddedBy] = useState(
+    item?.blogAddedBy?.find((item) => item === user?.id) ? true : false
   );
   const [ignored, setIgnored] = useState(
     item?.ignoredBy?.find((item) => item === user?.id) ? true : false
@@ -42,10 +42,10 @@ export default function OpportunitiesCard() {
     setSaved(item?.savedBy?.find((item) => item === user?.id) ? true : false);
   }, [item?.savedBy, user?.id]);
   useEffect(() => {
-    setMilestoneAddedBy(
-      item?.milestoneAddedBy?.find((item) => item === user?.id) ? true : false
+    setBlogAddedBy(
+      item?.blogAddedBy?.find((item) => item === user?.id) ? true : false
     );
-  }, [item?.milestoneAddedBy, user?.id]);
+  }, [item?.blogAddedBy, user?.id]);
   useEffect(() => {
     setIgnored(
       item?.ignoredBy?.find((item) => item === user?.id) ? true : false
@@ -114,10 +114,10 @@ export default function OpportunitiesCard() {
       console.error("Failed to update opportunity:", error);
     }
   };
-  async function addToMilestone(dateSelected: Date | undefined) {
+  async function addToBlog(dateSelected: Date | undefined) {
     console.log();
     setLoading(true);
-    if (milestoneAddedBy) {
+    if (blogAddedBy) {
       return;
     }
     try {
@@ -127,7 +127,7 @@ export default function OpportunitiesCard() {
         selectedDate: dateSelected,
       };
 
-      const res = await fetch("/api/milestones/addFromOpportunity", {
+      const res = await fetch("/api/blogs/addFromOpportunity", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -139,22 +139,22 @@ export default function OpportunitiesCard() {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: data.message || "Failed to add milestone",
+          text: data.message || "Failed to add blog",
           timer: 1500,
           showConfirmButton: false,
         });
       } else {
         Swal.fire({
           icon: "success",
-          title: "Added to Milestone",
+          title: "Added to Blog",
           text: "Opportunity added at the best-fit time period.",
           timer: 1500,
           showConfirmButton: false,
         });
-        setMilestoneAddedBy(true);
+        setBlogAddedBy(true);
       }
     } catch (error) {
-      console.error("Error adding milestone:", error);
+      console.error("Error adding blog:", error);
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -239,16 +239,12 @@ export default function OpportunitiesCard() {
 
               <button
                 className="opp-button-2 col-span-1 md:col-span-2"
-                style={{ cursor: milestoneAddedBy ? "not-allowed" : "pointer" }}
-                onClick={() => addToMilestone(undefined)}
-                disabled={milestoneAddedBy || loading}
+                style={{ cursor: blogAddedBy ? "not-allowed" : "pointer" }}
+                onClick={() => addToBlog(undefined)}
+                disabled={blogAddedBy || loading}
               >
-                <Image src={milestoneIcon} width={14} height={14} alt="" />
-                {milestoneAddedBy
-                  ? "Added"
-                  : loading
-                  ? "Adding..."
-                  : "Add to Milestone"}
+                <Image src={blogIcon} width={14} height={14} alt="" />
+                {blogAddedBy ? "Added" : loading ? "Adding..." : "Add to Blog"}
               </button>
 
               <Button
@@ -306,16 +302,12 @@ export default function OpportunitiesCard() {
           <div className="grid xl:hidden grid-cols-1 md:grid-cols-5 gap-2 w-[100%]">
             <button
               className="opp-button-2 col-span-1 md:col-span-2"
-              style={{ cursor: milestoneAddedBy ? "not-allowed" : "pointer" }}
-              onClick={() => addToMilestone(undefined)}
-              disabled={milestoneAddedBy || loading}
+              style={{ cursor: blogAddedBy ? "not-allowed" : "pointer" }}
+              onClick={() => addToBlog(undefined)}
+              disabled={blogAddedBy || loading}
             >
-              <Image src={milestoneIcon} width={14} height={14} alt="" />
-              {milestoneAddedBy
-                ? "Added"
-                : loading
-                ? "Adding..."
-                : "Add to Milestone"}
+              <Image src={blogIcon} width={14} height={14} alt="" />
+              {blogAddedBy ? "Added" : loading ? "Adding..." : "Add to Blog"}
             </button>
 
             <Button

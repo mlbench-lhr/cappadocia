@@ -8,7 +8,7 @@ export interface User {
   isEmailVerified: boolean;
   createdAt?: string;
   updatedAt?: string;
-  milestoneTier: "Tier 1" | "Tier 2" | "Tier 3";
+  blogTier: "Tier 1" | "Tier 2" | "Tier 3";
   profileUpdated: boolean;
   dataUpdated: boolean;
 }

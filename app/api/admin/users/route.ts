@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { withAuth } from "@/lib/auth/middleware";
 import connectDB from "@/lib/mongodb/connection";
 import User from "@/lib/mongodb/models/User";
-import Milestone from "@/lib/mongodb/models/Milestone";
+import Blog from "@/lib/mongodb/models/Blog";
 
 export const GET = withAuth(async (req) => {
   try {
@@ -46,12 +46,12 @@ export const GET = withAuth(async (req) => {
 
     const formattedUsers = await Promise.all(
       users.map(async (user) => {
-        const milestones = await Milestone.find({
+        const blogs = await Blog.find({
           createdBy: user._id,
         });
         console.log("user._id", user._id);
-        const total = milestones.length;
-        const completed = milestones.filter((m) => m.completed).length;
+        const total = blogs.length;
+        const completed = blogs.filter((m) => m.completed).length;
         const progressPercent = total ? (completed / total) * 100 : 0;
 
         return {

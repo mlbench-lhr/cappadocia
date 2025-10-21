@@ -24,11 +24,11 @@ export default function DashboardPage() {
   const [tilesData, setTilesData] = useState<{
     applicationsStarted: number;
     daysUntilNextDeadline: number;
-    milestonesCompleted: number;
+    blogsCompleted: number;
     opportunitiesSaved: number;
     nextAction: string;
     progressPercent: number;
-    totalMilestones: number;
+    totalBlogs: number;
   } | null>(null);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function DashboardPage() {
         const res = await axios.get(
           `/api/dashboard/${userData?.id}?grade=${
             user?.academicInfo?.gradeLevel || "9"
-          }&season=${currentSeason || "Fall"}&tier=${user?.milestoneTier}`
+          }&season=${currentSeason || "Fall"}&tier=${user?.blogTier}`
         );
         setTilesData(res.data);
       } catch (err) {
@@ -58,7 +58,7 @@ export default function DashboardPage() {
   }, [
     userData?.id,
     user?.academicInfo?.gradeLevel,
-    user?.milestoneTier,
+    user?.blogTier,
     currentSeason,
   ]);
   console.log("tilesData", tilesData, userData?.id);
@@ -69,7 +69,7 @@ export default function DashboardPage() {
     try {
       setRerunLoading(true);
       const userInfoPayload = {
-        tier: userData?.milestoneTier,
+        tier: userData?.blogTier,
         gpa: userData?.academicInfo?.gpa,
         gradeLevel: userData?.academicInfo?.gradeLevel,
         majors: userData?.dreamsAndGoals?.majors,
@@ -85,8 +85,8 @@ export default function DashboardPage() {
       const result = await res.json();
       console.log("userInfoPayload-------", result);
       setRerunLoading(false);
-      dispatch(setGeneratedMilestones(result.data));
-      router.push("/milestones/generated-plan");
+      dispatch(setGeneratedBlogs(result.data));
+      router.push("/blogs/generated-plan");
     } catch (error) {
       console.log("error--------", error);
     }
@@ -117,7 +117,7 @@ export default function DashboardPage() {
 
             {tilesLoading ? (
               <Skeleton className="w-full lg:w-[500px] rounded-md h-[20px]" />
-            ) : tilesData?.totalMilestones ? (
+            ) : tilesData?.totalBlogs ? (
               <div className="w-full lg:w-fit h-[20px] flex justify-start gap-[16px] items-center">
                 <div className="w-full lg:w-[500px] h-[10px] flex justify-start items-center bg-[#D8E6DD] rounded-[100px]">
                   <div
@@ -130,7 +130,7 @@ export default function DashboardPage() {
                 </div>
               </div>
             ) : (
-              <>Add milestone to see your progress.</>
+              <>Add blog to see your progress.</>
             )}
 
             {tilesLoading ? (
@@ -152,7 +152,7 @@ export default function DashboardPage() {
                 size="lg"
                 className="primary-button mt-[8px]"
               >
-                <Link href="/milestones">View Milestones</Link>
+                <Link href="/blogs">View Blogs</Link>
               </Button>
             )}
           </div>
@@ -227,10 +227,10 @@ export default function DashboardPage() {
                 className="w-full flex justify-between items-center heading-text-style-1"
                 style={{ fontSize: "40px" }}
               >
-                {tilesData?.milestonesCompleted || 0}
+                {tilesData?.blogsCompleted || 0}
                 <Image src={school.src} alt="" width={32} height={32} />
               </div>
-              <p className="heading-text-style-5">Milestones Completed</p>
+              <p className="heading-text-style-5">Blogs Completed</p>
             </div>
             <div className="h-[136px] md:h-[148px] bg-white box-border box-radius p-6 flex flex-col gap-4 justify-start items-start">
               <div
@@ -255,7 +255,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import UpcomingEvents from "./UpcomingEvents";
-import { setGeneratedMilestones } from "@/lib/store/slices/milestoneSlice";
+import { setGeneratedBlogs } from "@/lib/store/slices/blogslice";
 import { getSeason } from "@/lib/helper/timeFunctions";
 
 function TilesSkeleton() {

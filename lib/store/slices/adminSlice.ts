@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface OverviewType {
-  milestoneOverview: {
+  blogOverview: {
     completed: string;
     inProgress: string;
     overdue: number;
   };
-  overview: { milestones: number; month: string; users: number }[];
+  overview: { blogs: number; month: string; users: number }[];
   sinceLastMonth: {
     users: {
       total: number;
@@ -18,7 +18,7 @@ interface OverviewType {
       percent: number;
       increased: boolean;
     };
-    milestones: {
+    blogs: {
       total: number;
       percent: number;
       increased: boolean;
@@ -26,18 +26,18 @@ interface OverviewType {
   };
 }
 
-interface MilestoneData {
+interface BlogData {
   date: string;
   value: number;
 }
 
 interface AdminState {
   overview: OverviewType;
-  milestonesCompletion: MilestoneData[];
+  blogsCompletion: BlogData[];
 }
 const initialState: AdminState = {
   overview: {
-    milestoneOverview: {
+    blogOverview: {
       completed: "0",
       inProgress: "0",
       overdue: 0,
@@ -54,14 +54,14 @@ const initialState: AdminState = {
         percent: 0,
         increased: false,
       },
-      milestones: {
+      blogs: {
         total: 0,
         percent: 0,
         increased: false,
       },
     },
   },
-  milestonesCompletion: [{ date: "", value: 0 }],
+  blogsCompletion: [{ date: "", value: 0 }],
 };
 
 const adminSlice = createSlice({
@@ -74,14 +74,14 @@ const adminSlice = createSlice({
     ) => {
       state.overview = action.payload;
     },
-    setMilestonesCompletion: (
+    setBlogsCompletion: (
       state,
-      action: PayloadAction<NonNullable<AdminState["milestonesCompletion"]>>
+      action: PayloadAction<NonNullable<AdminState["blogsCompletion"]>>
     ) => {
-      state.milestonesCompletion = action.payload;
+      state.blogsCompletion = action.payload;
     },
   },
 });
 
-export const { setOverview, setMilestonesCompletion } = adminSlice.actions;
+export const { setOverview, setBlogsCompletion } = adminSlice.actions;
 export default adminSlice.reducer;

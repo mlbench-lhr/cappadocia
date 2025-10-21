@@ -2,12 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface GeneralState {
   updateProfileStep: number;
-  milestoneTier: "Tier 1" | "Tier 2" | "Tier 3" | null;
+  blogTier: "Tier 1" | "Tier 2" | "Tier 3" | null;
 }
 
 const initialState: GeneralState = {
   updateProfileStep: 0,
-  milestoneTier: null,
+  blogTier: null,
 };
 
 const generalSlice = createSlice({
@@ -20,11 +20,11 @@ const generalSlice = createSlice({
     ) => {
       state.updateProfileStep = action.payload;
     },
-    setMilestoneTier: (
+    setBlogTier: (
       state,
-      action: PayloadAction<NonNullable<GeneralState["milestoneTier"]>>
+      action: PayloadAction<NonNullable<GeneralState["blogTier"]>>
     ) => {
-      state.milestoneTier = action.payload;
+      state.blogTier = action.payload;
     },
     updateProfileStepNext: (state) => {
       state.updateProfileStep = state.updateProfileStep + 1;
@@ -39,6 +39,6 @@ export const {
   setUpdateProfileStep,
   updateProfileStepNext,
   updateProfileStepBack,
-  setMilestoneTier,
+  setBlogTier,
 } = generalSlice.actions;
 export default generalSlice.reducer;

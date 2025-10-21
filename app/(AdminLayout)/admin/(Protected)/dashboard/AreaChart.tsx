@@ -19,8 +19,8 @@ const chartConfig = {
     label: "Users",
     color: "rgba(90, 210, 166, 0.3)",
   },
-  milestones: {
-    label: "Milestones",
+  blogs: {
+    label: "Blogs",
     color: "#51606E",
   },
 } satisfies ChartConfig;
@@ -33,7 +33,7 @@ export function ChartAreaGradient() {
         <span className="text-[16px] md:text-[20px] font-[500]">
           Total Users
         </span>
-        <span className="text-[14px] font-[500]">Total Milestones</span>
+        <span className="text-[14px] font-[500]">Total Blogs</span>
         <span className="text-[14px] font-[500] text-[#D5DCD6]">|</span>
         <div className="p-0 flex justify-start leading-[0px] items-center gap-[7px]">
           <Dot color="" className="w-[6px] h-[6px] bg-[#B32053] rounded-full" />
@@ -41,7 +41,7 @@ export function ChartAreaGradient() {
         </div>
         <div className="p-0 flex justify-start leading-[0px] items-center gap-[7px]">
           <Dot color="" className="w-[6px] h-[6px] bg-[#51606E] rounded-full" />
-          <span className="text-[12px] font-[500]">Total milestones</span>
+          <span className="text-[12px] font-[500]">Total blogs</span>
         </div>
       </CardHeader>
       <CardContent className="p-0">
@@ -77,24 +77,24 @@ export function ChartAreaGradient() {
                   stopOpacity={0.1}
                 />
               </linearGradient>
-              <linearGradient id="fillMilestones" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillBlogs" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-milestones)"
+                  stopColor="var(--color-blogs)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-milestones)"
+                  stopColor="var(--color-blogs)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
             <Area
-              dataKey="milestones"
+              dataKey="blogs"
               type="natural"
               fill="transparent"
-              stroke="var(--color-milestones)"
+              stroke="var(--color-blogs)"
               strokeDasharray="4 4"
             />
             <Area

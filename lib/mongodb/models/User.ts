@@ -46,7 +46,7 @@ export interface IUser extends Document {
   profileUpdated: Boolean;
   roadMapAdded: Boolean;
   applicationsStarted: number;
-  milestoneTier: string;
+  blogTier: string;
   // new fields
   personalInfo?: {
     gender: "Male" | "Female" | "Other" | "Prefer not to say";
@@ -186,7 +186,7 @@ const UserSchema = new Schema<IUser>(
     profileUpdated: { type: Boolean },
     roadMapAdded: { type: Boolean, default: false },
     applicationsStarted: { type: Number },
-    milestoneTier: { type: String },
+    blogTier: { type: String },
   },
   { timestamps: true }
 );

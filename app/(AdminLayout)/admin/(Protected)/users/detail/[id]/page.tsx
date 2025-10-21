@@ -21,14 +21,14 @@ export default function UserDetail() {
   const [loading, setLoading] = useState(true);
   const [userLoading, setUserLoading] = useState(true);
   const [user, setUser] = useState<any>({});
-  const [milestones, setMilestones] = useState<{
-    milestones: any[];
+  const [blogs, setBlogs] = useState<{
+    blogs: any[];
     total: number;
     page: number;
     limit: number;
     totalPages: number;
   }>({
-    milestones: [],
+    blogs: [],
     total: 0,
     page: 1,
     limit: 7,
@@ -58,9 +58,9 @@ export default function UserDetail() {
     }
   }, [id]);
 
-  // Fetch milestones (when page or filter changes)
+  // Fetch blogs (when page or filter changes)
   useEffect(() => {
-    async function getMilestones() {
+    async function getBlogs() {
       try {
         setLoading(true);
         const params = new URLSearchParams({
@@ -70,9 +70,9 @@ export default function UserDetail() {
         });
 
         const response = await axios.get(
-          `/api/admin/users/detail/${id}/milestones?${params.toString()}`
+          `/api/admin/users/detail/${id}/blogs?${params.toString()}`
         );
-        setMilestones(response.data);
+        setBlogs(response.data);
       } catch (error) {
         console.log("error----", error);
       } finally {
@@ -80,7 +80,7 @@ export default function UserDetail() {
       }
     }
     if (id) {
-      getMilestones();
+      getBlogs();
     }
   }, [id, currentPage, statusFilter]);
 
@@ -102,7 +102,7 @@ export default function UserDetail() {
       render: (item) => <span>#{item._id.replace(/\D/g, "").slice(-5)}</span>,
     },
     {
-      header: "Milestones Title",
+      header: "Blogs Title",
       accessor: "title",
     },
     {
@@ -214,7 +214,7 @@ export default function UserDetail() {
           <div className="w-full mb-4 flex justify-between items-center">
             <div className="w-fit space-y-[20px]">
               <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
-                Milestones {milestones.total > 0 && `(${milestones.total})`}
+                Blogs {blogs.total > 0 && `(${blogs.total})`}
               </h1>
               <div className="flex justify-start items-center gap-4 flex-wrap">
                 <button
@@ -253,7 +253,7 @@ export default function UserDetail() {
             </div>
           </div>
           <DynamicTable
-            data={milestones.milestones}
+            data={blogs.blogs}
             columns={columns}
             itemsPerPage={7}
             onRowClick={(item) => console.log("Clicked:", item)}
@@ -261,10 +261,10 @@ export default function UserDetail() {
             // Server-side pagination props
             serverPagination={{
               currentPage: currentPage,
-              totalPages: milestones.totalPages,
+              totalPages: blogs.totalPages,
               onPageChange: setCurrentPage,
             }}
-            type="Milestones"
+            type="Blogs"
           />
         </div>
       </div>

@@ -75,7 +75,7 @@ const UpdateProfileSchema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   avatar: z.string().optional(),
-  milestoneTier: z.string().optional(),
+  blogTier: z.string().optional(),
   profileUpdated: z.boolean().optional(),
 });
 
@@ -160,8 +160,7 @@ export const PUT = async (req: any) => {
     if (validatedData.firstName) updateData.firstName = validatedData.firstName;
     if (validatedData.lastName) updateData.lastName = validatedData.lastName;
     if (validatedData.avatar) updateData.avatar = validatedData.avatar;
-    if (validatedData.milestoneTier)
-      updateData.milestoneTier = validatedData.milestoneTier;
+    if (validatedData.blogTier) updateData.blogTier = validatedData.blogTier;
     try {
       if (validatedData.profileUpdated === true) {
         updateData.profileUpdated = validatedData.profileUpdated;
@@ -178,7 +177,7 @@ export const PUT = async (req: any) => {
       { $set: updateData },
       { new: true, runValidators: true }
     ).select("-password -emailVerificationOTP -resetPasswordOTP");
-    console.log("updatedUser---------", updatedUser, userId)
+    console.log("updatedUser---------", updatedUser, userId);
     if (!updatedUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

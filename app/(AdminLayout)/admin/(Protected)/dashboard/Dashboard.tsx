@@ -26,10 +26,7 @@ import { ChartPieDonutText } from "./DonutChart";
 import { ChartAreaGradient } from "./AreaChart";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import {
-  setMilestonesCompletion,
-  setOverview,
-} from "@/lib/store/slices/adminSlice";
+import { setBlogsCompletion, setOverview } from "@/lib/store/slices/adminSlice";
 import moment from "moment";
 import { SimpleBarChart } from "./SimpleBarChart";
 
@@ -245,9 +242,7 @@ const UserCard: React.FC<{ user: UserData }> = ({ user }) => {
 
 const Dashboard: React.FC = () => {
   const overview = useAppSelector((s) => s.admin.overview);
-  const milestonesCompletion = useAppSelector(
-    (s) => s.admin.milestonesCompletion
-  );
+  const blogsCompletion = useAppSelector((s) => s.admin.blogsCompletion);
   const dispatch = useAppDispatch();
   const [latestUsers, setLatestUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -275,10 +270,10 @@ const Dashboard: React.FC = () => {
     const fetchData = async () => {
       try {
         setLoading2(true);
-        const milestonesCompletion = await axios.get(
-          `/api/admin/dashboard/milestone-completion?range=${selectedPeriod}`
+        const blogsCompletion = await axios.get(
+          `/api/admin/dashboard/blog-completion?range=${selectedPeriod}`
         );
-        dispatch(setMilestonesCompletion(milestonesCompletion.data));
+        dispatch(setBlogsCompletion(blogsCompletion.data));
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -367,18 +362,14 @@ const Dashboard: React.FC = () => {
           />
           <StatCard
             icon={<Trophy color="#B32053" />}
-            title="Completed Milestones"
-            value={overview?.sinceLastMonth?.milestones?.total}
-            trend={overview?.sinceLastMonth?.milestones?.percent}
+            title="Completed Blogs"
+            value={overview?.sinceLastMonth?.blogs?.total}
+            trend={overview?.sinceLastMonth?.blogs?.percent}
             trendColorVar={
-              overview.sinceLastMonth.milestones.increased
-                ? "#B32053"
-                : "#BA1A1A"
+              overview.sinceLastMonth.blogs.increased ? "#B32053" : "#BA1A1A"
             }
             lineColorVar={
-              overview.sinceLastMonth.milestones.increased
-                ? "#B32053"
-                : "#BA1A1A"
+              overview.sinceLastMonth.blogs.increased ? "#B32053" : "#BA1A1A"
             }
             points={[3]}
             isLoading={loading}

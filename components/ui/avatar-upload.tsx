@@ -16,7 +16,7 @@ interface AvatarUploadProps {
   size?: number;
   setLoading?: Dispatch<SetStateAction<boolean>>;
   opportunity?: Boolean;
-  milestone?: Boolean;
+  blog?: Boolean;
 }
 
 export function AvatarUpload({
@@ -26,7 +26,7 @@ export function AvatarUpload({
   size = 96,
   setLoading,
   opportunity = false,
-  milestone = false,
+  blog = false,
 }: AvatarUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -99,7 +99,7 @@ export function AvatarUpload({
               <div className="w-full h-full flex items-center justify-center">
                 {opportunity ? (
                   <Sprout className="w-8 h-8 text-[#B32053]" />
-                ) : milestone ? (
+                ) : blog ? (
                   <Trophy className="w-8 h-8 text-[#B32053]" />
                 ) : (
                   <User className="w-8 h-8 text-[#B32053]" />

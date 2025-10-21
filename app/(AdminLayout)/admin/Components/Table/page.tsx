@@ -61,13 +61,20 @@ interface DynamicTableProps {
   isLoading?: boolean;
   showImage?: boolean;
   serverPagination?: ServerPagination; // New prop for server-side pagination
-  type?: "Users" | "Opportunities" | "Milestones" | "Data" | "Field";
+  type?: "Users" | "Opportunities" | "Blogs" | "Data" | "Field";
 }
 const Icons = {
   Users: <Users color="#D8E6DD" size={40} />,
   Opportunities: <Sprout color="#D8E6DD" size={40} />,
   Field: <Database color="#D8E6DD" size={40} />,
-  Milestones: <Trophy color="#D8E6DD" size={40} />,
+  Blogs: (
+    <Image
+      src={"/blogs imgs/blogPlaceholder.png"}
+      alt=""
+      width={317}
+      height={257}
+    />
+  ),
   Data: null,
 };
 export function DynamicTable({
@@ -116,9 +123,9 @@ export function DynamicTable({
   }
   if (currentData.length < 1) {
     return (
-      <div className="mx-auto w-full flex justify-center items-center flex-col pt-6 gap-y-2">
+      <div className="mx-auto w-full flex justify-center items-center flex-col pt-6 gap-y-2 text-sm md:text-[24px] text-[#7B849A]">
         {Icons[type]}
-        No {type} Found
+        No {type} Added Yet!!
       </div>
     );
   }
