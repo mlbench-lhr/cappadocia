@@ -40,15 +40,25 @@ export default function app() {
             className="h-[45px] w-full md:w-[350px] bg-white text-center"
             style={{ borderColor: "white" }}
           />
-          <Link href={"/blogs"} className="w-full md:w-fit">
-            <Button className="w-full md:w-fit" variant={"main_green_button"}>
-              Get Connected
-            </Button>
-          </Link>
+          <div className="grid grid-cols-2 gap-2.5 w-full md:w-fit">
+            <Link href={"/blogs"} className="col-span-1 md:w-fit">
+              <Button className="w-full md:w-fit" variant={"main_green_button"}>
+                Get Connected
+              </Button>
+            </Link>
+            <Link
+              href={"/blogs"}
+              className="col-span-1 md:w-fit block md:hidden"
+            >
+              <Button className="w-full md:w-fit" variant={"main_green_button"}>
+                Visit Blog Page
+              </Button>
+            </Link>
+          </div>
         </div>
-        <Link href={"/blogs"} className="w-full md:w-fit">
+        <Link href={"/blogs"} className="w-full md:w-fit hidden md:block">
           <Button
-            className="mt-6 w-full md:w-fit"
+            className="mt-2.5 md:mt-6 w-full md:w-fit"
             variant={"main_green_button"}
           >
             Visit Blog Page
