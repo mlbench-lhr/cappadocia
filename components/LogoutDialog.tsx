@@ -24,8 +24,8 @@ export default function LogoutDialog({
   const handleConfirm = async () => {
     await signOut();
     router.refresh();
-    router.push("/");
-    window.location.href = "/";
+    router.push("/admin/auth/login");
+    window.location.href = "/admin/auth/login";
   };
   return (
     <>

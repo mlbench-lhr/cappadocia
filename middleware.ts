@@ -4,7 +4,7 @@ import { verifyToken } from "@/lib/auth/jwt";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const protectedRoutes = ["/dashboard", "/admin/dashboard"];
+  const protectedRoutes = ["/dashboard", "/admin/dashboard", "/admin/blogs"];
   const authRoutes = [
     "/auth/login",
     "/auth/signup",
