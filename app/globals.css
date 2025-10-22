@@ -1103,3 +1103,21 @@ button {
     padding-bottom: 0px;
   }
 }
+.content img {
+  width: 100%;
+  border-radius: 12px;
+  margin: 10px 0px;
+}
+.content em,
+.content i {
+  display: block;
+  padding: 2rem; /* same as p-8 */
+  background-color: #f6f6f7;
+  border-left: 4px solid #e8e8ea;
+  border-radius: 12px;
+  font-style: italic;
+  font-weight: 400; /* normal */
+  font-size: 24px; /* base text */
+  line-height: 32px; /* normal leading */
+  margin: 1rem 0; /* spacing between blocks */
+}

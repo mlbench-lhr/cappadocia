@@ -1,10 +1,38 @@
 "use client";
+import { BlogsCardType } from "@/lib/types/blog";
+import axios from "axios";
 import { ChevronLeft } from "lucide-react";
+import moment from "moment";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function app() {
+  const { id } = useParams();
+  const [item, setItem] = useState<BlogsCardType | null>(null);
+  const [loading, setLoading] = useState(true);
+  console.log("item-----", item);
+
+  const [refreshData, setRefreshData] = useState(0);
   const router = useRouter();
+  useEffect(() => {
+    const fetchOpportunity = async () => {
+      try {
+        const res = await axios.get(`/api/blogs/${id}`);
+        setItem(res.data);
+      } catch (error) {
+        console.error("Error fetching opportunity:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) fetchOpportunity();
+  }, [id, refreshData]);
+
+  if (!item) {
+    return;
+  }
 
   return (
     <div className="w-full mx-auto space-y-8">
@@ -21,11 +49,10 @@ export default function app() {
         <section className="w-full mt-[30px] lg:mt-[50px] h-fit space-y-4">
           <div className="w-full h-fit flex flex-col justify-start items-start gap-2 md:gap-[24px]">
             <h1 className="font-[600] text-[20px] md:text-[36px] md:leading-[40px]">
-              The Impact of Technology on the Workplace: How Technology is
-              Changing
+              {item?.title}
             </h1>
             <div className="flex justify-start items-center gap-5">
-              <div className="flex justify-start items-center gap-3">
+              {/* <div className="flex justify-start items-center gap-3">
                 <Image
                   width={36}
                   height={36}
@@ -38,9 +65,9 @@ export default function app() {
                 <h3 className="text-[12px] md:text-[16px] text-[#97989F] font-[500]">
                   Tracey Wilson
                 </h3>
-              </div>
+              </div> */}
               <h4 className="text-[12px] md:text-[16px] text-[#97989F] font-[400]">
-                August 20, 2022
+                Published on: {moment(item?.createdAt).format("MMM DD, YYYY")}
               </h4>
             </div>
           </div>
@@ -49,14 +76,12 @@ export default function app() {
               width={100}
               height={600}
               alt=""
-              src={
-                "/blogs imgs/source/8861f38d3fffbc5030644caaea473452e354175b.jpg"
-              }
+              src={item?.coverImage}
               className="w-full h-auto md:h-[465px] rounded-[12px] overflow-hidden object-cover"
             />
           </div>
         </section>
-        <div className="w-full py-6 md:py-[32px] flex flex-col justify-start items-start gap-6 md:gap-8 font-[400] text-base md:text-[20px] leading-normal md:leading-[32px] text-[#3B3C4A] text-justify md:text-left">
+        {/* <div className="w-full py-6 md:py-[32px] flex flex-col justify-start items-start gap-6 md:gap-8 font-[400] text-base md:text-[20px] leading-normal md:leading-[32px] text-[#3B3C4A] text-justify md:text-left">
           <p>
             Cappadocia is a destination like no other — a surreal landscape of
             fairy chimneys, ancient cave dwellings, and vibrant culture that
@@ -215,6 +240,13 @@ export default function app() {
             Cappadocia’s timeless beauty leave an imprint on your soul. This is
             not just a journey — it’s a story you’ll carry with you forever.
           </p>
+        </div> */}
+        <div className="w-full py-6 md:py-[32px] flex flex-col justify-start items-start gap-6 md:gap-8 font-[400] text-base md:text-[20px] leading-normal md:leading-[32px] text-[#3B3C4A] text-justify md:text-left">
+          <div
+            className="content w-[100%] flex flex-col gap-1 md:gap-2"
+            style={{ textAlign: "start" }}
+            dangerouslySetInnerHTML={{ __html: item?.text }}
+          />
         </div>
       </div>
     </div>

@@ -4,6 +4,8 @@ import TestimonialCard from "./BlogCards";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const testimonials = [
   {
@@ -74,6 +76,47 @@ const testimonials = [
 ];
 
 export function CardSection() {
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [refreshData, setRefreshData] = useState(1);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [data, setData] = useState<{
+    blogs: any[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  }>({
+    blogs: [],
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+  });
+  console.log("data-----", data);
+
+  useEffect(() => {
+    async function getblogs() {
+      try {
+        setLoading(true);
+        const params = new URLSearchParams({
+          page: currentPage.toString(),
+          limit: "10",
+          ...(debouncedSearch && { search: debouncedSearch }),
+        });
+
+        let allblogs = await axios.get(`/api/admin/blogs?${params.toString()}`);
+        setData(allblogs.data);
+        setLoading(false);
+      } catch (error) {
+        console.log("error----", error);
+        setLoading(false);
+      }
+    }
+    getblogs();
+  }, [currentPage, refreshData, debouncedSearch]);
+
   return (
     <section id="testimonials" className="pb-[80px] w-full">
       <div className="w-full mx-auto">
@@ -93,14 +136,15 @@ export function CardSection() {
 
         <div className="w-full relative mt-[50px] flex flex-col justify-start items-center gap-8">
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {testimonials.map((testimonial, index) => (
+            {data?.blogs.map((testimonial, index) => (
               <TestimonialCard
                 key={index}
-                img={testimonial.img}
-                date={testimonial.date}
-                text={testimonial.text}
+                img={testimonial.coverImage}
+                date={testimonial.createdAt}
+                title={testimonial.title}
                 name={testimonial.name}
                 avatar={testimonial.avatar}
+                _id={testimonial._id}
               />
             ))}
           </div>

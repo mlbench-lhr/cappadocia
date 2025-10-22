@@ -158,8 +158,8 @@ export default function BlogCard() {
           <div
             className={`py-[24px] px-[16px] flex flex-col gap-[16px] justify-start items-start w-full bg-[#F0F1F3]`}
           >
-            <span
-              className="text-[14px] font-[400] w-[100%] leading-[24px] md:leading-[32px]"
+            <div
+              className="content w-[100%]"
               style={{ textAlign: "start" }}
               dangerouslySetInnerHTML={{ __html: item?.text }}
             />
