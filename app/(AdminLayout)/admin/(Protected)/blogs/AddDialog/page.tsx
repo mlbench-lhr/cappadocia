@@ -1,16 +1,30 @@
 "use client";
-import { Textarea } from "@/components/ui/textarea";
 import { AvatarUpload } from "@/components/ui/avatar-upload";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PencilLine } from "lucide-react";
+import {
+  PencilLine,
+  Bold,
+  Italic,
+  Heading1,
+  Heading2,
+  Image as ImageIcon,
+} from "lucide-react";
 import { BlogsCardType } from "@/lib/types/blog";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
 
 const schema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
@@ -29,6 +43,130 @@ interface SimplifiedFormProps {
   setItem?: any;
 }
 
+// Rich Text Editor Component
+const RichTextEditor = ({
+  value,
+  onChange,
+  placeholder = "Start writing...",
+}: {
+  value: string;
+  onChange: (html: string) => void;
+  placeholder?: string;
+}) => {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3],
+        },
+      }),
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+      }),
+    ],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+    editorProps: {
+      attributes: {
+        class:
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl focus:outline-none min-h-[150px] max-w-none p-4",
+      },
+    },
+  });
+
+  const addImage = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file && editor) {
+        // Convert image to base64
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64 = event.target?.result as string;
+          editor.chain().focus().setImage({ src: base64 }).run();
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  if (!editor) {
+    return null;
+  }
+
+  return (
+    <div className="border rounded-md">
+      {/* Toolbar */}
+      <div className="border-b p-2 flex gap-2 flex-wrap bg-gray-50">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`p-2 rounded hover:bg-gray-200 ${
+            editor.isActive("bold") ? "bg-gray-300" : ""
+          }`}
+          title="Bold"
+        >
+          <Bold size={18} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`p-2 rounded hover:bg-gray-200 ${
+            editor.isActive("italic") ? "bg-gray-300" : ""
+          }`}
+          title="Italic"
+        >
+          <Italic size={18} />
+        </button>
+        <div className="w-px bg-gray-300 mx-1" />
+        <button
+          type="button"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={`p-2 rounded hover:bg-gray-200 ${
+            editor.isActive("heading", { level: 1 }) ? "bg-gray-300" : ""
+          }`}
+          title="Heading 1"
+        >
+          <Heading1 size={18} />
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={`p-2 rounded hover:bg-gray-200 ${
+            editor.isActive("heading", { level: 2 }) ? "bg-gray-300" : ""
+          }`}
+          title="Heading 2"
+        >
+          <Heading2 size={18} />
+        </button>
+        <div className="w-px bg-gray-300 mx-1" />
+        <button
+          type="button"
+          onClick={addImage}
+          className="p-2 rounded hover:bg-gray-200"
+          title="Add Image"
+        >
+          <ImageIcon size={18} />
+        </button>
+      </div>
+
+      {/* Editor Content */}
+      <EditorContent editor={editor} className="min-h-[150px]" />
+    </div>
+  );
+};
+
 export default function AddDialog({
   onSubmit: onSubmitProp,
   setRefreshData,
@@ -41,6 +179,10 @@ export default function AddDialog({
     initialData?.coverImage || ""
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editorContent, setEditorContent] = useState<string>(
+    initialData?.text || ""
+  );
+
   const {
     register,
     handleSubmit,
@@ -61,6 +203,11 @@ export default function AddDialog({
   const handleCoverImageUpload = (url: string) => {
     setCoverImage(url);
     setValue("coverImage", url);
+  };
+
+  const handleEditorChange = (html: string) => {
+    setEditorContent(html);
+    setValue("text", html);
   };
 
   const onSubmit = async (data: FormData) => {
@@ -101,12 +248,13 @@ export default function AddDialog({
         text: item.text || "",
       });
       setCoverImage(item.coverImage);
+      setEditorContent(item.text || "");
     }
   }, [item, reset]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         {edit ? (
           <Button className="flex text-white bg-[#38B89A] text-[20px] px-[20px]">
             <PencilLine size={26} />
@@ -116,7 +264,8 @@ export default function AddDialog({
           <Button variant={"main_green_button"}>Add Blog</Button>
         )}
       </DialogTrigger>
-      <DialogContent className="min-w-[600px]">
+      <DialogContent className="min-w-[800px] max-h-[90vh] overflow-y-auto">
+        <DialogTitle></DialogTitle>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-[24px] w-full bg-white"
@@ -162,17 +311,16 @@ export default function AddDialog({
                 )}
               </div>
 
-              {/* Text */}
+              {/* Rich Text Editor */}
               <div className="flex flex-col gap-[10px]">
                 <Label htmlFor="text" className="text-[25px] font-[700]">
                   {edit ? "Edit " : "Add "}
                   Blog <span className="text-red-500 ml-1">*</span>
                 </Label>
-                <Textarea
-                  id="text"
-                  className="input-style min-h-[150px]"
-                  placeholder="Enter Text"
-                  {...register("text")}
+                <RichTextEditor
+                  value={editorContent}
+                  onChange={handleEditorChange}
+                  placeholder="Start writing your blog..."
                 />
                 {errors.text && (
                   <p className="text-red-500 text-sm">{errors.text.message}</p>
