@@ -11,6 +11,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import AddDialog from "../../AddDialog/page";
 import Swal from "sweetalert2";
+import AdminBlogDetailSkeleton from "../AdminBlogDetailLoader";
 
 export default function BlogCard() {
   const { id } = useParams();
@@ -80,13 +81,7 @@ export default function BlogCard() {
   if (loading && !item) {
     return (
       <AdminLayout>
-        <div className="py-[24px] flex flex-col gap-[32px] justify-start items-start w-full">
-          <div className="py-[24px] flex flex-col gap-[32px] justify-start items-start w-full relative">
-            <div className="flex justify-start items-center gap-[12px] flex-col">
-              Loading...
-            </div>
-          </div>
-        </div>
+        <AdminBlogDetailSkeleton />
       </AdminLayout>
     );
   }
