@@ -963,23 +963,10 @@ button {
 /* Add to your global CSS or use a style tag */
 .custom-table-row {
   border: none !important;
-  padding-bottom: 6px !important;
-  padding-top: 6px !important;
-}
-
-.custom-table-row td:first-child {
-  border-bottom-left-radius: 15px;
-  border-top-left-radius: 15px;
-}
-
-.custom-table-row td:last-child {
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
 }
 
 .custom-table-row td {
-  background-color: #f8faf6;
-  border: none !important;
+  border-bottom: #dbdfe9 1px solid !important;
 }
 
 .not_started {

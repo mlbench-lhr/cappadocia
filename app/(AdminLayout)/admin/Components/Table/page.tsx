@@ -139,7 +139,7 @@ export function DynamicTable({
             {columns.map((column, i) => (
               <TableHead
                 key={i}
-                className={column.headerClassName}
+                className={"text-[20px] font-[500]"}
                 style={{ width: column.width }}
               >
                 {column.header}
@@ -151,8 +151,8 @@ export function DynamicTable({
           {currentData.map((item, i) => (
             <TableRow
               key={i}
-              className={`border-none bg-[#F8FAF6] rounded-[35px] border-b-2 custom-table-row h-[75px] text-[14px] font-[400] ${rowClassName} ${
-                onRowClick ? "cursor-pointer hover:bg-[#F0F5EB]" : ""
+              className={`border-none rounded-[35px] border-b-2 custom-table-row h-[75px] text-[14px] font-[400] ${rowClassName} ${
+                onRowClick ? "hover:bg-transparent" : ""
               }`}
               onClick={() => onRowClick?.(item)}
             >
@@ -197,7 +197,7 @@ export function DynamicTable({
                   ? i + 1
                   : currentPage >= totalPages - 2
                   ? totalPages - 4 + i
-                  : currentPage - 2 + i;
+                : currentPage - 2 + i;
 
               return (
                 <PaginationItem key={i}>
