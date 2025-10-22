@@ -105,12 +105,12 @@ export default function AllBlogs() {
                 Total Blogs: {data.total}
               </h1>
             </div>
-            <div className="grid grid-cols-2 md:flex justify-end items-center gap-4 flex-wrap lg:w-fit w-full">
-              <div className="col-span-2 relative w-full md:w-[325px] h-[50px]">
+            <div className="flex justify-start items-center md:gap-x-4 gap-y-2 flex-wrap w-fit">
+              <div className="relative w-full md:w-[325px] h-[50px]">
                 <Search className="absolute left-3 top-[17px] h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search..."
-                  className="pl-10 w-full md:w-[325px] h-[50px] rounded-[10px]"
+                  className="pl-10 w-[325px] h-[50px] rounded-[10px]"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />

@@ -261,16 +261,16 @@ export default function AddDialog({
             Edit
           </Button>
         ) : (
-          <Button variant={"main_green_button"}>Add Blog</Button>
+          <Button variant={"main_green_button"} className="w-full md:w-fit">Add Blog</Button>
         )}
       </DialogTrigger>
-      <DialogContent className="min-w-[800px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="min-w-[95vw] lg:min-w-[800px] max-h-[90vh] overflow-y-auto">
         <DialogTitle></DialogTitle>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-[24px] w-full bg-white"
         >
-          <h4 className="text-[35px] font-[600] text-center">
+          <h4 className="text-2xl md:text-[35px] font-[600] text-center mb-2">
             {edit ? "Edit " : "Add "}
             Blog
           </h4>
@@ -283,7 +283,7 @@ export default function AddDialog({
                 className="mx-auto"
               />
               <span className="plan-text-style-4">Cover Image</span>
-              <span className="plan-text-style-3 pt-1">
+              <span className="text-[14px] font-[400] text-[#51606e] pt-1">
                 This image will be displayed as the cover of your blog
               </span>
             </div>
@@ -297,7 +297,7 @@ export default function AddDialog({
             <div className="grid grid-cols-1 gap-6">
               {/* Title */}
               <div className="flex flex-col gap-[10px]">
-                <Label htmlFor="title" className="text-[25px] font-[700]">
+                <Label htmlFor="title" className="text-xl md:text-[25px] font-[700]">
                   Title <span className="text-red-500 ml-1">*</span>
                 </Label>
                 <Input
@@ -313,7 +313,7 @@ export default function AddDialog({
 
               {/* Rich Text Editor */}
               <div className="flex flex-col gap-[10px]">
-                <Label htmlFor="text" className="text-[25px] font-[700]">
+                <Label htmlFor="text" className="text-xl md:text-[25px] font-[700]">
                   {edit ? "Edit " : "Add "}
                   Blog <span className="text-red-500 ml-1">*</span>
                 </Label>
