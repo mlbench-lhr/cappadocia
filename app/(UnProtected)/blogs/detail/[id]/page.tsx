@@ -6,6 +6,7 @@ import moment from "moment";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import BlogDetailSkeleton from "../BlogDetailPageLoader";
 
 export default function app() {
   const { id } = useParams();
@@ -31,7 +32,7 @@ export default function app() {
   }, [id, refreshData]);
 
   if (!item) {
-    return;
+    return <BlogDetailSkeleton />;
   }
 
   return (
@@ -246,7 +247,9 @@ export default function app() {
             className="content w-[100%] flex flex-col gap-1 md:gap-2"
             style={{ textAlign: "start" }}
             dangerouslySetInnerHTML={{ __html: item?.text }}
-          />
+          >
+            {/* {item?.text} */}
+          </div>
         </div>
       </div>
     </div>

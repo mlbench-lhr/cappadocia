@@ -23,7 +23,7 @@ export default function AllBlogs() {
     blogs: [],
     total: 0,
     page: 1,
-    limit: 10,
+    limit: 9,
     totalPages: 0,
   });
   const [searchTerm, setSearchTerm] = useState("");

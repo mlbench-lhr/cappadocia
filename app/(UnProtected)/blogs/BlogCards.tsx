@@ -30,7 +30,7 @@ const BlogCards = ({
         alt=""
         className="w-full h-[240px] rounded-[16px] object-cover"
       />
-      <h1 className="font-[600] text-[22px]">{title}</h1>
+      <h1 className="font-[600] text-[22px] line-clamp-2">{title}</h1>
       <div className="w-full flex justify-between flex-wrap gap-[12px] items-center">
         {(avatar || name) && (
           <div className="w-fit rounded-[8px] flex justify-center items-center gap-3">

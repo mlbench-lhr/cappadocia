@@ -97,12 +97,12 @@ export default function BlogCard() {
         <div
           className={` flex flex-col gap-[16px] justify-start items-start w-full`}
         >
-          <div className="w-full flex justify-between gap-[24px] items-center mb-[16px]">
-            <div className="flex justify-start gap-[24px] items-center">
+          <div className="w-full flex justify-between gap-[24px] items-center mb-[16px] flex-wrap">
+            <div className="flex justify-start gap-1 md:gap-[24px] items-center">
               <Link href={"/admin/blogs"} className="pl-2">
                 <ArrowLeft color="#B32053" size={30} />
               </Link>
-              <h4 className="text-3xl md:text-[35px] font-[600] text-center">
+              <h4 className="text-2xl md:text-[35px] font-[600] text-center">
                 Blog Details
               </h4>
             </div>
