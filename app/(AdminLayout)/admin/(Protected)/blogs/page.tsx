@@ -115,7 +115,7 @@ export default function AllBlogs() {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <AddDialog setRefreshData={setRefreshData} />{" "}
+              <AddDialog setRefreshData={setRefreshData} />
             </div>
           </div>
           <DynamicTable

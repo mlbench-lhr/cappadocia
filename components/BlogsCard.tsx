@@ -302,7 +302,7 @@ export default function BlogsCard(item: BlogsCardProps) {
         item?.inGeneratedItemsPage || item?.inPlanPage
           ? "box-shadows-2"
           : "section-box-2"
-      } py-[24px] px-[16px] flex flex-col gap-[16px] justify-start items-start w-full relative z-[1] overflow-hidden`}
+      }  flex flex-col gap-[16px] justify-start items-start w-full relative z-[1] overflow-hidden`}
       style={{
         backgroundColor:
           !item?.inDetailPage &&

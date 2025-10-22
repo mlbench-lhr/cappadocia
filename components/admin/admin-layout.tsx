@@ -378,7 +378,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-slate-50 w-full flex">
       <Sidebar />
       <div
-        className={`flex flex-col items-center w-full bg-white ${
+        className={`flex flex-col items-center w-full bg-[#F9FAFB] ${
           isMiddleScreen && !isCollapsed
             ? "w-full"
             : isCollapsed
@@ -389,7 +389,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
         <Navbar />
 
         <main
-          className={`flex-1 py-[20px] px-[20px] md:py-[32px] md:px-[38px] element bg-[#F9FAFB]`}
+          className={`flex-1 py-[20px] px-[20px] md:py-[32px] md:px-[38px] element`}
         >
           {children}
         </main>

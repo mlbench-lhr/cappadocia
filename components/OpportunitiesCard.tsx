@@ -156,7 +156,7 @@ export default function OpportunitiesCard(item: OpportunitiesCardTypeProps) {
   }
 
   return (
-    <div className="relative section-box-2 py-[24px] px-[16px] flex flex-col gap-[16px] justify-start items-start w-full overflow-hidden z-[1]">
+    <div className="relative section-box-2  flex flex-col gap-[16px] justify-start items-start w-full overflow-hidden z-[1]">
       {/* Top info */}
       <Link
         href={`/opportunities/detail/${item?._id}`}
