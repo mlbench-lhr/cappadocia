@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-import { withAuth } from "@/lib/auth/middleware";
 import connectDB from "@/lib/mongodb/connection";
 import Blog from "@/lib/mongodb/models/Blog";
 
-export const GET = withAuth(async (req) => {
+export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const page = Number(url.searchParams.get("page")) || 1;
@@ -42,7 +41,7 @@ export const GET = withAuth(async (req) => {
       { status: 500 }
     );
   }
-});
+}
 
 export async function POST(req: Request) {
   try {
