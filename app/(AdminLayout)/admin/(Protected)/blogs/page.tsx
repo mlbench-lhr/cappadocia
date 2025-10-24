@@ -98,9 +98,7 @@ export default function AllBlogs() {
         <div className="w-full mx-auto">
           <div className="w-full mb-4 flex justify-between items-center flex-wrap gap-y-2">
             <div className="w-full md:w-fit mb-0 space-y-[5px]">
-              <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
-                All Blogs
-              </h1>
+              <h1 className="title-heading">Blogs</h1>
               <h1 className="text-lg md:text-xl font-semibold text-[#51606E]">
                 Total Blogs: {data.total}
               </h1>

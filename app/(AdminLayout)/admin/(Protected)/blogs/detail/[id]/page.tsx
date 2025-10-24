@@ -97,8 +97,8 @@ export default function BlogCard() {
               <Link href={"/admin/blogs"} className="pl-2">
                 <ArrowLeft color="#B32053" size={30} />
               </Link>
-              <h4 className="text-2xl md:text-[35px] font-[600] text-center">
-                Blog Details
+              <h4 className="text-xl md:text-[26px] font-[600] text-center">
+                Blog Detail
               </h4>
             </div>
             <div className="flex justify-end gap-[10px] items-center">
@@ -136,15 +136,15 @@ export default function BlogCard() {
               className={`px-0 md:px-[16px] flex flex-col justify-start items-start w-full bg-[#F0F1F3]`}
             >
               <h3
-                className={`text-xl md:text-[32px] text-[#B32053] font-[600] w-[100%]`}
+                className={`text-lg md:text-[26px] text-[#B32053] font-[600] w-[100%]`}
               >
                 Title
               </h3>
-              <span className={`text-xl md:text-[28px] font-[400] w-[100%]`}>
+              <span className={`text-xl md:text-[22px] font-[600] w-[100%]`}>
                 {item?.title}
               </span>
               <span
-                className={`text-lg md:text-[20px] font-[500] text-[rgba(120,130,127,0.80)] w-[100%]`}
+                className={`text-lg md:text-[18px] font-[400] text-[rgba(120,130,127,0.80)] w-[100%]`}
               >
                 Published On : {moment(item?.createdAt).format("MMM DD, YYYY")}
               </span>
