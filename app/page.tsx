@@ -1,9 +1,47 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
 export default function app() {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  async function getConnected(e: any) {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      let response = await axios.post("/api/getConnected", {
+        email: email,
+      });
+
+      if (response?.data?.message) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: response?.data?.message || "Subscription Successful",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+      setEmail("");
+    } catch (error: any) {
+      if (error?.response?.data?.message) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error?.response?.data?.message || "Failed to add blog",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="bg-[#FFF9F9] w-full h-screen">
       <div className="w-full h-screen getStartedPage relative py-[20px] px-4 md:py-[32px] md:px-[38px] element mx-auto">
@@ -42,23 +80,31 @@ export default function app() {
           <h3 className="font-[700] heading3 text-[#B32054] leading-normal text-center mt-2.5 md:mt-5">
             Be the First to Know When We Launch
           </h3>
-          <div className="w-full flex gap-2.5 justify-center items-center mt-4 md:mt-8 flex-col md:flex-row">
+          <form
+            onSubmit={(e) => {
+              getConnected(e);
+            }}
+            className="w-full flex gap-2.5 justify-center items-center mt-4 md:mt-8 flex-col md:flex-row"
+          >
             <Input
               placeholder="Enter your email address"
               className="h-[45px] w-full md:w-[350px] bg-white text-center"
               style={{ borderColor: "white" }}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              value={email}
             />
             <div className="grid md:flex grid-cols-2 gap-2.5 w-full md:w-fit">
-              <Link href={"/blogs"} className="col-span-2 md:w-fit">
-                <Button
-                  className="w-full md:w-fit"
-                  variant={"main_green_button"}
-                >
-                  Get Connected
-                </Button>
-              </Link>
+              <Button
+                className="w-full md:w-fit"
+                type="submit"
+                variant={"main_green_button"}
+                loading={loading}
+              >
+                Get Connected
+              </Button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
