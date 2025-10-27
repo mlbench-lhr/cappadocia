@@ -1,12 +1,13 @@
 "use client";
 
 import TestimonialCard from "./BlogCards";
-import { Search } from "lucide-react";
+import { Files, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BlogCardsGridSkeleton } from "./BlogCardsLoader";
+import Image from "next/image";
 
 export function CardSection() {
   const [loading, setLoading] = useState(true);
@@ -80,6 +81,18 @@ export function CardSection() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {loading ? (
               <BlogCardsGridSkeleton />
+            ) : data?.blogs.length < 1 ? (
+              <div className="col-span-3 mx-auto flex flex-col justify-center items-center gap-4">
+                <Image
+                  src={"/blogs imgs/blogPlaceholder.png"}
+                  alt=""
+                  width={317}
+                  height={257}
+                />
+                <span className="text-sm md:text-[24px] text-[#7B849A]">
+                  No blogs added yet
+                </span>
+              </div>
             ) : (
               data?.blogs.map((testimonial, index) => (
                 <TestimonialCard
