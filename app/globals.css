@@ -1155,4 +1155,25 @@ button {
   .title-heading {
     font-size: 20px;
   }
+  .heading1 {
+    font-size: 30px;
+  }
+  .heading2 {
+    font-size: 25px;
+  }
+  .heading3 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 468px) {
+  .heading1 {
+    font-size: 20px;
+  }
+  .heading2 {
+    font-size: 18px;
+  }
+  .heading3 {
+    font-size: 16px;
+  }
 }
