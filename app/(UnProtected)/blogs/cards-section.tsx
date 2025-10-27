@@ -61,7 +61,7 @@ export function CardSection() {
   return (
     <section id="testimonials" className="pb-[80px] w-full">
       <div className="w-full mx-auto">
-        <div className="w-full flex justify-between items-center text-center gap-[20px] flex-wrap">
+        <div className="w-full flex justify-between items-center text-center gap-[20px] flex-wrap-reverse">
           <h2 className="font-[700] text-[24px]">Latest Post</h2>
           <div className="w-[390px] h-[48px] relative">
             <Search

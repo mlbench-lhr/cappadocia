@@ -14,7 +14,7 @@ export function HeroSection() {
         <h1 className="text-[18px] md:text-[32px] font-[600] leading-[20px] md:leading-[40px]">
           Discover the Best Tours & Activities in Cappadocia
         </h1>
-        <div className="w-fit rounded-[8px] flex justify-center items-center gap-3">
+        <div className="w-fit rounded-[8px] flex justify-start md:justify-center items-center gap-3 flex-wrap">
           <Image
             width={100}
             height={100}
@@ -27,7 +27,7 @@ export function HeroSection() {
           <h2 className="font-[500] text-sm md:text-[16px] text-[#97989F]">
             Jason Francisco
           </h2>
-          <h2 className="ms-2 font-[400] text-sm md:text-[16px] text-[#97989F]">
+          <h2 className="m-0 md:ms-2 font-[400] text-sm md:text-[16px] text-[#97989F]">
             January 20, 2024
           </h2>
         </div>
