@@ -54,8 +54,7 @@ export default function app() {
               alt="Logo"
               className="logo w-auto"
             /> */}
-            <div className="w-[200px] h-[72px] bg-image">
-            </div>
+            <div className="w-[130px] h-[50px] md:w-[200px] md:h-[72px] bg-image"></div>
             <Link href={"/blogs"} className="w-fit block">
               <Button className="w-full md:w-fit" variant={"main_green_button"}>
                 Visit Blog Page
