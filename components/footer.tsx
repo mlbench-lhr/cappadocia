@@ -7,13 +7,14 @@ export function Footer() {
     <footer className="px-0 md:px-[20px] xl:px-[100px] w-full bg-[#B32053] py-[40px] xl:py-[56px] text-[rgba(255,255,255,0.80)]">
       <div className="w-full flex justify-between items-center mx-auto flex-wrap gap-y-[48px]">
         <div className="px-[20px] md:px-[0px] flex justify-between items-start flex-col gap-[12px]">
-          <Image
+          {/* <Image
             src={WhiteLogo}
             alt="Twitter"
             width={103}
             height={56}
             className="w-[130px] h-[50px] md:w-[200px] md:h-[72px]"
-          />
+          /> */}
+          <div className="w-[130px] h-[50px] md:w-[200px] md:h-[72px] white-bg-image"></div>
           <span className="font-[400] text-white text-base">
             Discover amazing tours and activities with ease.
             <br className="hidden md:block" /> Connect with trusted local

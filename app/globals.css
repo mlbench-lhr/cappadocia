@@ -1182,3 +1182,8 @@ button {
   background-size: contain;
   object-fit: fill;
 }
+.white-bg-image {
+  background-image: url("/WhiteLogo.png");
+  background-size: contain;
+  object-fit: fill;
+}

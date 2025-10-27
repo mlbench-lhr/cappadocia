@@ -79,13 +79,14 @@ export function Navigation() {
             </button> */}
           </div>
           <Link href="/" className="flex items-center">
-            <Image
+            {/* <Image
               width={200}
               height={72}
               src={logo.src}
               alt="Logo"
               className="w-[130px] h-[50px] md:w-[200px] md:h-[72px]"
-            />
+            /> */}
+            <div className="w-[130px] h-[50px] md:w-[200px] md:h-[72px] bg-image"></div>
           </Link>
         </div>
 
