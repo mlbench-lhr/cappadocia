@@ -47,13 +47,15 @@ export default function app() {
       <div className="w-full h-screen getStartedPage relative py-[20px] px-4 md:py-[32px] md:px-[38px] element mx-auto">
         <div className="w-full flex flex-col justify-start items-center">
           <div className="w-full flex justify-between items-center">
-            <Image
+            {/* <Image
               src={"/logo.svg"}
               width={200}
               height={72}
               alt="Logo"
               className="logo w-auto"
-            />
+            /> */}
+            <div className="w-[200px] h-[72px] bg-image">
+            </div>
             <Link href={"/blogs"} className="w-fit block">
               <Button className="w-full md:w-fit" variant={"main_green_button"}>
                 Visit Blog Page

@@ -1177,3 +1177,8 @@ button {
     font-size: 16px;
   }
 }
+.bg-image {
+  background-image: url("/logo.png");
+  background-size: contain;
+  object-fit: fill;
+}
