@@ -96,7 +96,7 @@ export default function app() {
             />
             <div className="grid md:flex grid-cols-2 gap-2.5 w-full md:w-fit">
               <Button
-                className="w-full md:w-fit"
+                className="w-full md:w-fit col-span-2"
                 type="submit"
                 variant={"main_green_button"}
                 loading={loading}
