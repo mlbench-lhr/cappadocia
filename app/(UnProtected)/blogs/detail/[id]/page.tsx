@@ -49,7 +49,7 @@ export default function app() {
       <div className="w-full max-w-[800px] mx-auto pb-4">
         <section className="w-full mt-[30px] lg:mt-[50px] h-fit space-y-4">
           <div className="w-full h-fit flex flex-col justify-start items-start gap-2 md:gap-[24px]">
-            <h1 className="font-[600] text-[20px] md:text-[36px] md:leading-[40px]">
+            <h1 className="font-[600] text-[20px] md:text-[30px] md:leading-[40px]">
               {item?.title}
             </h1>
             <div className="flex justify-start items-center gap-5">

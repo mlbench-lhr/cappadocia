@@ -97,7 +97,7 @@ export default function BlogCard() {
               <Link href={"/admin/blogs"} className="pl-2">
                 <ArrowLeft color="#B32053" size={30} />
               </Link>
-              <h4 className="text-xl md:text-[26px] font-[600] text-center">
+              <h4 className="text-xl md:text-[24px] font-[600] text-center">
                 Blog Detail
               </h4>
             </div>
@@ -136,7 +136,7 @@ export default function BlogCard() {
               className={`px-0 md:px-[16px] flex flex-col justify-start items-start w-full bg-[#F0F1F3]`}
             >
               <h3
-                className={`text-lg md:text-[26px] text-[#B32053] font-[600] w-[100%]`}
+                className={`text-lg md:text-[24px] text-[#B32053] font-[600] w-[100%]`}
               >
                 Title
               </h3>

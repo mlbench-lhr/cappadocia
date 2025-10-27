@@ -272,7 +272,7 @@ export default function AddDialog({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-[24px] w-full bg-white"
         >
-          <h4 className="text-xl md:text-[26px] font-[600] text-center mb-2">
+          <h4 className="text-xl md:text-[24px] font-[600] text-center mb-2">
             {edit ? "Edit " : "Add "}
             Blog
           </h4>
@@ -301,7 +301,7 @@ export default function AddDialog({
               <div className="flex flex-col gap-[10px]">
                 <Label
                   htmlFor="title"
-                  className="text-xl md:text-[26px] font-[600]"
+                  className="text-xl md:text-[24px] font-[600]"
                 >
                   Title <span className="text-red-500 ml-1">*</span>
                 </Label>
@@ -320,7 +320,7 @@ export default function AddDialog({
               <div className="flex flex-col gap-[10px]">
                 <Label
                   htmlFor="text"
-                  className="text-xl md:text-[26px] font-[600]"
+                  className="text-xl md:text-[24px] font-[600]"
                 >
                   {edit ? "Edit " : "Add "}
                   Blog <span className="text-red-500 ml-1">*</span>

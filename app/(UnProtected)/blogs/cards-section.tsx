@@ -77,7 +77,7 @@ export function CardSection() {
           </div>
         </div>
 
-        <div className="w-full relative mt-[50px] flex flex-col justify-start items-center gap-8">
+        <div className="w-full relative mt-[40px] flex flex-col justify-start items-center gap-8">
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {loading ? (
               <BlogCardsGridSkeleton />
