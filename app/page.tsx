@@ -56,7 +56,11 @@ export default function app() {
             /> */}
             <div className="w-[130px] h-[50px] md:w-[200px] md:h-[72px] bg-image"></div>
             <Link href={"/blogs"} className="w-fit block">
-              <Button className="w-full md:w-fit" variant={"main_green_button"}>
+              <Button
+                size={"withLogo"}
+                className="w-full md:w-fit"
+                variant={"main_green_button"}
+              >
                 Visit Blog Page
               </Button>
             </Link>
