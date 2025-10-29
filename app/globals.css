@@ -1177,9 +1177,11 @@ button {
   background-image: url("/logo.png");
   background-size: contain;
   object-fit: fill;
+  background-repeat: no-repeat;
 }
 .white-bg-image {
-  background-image: url("/WhiteLogo.png");
+  background-image: url("/WhiteLogopng512.png");
   background-size: contain;
   object-fit: fill;
+  background-repeat: no-repeat;
 }

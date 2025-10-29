@@ -2,18 +2,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import UserSubscription from "@/lib/mongodb/models/UserSubscription";
+import { Resend } from "resend";
 
 const MONGO_URI = process.env.MONGODB_URI as string;
-const BREVO_API_KEY = process.env.BREVO_API_KEY as string;
-const EMAIL_FROM = process.env.EMAIL_FROM || "mlbenchpvtltd@gmail.com";
+const RESEND_API_KEY =
+  (process.env.RESEND_API_KEY as string) ||
+  "re_UnbMd7D2_NrJ4Kq9gbN3B8U2ceKHpu1HV";
+const EMAIL_FROM = process.env.EMAIL_FROM || "noreply@cappadociaplatform.com";
 
-// Helper: ensure required env vars exist (optional runtime guard)
-if (!MONGO_URI) {
-  console.error("MONGODB_URI is not defined in env");
-}
-if (!BREVO_API_KEY) {
-  console.error("BREVO_API_KEY is not defined in env");
-}
+const resend = new Resend(RESEND_API_KEY);
 
 async function connectToDatabase(): Promise<void> {
   // 1 = connected
@@ -32,30 +29,20 @@ function isValidEmail(email: unknown): email is string {
   return typeof email === "string" && email.includes("@");
 }
 
-async function sendBrevoEmail(payload: {
-  to: string;
-  subject: string;
-  htmlContent: string;
-  senderName?: string;
-}) {
-  const body = {
-    sender: { email: EMAIL_FROM, name: payload.senderName || "Cappadocia" },
-    to: [{ email: payload.to }],
-    subject: payload.subject,
-    htmlContent: payload.htmlContent,
-  };
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": BREVO_API_KEY,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = await res.json().catch(() => ({}));
-  return { ok: res.ok, status: res.status, data };
+async function sendResendEmail(to: string, subject: string, html: string) {
+  try {
+    const data = await resend.emails.send({
+      from: EMAIL_FROM,
+      to,
+      subject,
+      html,
+    });
+    console.log("data--------", data);
+    return { ok: true, data };
+  } catch (err) {
+    console.error("Resend email error:", err);
+    return { ok: false, error: err };
+  }
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -70,8 +57,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       );
     }
 
-    if (!MONGO_URI || !BREVO_API_KEY) {
-      console.error("Missing required env vars");
+    if (!MONGO_URI || !RESEND_API_KEY) {
       return NextResponse.json(
         { error: "Server not configured" },
         { status: 500 }
@@ -105,41 +91,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     </p>
     <hr />
     <p style="font-size: 12px; color:#000;">
-      <a href="https://cappadocia-alpha.vercel.app" style="color: #555;">www.cappadocia-alpha.vercel.app</a>
+      <a href="https://cappadociaplatform.com" style="color: #555;">www.cappadociaplatform.com</a>
     </p>
   </div>
 `;
 
-    // Prepare requests (run in parallel)
-    const teamEmailPromise = sendBrevoEmail({
-      to: "Info@stelomic.com",
-      subject: "New Newsletter Subscriber",
-      htmlContent: `<p>A new user subscribed: <strong>${email}</strong></p>`,
-      senderName: "Cappadocia",
-    });
-
-    const userEmailPromise = sendBrevoEmail({
-      to: email,
-      subject: "Welcome to Cappadocia!",
-      htmlContent,
-      senderName: "Cappadocia",
-    });
-
-    const [teamRes, userRes] = await Promise.all([
-      teamEmailPromise,
-      userEmailPromise,
+    const [userRes] = await Promise.all([
+      sendResendEmail(email, "Welcome to Cappadocia!", htmlContent),
     ]);
 
-    console.log("Team email response:", teamRes);
-    console.log("User email response:", userRes);
-
-    // If Brevo returned an error for either, log but still consider subscription saved.
-    if (!teamRes.ok) {
-      console.error("Team email failed:", teamRes.status, teamRes.data);
-    }
-    if (!userRes.ok) {
-      console.error("User email failed:", userRes.status, userRes.data);
-    }
+    if (!userRes.ok) console.error("User email failed:", userRes.error);
 
     return NextResponse.json({
       success: true,
@@ -147,10 +108,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     });
   } catch (err: unknown) {
     console.error("Error handling subscription:", err);
-    const message =
-      err instanceof Error && err.message
-        ? err.message
-        : "Something went wrong.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: "Something went wrong." },
+      { status: 500 }
+    );
   }
 }
