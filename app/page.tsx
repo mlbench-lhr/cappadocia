@@ -93,7 +93,7 @@ export default function app() {
           >
             <Input
               placeholder="Enter your email address"
-              className="h-[45px] w-full md:w-[350px] bg-white"
+              className="ring-[1px] border-ring ring-[#b32053] h-[45px] w-full md:w-[350px] bg-white"
               style={{ borderColor: "white" }}
               onChange={(e) => setEmail(e.target.value)}
               required
