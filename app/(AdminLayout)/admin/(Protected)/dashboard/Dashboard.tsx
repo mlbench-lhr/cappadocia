@@ -238,11 +238,14 @@ const UserCard: React.FC<{ user: UserData }> = ({ user }) => {
         {defaultImg}
       </div>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-900 truncate">
+        <p className="text-xs font-semibold text-gray-900 truncate">
           {user.type}
         </p>
-        <p className="text-sm text-gray-500 truncate">
-          Date added: {moment(user.date).format("DD MMM YYYY")}
+        <p className="text-[10px] text-gray-500 truncate">
+          {user.title?.includes("@") ? user.title : ""}{" "}
+        </p>
+        <p className="text-[8px] text-gray-500 truncate">
+          {moment(user.date).format("DD MMM YYYY")}
         </p>
       </div>
     </div>
@@ -410,7 +413,7 @@ const Dashboard: React.FC = () => {
             ) : (
               <>
                 <h2 className="text-[20px] font-[500] text-gray-900 mb-[20px]">
-                  Recent Activities
+                  Recent Subscriptions
                 </h2>
                 <div className="space-y-0">
                   {latestUsers.length > 0 ? (

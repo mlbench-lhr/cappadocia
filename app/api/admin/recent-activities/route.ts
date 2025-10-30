@@ -37,7 +37,7 @@ export async function GET(req: Request) {
     }));
 
     // --- Combine + Sort (Latest 6 only) ---
-    const activities = [...visitActivities, ...blogActivities, ...subActivities]
+    const activities = [...subActivities]
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .slice(0, 6);
 
