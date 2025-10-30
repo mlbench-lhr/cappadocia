@@ -50,11 +50,11 @@ export default function app() {
       </div>
       <div className="w-full max-w-[800px] mx-auto pb-4">
         <section className="w-full mt-[30px] lg:mt-[50px] h-fit space-y-4">
-          <div className="w-full h-fit flex flex-col justify-start items-start gap-2 md:gap-[24px]">
+          <div className="w-full h-fit flex flex-col justify-start items-start">
             <h1 className="font-[600] text-[20px] md:text-[30px] md:leading-[40px]">
               {item?.title}
             </h1>
-            <div className="flex justify-start items-center gap-5">
+            <div className="flex justify-start items-center gap-0">
               {/* <div className="flex justify-start items-center gap-3">
                 <Image
                   width={36}
@@ -69,9 +69,9 @@ export default function app() {
                   Tracey Wilson
                 </h3>
               </div> */}
-              <h4 className="text-[12px] md:text-[16px] text-[#97989F] font-[400]">
+              {/* <h4 className="text-[12px] md:text-[16px] text-[#97989F] font-[400]">
                 Published on: {moment(item?.createdAt).format("MMM DD, YYYY")}
-              </h4>
+              </h4> */}
             </div>
           </div>
           <div className="mx-auto relative flex justify-start items-center h-fit">
