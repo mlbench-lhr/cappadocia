@@ -7,12 +7,14 @@ import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import BlogDetailSkeleton from "../BlogDetailPageLoader";
+import useTrackVisit from "@/hooks/useTrackVisit";
 
 export default function app() {
   const { id } = useParams();
   const [item, setItem] = useState<BlogsCardType | null>(null);
   const [loading, setLoading] = useState(true);
   console.log("item-----", item);
+  useTrackVisit("blog", null);
 
   const [refreshData, setRefreshData] = useState(0);
   const router = useRouter();

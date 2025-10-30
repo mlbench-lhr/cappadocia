@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import useTrackVisit from "@/hooks/useTrackVisit";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,6 +11,7 @@ import Swal from "sweetalert2";
 export default function app() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  useTrackVisit("main", null);
   async function getConnected(e: any) {
     e.preventDefault();
     try {
