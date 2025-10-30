@@ -9,6 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-}
+  // Add this
+  assetPrefix: process.env.NODE_ENV === "production" ? "/" : "",
+};
 
-export default nextConfig
+export default nextConfig;
