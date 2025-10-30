@@ -1,29 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface OverviewType {
-  blogOverview: {
-    completed: string;
-    inProgress: string;
-    overdue: number;
-  };
-  overview: { blogs: number; month: string; users: number }[];
-  sinceLastMonth: {
-    users: {
-      total: number;
-      percent: number;
-      increased: boolean;
-    };
-    opportunities: {
-      total: number;
-      percent: number;
-      increased: boolean;
-    };
-    blogs: {
-      total: number;
-      percent: number;
-      increased: boolean;
-    };
-  };
+export interface VisitSummaryItem {
+  total: number; // Total visits in current month
+  percentageChange: number; // Absolute % change from last month
+  incremented: boolean; // True if increased, false if decreased
+}
+
+export interface VisitSummaryResponse {
+  app: VisitSummaryItem; // App visits summary
+  blog: VisitSummaryItem; // Blog page visits summary
+  blogs: VisitSummaryItem; // All blogs combined summary (or per blog if extended)
 }
 
 interface BlogData {
@@ -32,33 +18,25 @@ interface BlogData {
 }
 
 interface AdminState {
-  overview: OverviewType;
+  overview: VisitSummaryResponse;
   blogsCompletion: BlogData[];
 }
 const initialState: AdminState = {
   overview: {
-    blogOverview: {
-      completed: "0",
-      inProgress: "0",
-      overdue: 0,
+    app: {
+      total: 0,
+      percentageChange: 0,
+      incremented: false,
     },
-    overview: [],
-    sinceLastMonth: {
-      users: {
-        total: 0,
-        percent: 0,
-        increased: false,
-      },
-      opportunities: {
-        total: 0,
-        percent: 0,
-        increased: false,
-      },
-      blogs: {
-        total: 0,
-        percent: 0,
-        increased: false,
-      },
+    blog: {
+      total: 0,
+      percentageChange: 0,
+      incremented: false,
+    },
+    blogs: {
+      total: 0,
+      percentageChange: 0,
+      incremented: false,
     },
   },
   blogsCompletion: [{ date: "", value: 0 }],

@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 export default function app() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  useTrackVisit("main", null);
+  useTrackVisit("app", null);
   async function getConnected(e: any) {
     e.preventDefault();
     try {

@@ -9,6 +9,9 @@ import {
   ChevronDown,
   Triangle,
   User,
+  Newspaper,
+  View,
+  Eye,
 } from "lucide-react";
 import Image from "next/image";
 import greenGraphLine from "@/public/green graph line.svg";
@@ -249,12 +252,13 @@ const Dashboard: React.FC = () => {
   const [loading2, setLoading2] = useState(true);
   const [usersLoading, setUsersLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState("7");
+  console.log("overview---------", overview);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const overview = await axios.get("/api/admin/dashboard/overview");
+        const overview = await axios.get("/api/admin/visits-summary");
         dispatch(setOverview(overview.data));
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -281,7 +285,7 @@ const Dashboard: React.FC = () => {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, [selectedPeriod]);
 
   const fetchLatestUsers = async () => {
@@ -309,7 +313,7 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchLatestUsers();
+    // fetchLatestUsers();
   }, []);
 
   const handlePeriodChange = (e: string) => {
@@ -327,48 +331,32 @@ const Dashboard: React.FC = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
           <StatCard
-            icon={<Users color="#B32053" />}
-            title="Total Users"
-            value={overview?.sinceLastMonth?.users?.total}
-            trend={overview?.sinceLastMonth?.users?.percent}
-            trendColorVar={
-              overview.sinceLastMonth.users.increased ? "#B32053" : "#BA1A1A"
-            }
-            lineColorVar={
-              overview.sinceLastMonth.users.increased ? "#B32053" : "#BA1A1A"
-            }
+            icon={<Newspaper color="#B32053" />}
+            title="Total Blogs"
+            value={overview?.blogs?.total}
+            trend={overview?.blogs?.percentageChange}
+            trendColorVar={overview?.blogs?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.blogs?.incremented ? "#B32053" : "#BA1A1A"}
             points={[3]}
             isLoading={loading}
           />
           <StatCard
-            icon={<Sprout color="#B32053" />}
-            title="Total Opportunities"
-            value={overview?.sinceLastMonth?.opportunities?.total}
-            trend={overview?.sinceLastMonth?.opportunities?.percent}
-            trendColorVar={
-              overview.sinceLastMonth.opportunities.increased
-                ? "#B32053"
-                : "#BA1A1A"
-            }
-            lineColorVar={
-              overview.sinceLastMonth.opportunities.increased
-                ? "#B32053"
-                : "#BA1A1A"
-            }
+            icon={<Eye color="#B32053" />}
+            title="Blog Views"
+            value={overview?.blog?.total}
+            trend={overview?.blog?.percentageChange}
+            trendColorVar={overview?.blog?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.blog?.incremented ? "#B32053" : "#BA1A1A"}
             points={[3]}
             isLoading={loading}
           />
           <StatCard
-            icon={<Trophy color="#B32053" />}
-            title="Completed Blogs"
-            value={overview?.sinceLastMonth?.blogs?.total}
-            trend={overview?.sinceLastMonth?.blogs?.percent}
-            trendColorVar={
-              overview.sinceLastMonth.blogs.increased ? "#B32053" : "#BA1A1A"
-            }
-            lineColorVar={
-              overview.sinceLastMonth.blogs.increased ? "#B32053" : "#BA1A1A"
-            }
+            icon={<View color="#B32053" />}
+            title="Website Views"
+            value={overview?.app?.total}
+            trend={overview?.app?.percentageChange}
+            trendColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}
             points={[3]}
             isLoading={loading}
           />
