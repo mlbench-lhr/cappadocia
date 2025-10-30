@@ -94,7 +94,7 @@ export default function AllBlogs() {
 
   return (
     <AdminLayout>
-      <div className="min-h-screen w-full">
+      <div className="w-full">
         <div className="w-full mx-auto">
           <div className="w-full mb-4 flex justify-between items-center flex-wrap gap-y-2">
             <div className="w-full md:w-fit mb-0 space-y-[5px]">

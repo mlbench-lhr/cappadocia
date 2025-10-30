@@ -1,7 +1,7 @@
 "use client";
 
 // Dashboard.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Users,
   Sprout,
@@ -12,6 +12,7 @@ import {
   Newspaper,
   View,
   Eye,
+  UserPlus,
 } from "lucide-react";
 import Image from "next/image";
 import greenGraphLine from "@/public/green graph line.svg";
@@ -78,11 +79,13 @@ interface StatCardProps {
 }
 
 interface UserData {
-  avatar?: string;
-  createdAt: string;
-  email: string;
-  id: string;
-  fullName: string;
+  date: string;
+  type:
+    | "Website Viewed"
+    | "Blog Viewed"
+    | "New Blog Added"
+    | "New Subscription";
+  title: string;
 }
 
 // Loading skeleton component
@@ -217,27 +220,30 @@ const StatCard: React.FC<StatCardProps> = ({
 
 const UserCard: React.FC<{ user: UserData }> = ({ user }) => {
   // Generate a default avatar if none provided
-  const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    user.fullName
-  )}&background=2F65A7&color=fff&size=40`;
+  const defaultImg = useMemo(() => {
+    return user.type === "Website Viewed" ? (
+      <View size={18} />
+    ) : user.type === "Blog Viewed" ? (
+      <Eye size={18} />
+    ) : user.type === "New Blog Added" ? (
+      <Newspaper size={18} />
+    ) : (
+      <UserPlus size={18} />
+    );
+  }, [user.type]);
 
   return (
     <div className="flex items-center space-x-3 py-3 hover: rounded-xl transition-colors">
-      <Image
-        src={user.avatar || defaultAvatar}
-        alt={user.fullName}
-        className="w-10 h-10 rounded-full object-cover"
-        onError={(e) => {
-          e.currentTarget.src = defaultAvatar;
-        }}
-        width={40}
-        height={40}
-      />
+      <div className="w-10 h-10 rounded-full flex justify-center items-center bg-[#b32053] text-white">
+        {defaultImg}
+      </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-gray-900 truncate">
-          {user.fullName}
+          {user.type}
         </p>
-        <p className="text-sm text-gray-500 truncate">{user.email}</p>
+        <p className="text-sm text-gray-500 truncate">
+          Date added: {moment(user.date).format("DD MMM YYYY")}
+        </p>
       </div>
     </div>
   );
@@ -292,7 +298,7 @@ const Dashboard: React.FC = () => {
     try {
       setUsersLoading(true);
 
-      const response = await fetch("/api/admin/users?limit=6", {
+      const response = await fetch("/api/admin/recent-activities", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -304,7 +310,9 @@ const Dashboard: React.FC = () => {
       }
 
       const data = await response.json();
-      setLatestUsers(data.users);
+      console.log("data-------", data);
+
+      setLatestUsers(data.activities);
     } catch (err) {
       console.error("Error fetching latest users:", err);
     } finally {
@@ -313,7 +321,7 @@ const Dashboard: React.FC = () => {
   };
 
   useEffect(() => {
-    // fetchLatestUsers();
+    fetchLatestUsers();
   }, []);
 
   const handlePeriodChange = (e: string) => {
@@ -321,7 +329,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full pb-8">
+    <div className="w-full">
       <div className="w-full mx-auto">
         {/* Header */}
         <div className="mb-4">
@@ -402,12 +410,12 @@ const Dashboard: React.FC = () => {
             ) : (
               <>
                 <h2 className="text-[20px] font-[500] text-gray-900 mb-[20px]">
-                  Latest Added Users
+                  Recent Activities
                 </h2>
                 <div className="space-y-0">
                   {latestUsers.length > 0 ? (
                     latestUsers.map((user, index) => (
-                      <UserCard key={`${user.id}-${index}`} user={user} />
+                      <UserCard key={`${user.type}-${index}`} user={user} />
                     ))
                   ) : (
                     <div className="text-center text-gray-500 py-8">
