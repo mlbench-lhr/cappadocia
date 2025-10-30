@@ -2,22 +2,19 @@
 import { BlogsCardType } from "@/lib/types/blog";
 import axios from "axios";
 import { ChevronLeft } from "lucide-react";
-import moment from "moment";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import BlogDetailSkeleton from "../BlogDetailPageLoader";
 import useTrackVisit from "@/hooks/useTrackVisit";
+import BlogDetailSkeleton from "../blogs/detail/BlogDetailPageLoader";
 
 export default function app() {
   const params = useParams();
   const id: any = params?.id;
   const [item, setItem] = useState<BlogsCardType | null>(null);
   const [loading, setLoading] = useState(true);
-  console.log("item-----", item);
   useTrackVisit("blog", null);
 
-  const [refreshData, setRefreshData] = useState(0);
   const router = useRouter();
   useEffect(() => {
     const fetchOpportunity = async () => {
@@ -32,7 +29,7 @@ export default function app() {
     };
 
     if (id) fetchOpportunity();
-  }, [id, refreshData]);
+  }, [id]);
 
   if (!item) {
     return <BlogDetailSkeleton />;
