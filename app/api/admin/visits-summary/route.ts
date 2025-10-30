@@ -11,6 +11,9 @@ export async function GET() {
     .toISOString()
     .slice(0, 7); // YYYY-MM
 
+  const startOfCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   try {
     // ----------- APP & BLOG PAGE STATS -----------
     const current = await Visits.aggregate([
@@ -50,7 +53,7 @@ export async function GET() {
 
     paths.forEach((p) => {
       const currentTotal = current.find((c) => c._id === p)?.total || 0;
-      const lastTotal = last.find((c: any) => c._id === p)?.total || 0;
+      const lastTotal = last.find((c) => c._id === p)?.total || 0;
 
       const change =
         lastTotal === 0 ? 100 : ((currentTotal - lastTotal) / lastTotal) * 100;
@@ -66,7 +69,7 @@ export async function GET() {
     const currentMonthBlogs = await Blog.aggregate([
       {
         $match: {
-          createdAt: { $regex: `^${currentMonth}` },
+          createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
         },
       },
       { $count: "total" },
@@ -76,7 +79,7 @@ export async function GET() {
     const lastMonthBlogs = await Blog.aggregate([
       {
         $match: {
-          createdAt: { $regex: `^${lastMonth}` },
+          createdAt: { $gte: startOfLastMonth, $lt: startOfCurrentMonth },
         },
       },
       { $count: "total" },
