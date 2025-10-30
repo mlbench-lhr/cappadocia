@@ -10,7 +10,8 @@ const nextConfig = {
     unoptimized: true,
   },
   // Add this
-  assetPrefix: process.env.NODE_ENV === "production" ? "/" : "",
+  // assetPrefix: process.env.NODE_ENV === "production" ? "/" : "",
+  assetPrefix: "/",
 };
 
 export default nextConfig;
