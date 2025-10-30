@@ -1,6 +1,5 @@
 "use client";
 
-import logo from "@/public/logo.png";
 import coloredGoogleIcon from "@/public/flat-color-icons_google.svg";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -106,7 +105,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
             width={88}
             height={48}
             alt=""
-            src={logo.src || "/placeholder.svg"}
+            src={"/logo.png"}
             className="mx-auto mb-[20px]"
           />
         </Link>
