@@ -3,7 +3,7 @@
 import type React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import logo from "@/public/logo.svg";
+import logo from "@/public/logo.png";
 import bell from "@/public/bell.svg";
 import dashboardIcon from "@/public/layout-dashboard.svg";
 import opportunityIcon from "@/public/sprout.svg";

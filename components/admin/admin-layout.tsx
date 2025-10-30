@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import logo from "@/public/logo.svg";
+import logo from "@/public/logo.png";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { RootState } from "@/lib/store/store";
 import {
@@ -74,7 +74,7 @@ function ProfileMenu() {
     <div className="relative">
       <div className="flex items-center justify-center cursor-pointer">
         <Popover>
-          <PopoverTrigger asChild>
+          <PopoverTrigger asChild className="cursor-pointer">
             <div className="flex items-center justify-center cursor-pointer gap-2">
               <div className="w-[48px] h-[48px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
                 {userData?.avatar ? (
@@ -206,17 +206,27 @@ export function Sidebar() {
       {/* Desktop Sidebar */}
       {!isMiddleScreen && (
         <aside
-          className={`gap-[40px] hidden md:flex flex-col bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
+          className={`gap-[30px] hidden md:flex flex-col relative bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
         >
           <div className="flex items-center justify-between font-semibold w-full ">
             <Link href="/admin/dashboard" className="">
-              <Image
-                src={logo.src}
-                alt="logo"
-                width={150}
-                height={40}
-                className="w-[90px] h-[40px] md:w-[150px] md:h-[40px]"
-              />
+              {isCollapsed ? (
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={150}
+                  height={40}
+                  className="w-[90px] h-auto md:w-[90%] absolute left-1 top-7 md:h-auto"
+                />
+              ) : (
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={150}
+                  height={40}
+                  className="w-[90px] h-auto md:w-[150px] md:h-auto"
+                />
+              )}
             </Link>
             <button
               onClick={() => dispatch(toggleCollapse())}
@@ -226,7 +236,11 @@ export function Sidebar() {
             </button>
           </div>
 
-          <nav className="flex-1 space-y-[24px] overflow-auto plan-text-style-4">
+          <nav
+            className={`flex-1 space-y-[24px] overflow-auto plan-text-style-4 ${
+              isCollapsed && "pt-[30px]"
+            }`}
+          >
             {sidebarOptions.map(({ name, href, icon: Icon }) => (
               <Link
                 key={name}
@@ -251,21 +265,41 @@ export function Sidebar() {
           } transform transition-transform duration-200`}
         >
           <aside
-            className={`gap-[40px] h-full hidden md:flex flex-col bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
+            className={`gap-[30px] h-full hidden md:flex flex-col relative bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
           >
-            <div className="flex items-start justify-between font-semibold w-full">
+            <div className="flex items-center justify-between font-semibold w-full">
               <Link href="/admin/dashboard">
-                <Image src={logo.src} alt="logo" width={59} height={32} />
+                {isCollapsed ? (
+                  <Image
+                    src={logo}
+                    alt="logo"
+                    width={150}
+                    height={40}
+                    className="w-[90px] h-auto md:w-[90%] absolute left-1 top-7 md:h-auto"
+                  />
+                ) : (
+                  <Image
+                    src={logo}
+                    alt="logo"
+                    width={150}
+                    height={40}
+                    className="w-[90px] h-auto md:w-[150px] md:h-auto"
+                  />
+                )}
               </Link>
               <button
                 onClick={() => dispatch(toggleCollapse())}
-                className={`hidden ${!isCollapsed && "md:inline-flex"} mt-1`}
+                className={`hidden ${!isCollapsed && "md:inline-flex"}`}
               >
                 <X className="h-[16px] w-[16px]" />
               </button>
             </div>
 
-            <nav className="flex-1 space-y-[24px] overflow-auto plan-text-style-4">
+            <nav
+              className={`flex-1 space-y-[24px] overflow-auto plan-text-style-4 ${
+                isCollapsed && "pt-[30px]"
+              }`}
+            >
               {sidebarOptions.map(({ name, href, icon: Icon }) => (
                 <Link
                   key={name}

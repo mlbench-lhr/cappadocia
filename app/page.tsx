@@ -48,7 +48,7 @@ export default function app() {
         <div className="w-full flex flex-col justify-start items-center">
           <div className="w-full flex justify-between items-center">
             {/* <Image
-              src={"/logo.svg"}
+              src={"/logo.png"}
               width={200}
               height={72}
               alt="Logo"
@@ -93,7 +93,7 @@ export default function app() {
           >
             <Input
               placeholder="Enter your email address"
-              className="h-[45px] w-full md:w-[350px] bg-white text-center"
+              className="h-[45px] w-full md:w-[350px] bg-white"
               style={{ borderColor: "white" }}
               onChange={(e) => setEmail(e.target.value)}
               required

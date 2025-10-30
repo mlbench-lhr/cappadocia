@@ -59,9 +59,6 @@ export async function middleware(request: NextRequest) {
     if (user.role === "user" && isAdmin && !isAuthRoute) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
-    if (user.role === "admin" && !isAdmin && !isAuthRoute) {
-      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
-    }
   }
 
   // Refresh cookie if token valid

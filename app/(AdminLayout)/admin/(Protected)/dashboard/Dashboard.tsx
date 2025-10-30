@@ -321,9 +321,7 @@ const Dashboard: React.FC = () => {
       <div className="w-full mx-auto">
         {/* Header */}
         <div className="mb-4">
-          <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
-            Dashboard
-          </h1>
+          <h1 className="title-heading">Dashboard</h1>
         </div>
 
         {/* Stats Grid */}

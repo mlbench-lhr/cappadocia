@@ -2,7 +2,7 @@ import "@/app/globals.css";
 import { Footer } from "@/components/footer";
 import { Inter } from "next/font/google";
 import Link from "next/link";
-import logo from "@/public/logo.svg";
+import logo from "@/public/logo.png";
 
 const inter = Inter({
   subsets: ["latin"],

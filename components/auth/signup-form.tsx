@@ -1,6 +1,6 @@
 "use client";
 
-import logo from "@/public/logo.svg";
+import logo from "@/public/logo.png";
 import coloredGoogleIcon from "@/public/flat-color-icons_google.svg";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
