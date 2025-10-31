@@ -20,7 +20,7 @@ const BlogCards = ({
 }) => {
   return (
     <Link
-      href={`/${encodeURIComponent(title)}`}
+      href={`/${title?.replaceAll(" ", "-")}`}
       className="col-span-1 relative bg-white p-4 rounded-[12px] flex flex-col justify-start items-start gap-5 border-2 border-[#E8E8EA]"
     >
       <Image

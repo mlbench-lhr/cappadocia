@@ -3,15 +3,15 @@ import Blog from "@/lib/mongodb/models/Blog";
 import { NextResponse } from "next/server";
 
 // ----------- GET single blog -----------
-export async function GET(
+export async function POST(
   req: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     await connectDB();
 
-    let titleFromParam = params.id;
-    const blog = await Blog.findOne({ title: titleFromParam });
+    const { title } = await req.json();
+    const blog = await Blog.findOne({ title: title });
 
     if (!blog) {
       return NextResponse.json({ message: "Blog not found" }, { status: 404 });

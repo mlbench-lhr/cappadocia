@@ -19,7 +19,9 @@ export default function app() {
   useEffect(() => {
     const fetchOpportunity = async () => {
       try {
-        const res = await axios.get(`/api/blogs/${id}`);
+        const res = await axios.post(`/api/blogs/id`, {
+          title: window.location.href.split("/").pop()?.replaceAll("-", " "),
+        });
         setItem(res.data);
       } catch (error) {
         console.error("Error fetching opportunity:", error);
@@ -28,7 +30,7 @@ export default function app() {
       }
     };
 
-    if (id) fetchOpportunity();
+    if (id && typeof window !== "undefined") fetchOpportunity();
   }, [id]);
 
   if (!item) {
