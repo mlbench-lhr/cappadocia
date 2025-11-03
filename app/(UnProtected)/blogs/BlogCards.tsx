@@ -1,7 +1,9 @@
+"use client";
 import commasIcon from "@/public/Text.svg";
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const BlogCards = ({
   avatar,
@@ -18,9 +20,16 @@ const BlogCards = ({
   date: string;
   _id: string;
 }) => {
+  const router = useRouter();
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    sessionStorage.setItem("blogId", _id);
+    router.push(`/${title?.replaceAll(" ", "-")}`);
+  };
   return (
     <Link
       href={`/${title?.replaceAll(" ", "-")}`}
+      onClick={handleClick}
       className="col-span-1 relative bg-white p-4 rounded-[12px] flex flex-col justify-start items-start gap-5 border-2 border-[#E8E8EA]"
     >
       <Image

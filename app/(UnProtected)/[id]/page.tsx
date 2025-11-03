@@ -10,16 +10,18 @@ import BlogDetailSkeleton from "../blogs/detail/BlogDetailPageLoader";
 
 export default function app() {
   const params = useParams();
-  const id: any = params?.id;
+  const router = useRouter();
   const [item, setItem] = useState<BlogsCardType | null>(null);
   const [loading, setLoading] = useState(true);
   useTrackVisit("blog", null);
 
-  const router = useRouter();
   useEffect(() => {
-    const fetchOpportunity = async () => {
+    const fetchBlog = async () => {
       try {
+        const id = sessionStorage.getItem("blogId");
+        console.log("id", id);
         const res = await axios.post(`/api/blogs/id`, {
+          id,
           title: window.location.href.split("/").pop()?.replaceAll("-", " "),
         });
         setItem(res.data);
@@ -30,12 +32,10 @@ export default function app() {
       }
     };
 
-    if (id && typeof window !== "undefined") fetchOpportunity();
-  }, [id]);
+    if (typeof window !== "undefined") fetchBlog();
+  }, []);
 
-  if (!item) {
-    return <BlogDetailSkeleton />;
-  }
+  if (loading || !item) return <BlogDetailSkeleton />;
 
   return (
     <div className="w-full mx-auto space-y-8">

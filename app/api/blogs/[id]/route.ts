@@ -10,8 +10,9 @@ export async function POST(
   try {
     await connectDB();
 
-    const { title } = await req.json();
-    const blog = await Blog.findOne({ title: title });
+    const { title, id } = await req.json();
+    // const blog = await Blog.findOne({ title: title });
+    const blog = await Blog.findOne({ _id: id });
 
     if (!blog) {
       return NextResponse.json({ message: "Blog not found" }, { status: 404 });
