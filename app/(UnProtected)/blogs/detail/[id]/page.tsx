@@ -22,7 +22,7 @@ export default function app() {
   useEffect(() => {
     const fetchOpportunity = async () => {
       try {
-        const res = await axios.get(`/api/blogs/${id}`);
+        const res = await axios.post(`/api/blogs/${id}`, { id });
         setItem(res.data);
       } catch (error) {
         console.error("Error fetching opportunity:", error);
