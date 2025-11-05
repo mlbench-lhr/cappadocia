@@ -177,7 +177,13 @@ import { useMediaQuery } from "react-responsive";
 
 const sidebarOptions = [
   { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+  { name: "Vendor Applications", href: "/admin/vendor-applications", icon: PencilLine },
+  { name: "Tours & Activities", href: "/admin/tours-activities", icon: PencilLine },
+  { name: "Reservations", href: "/admin/reservations", icon: PencilLine },
   { name: "Blogs", href: "/admin/blogs", icon: PencilLine },
+  { name: "Payments & Payouts", href: "/admin/payments", icon: PencilLine },
+  { name: "Support Requests", href: "/admin/support", icon: PencilLine },
+  { name: "Settings", href: "/admin/setting", icon: PencilLine },
 ];
 
 const mobileProfileOptions = [
@@ -228,12 +234,12 @@ export function Sidebar() {
                 />
               )}
             </Link>
-            <button
+            {/* <button
               onClick={() => dispatch(toggleCollapse())}
               className={`hidden ${!isCollapsed && "md:inline-flex"}`}
             >
               <X className="h-[16px] w-[16px]" />
-            </button>
+            </button> */}
           </div>
 
           <nav

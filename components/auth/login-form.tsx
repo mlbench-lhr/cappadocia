@@ -44,11 +44,12 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
   const handleEmailLogin = async (data: LoginFormValues) => {
     setLoading(true);
     setError("");
+    console.log("login data", data);
 
     try {
       const { error } = await signIn(data.email, data.password);
       const userData = (await signIn(data.email, data.password)).data;
-
+      
       // dispatch(setReduxUser(userData.user));
       if (error) {
         setError(error.message);

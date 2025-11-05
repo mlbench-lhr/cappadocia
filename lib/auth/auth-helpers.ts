@@ -37,6 +37,7 @@ export const signUp = async (userData: SignUpData) => {
 
 export const signIn = async (email: string, password: string) => {
   try {
+    console.log("signIn called with email:", email, "and password:", password);
     const response = await api.post("/api/auth/signin", { email, password });
 
     // Set auth cookie
