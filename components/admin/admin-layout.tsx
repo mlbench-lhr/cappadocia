@@ -418,7 +418,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-slate-50 w-full flex">
       <Sidebar />
       <div
-        className={`flex flex-col items-center w-full bg-[#F9FAFB] ${
+        className={`flex flex-col items-center w-full bg-white ${
           isMiddleScreen && !isCollapsed
             ? "w-full"
             : isCollapsed

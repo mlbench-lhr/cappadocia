@@ -9,56 +9,59 @@ import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from "next/navigation";
 import ActionButton from "../ActionButton";
 
-export type VendorData = {
+export type TourData = {
     id: string;
-    buisnessName: string;
-    email: string;
-    dateApplied?: string;
-    contact_person: string;
-    tursab_number: number
+    tourTitle: string;
+    vendor: string;
+    price: number;
+    capacity: number
 };
 
-export const dummyVendors: VendorData[] = [
+export const dummyTours: TourData[] = [
     {
         id: "1",
-        buisnessName: "Cappadocia Travel Co.",
-        email: "info@cappadociatravel.com",
-        dateApplied: "2025-10-01",
-        contact_person: "Ali Demir",
-        tursab_number: 45239,
+        tourTitle: "Hot Air Balloon Experience",
+        vendor: "Cappadocia Travel Co.",
+        price: 120,
+        capacity: 12,
     },
     {
         id: "2",
-        buisnessName: "Skyline Tours",
-        email: "contact@skylinetours.com",
-        dateApplied: "2025-09-15",
-        contact_person: "Mehmet Yildiz",
-        tursab_number: 38921,
+        tourTitle: "Sunset Jeep Safari",
+        vendor: "Skyline Tours",
+        price: 80,
+        capacity: 8,
     },
     {
         id: "3",
-        buisnessName: "Anatolia Adventures",
-        email: "support@anatoliaadventures.com",
-        dateApplied: "2025-08-27",
-        contact_person: "Fatma Kaya",
-        tursab_number: 51784,
+        tourTitle: "Underground City Tour",
+        vendor: "Anatolia Adventures",
+        price: 95,
+        capacity: 20,
     },
     {
         id: "4",
-        buisnessName: "Blue Horizon Travels",
-        email: "info@bluehorizon.com",
-        dateApplied: "2025-07-10",
-        contact_person: "Hasan Aksoy",
-        tursab_number: 40312,
+        tourTitle: "Blue Lagoon Boat Trip",
+        vendor: "Blue Horizon Travels",
+        price: 150,
+        capacity: 25,
+    },
+    {
+        id: "5",
+        tourTitle: "Istanbul Old City Walking Tour",
+        vendor: "Historic Gateways",
+        price: 60,
+        capacity: 15,
     },
 ];
 
 
-export default function AllVendorApplications() {
+
+export default function AllTours() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [tableData, setTableData] = useState<VendorData[]>([]);
+    const [tableData, setTableData] = useState<TourData[]>([]);
     const [totaluser, setTotaluser] = useState(5);
     const currentPage = parseInt(searchParams.get("user_page") || "1", 10);
     const [loading, setLoading] = useState(false)
@@ -83,42 +86,35 @@ export default function AllVendorApplications() {
         }
     }, [search]);
 
-    const columns: Column<VendorData>[] = [
+    const columns: Column<TourData>[] = [
         {
-            header: "Buisness Name",
-            accessor: "buisnessName",
+            header: "Tour Title",
+            accessor: "tourTitle",
             cell: (row) => (
-                <div className="opacity-60">{row.buisnessName}</div>
+                <div className="opacity-60">{row.tourTitle}</div>
             ),
         },
         {
-            header: "Date Applied",
-            accessor: "dateApplied",
+            header: "Vendor",
+            accessor: "vendor",
             cell: (row) => (
                 <div className="opacity-60">
-                    {row.dateApplied ? row.dateApplied.slice(0, 10) : "—"}
+                    {row.vendor}
                 </div>
             ),
         },
         {
-            header: "Contact Person",
-            accessor: "contact_person",
+            header: "Price",
+            accessor: "price",
             cell: (row) => (
-                <div className="opacity-60">{row.contact_person}</div>
+                <div className="opacity-60">€{row.price}</div>
             ),
         },
         {
-            header: "Email Address",
-            accessor: "email",
+            header: "Capacity",
+            accessor: "capacity",
             cell: (row) => (
-                <div className="opacity-60">{row.email}</div>
-            ),
-        },
-        {
-            header: "TURSAB Number",
-            accessor: "tursab_number",
-            cell: (row) => (
-                <div className="opacity-60">{row.tursab_number}</div>
+                <div className="opacity-60">{row.capacity} people</div>
             ),
         },
         {
@@ -126,7 +122,7 @@ export default function AllVendorApplications() {
             accessor: "action",
             cell: (row) => (
                 <ActionButton
-                    link={`/admin/vendor-applications/details/${row.id}?vendor_page=${currentPage}`}
+                    link={`/admin/tours-activities/details/${row.id}?tour_page=${currentPage}`}
                 />
             ),
         },
@@ -174,7 +170,7 @@ export default function AllVendorApplications() {
     //     }
     // };
 
-    const handleAddUser = (newUserData: VendorData) => {
+    const handleAddUser = (newUserData: TourData) => {
         // Optimistically add to the beginning of the list
         setTableData(prev => [newUserData, ...prev]);
         setTotaluser(prev => prev + 1);
@@ -190,8 +186,8 @@ export default function AllVendorApplications() {
     return (
         <div className="">
             <GenericDataTable
-                title="Vendor Applications"
-                data={dummyVendors}
+                title="Tours & Actvities"
+                data={dummyTours}
                 tabs={pageTabs}
                 columns={columns}
                 pageSize={limit}
@@ -203,9 +199,9 @@ export default function AllVendorApplications() {
                 setSearch={setSearch}
                 onAddUser={handleAddUser}
                 emptyStateImages={{
-                    "Vendor Applications": "/images/admin/users/no_user.svg",
+                    "Tours & Actvities": "/images/admin/users/no_user.svg",
                 }}
-                size={`Total Application: 4`}
+                size={`Total Tours & Actvities: 4`}
             />
         </div>
     );

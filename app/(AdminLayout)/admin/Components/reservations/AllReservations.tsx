@@ -9,56 +9,84 @@ import { toast } from 'react-toastify';
 import { useParams, useSearchParams } from "next/navigation";
 import ActionButton from "../ActionButton";
 
-export type VendorData = {
+export type ReservationData = {
     id: string;
-    buisnessName: string;
-    email: string;
-    dateApplied?: string;
-    contact_person: string;
-    tursab_number: number
+    tourTitle: string;
+    partcipants: string;  // e.g 2 Adults, 1 child
+    status: string; //e.g Pending or Paid
+    bookedBy: {
+        name: string;
+        email: string;
+        profile_image: string;
+    }
 };
 
-export const dummyVendors: VendorData[] = [
+export const dummyReservations: ReservationData[] = [
     {
         id: "1",
-        buisnessName: "Cappadocia Travel Co.",
-        email: "info@cappadociatravel.com",
-        dateApplied: "2025-10-01",
-        contact_person: "Ali Demir",
-        tursab_number: 45239,
+        tourTitle: "Hot Air Balloon Experience",
+        partcipants: "2 Adults, 1 Child",
+        status: "Paid",
+        bookedBy: {
+            name: "Ali Demir",
+            email: "ali.demir@example.com",
+            profile_image: "/admin-images/user.svg",
+        },
     },
     {
         id: "2",
-        buisnessName: "Skyline Tours",
-        email: "contact@skylinetours.com",
-        dateApplied: "2025-09-15",
-        contact_person: "Mehmet Yildiz",
-        tursab_number: 38921,
+        tourTitle: "Sunset Jeep Safari",
+        partcipants: "3 Adults",
+        status: "Pending",
+        bookedBy: {
+            name: "Mehmet Yildiz",
+            email: "mehmet.yildiz@example.com",
+            profile_image: "/admin-images/user.svg",
+        },
     },
     {
         id: "3",
-        buisnessName: "Anatolia Adventures",
-        email: "support@anatoliaadventures.com",
-        dateApplied: "2025-08-27",
-        contact_person: "Fatma Kaya",
-        tursab_number: 51784,
+        tourTitle: "Underground City Tour",
+        partcipants: "1 Adult, 2 Children",
+        status: "Paid",
+        bookedBy: {
+            name: "Fatma Kaya",
+            email: "fatma.kaya@example.com",
+            profile_image: "/admin-images/user.svg",
+        },
     },
     {
         id: "4",
-        buisnessName: "Blue Horizon Travels",
-        email: "info@bluehorizon.com",
-        dateApplied: "2025-07-10",
-        contact_person: "Hasan Aksoy",
-        tursab_number: 40312,
+        tourTitle: "Blue Lagoon Boat Trip",
+        partcipants: "2 Adults",
+        status: "Pending",
+        bookedBy: {
+            name: "Hasan Aksoy",
+            email: "hasan.aksoy@example.com",
+            profile_image: "/admin-images/user.svg",
+        },
+    },
+    {
+        id: "5",
+        tourTitle: "Istanbul Old City Walking Tour",
+        partcipants: "4 Adults",
+        status: "Paid",
+        bookedBy: {
+            name: "Elif Aydin",
+            email: "elif.aydin@example.com",
+            profile_image: "/admin-images/user.svg",
+        },
     },
 ];
 
 
-export default function AllVendorApplications() {
+
+
+export default function AllReservations() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const [tableData, setTableData] = useState<VendorData[]>([]);
+    const [tableData, setTableData] = useState<ReservationData[]>([]);
     const [totaluser, setTotaluser] = useState(5);
     const currentPage = parseInt(searchParams.get("user_page") || "1", 10);
     const [loading, setLoading] = useState(false)
@@ -83,42 +111,57 @@ export default function AllVendorApplications() {
         }
     }, [search]);
 
-    const columns: Column<VendorData>[] = [
+    const columns: Column<ReservationData>[] = [
         {
-            header: "Buisness Name",
-            accessor: "buisnessName",
+            header: "Booking ID",
+            accessor: "id",
             cell: (row) => (
-                <div className="opacity-60">{row.buisnessName}</div>
+                <div className="opacity-60">#{row.id}</div>
             ),
         },
         {
-            header: "Date Applied",
-            accessor: "dateApplied",
+            header: "Tour Title",
+            accessor: "tourTitle",
             cell: (row) => (
-                <div className="opacity-60">
-                    {row.dateApplied ? row.dateApplied.slice(0, 10) : "—"}
+                <div className="opacity-60">{row.tourTitle}</div>
+            ),
+        },
+        {
+            header: "Participants",
+            accessor: "partcipants",
+            cell: (row) => (
+                <div className="opacity-60">{row.partcipants}</div>
+            ),
+        },
+        {
+            header: <div className="text-center w-20">Status</div>,
+            accessor: "status",
+            cell: (row) => (
+                <div
+                    className={`font-medium rounded-full w-20 px-2 py-1 text-center ${row.status === "Paid" ? "text-green-600 bg-[#E7FAE3]" : "text-yellow-600 bg-[#FFE7CA]"
+                        }`}
+                >
+                    {row.status}
                 </div>
             ),
         },
         {
-            header: "Contact Person",
-            accessor: "contact_person",
+            header: "Booked By",
+            accessor: "bookedBy",
             cell: (row) => (
-                <div className="opacity-60">{row.contact_person}</div>
-            ),
-        },
-        {
-            header: "Email Address",
-            accessor: "email",
-            cell: (row) => (
-                <div className="opacity-60">{row.email}</div>
-            ),
-        },
-        {
-            header: "TURSAB Number",
-            accessor: "tursab_number",
-            cell: (row) => (
-                <div className="opacity-60">{row.tursab_number}</div>
+                <div className="flex items-center gap-2">
+                    <Image
+                        src={row.bookedBy.profile_image || "/images/avatar.png"}
+                        alt={row.bookedBy.name}
+                        width={32}
+                        height={32}
+                        className="rounded-full h-8 w-8 object-cover bg-gray-100"
+                    />
+                    <div>
+                        <div className="font-medium">{row.bookedBy.name}</div>
+                        <div className="text-sm opacity-60">{row.bookedBy.email}</div>
+                    </div>
+                </div>
             ),
         },
         {
@@ -126,11 +169,12 @@ export default function AllVendorApplications() {
             accessor: "action",
             cell: (row) => (
                 <ActionButton
-                    link={`/admin/vendor-applications/details/${row.id}?vendor_page=${currentPage}`}
+                    link={`/admin/reservations/details/${row.id}?reservation_page=${currentPage}`}
                 />
             ),
         },
     ];
+
 
 
     // useEffect(() => {
@@ -174,7 +218,7 @@ export default function AllVendorApplications() {
     //     }
     // };
 
-    const handleAddUser = (newUserData: VendorData) => {
+    const handleAddUser = (newUserData: ReservationData) => {
         // Optimistically add to the beginning of the list
         setTableData(prev => [newUserData, ...prev]);
         setTotaluser(prev => prev + 1);
@@ -190,8 +234,8 @@ export default function AllVendorApplications() {
     return (
         <div className="">
             <GenericDataTable
-                title="Vendor Applications"
-                data={dummyVendors}
+                title="Reservations"
+                data={dummyReservations}
                 tabs={pageTabs}
                 columns={columns}
                 pageSize={limit}
@@ -203,9 +247,9 @@ export default function AllVendorApplications() {
                 setSearch={setSearch}
                 onAddUser={handleAddUser}
                 emptyStateImages={{
-                    "Vendor Applications": "/images/admin/users/no_user.svg",
+                    "Reservations": "/images/admin/users/no_user.svg",
                 }}
-                size={`Total Application: 4`}
+                size={`Total Reservations: 4`}
             />
         </div>
     );

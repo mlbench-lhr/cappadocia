@@ -22,7 +22,7 @@ export default function ActionButton({ link }: { link: string }) {
   return (
     <button
       onClick={handleClick}
-      className="text-blue-600 hover:underline"
+      className="text-[#B32053] hover:underline"
     >
       View Details
     </button>

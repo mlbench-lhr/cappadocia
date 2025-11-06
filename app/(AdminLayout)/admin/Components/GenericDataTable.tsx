@@ -18,6 +18,7 @@ export interface Column<T> {
 interface GenericDataTableProps<T> {
   title?: string;
   tabs: string[];
+  size?: string;
   custom_tabs?: string[];
   activeTab?: string;
   onTabChange?: (tab: string) => void;
@@ -39,6 +40,7 @@ interface GenericDataTableProps<T> {
 function GenericDataTable<T extends { id: string; tab?: string }>({
   title,
   tabs,
+  size,
   custom_tabs,
   activeTab,
   onTabChange,
@@ -112,9 +114,12 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
           {/* Title*/}
           <div className={`flex ${tabs?.length ? "flex-col gap-2" : "items-center gap-4"}`}>
             {title && (
-              <h1 className="text-2xl font-weight-600 text-gray-800  font-raleway">
-                {title}
-              </h1>
+              <>
+                <h1 className="text-2xl font-bold text-gray-800  font-raleway">
+                  {title}
+                </h1>
+                <p className="text-sm opacity-50">{size}</p>
+              </>
             )}
             {custom_tabs && custom_tabs.length > 0 && (
               <div className="flex items-center gap-2 bg-gray-100 p-2  rounded-lg shadow-sm">
@@ -136,14 +141,14 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
 
           {/* Search bar */}
           <div className="flex items-start gap-2">
-            {title && title === "All Users" && (
+            {/* {title && title === "All Users" && (
               <button
                 onClick={() => setShowModal(true)}
                 className="bg-primary px-4 py-2 rounded-lg w-[150px] font-medium text-white sm:text-base transition-colors cursor-pointer"
               >
                 Add Users
               </button>
-            )}
+            )} */}
             <div className="relative w-72">
               <input
                 type="text"
@@ -169,27 +174,26 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
             {emptyImage && (
               <Image src={emptyImage} width={300} height={200} alt="No data" className="mb-4 object-contain" />
             )}
-            {title && title === "All Users" && (
+            {/* {title && title === "All Users" && (
               <button
                 onClick={() => setShowModal(true)}
                 className="bg-primary mt-4 px-4 py-2.5 rounded-lg w-[200px] font-medium text-white sm:text-base transition-colors cursor-pointer"
               >
                 Add Users
               </button>
-            )}
+            )} */}
           </div>
         ) : (
           <>
             {/* Table */}
-            <div className="overflow-x-auto ">
-              <table className="min-w-full text-sm border-separate border-spacing-y-2">
+            <div className="overflow-x-auto border p-4">
+              <table className="min-w-full text-sm ">
                 <thead>
-                  <tr className="font-raleway text-[var(--secondary)]">
+                  <tr className="font-raleway text-black border-b">
                     {columns.map((col, i) => (
                       <th
                         key={i}
-                        className={`py-2 px-4 font-medium border-b border-gray-200 pb-2 ${(col.accessor === 'username' || col.accessor === 'downloadedBy' || col.accessor === 'addedBy') ? 'text-left' : 'text-center'
-                          }`}
+                        className={`py-2 px-4 font-medium text-left`}
                       >
                         {col.header}
                       </th>
@@ -198,12 +202,11 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
                 </thead>
                 <tbody>
                   {currentData.map((row) => (
-                    <tr key={row.id} className="bg-gray-50 rounded-md">
+                    <tr key={row.id} className="border-b border-gray-200 last:border-b-0">
                       {columns.map((col, i) => (
                         <td
                           key={i}
-                          className={`py-3 px-4 font-raleway ${(col.accessor === 'username' || col.accessor === 'downloadedBy' || col.accessor === 'addedBy') ? 'text-left min-w-0 w-64 max-w-xs' : 'text-center'
-                            }`}
+                          className={`py-4 px-4 font-raleway text-left`}
                         >
                           {col.cell ? col.cell(row) : (row as any)[col.accessor]}
                         </td>
@@ -216,21 +219,21 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-end items-center mt-4 gap-2">
+            <div className="flex justify-between items-center mt-4 gap-2">
               <button
                 onClick={() => goToPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage <= 1}
-                className="disabled:opacity-50"
+                className="px-4 py-2 border rounded-md text-sm disabled:opacity-50"
               >
-                <ChevronLeft className="mr-1 w-4 h-4" />
+                ← Previous
               </button>
               <div className="flex gap-2">
                 {tabs.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => goToPage(Number(tab))}
-                    className={`w-8 h-8 rounded-md text-sm ${currentPage === Number(tab)
-                      ? "bg-blue-600 text-white"
+                    className={`w-9 h-9 rounded-md text-sm ${currentPage === Number(tab)
+                      ? "bg-[#B32053] text-white"
                       : "text-gray-600 hover:bg-gray-200"
                       }`}
                   >
@@ -242,16 +245,16 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
               <button
                 onClick={() => goToPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage >= totalPages}
-                className="disabled:opacity-50"
+                className="px-6 py-2 border rounded-md text-sm disabled:opacity-50"
               >
-                <ChevronRight className="ml-1 w-4 h-4" />
+                Next →
               </button>
             </div>
           </>
         )}
 
       </div>
-      
+
     </>
   );
 }
