@@ -1,27 +1,13 @@
-import nodemailer from "nodemailer";
-
-// Create transporter with environment variables
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST || "smtp.gmail.com",
-    port: Number.parseInt(process.env.SMTP_PORT || "587"),
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-};
+import { Resend } from "resend";
+const RESEND_API_KEY =
+  (process.env.RESEND_API_KEY as string) ||
+  "re_UnbMd7D2_NrJ4Kq9gbN3B8U2ceKHpu1HV";
+const EMAIL_FROM = process.env.EMAIL_FROM || "noreply@cappadociaplatform.com";
+const resend = new Resend(RESEND_API_KEY);
 
 export const sendPasswordResetEmail = async (email: string, otp: string) => {
   try {
-    const transporter = createTransporter();
-
-    const mailOptions = {
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: email,
-      subject: "Password Reset OTP",
-      html: `
+    const htmlContent = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
       <img src="https://res.cloudinary.com/sage-media/image/upload/v1761809447/logo_olblxe.png" alt="Cappadocia Logo" 
@@ -41,11 +27,16 @@ export const sendPasswordResetEmail = async (email: string, otp: string) => {
       This OTP will expire in 10 minutes. If you didn't request this reset, please ignore this email.
     </p>
   </div>
-`,
-    };
+`;
 
-    await transporter.sendMail(mailOptions);
-    console.log(`Password reset OTP sent to ${email}`);
+    const data = await resend.emails.send({
+      from: EMAIL_FROM,
+      to: email,
+      subject: "Password Reset OTP",
+      html: htmlContent,
+    });
+
+    console.log("Password reset OTP sent to", email, "- data:", data);
   } catch (error) {
     console.error("Error sending password reset email:", error);
     throw new Error("Failed to send password reset email");
@@ -54,13 +45,7 @@ export const sendPasswordResetEmail = async (email: string, otp: string) => {
 
 export const sendVerificationEmail = async (email: string, otp: string) => {
   try {
-    const transporter = createTransporter();
-
-    const mailOptions = {
-      from: process.env.SMTP_FROM || process.env.SMTP_USER,
-      to: email,
-      subject: "Verify Your Email Address",
-      html: `
+    const htmlContent = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
       <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1758176120/logo_png_lajh7e.png" alt="Cappadocia Logo" 
@@ -79,11 +64,15 @@ export const sendVerificationEmail = async (email: string, otp: string) => {
       This OTP will expire in 10 minutes. If you didn't create this account, please ignore this email.
     </p>
   </div>
-`,
-    };
+`;
 
-    await transporter.sendMail(mailOptions);
-    console.log(`Verification OTP sent to ${email}`);
+    const data = await resend.emails.send({
+      from: EMAIL_FROM,
+      to: email,
+      subject: "Verify Your Email Address",
+      html: htmlContent,
+    });
+    console.log("Verification OTP sent to", email, "- data:", data);
   } catch (error) {
     console.error("Error sending verification email:", error);
     throw new Error("Failed to send verification email");
