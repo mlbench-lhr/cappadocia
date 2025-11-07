@@ -18,6 +18,9 @@ module.exports = {
       screens: {
         custom: "480px",
         largeScreens: "1700px",
+        short: { raw: "(max-height: 600px)" },
+        medium: { raw: "(min-height: 601px) and (max-height: 899px)" },
+        tall: { raw: "(max-height: 900px)" },
       },
     },
   },
