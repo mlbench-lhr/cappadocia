@@ -39,7 +39,12 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormValues>();
+  } = useForm<LoginFormValues>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const handleEmailLogin = async (data: LoginFormValues) => {
     setLoading(true);

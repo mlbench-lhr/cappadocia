@@ -182,7 +182,7 @@ const sidebarOptions = [
   { name: "Reservations", href: "/admin/reservations", icon: PencilLine },
   { name: "Blogs", href: "/admin/blogs", icon: PencilLine },
   { name: "Payments & Payouts", href: "/admin/payments", icon: PencilLine },
-  { name: "Support Requests", href: "/admin/support", icon: PencilLine },
+  // { name: "Support Requests", href: "/admin/support", icon: PencilLine },
   { name: "Settings", href: "/admin/setting", icon: PencilLine },
 ];
 

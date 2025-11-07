@@ -62,44 +62,45 @@ export function ChangePass() {
   }
 
   return (
-    <div className="w-full h-full flex justify-between items-end flex-col">
-      <div className="w-full grid grid-cols-2 gap-[20px]">
-        <div className="col-span-2 w-full grid grid-cols-2 gap-[20px]">
-          <div className="col-span-2 md:col-span-1 flex flex-col gap-[10px] relative">
-            <Label htmlFor="oldPassword" className="label-style">
-              Old Password <span className="text-red-500 ml-1">*</span>
-            </Label>
-            <Input
-              type={showPassword3 ? "text" : "password"}
-              id="oldPassword"
-              className="input-style"
-              placeholder="Enter First Name"
-              onChange={(e) => setOldPassword(e.target.value)}
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
-              onClick={() => setShowPassword3(!showPassword3)}
-            >
-              {showPassword3 ? (
-                <EyeOff className="h-4 w-4" />
-              ) : (
-                <Eye className="h-4 w-4" />
-              )}
-            </Button>
-          </div>
-        </div>
-        <div className="col-span-2 md:col-span-1 flex flex-col gap-[10px] relative">
+    <div className="w-96 h-full flex flex-col justify-between items-end">
+      <div className="w-full flex flex-col gap-[20px]">
+        {/* Old Password */}
+        <div className="flex flex-col gap-[10px] relative">
           <Label htmlFor="oldPassword" className="label-style">
+            Old Password <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Input
+            type={showPassword3 ? "text" : "password"}
+            id="oldPassword"
+            className="input-style"
+            placeholder="Enter Old Password"
+            onChange={(e) => setOldPassword(e.target.value)}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
+            onClick={() => setShowPassword3(!showPassword3)}
+          >
+            {showPassword3 ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+
+        {/* New Password */}
+        <div className="flex flex-col gap-[10px] relative">
+          <Label htmlFor="newPassword" className="label-style">
             New Password <span className="text-red-500 ml-1">*</span>
           </Label>
           <Input
             type={showPassword ? "text" : "password"}
             id="newPassword"
             className="input-style"
-            placeholder="Enter Last Name"
+            placeholder="Enter New Password"
             onChange={(e) => setNewPassword(e.target.value)}
           />
           <Button
@@ -116,7 +117,9 @@ export function ChangePass() {
             )}
           </Button>
         </div>
-        <div className="col-span-2 md:col-span-1 flex flex-col gap-[10px] relative">
+
+        {/* Confirm Password */}
+        <div className="flex flex-col gap-[10px] relative">
           <Label htmlFor="confirmPassword" className="label-style">
             Confirm New Password <span className="text-red-500 ml-1">*</span>
           </Label>
@@ -124,7 +127,7 @@ export function ChangePass() {
             type={showPassword2 ? "text" : "password"}
             id="confirmPassword"
             className="input-style"
-            placeholder="Enter confirmPassword"
+            placeholder="Confirm New Password"
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <Button
@@ -141,16 +144,20 @@ export function ChangePass() {
             )}
           </Button>
         </div>
+        <Button
+          variant="main_green_button"
+          className=""
+          onClick={handleSubmit}
+          loading={isSubmitting}
+        >
+          Update Password
+        </Button>
       </div>
-      <Button
-        variant={"main_green_button"}
-        className="mt-5"
-        onClick={handleSubmit}
-        loading={isSubmitting}
-      >
-        Update Password
-      </Button>
+
+      {/* Submit Button */}
+
     </div>
+
   );
 }
 
@@ -159,6 +166,7 @@ import { AvatarUpload } from "@/components/ui/avatar-upload";
 import { useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import SettingsLayout from "../../../Components/settings/SettingsLayout";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -183,8 +191,8 @@ export default function App() {
   );
 
   return (
-    <AdminLayout>
-      <div className="min-h-screen w-full">
+    <SettingsLayout>
+      <div className="p-6 w-full">
         <div className="w-full mx-auto">
           <div className="w-full flex justify-between items-start flex-col gap-[24px]">
             <div className="w-fit mb-0 spacey-[15px]">
@@ -200,6 +208,6 @@ export default function App() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </SettingsLayout>
   );
 }

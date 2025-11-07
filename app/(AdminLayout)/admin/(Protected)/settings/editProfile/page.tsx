@@ -2,12 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import PhoneInput from "react-phone-number-input";
+import 'react-phone-number-input/style.css'
 export function EditProfile() {
   const userData = useAppSelector((state) => state.auth.user);
   const [firstName, setFirstName] = useState<undefined | string>("");
   const [lastName, setLastName] = useState<undefined | string>("");
   const [email, setEmail] = useState<undefined | string>("");
+  const [phone, setPhone] = useState<undefined | string>("");
   const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
@@ -37,11 +39,26 @@ export function EditProfile() {
     }
   }
   return (
-    <div className="w-full h-full flex justify-between items-end flex-col">
-      <div className="w-full grid grid-cols-2 gap-[20px]">
-        <div className="col-span-2 md:col-span-1 flex flex-col gap-[10px]">
+    <div className="w-96 h-full flex flex-col justify-between items-end">
+      <div className="w-full flex flex-col gap-[20px]">
+        {/* Email (disabled) */}
+        <div className="flex flex-col gap-[10px]" style={{ cursor: "not-allowed" }}>
+          <Label htmlFor="email" className="label-style">
+            Email <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Input
+            id="email"
+            className="input-style"
+            disabled
+            placeholder="Enter Email"
+            value={email || ""}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+        {/* First Name */}
+        <div className="flex flex-col gap-[10px]">
           <Label htmlFor="firstName" className="label-style">
-            First Name <span className="text-red-500 ml-1">*</span>
+            Full Name <span className="text-red-500 ml-1">*</span>
           </Label>
           <Input
             id="firstName"
@@ -51,22 +68,28 @@ export function EditProfile() {
             onChange={(e) => setFirstName(e.target.value)}
           />
         </div>
-        <div className="col-span-2 md:col-span-1 flex flex-col gap-[10px]">
-          <Label htmlFor="firstName" className="label-style">
-            Last Name <span className="text-red-500 ml-1">*</span>
-          </Label>
-          <Input
-            id="lastName"
-            className="input-style"
-            placeholder="Enter Last Name"
-            value={lastName || ""}
-            onChange={(e) => setLastName(e.target.value)}
-          />
+
+        <div className="flex flex-col gap-2.5">
+          <label htmlFor="phone" className="text-base font-medium">
+            Phone Number <span className="text-red-500">*</span>
+          </label>
+
+          <div className="border border-gray-300 rounded-lg px-4 py-3  transition-all">
+            <PhoneInput
+              id="phone"
+              international
+              defaultCountry="PK"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={setPhone}
+              className="PhoneInput"
+              countrySelectProps={{ unicodeFlags: false }}
+            />
+          </div>
         </div>
-        <div
-          className="col-span-2 flex flex-col gap-[10px]"
-          style={{ cursor: "not-allowed" }}
-        >
+
+        {/* Email (disabled) */}
+        <div className="flex flex-col gap-[10px]" style={{ cursor: "not-allowed" }}>
           <Label htmlFor="email" className="label-style">
             Email <span className="text-red-500 ml-1">*</span>
           </Label>
@@ -80,8 +103,10 @@ export function EditProfile() {
           />
         </div>
       </div>
+
+      {/* Submit Button */}
       <Button
-        variant={"main_green_button"}
+        variant="main_green_button"
         className="mt-5"
         onClick={handleSubmit}
         loading={submitLoading}
@@ -89,6 +114,7 @@ export function EditProfile() {
         Save Changes
       </Button>
     </div>
+
   );
 }
 
@@ -96,6 +122,7 @@ import { AdminLayout } from "@/components/admin/admin-layout";
 import { AvatarUpload } from "@/components/ui/avatar-upload";
 import { useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
+import SettingsLayout from "../../../Components/settings/SettingsLayout";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -121,8 +148,8 @@ export default function App() {
   );
 
   return (
-    <AdminLayout>
-      <div className="min-h-screen w-full">
+    <SettingsLayout>
+      <div className="p-6 w-full">
         <div className="w-full mx-auto">
           <div className="w-full flex justify-between items-start flex-col gap-[24px]">
             <div className="w-fit mb-0 spacey-[15px]">
@@ -147,6 +174,6 @@ export default function App() {
           </div>
         </div>
       </div>
-    </AdminLayout>
+    </SettingsLayout>
   );
 }
