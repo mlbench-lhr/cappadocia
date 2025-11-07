@@ -99,7 +99,7 @@ export function Navigation() {
           {/* Desktop Button */}
           <div className="flex items-center space-x-4">
             <Button asChild variant={"main_green_button"}>
-              <Link href="/auth/login">Login Now</Link>
+              <Link href="/dashboard">Get Started</Link>
             </Button>
           </div>
         </div>

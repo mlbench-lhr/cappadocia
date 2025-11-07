@@ -519,9 +519,6 @@ export default function DashboardLayout({
     async function getData() {
       const userData = await getCurrentUser();
       dispatch(setReduxUser(userData.data.user));
-      if (userData?.data?.user?.extracurricularsAndAwards?.awards?.length < 1) {
-        router.push("/update-profile");
-      }
     }
     if (!reduxUserData.user) {
       getData();

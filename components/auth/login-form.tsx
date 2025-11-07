@@ -55,10 +55,6 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
       } else if (userData?.user.role === "admin") {
         router.push("/admin/dashboard");
         router.refresh();
-      } else if (
-        userData?.user?.extracurricularsAndAwards?.awards?.length < 1
-      ) {
-        router.push("/update-profile");
       } else {
         router.push("/dashboard");
         router.refresh();
