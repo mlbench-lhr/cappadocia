@@ -324,7 +324,7 @@
 
   /* material-theme/headline/small */
 
-  font-size: 24px;
+  font-size: 26px;
   font-style: normal;
   font-weight: 500;
   line-height: 32px; /* 133.333% */
@@ -427,12 +427,10 @@ body {
 }
 
 .auth-box-shadows {
-  border-radius: 16px;
-  background: var(--Schemes-Surface-Container-Lowest, #fff);
-  border: none;
-
-  /* Drop Shadow/xl */
-  box-shadow: 0 20px 13px 0 rgba(0, 0, 0, 0.03), 0 8px 5px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.07);
+  background: #fff;
+  box-shadow: 0 7px 35.5px 0 rgba(0, 0, 0, 0.05);
 }
 
 .box-shadows-2 {

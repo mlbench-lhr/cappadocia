@@ -97,11 +97,11 @@ export function Navigation() {
           </div>
 
           {/* Desktop Button */}
-          {/* <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4">
             <Button asChild variant={"main_green_button"}>
-              <Link href="/dashboard">Login Now</Link>
+              <Link href="/auth/login">Login Now</Link>
             </Button>
-          </div> */}
+          </div>
         </div>
         {/* Hamburger (Mobile) */}
       </div>

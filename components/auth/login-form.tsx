@@ -98,30 +98,18 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
   }, [error]);
 
   return (
-    <Card className="w-full max-w-md auth-box-shadows">
+    <Card className="w-full md:w-[450px] auth-box-shadows">
       <CardHeader className="space-y-1">
-        <Link href={"/"}>
-          <Image
-            width={88}
-            height={48}
-            alt=""
-            src={"/logo.png"}
-            className="mx-auto mb-[20px]"
-          />
-        </Link>
-        <CardTitle className="heading-text-style-4 text-center">
-          {isAdmin ? "Login" : "Sign In"}
+        <CardTitle className="heading-text-style-4">
+          {isAdmin ? "Login" : "Welcome Back"}
         </CardTitle>
-        <CardDescription className="text-center plan-text-style-3">
-          Welcome back! Please log in to continue.
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-2">
         <form onSubmit={handleSubmit(handleEmailLogin)} className="space-y-4">
           {/* Email Field */}
           <div className="space-y-2">
             <Label className="label-style" htmlFor="email">
-              Email
+              Email Address
             </Label>
             <Controller
               name="email"
@@ -137,7 +125,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Enter Your Email Address"
                   className="input-style"
                   {...field}
                 />
@@ -220,20 +208,11 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
         </form>
         {!isAdmin && (
           <>
-            {/* Divider */}
-            <div className="relative">
-              <div className="relative flex justify-center uppercase">
-                <span className="plan-text-style-2 bg-background px-2 text-muted-foreground">
-                  Or
-                </span>
-              </div>
-            </div>
-
             {/* Google Login */}
             <Button
               type="button"
               variant="outline"
-              className="border-[1px] border-[#B8C8D8] w-full bg-transparent h-[46px] cursor-pointer"
+              className="border-none bg-[#FFEAF4] w-full h-[46px] cursor-pointer"
               onClick={handleGoogleLogin}
               disabled={loading}
             >
