@@ -212,7 +212,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
             <Button
               type="button"
               variant="outline"
-              className="border-none bg-[#FFEAF4] w-full h-[46px] cursor-pointer"
+              className="border-none bg-[#FFEAF4] w-full h-[46px] text-primary cursor-pointer"
               onClick={handleGoogleLogin}
               disabled={loading}
             >
@@ -222,7 +222,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
                 alt=""
                 src={coloredGoogleIcon.src || "/placeholder.svg"}
               />
-              Continue with Google
+              Sign in with Google
             </Button>
 
             <div className="plan-text-style-3">

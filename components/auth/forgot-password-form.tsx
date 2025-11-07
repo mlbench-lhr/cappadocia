@@ -305,7 +305,8 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
             onClick={() => setStep("email")}
             className="text-sm text-muted-foreground hover:text-foreground flex items-start justify-start mb-[28px]"
           >
-            <ChevronLeft className="mr-2 h-[24px] w-[24px]" />
+            <ChevronLeft className="mr-2 h-[24px] w-[24px]" color="#B32053" />
+            <span className="text-base font-semibold">Go Back</span>
           </button>
           <CardTitle className="heading-text-style-4 text-center">
             Enter OTP
@@ -357,9 +358,10 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
       <CardHeader className="space-y-1">
         <Link
           href={isAdmin ? "/admin/auth/login" : "/auth/login"}
-          className="text-sm text-muted-foreground hover:text-foreground flex items-start justify-start mb-[28px]"
+          className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-start mb-[28px]"
         >
-          <ChevronLeft className="mr-2 h-[24px] w-[24px]" />
+          <ChevronLeft className="mr-2 h-[24px] w-[24px]" color="#B32053" />
+          <span className="text-base font-semibold">Go Back</span>
         </Link>
         <CardTitle className="heading-text-style-4 text-center">
           Forgot Password?
