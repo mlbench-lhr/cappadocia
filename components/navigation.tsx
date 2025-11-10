@@ -93,7 +93,7 @@ export function Navigation() {
         {/* Desktop Nav */}
         <div className="flex justify-end items-center gap-0 md:gap-6 lg:gap-[100px]">
           <div className="hidden md:flex gap-6 lg:gap-[48px] items-center">
-            {/* {navLinks} */}
+            {navLinks}
           </div>
 
           {/* Desktop Button */}
@@ -119,7 +119,7 @@ export function Navigation() {
   ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex flex-col items-start px-6 space-y-6 py-6">
-          {/* {navLinks} */}
+          {navLinks}
         </div>
       </div>
     </nav>

@@ -1,10 +1,10 @@
 import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
-import { AuthProvider } from "../../AuthProvider";
+import { AuthLayoutProvider } from "../../AuthLayoutProvider";
 
 export default function ForgotPasswordPage() {
   return (
-    <AuthProvider showImage1={false}>
+    <AuthLayoutProvider showImage1={false}>
       <ForgotPasswordForm />
-    </AuthProvider>
+    </AuthLayoutProvider>
   );
 }

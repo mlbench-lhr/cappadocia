@@ -15,7 +15,7 @@ import { OTPInput } from "@/components/ui/otp-input";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import Swal from "sweetalert2"; // ✅ use SweetAlert2
-import { AuthProvider } from "../../AuthProvider";
+import { AuthLayoutProvider } from "../../AuthLayoutProvider";
 
 export default function VerifyEmailPage() {
   const [otp, setOtp] = useState("");
@@ -201,7 +201,7 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <AuthProvider>
+    <AuthLayoutProvider>
       <Card className="w-full max-w-md auth-box-shadows">
         <CardHeader className="space-y-1">
           <CardTitle className="text-center">Email Verification</CardTitle>
@@ -247,6 +247,6 @@ export default function VerifyEmailPage() {
           </div>
         </CardContent>
       </Card>
-    </AuthProvider>
+    </AuthLayoutProvider>
   );
 }

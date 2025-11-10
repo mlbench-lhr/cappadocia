@@ -1,10 +1,10 @@
 import { LoginForm } from "@/components/auth/login-form";
-import { AuthProvider } from "../../AuthProvider";
+import { AuthLayoutProvider } from "../../AuthLayoutProvider";
 
 export default function LoginPage() {
   return (
-    <AuthProvider>
+    <AuthLayoutProvider>
       <LoginForm />
-    </AuthProvider>
+    </AuthLayoutProvider>
   );
 }
