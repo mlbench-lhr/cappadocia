@@ -48,15 +48,15 @@ export const sendVerificationEmail = async (email: string, otp: string) => {
     const htmlContent = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
-      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1758176120/logo_png_lajh7e.png" alt="Cappadocia Logo" 
+      <img src="https://res.cloudinary.com/sage-media/image/upload/v1761809447/logo_olblxe.png" alt="Cappadocia Logo" 
            style="max-width: 120px; margin-bottom: 10px;" />
     </div>
     <h2 style="color: #333;">Welcome! Please Verify Your Email</h2>
     <p>Thank you for signing up! Please verify your email address using the OTP code below:</p>
     <div style="text-align: center; margin: 30px 0;">
-      <div style="background-color: #f8f9fa; border: 2px dashed #28a745; 
+      <div style="background-color: #f8f9fa; border: 2px dashed #b32053; 
                   padding: 20px; border-radius: 10px; display: inline-block;">
-        <span style="font-size: 32px; font-weight: bold; color: #28a745; 
+        <span style="font-size: 32px; font-weight: bold; color: #b32053; 
                      letter-spacing: 5px;">${otp}</span>
       </div>
     </div>
