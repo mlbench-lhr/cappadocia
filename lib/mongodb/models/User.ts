@@ -136,7 +136,7 @@ const UserSchema = new Schema<IUser>(
     },
     fullName: { type: String, required: false, trim: true },
     firstName: { type: String, required: false, trim: true },
-    phoneNumber: { type: String, required: true, trim: true },
+    phoneNumber: { type: String, trim: true },
     lastName: { type: String, required: false, trim: true },
     role: { type: String, default: "user", enum: ["user", "admin"] },
     avatar: { type: String, default: null },

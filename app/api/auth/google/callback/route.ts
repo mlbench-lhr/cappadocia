@@ -49,8 +49,7 @@ export async function GET(request: NextRequest) {
       // Create new user
       user = new User({
         email: googleUser.email,
-        firstName: googleUser.given_name,
-        lastName: googleUser.family_name,
+        fullName: googleUser.given_name + googleUser.family_name,
         googleId: googleUser.id,
         avatar: googleUser.picture,
         isEmailVerified: googleUser.verified_email,
