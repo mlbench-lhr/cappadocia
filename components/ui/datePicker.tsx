@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -18,20 +17,15 @@ export default function DeadlinePicker({
 }) {
   return (
     <div className="flex flex-col gap-[10px] w-full">
-      <label className="label-style">Due Date</label>
       <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={`w-full justify-start text-left font-normal input-style ${
+            className={`w-full justify-start text-left font-medium text-base border-none shadow-none h-[37px] ps-0 px-0 hover:bg-transparent ${
               !date && "text-muted-foreground"
             }`}
           >
-            {date ? (
-              moment(date).format("MMM DD, YYYY")
-            ) : (
-              <span>Select Due Date</span>
-            )}
+            {date ? moment(date).format("MMM DD, YYYY") : <span>Date</span>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">

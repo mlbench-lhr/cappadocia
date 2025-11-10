@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-import { Footer } from "@/components/footer";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import logo from "@/public/logo.png";

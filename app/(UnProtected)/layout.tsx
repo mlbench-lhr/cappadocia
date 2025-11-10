@@ -20,9 +20,7 @@ export default function RootLayout({
           <div className="h-fit flex flex-col">
             <Navigation />
 
-            <main className="mx-auto element px-[20px] xl:px-[100px]">
-              {children}
-            </main>
+            <main className="mx-auto element">{children}</main>
           </div>
           <Footer />
         </div>
