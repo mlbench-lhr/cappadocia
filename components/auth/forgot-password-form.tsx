@@ -153,7 +153,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
     }
 
     if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError("Password must be at least 8 characters");
       return;
     }
 

@@ -202,7 +202,9 @@ export function SignupForm() {
               )}
             />
             {errors.phoneNumber && (
-              <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
+              <p className="text-red-500 text-sm">
+                {errors.phoneNumber.message}
+              </p>
             )}
           </div>
 
@@ -217,8 +219,23 @@ export function SignupForm() {
                 rules={{
                   required: "Password is required",
                   minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters long",
+                    value: 8,
+                    message: "Password must be at least 8 characters long",
+                  },
+                  validate: (value) => {
+                    const hasUppercase = /[A-Z]/.test(value);
+                    const hasLowercase = /[a-z]/.test(value);
+                    const hasNumber = /[0-9]/.test(value);
+                    const hasSpecial = /[^A-Za-z0-9]/.test(value);
+                    if (!hasUppercase)
+                      return "Password must include at least one uppercase letter";
+                    if (!hasLowercase)
+                      return "Password must include at least one lowercase letter";
+                    if (!hasNumber)
+                      return "Password must include at least one number";
+                    if (!hasSpecial)
+                      return "Password must include at least one special character";
+                    return true;
                   },
                 }}
                 render={({ field }) => (
