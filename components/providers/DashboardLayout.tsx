@@ -75,6 +75,7 @@ function ProfileMenu() {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth.user);
   const { settingOpen } = useAppSelector((state) => state.sidebar);
+  console.log("userData-----", userData);
 
   return (
     <div className="relative">
@@ -92,7 +93,7 @@ function ProfileMenu() {
                 />
               ) : (
                 <span className="text-lg font-medium">
-                  {userData?.firstName?.charAt(0)}
+                  {userData?.fullName?.charAt(0)}
                 </span>
               )}
             </div>

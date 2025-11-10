@@ -21,6 +21,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validatedData = signupSchema.parse(body);
+    console.log("validatedData------", validatedData);
 
     // Check if user already exists by email
     const existingUserByEmail = await User.findOne({

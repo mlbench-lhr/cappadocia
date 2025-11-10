@@ -134,6 +134,7 @@ const UserSchema = new Schema<IUser>(
         return !this.googleId;
       },
     },
+    fullName: { type: String, required: false, trim: true },
     firstName: { type: String, required: false, trim: true },
     phoneNumber: { type: String, required: true, trim: true },
     lastName: { type: String, required: false, trim: true },
@@ -192,11 +193,6 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
-
-// Virtual for full name
-UserSchema.virtual("fullName").get(function () {
-  return `${this.firstName} ${this.lastName}`;
-});
 
 // Ensure virtuals are serialized
 UserSchema.set("toJSON", { virtuals: true });

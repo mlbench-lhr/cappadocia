@@ -14,18 +14,25 @@ import { Button } from "./ui/button";
 import { signOut } from "@/lib/auth/auth-helpers";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
+import { useAppSelector } from "@/lib/store/hooks";
 
 export default function LogoutDialog({
   adminStyle = false,
 }: {
   adminStyle?: boolean;
 }) {
+  const userRole = useAppSelector((s) => s.auth.user?.role);
   const router = useRouter();
   const handleConfirm = async () => {
     await signOut();
     router.refresh();
-    router.push("/admin/auth/login");
-    window.location.href = "/admin/auth/login";
+    if (userRole === "user") {
+      router.push("/auth/login");
+      window.location.href = "/auth/login";
+    } else {
+      router.push("/admin/auth/login");
+      window.location.href = "/admin/auth/login";
+    }
   };
   return (
     <>
