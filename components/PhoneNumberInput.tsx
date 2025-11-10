@@ -2,18 +2,18 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 export default function PhoneNumberInput({
-  phone,
-  setPhone,
+  phoneNumber,
+  setPhoneNumber,
 }: {
-  phone: string;
-  setPhone: any;
+  phoneNumber: string;
+  setPhoneNumber: any;
 }) {
   return (
     <PhoneInput
       country={"tr"}
-      value={phone}
+      value={phoneNumber}
       placeholder="Enter phone number"
-      onChange={setPhone}
+      onChange={setPhoneNumber}
       inputClass="input-style-phone-number"
       buttonClass="!border-r !border-gray-300"
     />

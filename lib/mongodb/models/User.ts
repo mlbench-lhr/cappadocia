@@ -31,8 +31,8 @@ export interface IUser extends Document {
   email: string;
   password: string;
   phoneNumber: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
@@ -134,9 +134,9 @@ const UserSchema = new Schema<IUser>(
         return !this.googleId;
       },
     },
-    firstName: { type: String, required: true, trim: true },
+    firstName: { type: String, required: false, trim: true },
     phoneNumber: { type: String, required: true, trim: true },
-    lastName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: false, trim: true },
     role: { type: String, default: "user", enum: ["user", "admin"] },
     avatar: { type: String, default: null },
     isEmailVerified: { type: Boolean, default: false },

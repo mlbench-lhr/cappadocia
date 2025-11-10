@@ -7,12 +7,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { signUp, signInWithGoogle } from "@/lib/auth/auth-helpers";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
@@ -22,15 +17,17 @@ import { Checkbox } from "../ui/checkbox";
 import PhoneNumberInput from "../PhoneNumberInput";
 
 type SignupFormValues = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
+  phoneNumber: string;
   password: string;
+  confirmPassword: string;
+  agreedToTerms: boolean;
 };
 
 export function SignupForm() {
-  const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -39,15 +36,34 @@ export function SignupForm() {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<SignupFormValues>();
+  } = useForm<SignupFormValues>({
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      agreedToTerms: false,
+    },
+  });
+
+  const password = watch("password");
 
   const handleEmailSignup = async (data: SignupFormValues) => {
     setLoading(true);
     setError("");
 
     try {
-      const { data: res, error } = await signUp(data);
+      const signupData = {
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+      };
+
+      const { data: res, error } = await signUp(signupData);
       if (error) {
         setError(error.message);
       } else {
@@ -85,18 +101,19 @@ export function SignupForm() {
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        confirmButtonColor: "#22c55e",
       });
     }
   }, [error]);
 
-  if (success) {
-    router.push(
-      `/auth/verify-email?email=${encodeURIComponent(
-        control._formValues.email || ""
-      )}`
-    );
-  }
+  useEffect(() => {
+    if (success) {
+      const email = watch("email");
+      router.push(
+        `/auth/verify-email?email=${encodeURIComponent(email || "")}`
+      );
+    }
+  }, [success, router, watch]);
 
   return (
     <Card className="w-full max-w-md auth-box-shadows min-h-fit max-h-full">
@@ -135,23 +152,24 @@ export function SignupForm() {
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
           </div>
+
           <div className="space-y-2">
-            <Label className="label-style" htmlFor="firstName">
+            <Label className="label-style" htmlFor="fullName">
               Full Name
             </Label>
             <Controller
-              name="firstName"
+              name="fullName"
               control={control}
               rules={{
                 required: "Full name is required",
-                pattern: {
-                  value: /^\S+$/,
-                  message: "Full name cannot contain spaces",
+                minLength: {
+                  value: 2,
+                  message: "Full name must be at least 2 characters",
                 },
               }}
               render={({ field }) => (
                 <Input
-                  id="firstName"
+                  id="fullName"
                   type="text"
                   placeholder="Enter your full name"
                   className="input-style"
@@ -159,15 +177,35 @@ export function SignupForm() {
                 />
               )}
             />
-            {errors.firstName && (
-              <p className="text-red-500 text-sm">{errors.firstName.message}</p>
+            {errors.fullName && (
+              <p className="text-red-500 text-sm">{errors.fullName.message}</p>
             )}
           </div>
 
           <div className="space-y-2">
             <Label className="label-style">Phone Number</Label>
-            <PhoneNumberInput phone={phone} setPhone={setPhone} />
+            <Controller
+              name="phoneNumber"
+              control={control}
+              rules={{
+                required: "Phone number is required",
+                pattern: {
+                  value: /^\+?[1-9]\d{1,14}$/,
+                  message: "Enter a valid phoneNumber number",
+                },
+              }}
+              render={({ field }) => (
+                <PhoneNumberInput
+                  phoneNumber={field.value}
+                  setPhoneNumber={field.onChange}
+                />
+              )}
+            />
+            {errors.phoneNumber && (
+              <p className="text-red-500 text-sm">{errors.phoneNumber.message}</p>
+            )}
           </div>
+
           <div className="space-y-2">
             <Label className="label-style" htmlFor="password">
               Password
@@ -180,7 +218,7 @@ export function SignupForm() {
                   required: "Password is required",
                   minLength: {
                     value: 6,
-                    message: "Password should be 6 character long",
+                    message: "Password must be at least 6 characters long",
                   },
                 }}
                 render={({ field }) => (
@@ -211,26 +249,25 @@ export function SignupForm() {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
+
           <div className="space-y-2">
-            <Label className="label-style" htmlFor="password">
+            <Label className="label-style" htmlFor="confirmPassword">
               Confirm Password
             </Label>
             <div className="relative">
               <Controller
-                name="password"
+                name="confirmPassword"
                 control={control}
                 rules={{
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password should be 6 character long",
-                  },
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
                 }}
                 render={({ field }) => (
                   <Input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm your password"
                     className="input-style"
                     {...field}
                   />
@@ -241,29 +278,40 @@ export function SignupForm() {
                 variant="ghost"
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
-                {showPassword ? (
+                {showConfirmPassword ? (
                   <EyeOff className="h-4 w-4" />
                 ) : (
                   <Eye className="h-4 w-4" />
                 )}
               </Button>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">
+                {errors.confirmPassword.message}
+              </p>
             )}
           </div>
+
           <div>
             <div className="flex items-start justify-start space-x-2">
-              <Checkbox
-                id="fg"
-                className="mt-1"
-                onCheckedChange={(val: any) => {
-                  console.log("val------", val);
+              <Controller
+                name="agreedToTerms"
+                control={control}
+                rules={{
+                  required: "You must agree to the terms and conditions",
                 }}
+                render={({ field }) => (
+                  <Checkbox
+                    id="agreedToTerms"
+                    className="mt-1"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
               />
-              <Label htmlFor="fg">
+              <Label htmlFor="agreedToTerms">
                 <span className="text-sm font-medium leading-5">
                   I have read and agree to the{" "}
                   <Link
@@ -289,7 +337,13 @@ export function SignupForm() {
                 </span>
               </Label>
             </div>
+            {errors.agreedToTerms && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.agreedToTerms.message}
+              </p>
+            )}
           </div>
+
           <Button
             type="submit"
             className="w-full mt-[8px]"
@@ -299,6 +353,7 @@ export function SignupForm() {
             Sign Up
           </Button>
         </form>
+
         <Button
           type="button"
           variant="outline"
@@ -314,6 +369,7 @@ export function SignupForm() {
           />
           Signup with Google
         </Button>
+
         <div className="plan-text-style-3">
           Already have an account?{" "}
           <Link

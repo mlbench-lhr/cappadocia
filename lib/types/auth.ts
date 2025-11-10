@@ -1,8 +1,8 @@
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
@@ -14,8 +14,8 @@ export interface User {
   dataUpdated: boolean;
 }
 export interface PersonalInfo {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   gender: "Male" | "Female" | "Other" | "Prefer not to say";
   state: string;
   city: string;
@@ -50,8 +50,8 @@ export interface extracurricularsAndAwards {
 export interface AuthUser {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
