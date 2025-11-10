@@ -2,11 +2,8 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import logo from "@/public/logo.png";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Menu } from "lucide-react";
-import Image from "next/image";
 
 export function Navigation() {
   const pathname = usePathname();
@@ -15,11 +12,11 @@ export function Navigation() {
   const navLinks = (
     <>
       <Link
-        href="/blogs"
+        href="/"
         className={
-          pathname === "/blogs"
-            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
-            : "text-[16px] font-[500]"
+          pathname === "/"
+            ? "font-[600] text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
         onClick={() => setIsMobileMenuOpen(false)}
       >
@@ -29,8 +26,8 @@ export function Navigation() {
         href="/About"
         className={
           pathname === "/About"
-            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
-            : "text-[16px] font-[500]"
+            ? "font-[600] text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
         onClick={() => setIsMobileMenuOpen(false)}
       >
@@ -40,8 +37,8 @@ export function Navigation() {
         href="/ToursAndActivities"
         className={
           pathname === "/ToursAndActivities"
-            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
-            : "text-[16px] font-[500]"
+            ? "font-[600] text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
         onClick={() => setIsMobileMenuOpen(false)}
       >
@@ -51,8 +48,8 @@ export function Navigation() {
         href="/Contact"
         className={
           pathname === "/Contact"
-            ? "text-[rgba(0,0,0,0.60)] font-[600] text-[16px]"
-            : "text-[16px] font-[500]"
+            ? "font-[600] text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
         onClick={() => setIsMobileMenuOpen(false)}
       >
@@ -93,13 +90,13 @@ export function Navigation() {
         {/* Desktop Nav */}
         <div className="flex justify-end items-center gap-0 md:gap-6 lg:gap-[100px]">
           <div className="hidden md:flex gap-6 lg:gap-[48px] items-center">
-            {/* {navLinks} */}
+            {navLinks}
           </div>
 
           {/* Desktop Button */}
           <div className="flex items-center space-x-4">
             <Button asChild variant={"main_green_button"}>
-              <Link href="/dashboard">Get Started</Link>
+              <Link href="/dashboard">Login Now</Link>
             </Button>
           </div>
         </div>
@@ -119,7 +116,7 @@ export function Navigation() {
   ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex flex-col items-start px-6 space-y-6 py-6">
-          {/* {navLinks} */}
+          {navLinks}
         </div>
       </div>
     </nav>

@@ -1,5 +1,4 @@
 import "@/app/globals.css";
-import { Navigation } from "@/components/navigation";
 import DashboardLayout from "@/components/providers/DashboardLayout";
 import { Inter } from "next/font/google";
 

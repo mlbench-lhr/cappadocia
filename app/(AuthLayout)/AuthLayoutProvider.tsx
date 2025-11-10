@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export function AuthProvider({
+export function AuthLayoutProvider({
   children,
   showImage1 = true,
 }: {

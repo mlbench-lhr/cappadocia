@@ -1,10 +1,10 @@
 import { SignupForm } from "@/components/auth/signup-form";
-import { AuthProvider } from "../../AuthProvider";
+import { AuthLayoutProvider } from "../../AuthLayoutProvider";
 
 export default function SignupPage() {
   return (
-    <AuthProvider>
+    <AuthLayoutProvider>
       <SignupForm />
-    </AuthProvider>
+    </AuthLayoutProvider>
   );
 }
