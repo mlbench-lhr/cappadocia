@@ -12,8 +12,8 @@ interface User {
   id: string;
   email: string;
   fullName: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   avatar?: string;
   isEmailVerified: boolean;
   createdAt: string;

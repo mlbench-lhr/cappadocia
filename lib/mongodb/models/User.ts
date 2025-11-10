@@ -30,8 +30,9 @@ export interface IUser extends Document {
   _id: string;
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  phoneNumber: string;
+  firstName?: string;
+  lastName?: string;
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
@@ -133,8 +134,10 @@ const UserSchema = new Schema<IUser>(
         return !this.googleId;
       },
     },
-    firstName: { type: String, required: true, trim: true },
-    lastName: { type: String, required: true, trim: true },
+    fullName: { type: String, required: false, trim: true },
+    firstName: { type: String, required: false, trim: true },
+    phoneNumber: { type: String, required: true, trim: true },
+    lastName: { type: String, required: false, trim: true },
     role: { type: String, default: "user", enum: ["user", "admin"] },
     avatar: { type: String, default: null },
     isEmailVerified: { type: Boolean, default: false },
@@ -190,11 +193,6 @@ const UserSchema = new Schema<IUser>(
   },
   { timestamps: true }
 );
-
-// Virtual for full name
-UserSchema.virtual("fullName").get(function () {
-  return `${this.firstName} ${this.lastName}`;
-});
 
 // Ensure virtuals are serialized
 UserSchema.set("toJSON", { virtuals: true });

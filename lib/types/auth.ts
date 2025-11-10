@@ -1,20 +1,21 @@
 export interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
   createdAt?: string;
   updatedAt?: string;
+  phoneNumber: string;
   blogTier: "Tier 1" | "Tier 2" | "Tier 3";
   profileUpdated: boolean;
   dataUpdated: boolean;
 }
 export interface PersonalInfo {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   gender: "Male" | "Female" | "Other" | "Prefer not to say";
   state: string;
   city: string;
@@ -49,8 +50,8 @@ export interface extracurricularsAndAwards {
 export interface AuthUser {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;

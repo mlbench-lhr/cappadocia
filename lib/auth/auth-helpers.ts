@@ -1,10 +1,10 @@
 import api from "@/lib/api/axios-config";
 
 export interface SignUpData {
+  fullName: string;
   email: string;
+  phoneNumber: string;
   password: string;
-  firstName: string;
-  lastName: string;
 }
 
 export interface SignInData {

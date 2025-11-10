@@ -32,13 +32,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (data?.user) {
         dispatch(setReduxUser(data.user));
         console.log("data?.user", data?.user);
-
-        if (
-          data?.user?.extracurricularsAndAwards?.awards?.length < 1 &&
-          data?.user?.role !== "admin"
-        ) {
-          router.push("/update-profile");
-        }
       }
       if (error || !data) {
         setUser(null);

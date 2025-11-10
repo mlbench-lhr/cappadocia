@@ -76,6 +76,7 @@
     "react-day-picker": "latest",
     "react-dom": "^19",
     "react-hook-form": "latest",
+    "react-phone-input-2": "^2.15.1",
     "react-quill": "^2.0.0",
     "react-resizable-panels": "latest",
     "react-responsive": "^10.0.1",

@@ -15,6 +15,7 @@ import { OTPInput } from "@/components/ui/otp-input";
 import { CheckCircle, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import Swal from "sweetalert2"; // ✅ use SweetAlert2
+import { AuthProvider } from "../../AuthProvider";
 
 export default function VerifyEmailPage() {
   const [otp, setOtp] = useState("");
@@ -200,56 +201,52 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <div className="flex justify-center items-start lg:items-center w-full h-[100vh] bg-[#FBFDF9]">
-      <main className="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-md space-y-8">
-          <Card className="w-full max-w-md auth-box-shadows">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-center">Email Verification</CardTitle>
-              <CardDescription className="text-center">
-                Check your email and enter the OTP to verify.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <form onSubmit={handleVerifyOtp} className="space-y-4">
-                <OTPInput
-                  value={otp}
-                  onChange={setOtp}
-                  length={6}
-                  className="justify-center"
-                />
-                {error && (
-                  <p className="text-sm text-red-500 text-center">{error}</p>
-                )}
-                <Button
-                  type="submit"
-                  className="w-full mt-[8px]"
-                  disabled={otp.length !== 6 || loading}
-                  variant="main_green_button"
-                >
-                  {loading ? "Verifying..." : "Continue"}
-                </Button>
-              </form>
-              <div className="text-center">
-                <p>
-                  Didn’t receive the email?{" "}
-                  <button
-                    onClick={handleResendOtp}
-                    disabled={resendTimer > 0 || resendLoading || !email}
-                    className="text-[#B32053] font-[500] hover:underline"
-                  >
-                    {resendLoading
-                      ? "Sending..."
-                      : resendTimer > 0
-                      ? `Resend in ${resendTimer}s`
-                      : "Resend OTP"}
-                  </button>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </main>
-    </div>
+    <AuthProvider>
+      <Card className="w-full max-w-md auth-box-shadows">
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-center">Email Verification</CardTitle>
+          <CardDescription className="text-center">
+            Check your email and enter the OTP to verify.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <form onSubmit={handleVerifyOtp} className="space-y-4">
+            <OTPInput
+              value={otp}
+              onChange={setOtp}
+              length={6}
+              className="justify-center"
+            />
+            {error && (
+              <p className="text-sm text-red-500 text-center">{error}</p>
+            )}
+            <Button
+              type="submit"
+              className="w-full mt-[8px]"
+              disabled={otp.length !== 6 || loading}
+              variant="main_green_button"
+            >
+              {loading ? "Verifying..." : "Continue"}
+            </Button>
+          </form>
+          <div className="text-center">
+            <p>
+              Didn’t receive the email?{" "}
+              <button
+                onClick={handleResendOtp}
+                disabled={resendTimer > 0 || resendLoading || !email}
+                className="text-[#B32053] font-[500] hover:underline"
+              >
+                {resendLoading
+                  ? "Sending..."
+                  : resendTimer > 0
+                  ? `Resend in ${resendTimer}s`
+                  : "Resend OTP"}
+              </button>
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </AuthProvider>
   );
 }
