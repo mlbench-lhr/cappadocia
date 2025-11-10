@@ -1,6 +1,5 @@
 "use client";
 
-import logo from "@/public/logo.png";
 import coloredGoogleIcon from "@/public/flat-color-icons_google.svg";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -11,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -19,7 +17,6 @@ import { signUp, signInWithGoogle } from "@/lib/auth/auth-helpers";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
-import { toast } from "sonner";
 import Swal from "sweetalert2";
 import { Checkbox } from "../ui/checkbox";
 import PhoneNumberInput from "../PhoneNumberInput";
@@ -32,6 +29,7 @@ type SignupFormValues = {
 };
 
 export function SignupForm() {
+  const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -167,7 +165,8 @@ export function SignupForm() {
           </div>
 
           <div className="space-y-2">
-            <PhoneNumberInput />
+            <Label className="label-style">Phone Number</Label>
+            <PhoneNumberInput phone={phone} setPhone={setPhone} />
           </div>
           <div className="space-y-2">
             <Label className="label-style" htmlFor="password">

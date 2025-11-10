@@ -30,6 +30,7 @@ export interface IUser extends Document {
   _id: string;
   email: string;
   password: string;
+  phoneNumber: string;
   firstName: string;
   lastName: string;
   fullName: string;
@@ -134,6 +135,7 @@ const UserSchema = new Schema<IUser>(
       },
     },
     firstName: { type: String, required: true, trim: true },
+    phoneNumber: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
     role: { type: String, default: "user", enum: ["user", "admin"] },
     avatar: { type: String, default: null },
