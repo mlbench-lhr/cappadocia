@@ -26,7 +26,7 @@ const testimonials = [
     rating: 5,
     image:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
-    text: "The trip was amazing from beginning to end. Every detail was perfectly planned and executed. Truly a memorable adventure!",
+    text: "The trip was amazing from beginning to end. Every detail was perfectly planned and executed. Truly a memorable adventure!. Would highly recommend to anyone.",
   },
   {
     id: 5,
@@ -35,7 +35,7 @@ const testimonials = [
     rating: 4,
     image:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-    text: "Outstanding service and breathtaking locations. The guides were exceptional and made the entire experience even more special.",
+    text: "Outstanding service and breathtaking locations. The guides were exceptional and made the entire experience even more special. Would highly recommend to anyone.",
   },
   {
     id: 6,
@@ -170,9 +170,9 @@ export default function TravelersTestimonials() {
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
           {/* Desktop View - 3 Cards */}
-          <div className="w-full hidden md:block">
-            <div className="w-[100%] flex justify-start items-center">
-              <div className="grid grid-cols-3 gap-0 w-full items-center">
+          <div className="w-full hidden md:block overflow-hidden py-8 h-fit">
+            <div className="w-[100%] flex justify-center items-center h-fit">
+              <div className="grid grid-cols-3 gap-0 w-[120%] items-center -mt-4 -mx-[10%]">
                 {getVisibleTestimonials().map(
                   ({ testimonial, isCenter, offset }) => (
                     <div
