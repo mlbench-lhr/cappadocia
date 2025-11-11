@@ -17,12 +17,19 @@ import { OTPInput } from "@/components/ui/otp-input";
 import { forgotPassword } from "@/lib/auth/auth-helpers";
 import { ChevronLeft, Check, EyeOff, Eye } from "lucide-react";
 import Swal from "sweetalert2";
+import { useForm, Controller } from "react-hook-form";
+
+type EmailFormValues = {
+  email: string;
+};
+
+type PasswordFormValues = {
+  newPassword: string;
+  confirmPassword: string;
+};
 
 export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
-  const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
   const [error, setError] = useState("");
@@ -32,6 +39,33 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
   const [resendTimer, setResendTimer] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const {
+    control: emailControl,
+    handleSubmit: handleEmailSubmit,
+    formState: { errors: emailErrors },
+    watch: watchEmail,
+  } = useForm<EmailFormValues>({
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const {
+    control: passwordControl,
+    handleSubmit: handlePasswordSubmit,
+    formState: { errors: passwordErrors },
+    watch: watchPassword,
+    reset,
+  } = useForm<PasswordFormValues>({
+    defaultValues: {
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  const newPassword = watchPassword("newPassword");
 
   useEffect(() => {
     if (error) {
@@ -54,16 +88,16 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
     return () => clearInterval(interval);
   }, [resendTimer]);
 
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSendOtp = async (data: EmailFormValues) => {
     setLoading(true);
     setError("");
 
     try {
-      const { error } = await forgotPassword(email);
+      const { error } = await forgotPassword(data.email);
       if (error) {
         setError(error.message);
       } else {
+        setEmail(data.email);
         setStep("otp");
         setResendTimer(60);
         Swal.fire({
@@ -72,6 +106,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           text: "OTP sent to your email!",
           confirmButtonColor: "#B32053",
         });
+        setOtp("");
       }
     } catch {
       setError("An unexpected error occurred");
@@ -134,6 +169,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           text: "OTP verified successfully!",
           confirmButtonColor: "#B32053",
         });
+        reset();
       } else {
         setError(data.error || "Invalid OTP. Please try again.");
       }
@@ -144,19 +180,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
     }
   };
 
-  const handleResetPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (newPassword?.length < 6) {
-      setError("Password must be at least 8 characters");
-      return;
-    }
-
+  const handleResetPassword = async (data: PasswordFormValues) => {
     setLoading(true);
     setError("");
 
@@ -164,13 +188,13 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp, password: newPassword }),
+        body: JSON.stringify({ email, otp, password: data.newPassword }),
       });
 
-      const data = await response.json();
+      const responseData = await response.json();
 
       if (!response.ok) {
-        setError(data.error || "Failed to reset password");
+        setError(responseData.error || "Failed to reset password");
       } else {
         setStep("success");
         Swal.fire({
@@ -226,61 +250,112 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <form onSubmit={handleResetPassword} className="space-y-4">
-            <div className="space-y-2 relative">
+          <form
+            onSubmit={handlePasswordSubmit(handleResetPassword)}
+            className="space-y-4"
+          >
+            <div className="space-y-2">
               <Label className="label-style" htmlFor="newPassword">
                 New Password
               </Label>
-              <Input
-                id="newPassword"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter new password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-                className="input-style"
-                min={6}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </Button>
+              <div className="relative">
+                <Controller
+                  name="newPassword"
+                  control={passwordControl}
+                  rules={{
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters long",
+                    },
+                    validate: (value) => {
+                      const hasUppercase = /[A-Z]/.test(value);
+                      const hasLowercase = /[a-z]/.test(value);
+                      const hasNumber = /[0-9]/.test(value);
+                      const hasSpecial = /[^A-Za-z0-9]/.test(value);
+                      if (!hasUppercase)
+                        return "Password must include at least one uppercase letter";
+                      if (!hasLowercase)
+                        return "Password must include at least one lowercase letter";
+                      if (!hasNumber)
+                        return "Password must include at least one number";
+                      if (!hasSpecial)
+                        return "Password must include at least one special character";
+                      return true;
+                    },
+                  }}
+                  render={({ field }) => (
+                    <Input
+                      id="newPassword"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter new password"
+                      className="input-style"
+                      {...field}
+                    />
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              {passwordErrors.newPassword && (
+                <p className="text-red-500 text-sm">
+                  {passwordErrors.newPassword.message}
+                </p>
+              )}
             </div>
-            <div className="space-y-2 relative">
+            <div className="space-y-2">
               <Label className="label-style" htmlFor="confirmPassword">
                 Confirm Password
               </Label>
-              <Input
-                id="confirmPassword"
-                type={showPassword2 ? "text" : "password"}
-                placeholder="Confirm new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="input-style"
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
-                onClick={() => setShowPassword2(!showPassword2)}
-              >
-                {showPassword2 ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </Button>
+              <div className="relative">
+                <Controller
+                  name="confirmPassword"
+                  control={passwordControl}
+                  rules={{
+                    required: "Confirm password is required",
+                    validate: (value) =>
+                      value === newPassword || "Passwords do not match",
+                  }}
+                  render={({ field }) => (
+                    <Input
+                      id="confirmPassword"
+                      type={showPassword2 ? "text" : "password"}
+                      placeholder="Confirm new password"
+                      className="input-style"
+                      {...field}
+                    />
+                  )}
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword2(!showPassword2)}
+                >
+                  {showPassword2 ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              {passwordErrors.confirmPassword && (
+                <p className="text-red-500 text-sm">
+                  {passwordErrors.confirmPassword.message}
+                </p>
+              )}
             </div>
             <Button
               type="submit"
@@ -333,7 +408,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           </form>
           <div className="text-center">
             <p className="plan-text-style-3">
-              Didn’t receive the email?{" "}
+              Didn't receive the email?{" "}
               <button
                 onClick={handleResendOtp}
                 disabled={resendTimer > 0 || resendLoading}
@@ -364,25 +439,41 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
         </Link>
         <CardTitle className="heading-text-style-4">Forgot Password?</CardTitle>
         <CardDescription className="plan-text-style-3">
-          Enter the email address linked to your account, and we’ll send you a
+          Enter the email address linked to your account, and we'll send you a
           link to reset your password.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <form onSubmit={handleSendOtp} className="space-y-4">
+        <form onSubmit={handleEmailSubmit(handleSendOtp)} className="space-y-4">
           <div className="space-y-2">
             <Label className="label-style" htmlFor="email">
-              Email
+              Email Address
             </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="input-style"
+            <Controller
+              name="email"
+              control={emailControl}
+              rules={{
+                required: "Email Address is required",
+                pattern: {
+                  value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
+                  message: "Enter a valid email",
+                },
+              }}
+              render={({ field }) => (
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email address"
+                  className="input-style"
+                  {...field}
+                />
+              )}
             />
+            {emailErrors.email && (
+              <p className="text-red-500 text-sm">
+                {emailErrors.email.message}
+              </p>
+            )}
           </div>
           <Button
             type="submit"
