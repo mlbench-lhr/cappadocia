@@ -925,7 +925,7 @@ button {
 }
 .swal2-popup {
   width: 90% !important; /* responsive width */
-  max-width: 540px !important; /* max size for larger screens */
+  max-width: 400px !important; /* max size for larger screens */
   border-radius: 12px !important;
 }
 .swal2-actions {
