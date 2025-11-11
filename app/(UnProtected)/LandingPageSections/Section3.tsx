@@ -1,5 +1,4 @@
 "use client";
-import TourCard from "@/components/landingPage/landingPageTourCard";
 import Tabs from "@/components/landingPage/tabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
