@@ -1,6 +1,5 @@
 "use client";
 
-import logo from "@/public/logo.png";
 import coloredGoogleIcon from "@/public/flat-color-icons_google.svg";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -8,29 +7,27 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { signUp, signInWithGoogle } from "@/lib/auth/auth-helpers";
 import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
-import { toast } from "sonner";
 import Swal from "sweetalert2";
+import { Checkbox } from "../ui/checkbox";
+import PhoneNumberInput from "../PhoneNumberInput";
 
 type SignupFormValues = {
-  firstName: string;
-  lastName: string;
+  fullName: string;
   email: string;
+  phoneNumber: string;
   password: string;
+  confirmPassword: string;
+  agreedToTerms: boolean;
 };
 
 export function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -39,15 +36,34 @@ export function SignupForm() {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm<SignupFormValues>();
+  } = useForm<SignupFormValues>({
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      password: "",
+      confirmPassword: "",
+      agreedToTerms: false,
+    },
+  });
+
+  const password = watch("password");
 
   const handleEmailSignup = async (data: SignupFormValues) => {
     setLoading(true);
     setError("");
 
     try {
-      const { data: res, error } = await signUp(data);
+      const signupData = {
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
+        password: data.password,
+      };
+
+      const { data: res, error } = await signUp(signupData);
       if (error) {
         setError(error.message);
       } else {
@@ -85,105 +101,29 @@ export function SignupForm() {
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        confirmButtonColor: "#22c55e",
       });
     }
   }, [error]);
 
-  if (success) {
-    router.push(
-      `/auth/verify-email?email=${encodeURIComponent(
-        control._formValues.email || ""
-      )}`
-    );
-  }
+  useEffect(() => {
+    if (success) {
+      const email = watch("email");
+      router.push(
+        `/auth/verify-email?email=${encodeURIComponent(email || "")}`
+      );
+    }
+  }, [success, router, watch]);
 
   return (
     <Card className="w-full max-w-md auth-box-shadows min-h-fit max-h-full">
       <CardHeader className="space-y-1">
-        <Link href={"/"}>
-          <Image
-            width={88}
-            height={48}
-            alt=""
-            src={logo.src || "/placeholder.svg"}
-            className="mx-auto mb-[20px]"
-          />
-        </Link>
-        <CardTitle className="heading-text-style-4 text-center">
-          Create your account
+        <CardTitle className="heading-text-style-4">
+          Create an Account
         </CardTitle>
-        <CardDescription className="text-center plan-text-style-3">
-          Join Cappadocia and start growing your opportunities{" "}
-        </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <form
-          onSubmit={handleSubmit(handleEmailSignup)}
-          className="space-y-[16px]"
-        >
-          <div className="flex gap-[16px] flex-wrap md:flex-nowrap w-full">
-            <div className="space-y-2 w-full md:w-[50%]">
-              <Label className="label-style" htmlFor="firstName">
-                First Name
-              </Label>
-              <Controller
-                name="firstName"
-                control={control}
-                rules={{
-                  required: "First name is required",
-                  pattern: {
-                    value: /^\S+$/,
-                    message: "First name cannot contain spaces",
-                  },
-                }}
-                render={({ field }) => (
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="Enter your first name"
-                    className="input-style"
-                    {...field}
-                  />
-                )}
-              />
-              {errors.firstName && (
-                <p className="text-red-500 text-sm">
-                  {errors.firstName.message}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2 w-full md:w-[50%]">
-              <Label className="label-style" htmlFor="lastName">
-                Last Name
-              </Label>
-              <Controller
-                name="lastName"
-                control={control}
-                rules={{
-                  required: "Last name is required",
-                  pattern: {
-                    value: /^\S+$/,
-                    message: "Last name cannot contain spaces",
-                  },
-                }}
-                render={({ field }) => (
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="Enter your last name"
-                    className="input-style"
-                    {...field}
-                  />
-                )}
-              />
-              {errors.lastName && (
-                <p className="text-red-500 text-sm">
-                  {errors.lastName.message}
-                </p>
-              )}
-            </div>
-          </div>
+      <CardContent className="space-y-2">
+        <form onSubmit={handleSubmit(handleEmailSignup)} className="space-y-4">
           <div className="space-y-2">
             <Label className="label-style" htmlFor="email">
               Email
@@ -212,6 +152,62 @@ export function SignupForm() {
               <p className="text-red-500 text-sm">{errors.email.message}</p>
             )}
           </div>
+
+          <div className="space-y-2">
+            <Label className="label-style" htmlFor="fullName">
+              Full Name
+            </Label>
+            <Controller
+              name="fullName"
+              control={control}
+              rules={{
+                required: "Full name is required",
+                minLength: {
+                  value: 2,
+                  message: "Full name must be at least 2 characters",
+                },
+              }}
+              render={({ field }) => (
+                <Input
+                  id="fullName"
+                  type="text"
+                  placeholder="Enter your full name"
+                  className="input-style"
+                  {...field}
+                />
+              )}
+            />
+            {errors.fullName && (
+              <p className="text-red-500 text-sm">{errors.fullName.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label className="label-style">Phone Number</Label>
+            <Controller
+              name="phoneNumber"
+              control={control}
+              rules={{
+                required: "Phone number is required",
+                pattern: {
+                  value: /^\+?[1-9]\d{1,14}$/,
+                  message: "Enter a valid phoneNumber number",
+                },
+              }}
+              render={({ field }) => (
+                <PhoneNumberInput
+                  phoneNumber={field.value}
+                  setPhoneNumber={field.onChange}
+                />
+              )}
+            />
+            {errors.phoneNumber && (
+              <p className="text-red-500 text-sm">
+                {errors.phoneNumber.message}
+              </p>
+            )}
+          </div>
+
           <div className="space-y-2">
             <Label className="label-style" htmlFor="password">
               Password
@@ -223,15 +219,30 @@ export function SignupForm() {
                 rules={{
                   required: "Password is required",
                   minLength: {
-                    value: 6,
-                    message: "Password should be 6 character long",
+                    value: 8,
+                    message: "Password must be at least 8 characters long",
+                  },
+                  validate: (value) => {
+                    const hasUppercase = /[A-Z]/.test(value);
+                    const hasLowercase = /[a-z]/.test(value);
+                    const hasNumber = /[0-9]/.test(value);
+                    const hasSpecial = /[^A-Za-z0-9]/.test(value);
+                    if (!hasUppercase)
+                      return "Password must include at least one uppercase letter";
+                    if (!hasLowercase)
+                      return "Password must include at least one lowercase letter";
+                    if (!hasNumber)
+                      return "Password must include at least one number";
+                    if (!hasSpecial)
+                      return "Password must include at least one special character";
+                    return true;
                   },
                 }}
                 render={({ field }) => (
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Create a password"
+                    placeholder="Enter your password"
                     className="input-style"
                     {...field}
                   />
@@ -255,26 +266,115 @@ export function SignupForm() {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
           </div>
+
+          <div className="space-y-2">
+            <Label className="label-style" htmlFor="confirmPassword">
+              Confirm Password
+            </Label>
+            <div className="relative">
+              <Controller
+                name="confirmPassword"
+                control={control}
+                rules={{
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "Passwords do not match",
+                }}
+                render={({ field }) => (
+                  <Input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    placeholder="Confirm your password"
+                    className="input-style"
+                    {...field}
+                  />
+                )}
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              >
+                {showConfirmPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <div className="flex items-start justify-start space-x-2">
+              <Controller
+                name="agreedToTerms"
+                control={control}
+                rules={{
+                  required: "You must agree to the terms and conditions",
+                }}
+                render={({ field }) => (
+                  <Checkbox
+                    id="agreedToTerms"
+                    className="mt-1"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
+              <Label htmlFor="agreedToTerms">
+                <span className="text-sm font-medium leading-5">
+                  I have read and agree to the{" "}
+                  <Link
+                    href={"/"}
+                    className="text-[#B32053] underline hover:no-underline"
+                  >
+                    KVKK Personal Data Protection Policy{" "}
+                  </Link>
+                  and{" "}
+                  <Link
+                    href={"/"}
+                    className="text-[#B32053] underline hover:no-underline"
+                  >
+                    Terms & Conditions{" "}
+                  </Link>
+                  and{" "}
+                  <Link
+                    href={"/"}
+                    className="text-[#B32053] underline hover:no-underline"
+                  >
+                    Privacy Statement.
+                  </Link>
+                </span>
+              </Label>
+            </div>
+            {errors.agreedToTerms && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.agreedToTerms.message}
+              </p>
+            )}
+          </div>
+
           <Button
             type="submit"
             className="w-full mt-[8px]"
             disabled={loading}
             variant={"main_green_button"}
           >
-            Sign Up{" "}
+            Sign Up
           </Button>
         </form>
-        <div className="relative">
-          <div className="relative flex justify-center uppercase">
-            <span className="plan-text-style-2 bg-background px-2 text-muted-foreground">
-              Or
-            </span>
-          </div>
-        </div>
+
         <Button
           type="button"
           variant="outline"
-          className="border-[1px] border-[#B8C8D8] w-full bg-transparent h-[46px] cursor-pointer"
+          className="border-none bg-[#FFEAF4] w-full h-[46px] text-primary cursor-pointer"
           onClick={handleGoogleSignup}
           disabled={loading}
         >
@@ -286,6 +386,7 @@ export function SignupForm() {
           />
           Signup with Google
         </Button>
+
         <div className="plan-text-style-3">
           Already have an account?{" "}
           <Link

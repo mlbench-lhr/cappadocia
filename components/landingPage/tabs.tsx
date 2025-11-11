@@ -1,0 +1,31 @@
+import Image from "next/image";
+
+export type TabsProps = {
+  image: string;
+  title: string;
+  description: string;
+};
+
+export default function Tabs(item: TabsProps) {
+  return (
+    <div className="w-full h-fit flex flex-col md:flex-row justify-start gap-[30px] items-center rounded-[10px] border py-3 px-4.5">
+      <div className="flex justify-center items-center w-[50px] h-[50px] rounded-full bg-[#FFEAF4]">
+        <Image
+          src={item.image}
+          alt="Cappadocia cave dwellings"
+          className="object-cover object-center"
+          width={28}
+          height={28}
+        />
+      </div>
+      <div className="w-full md:w-[calc(100%-80px)] text-center md:text-start h-fit flex justify-start items-start flex-col gap-1">
+        <h3 className="text-[18px] font-semibold w-full md:w-fit text-center md:text-start">
+          {item.title}
+        </h3>
+        <h4 className="text-[18px] font-[500] text-[rgba(0,0,0,0.50)] leading-tight">
+          {item.description}
+        </h4>
+      </div>
+    </div>
+  );
+}

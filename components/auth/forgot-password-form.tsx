@@ -153,7 +153,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
     }
 
     if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError("Password must be at least 8 characters");
       return;
     }
 
@@ -175,7 +175,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
         setStep("success");
         Swal.fire({
           icon: "success",
-          title: "Password Reset",
+          title: "Password Updated",
           text: "Your password has been reset successfully!",
           confirmButtonColor: "#B32053",
         });
@@ -191,8 +191,8 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
     return (
       <Card className="w-full md:w-[480px] h-full md:h-[390px]">
         <CardHeader className="flex flex-col justify-center items-center">
-          <div className="h-[80px] w-[80px] flex justify-center items-center rounded-full bg-[#D8E6DD] mt-[60px]">
-            <Check className="text-primary h-[40px] w-[40px]" />
+          <div className="h-[80px] w-[80px] flex justify-center items-center rounded-full bg-primary mt-[60px]">
+            <Check className="text-primary h-[40px] w-[40px]" color="white" />
           </div>
           <CardTitle className="heading-text-style-4 text-center mt-[28px]">
             Password Updated
@@ -217,12 +217,11 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
             onClick={() => setStep("otp")}
             className="text-sm text-muted-foreground hover:text-foreground flex items-start justify-start mb-[28px]"
           >
-            <ChevronLeft className="mr-2 h-[24px] w-[24px]" />
+            <ChevronLeft className="mr-2 h-[24px] w-[24px]" color="#B32053" />
+            <span className="text-base font-semibold">Go Back</span>
           </button>
-          <CardTitle className="heading-text-style-4 text-center">
-            Reset Password
-          </CardTitle>
-          <CardDescription className="text-center plan-text-style-3">
+          <CardTitle className="heading-text-style-4">Reset Password</CardTitle>
+          <CardDescription className="plan-text-style-3">
             Enter your new password & confirm password to reset your password
           </CardDescription>
         </CardHeader>
@@ -305,7 +304,8 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
             onClick={() => setStep("email")}
             className="text-sm text-muted-foreground hover:text-foreground flex items-start justify-start mb-[28px]"
           >
-            <ChevronLeft className="mr-2 h-[24px] w-[24px]" />
+            <ChevronLeft className="mr-2 h-[24px] w-[24px]" color="#B32053" />
+            <span className="text-base font-semibold">Go Back</span>
           </button>
           <CardTitle className="heading-text-style-4 text-center">
             Enter OTP
@@ -357,16 +357,15 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
       <CardHeader className="space-y-1">
         <Link
           href={isAdmin ? "/admin/auth/login" : "/auth/login"}
-          className="text-sm text-muted-foreground hover:text-foreground flex items-start justify-start mb-[28px]"
+          className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-start mb-[28px]"
         >
-          <ChevronLeft className="mr-2 h-[24px] w-[24px]" />
+          <ChevronLeft className="mr-2 h-[24px] w-[24px]" color="#B32053" />
+          <span className="text-base font-semibold">Go Back</span>
         </Link>
-        <CardTitle className="heading-text-style-4 text-center">
-          Forgot Password?
-        </CardTitle>
-        <CardDescription className="text-center plan-text-style-3">
-          Enter your email and we'll send you an OTP code to reset your
-          password.
+        <CardTitle className="heading-text-style-4">Forgot Password?</CardTitle>
+        <CardDescription className="plan-text-style-3">
+          Enter the email address linked to your account, and we’ll send you a
+          link to reset your password.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
