@@ -72,6 +72,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           text: "OTP sent to your email!",
           confirmButtonColor: "#B32053",
         });
+        setOtp("");
       }
     } catch {
       setError("An unexpected error occurred");
@@ -134,6 +135,8 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
           text: "OTP verified successfully!",
           confirmButtonColor: "#B32053",
         });
+        setNewPassword("");
+        setConfirmPassword("");
       } else {
         setError(data.error || "Invalid OTP. Please try again.");
       }
