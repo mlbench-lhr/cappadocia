@@ -1,9 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const POPULAR_MAJORS = [
   "Computer Science",
@@ -36,34 +42,39 @@ const POPULAR_MAJORS = [
   "Architecture",
   "Graphic Design",
   "Film Studies",
-]
+];
 
 interface MajorSelectorProps {
-  value: string[]
-  onChange: (value: string[]) => void
-  label: string
-  placeholder: string
+  value: string[];
+  onChange: (value: string[]) => void;
+  label: string;
+  placeholder: string;
 }
 
-export function MajorSelector({ value, onChange, label, placeholder }: MajorSelectorProps) {
-  const [customMajor, setCustomMajor] = useState("")
+export function MajorSelector({
+  value,
+  onChange,
+  label,
+  placeholder,
+}: MajorSelectorProps) {
+  const [customMajor, setCustomMajor] = useState("");
 
   const handleMajorSelect = (major: string) => {
     if (!value.includes(major)) {
-      onChange([...value, major])
+      onChange([...value, major]);
     }
-  }
+  };
 
   const handleCustomMajorAdd = () => {
     if (customMajor.trim() && !value.includes(customMajor.trim())) {
-      onChange([...value, customMajor.trim()])
-      setCustomMajor("")
+      onChange([...value, customMajor.trim()]);
+      setCustomMajor("");
     }
-  }
+  };
 
   const removeMajor = (majorToRemove: string) => {
-    onChange(value.filter((major) => major !== majorToRemove))
-  }
+    onChange(value.filter((major) => major !== majorToRemove));
+  };
 
   return (
     <div className="space-y-4">
@@ -103,7 +114,7 @@ export function MajorSelector({ value, onChange, label, placeholder }: MajorSele
         </div>
       </div>
 
-      {value.length > 0 && (
+      {value?.length > 0 && (
         <div className="space-y-2">
           <Label className="label-style">Selected {label}:</Label>
           <div className="flex flex-wrap gap-2">
@@ -126,5 +137,5 @@ export function MajorSelector({ value, onChange, label, placeholder }: MajorSele
         </div>
       )}
     </div>
-  )
+  );
 }

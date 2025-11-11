@@ -436,7 +436,7 @@ export default function ExtracurricularsAndAwards() {
             </Button>
           </div>
 
-          {awardFields.length > 0 && (
+          {awardFields?.length > 0 && (
             <div className="w-full flex flex-col justify-start items-start gap-[17px] border p-[8px] md:p-[12px] rounded-[12px]">
               {/* Awards List */}
               {awardFields.map((field, index) => (
@@ -521,7 +521,7 @@ export default function ExtracurricularsAndAwards() {
               <span className="hidden sm:block"> Activity</span>
             </Button>
           </div>
-          {activityFields.length > 0 && (
+          {activityFields?.length > 0 && (
             <div className="w-full flex flex-col justify-start items-start gap-[17px] border p-[8px] md:p-[12px] rounded-[12px]">
               {/* Activities List */}
               {activityFields.map((field, index) => (
@@ -741,7 +741,7 @@ export default function ExtracurricularsAndAwards() {
               onClick={handleAddAward}
               disabled={
                 !currentAward.awardName ||
-                currentAward.gradeLevel.length === 0 ||
+                currentAward.gradeLevel?.length === 0 ||
                 !currentAward.recognitionLevel
               }
             >
@@ -983,7 +983,7 @@ export default function ExtracurricularsAndAwards() {
                 !currentActivity.activityType ||
                 !currentActivity.activityTitle ||
                 !currentActivity.organization ||
-                currentActivity.grade.length === 0 ||
+                currentActivity.grade?.length === 0 ||
                 !currentActivity.timing ||
                 currentActivity.hourPerWeek <= 0 ||
                 currentActivity.weekPerYear <= 0

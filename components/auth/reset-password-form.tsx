@@ -63,7 +63,7 @@ export function ResetPasswordForm() {
       return;
     }
 
-    if (password.length < 6) {
+    if (password?.length < 6) {
       setError("Password should be 6 character long");
       setLoading(false);
       return;

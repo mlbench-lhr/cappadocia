@@ -1,9 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const DREAM_SCHOOLS = [
   { name: "Harvard University", icon: "🏛️" },
@@ -26,32 +32,35 @@ const DREAM_SCHOOLS = [
   { name: "University of Notre Dame", icon: "☘️" },
   { name: "UCLA", icon: "🐻" },
   { name: "Emory University", icon: "🦅" },
-]
+];
 
 interface DreamSchoolSelectorProps {
-  value: string[]
-  onChange: (value: string[]) => void
+  value: string[];
+  onChange: (value: string[]) => void;
 }
 
-export function DreamSchoolSelector({ value, onChange }: DreamSchoolSelectorProps) {
-  const [customSchool, setCustomSchool] = useState("")
+export function DreamSchoolSelector({
+  value,
+  onChange,
+}: DreamSchoolSelectorProps) {
+  const [customSchool, setCustomSchool] = useState("");
 
   const handleSchoolSelect = (schoolName: string) => {
     if (!value.includes(schoolName)) {
-      onChange([...value, schoolName])
+      onChange([...value, schoolName]);
     }
-  }
+  };
 
   const handleCustomSchoolAdd = () => {
     if (customSchool.trim() && !value.includes(customSchool.trim())) {
-      onChange([...value, customSchool.trim()])
-      setCustomSchool("")
+      onChange([...value, customSchool.trim()]);
+      setCustomSchool("");
     }
-  }
+  };
 
   const removeSchool = (schoolToRemove: string) => {
-    onChange(value.filter((school) => school !== schoolToRemove))
-  }
+    onChange(value.filter((school) => school !== schoolToRemove));
+  };
 
   return (
     <div className="space-y-4">
@@ -94,7 +103,7 @@ export function DreamSchoolSelector({ value, onChange }: DreamSchoolSelectorProp
         </div>
       </div>
 
-      {value.length > 0 && (
+      {value?.length > 0 && (
         <div className="space-y-2">
           <Label className="label-style">Selected Schools:</Label>
           <div className="flex flex-wrap gap-2">
@@ -117,5 +126,5 @@ export function DreamSchoolSelector({ value, onChange }: DreamSchoolSelectorProp
         </div>
       )}
     </div>
-  )
+  );
 }

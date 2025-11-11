@@ -132,7 +132,7 @@ export default function TravelersTestimonials() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    setCurrentIndex((prev) => (prev + 1) % testimonials?.length);
   };
 
   const goToSlide = (index: any) => {
@@ -150,7 +150,7 @@ export default function TravelersTestimonials() {
     const visible = [];
     for (let i = -1; i <= 1; i++) {
       const index =
-        (currentIndex + i + testimonials.length) % testimonials.length;
+        (currentIndex + i + testimonials?.length) % testimonials?.length;
       visible.push({
         testimonial: testimonials[index],
         isCenter: i === 0,

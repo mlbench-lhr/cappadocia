@@ -88,7 +88,7 @@ export default function UpcomingEvents() {
 
   return (
     <div className="flex flex-col gap-[32px] justify-start items-start w-full">
-      {(loading || events.upcoming.length > 0) && (
+      {(loading || events.upcoming?.length > 0) && (
         <div className="w-full bg-white box-border box-radius  md:px-[40px]">
           <div className="w-full flex flex-col justify-start items-start gap-[16px]">
             {loading ? (

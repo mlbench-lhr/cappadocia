@@ -16,8 +16,8 @@ export async function GET(req: Request, { params }: any) {
       season, // ensure your schema has this field
     });
 
-    const total = blogs.length;
-    const completed = blogs.filter((m) => m.completed).length;
+    const total = blogs?.length;
+    const completed = blogs.filter((m) => m.completed)?.length;
     const progressPercent = total ? (completed / total) * 100 : 0;
 
     return NextResponse.json({ total, completed, progressPercent });

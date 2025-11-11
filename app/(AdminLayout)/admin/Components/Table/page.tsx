@@ -101,7 +101,7 @@ export function DynamicTable({
     : internalPage;
   const totalPages = isServerPagination
     ? serverPagination.totalPages
-    : Math.ceil(data.length / itemsPerPage);
+    : Math.ceil(data?.length / itemsPerPage);
 
   // For client-side pagination, slice the data. For server-side, use data as-is
   const start = (internalPage - 1) * itemsPerPage;
@@ -121,7 +121,7 @@ export function DynamicTable({
   if (isLoading) {
     return <TableSkeleton columns={4} />;
   }
-  if (currentData.length < 1) {
+  if (currentData?.length < 1) {
     return (
       <div className="mx-auto w-full flex justify-center items-center flex-col pt-6 gap-y-2 text-sm md:text-[24px] text-[#7B849A]">
         {Icons[type]}
@@ -197,7 +197,7 @@ export function DynamicTable({
                   ? i + 1
                   : currentPage >= totalPages - 2
                   ? totalPages - 4 + i
-                : currentPage - 2 + i;
+                  : currentPage - 2 + i;
 
               return (
                 <PaginationItem key={i}>
