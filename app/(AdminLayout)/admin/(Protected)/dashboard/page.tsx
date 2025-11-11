@@ -5,8 +5,6 @@ import Dashboard from "./Dashboard";
 
 export default function Page() {
   return (
-    <AdminLayout>
-      <Dashboard />
-    </AdminLayout>
+    <Dashboard />
   );
 }

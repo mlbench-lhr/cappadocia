@@ -12,6 +12,7 @@ const signinSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("POST /api/auth/signin called");
     await connectDB();
 
     const body = await request.json();

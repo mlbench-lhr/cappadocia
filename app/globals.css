@@ -1200,3 +1200,8 @@ button {
   object-fit: fill;
   background-repeat: no-repeat;
 }
+
+.PhoneInputCountryIcon {
+  display: none;
+}
+

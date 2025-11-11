@@ -93,7 +93,6 @@ export default function AllBlogs() {
   ];
 
   return (
-    <AdminLayout>
       <div className="w-full">
         <div className="w-full mx-auto">
           <div className="w-full mb-4 flex justify-between items-center flex-wrap gap-y-2">
@@ -133,6 +132,5 @@ export default function AllBlogs() {
           />
         </div>
       </div>
-    </AdminLayout>
   );
 }

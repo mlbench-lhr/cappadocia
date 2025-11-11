@@ -88,7 +88,6 @@ export default function BlogCard() {
 
   if (item) {
     return (
-      <AdminLayout>
         <div
           className={` flex flex-col gap-[16px] justify-start items-start w-full`}
         >
@@ -160,7 +159,6 @@ export default function BlogCard() {
             />
           </div>
         </div>
-      </AdminLayout>
     );
   } else {
     return null;
