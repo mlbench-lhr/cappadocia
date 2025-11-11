@@ -126,13 +126,13 @@ export function SignupForm() {
         <form onSubmit={handleSubmit(handleEmailSignup)} className="space-y-4">
           <div className="space-y-2">
             <Label className="label-style" htmlFor="email">
-              Email
+              Email Address
             </Label>
             <Controller
               name="email"
               control={control}
               rules={{
-                required: "Email is required",
+                required: "Email Address is required",
                 pattern: {
                   value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
                   message: "Enter a valid email",
@@ -142,7 +142,7 @@ export function SignupForm() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder="Enter your email address"
                   className="input-style"
                   {...field}
                 />
@@ -276,7 +276,7 @@ export function SignupForm() {
                 name="confirmPassword"
                 control={control}
                 rules={{
-                  required: "Please confirm your password",
+                  required: "Confirm password is required",
                   validate: (value) =>
                     value === password || "Passwords do not match",
                 }}
@@ -387,7 +387,7 @@ export function SignupForm() {
           Signup with Google
         </Button>
 
-        <div className="plan-text-style-3">
+        <div className="plan-text-style-3 text-center">
           Already have an account?{" "}
           <Link
             href="/auth/login"

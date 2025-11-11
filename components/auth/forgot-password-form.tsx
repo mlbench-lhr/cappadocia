@@ -372,12 +372,12 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
         <form onSubmit={handleSendOtp} className="space-y-4">
           <div className="space-y-2">
             <Label className="label-style" htmlFor="email">
-              Email
+              Email Address
             </Label>
             <Input
               id="email"
               type="email"
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
