@@ -16,7 +16,7 @@ export default function Section8() {
           />
           <div className="w-full h-[500px] md:h-[753px] flex flex-col justify-center items-center z-[1] gap-17">
             <div className="w-full flex justify-center items-center h-fit">
-              <h1 className="font-semibold text-4xl text-white">
+              <h1 className="font-semibold text-xl md:text-4xl text-white">
                 What Our Travelers Say
               </h1>
             </div>

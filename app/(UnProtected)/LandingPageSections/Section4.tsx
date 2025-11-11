@@ -8,15 +8,15 @@ export default function Section4() {
   return (
     <div className="w-full h-fit pt-24">
       <div className="w-full flex flex-col items-center justify-center h-fit relative z-0">
-        <div className="w-full flex flex-col items-center h-[500px] md:h-[653px] justify-end relative z-0">
+        <div className="w-full flex flex-col items-center h-[653px] justify-end relative z-0">
           <Image
             src={"/landing page/image 6.png"}
             alt=""
             width={100}
             height={100}
-            className="w-full h-[500px] md:h-[653px] object-cover object-center"
+            className="w-full h-[653px] object-cover object-center"
           />
-          <div className="w-full flex items-center text-start justify-between absolute bottom-10 left-0 gap-2 px-15">
+          <div className="w-full flex flex-col md:flex-row items-center text-start justify-between absolute translate-y-[-50%] md:translate-y-[0%] top-1/2 md:top-auto bottom-auto md:bottom-10 left-0 gap-2 px-5 md:px-15">
             <div className="w-fit flex flex-col items-start text-start justify-start gap-15">
               <h1 className="font-bold text-3xl md:text-[52px] w-[90%] md:w-[560px] text-white leading-tight">
                 Cappadocia Gallery
