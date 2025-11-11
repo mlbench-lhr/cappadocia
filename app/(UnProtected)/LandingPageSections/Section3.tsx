@@ -1,5 +1,6 @@
 "use client";
-import TourCard from "@/components/Cards/landingPageTourCard";
+import TourCard from "@/components/landingPage/landingPageTourCard";
+import Tabs from "@/components/landingPage/tabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
@@ -20,14 +21,27 @@ export default function Section3() {
           </div>
         </div>
         <div className="w-full grid grid-cols-4 md:grid-cols-8 lg:grid-cols-16 gap-4">
-          <div className="w-full relative h-[275px]">
+          <div className="w-full relative h-fit col-span-9 flex justify-start items-center gap-3.5">
             <Image
-              src={"/public/landing page/image (4).png"}
+              src={"/landing page/image (4).png"}
               alt="Cappadocia cave dwellings"
-              className="w-full h-[275px] object-cover object-center"
-              width={300}
-              height={275}
+              className="w-[323px] h-[516px] object-cover object-center rounded-[10px]"
+              width={323}
+              height={516}
             />
+            <Image
+              src={"/landing page/image (5).png"}
+              alt="Cappadocia cave dwellings"
+              className="w-[319px] h-[414px] object-cover object-center rounded-[10px]"
+              width={319}
+              height={414}
+            />
+          </div>
+          <div className="w-full relative h-fit col-span-7 flex flex-col justify-start items-center gap-10">
+            <Tabs />
+            <Tabs />
+            <Tabs />
+            <Tabs />
           </div>
         </div>
       </div>

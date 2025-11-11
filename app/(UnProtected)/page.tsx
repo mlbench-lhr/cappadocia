@@ -6,6 +6,7 @@ import Swal from "sweetalert2";
 import Section1 from "./LandingPageSections/Section1";
 import Section2 from "./LandingPageSections/Section2";
 import Section3 from "./LandingPageSections/Section3";
+import Section4 from "./LandingPageSections/Section4";
 
 export default function app() {
   const [email, setEmail] = useState("");
@@ -48,6 +49,7 @@ export default function app() {
       <Section1 />
       <Section2 />
       <Section3 />
+      <Section4 />
     </div>
   );
 }

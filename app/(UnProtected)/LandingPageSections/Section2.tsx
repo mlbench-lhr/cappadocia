@@ -1,5 +1,5 @@
 "use client";
-import TourCard from "@/components/Cards/landingPageTourCard";
+import TourCard from "@/components/landingPage/landingPageTourCard";
 import { Button } from "@/components/ui/button";
 
 export default function Section2() {
