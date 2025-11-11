@@ -1,6 +1,39 @@
 "use client";
-import TourCard from "@/components/landingPage/landingPageTourCard";
+import TourCard, {
+  TourCardProps,
+} from "@/components/landingPage/landingPageTourCard";
 import { Button } from "@/components/ui/button";
+
+const tourCardData: TourCardProps[] = [
+  {
+    image: "/landing page/image.png",
+    title: "Blue Tour – Hidden Cappadocia",
+    price: 569.0,
+    rating: 4.6,
+    days: 5,
+  },
+  {
+    image: "/landing page/image (1).png",
+    title: "Red Tour (North Cappadocia)",
+    price: 569.0,
+    rating: 4.6,
+    days: 5,
+  },
+  {
+    image: "/landing page/image (2).png",
+    title: "Private Cave Hotel Stay",
+    price: 569.0,
+    rating: 4.6,
+    days: 5,
+  },
+  {
+    image: "/landing page/image (3).png",
+    title: "Private Cave Hotel Stay",
+    price: 569.0,
+    rating: 4.6,
+    days: 5,
+  },
+];
 
 export default function Section2() {
   return (
@@ -22,10 +55,9 @@ export default function Section2() {
           </div>
         </div>
         <div className="w-full grid grid-cols-4 md:grid-cols-8 lg:grid-cols-16 gap-4">
-          <TourCard />
-          <TourCard />
-          <TourCard />
-          <TourCard />
+          {tourCardData.map((item) => (
+            <TourCard key={item.image} {...item} />
+          ))}
         </div>
       </div>
     </div>

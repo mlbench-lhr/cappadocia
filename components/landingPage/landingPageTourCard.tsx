@@ -3,12 +3,20 @@ import { Star } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 
-export default function TourCard() {
+export type TourCardProps = {
+  image: string;
+  title: string;
+  price: number;
+  rating: number;
+  days: number;
+};
+
+export default function TourCard(item: TourCardProps) {
   return (
     <div className="col-span-4 w-full h-[430px] bg-white rounded-[16px] overflow-hidden shadow-lg border border-gray-200 flex flex-col justify-start items-start">
       <div className="w-full relative h-[275px]">
         <Image
-          src={"/landing page/image.png"}
+          src={item.image}
           alt="Cappadocia cave dwellings"
           className="w-full h-[275px] object-cover object-center"
           width={300}
@@ -17,21 +25,25 @@ export default function TourCard() {
       </div>
 
       {/* Content */}
-      <div className="px-3 w-full pt-6 flex flex-col justify-start items-start gap-4">
+      <div className="px-3 w-full pt-5 flex flex-col justify-start items-start gap-4">
         {/* Title */}
-        <h2 className="text-base font-semibold text-gray-900 line-clamp-1">
-          Blue Tour – Hidden Cappadocia
+        <h2 className="text-[18px] font-[600] text-gray-900 line-clamp-1">
+          {item.title}
         </h2>
 
         {/* Price and Rating */}
         <div className="flex items-center justify-between w-full">
           <div className="flex items-baseline gap-1">
-            <span className="text-base font-medium text-gray-900">$569.00</span>
+            <span className="text-base font-medium text-gray-900">
+              ${item.price}
+            </span>
             <span className="text-xs text-gray-500">/Person</span>
           </div>
           <div className="flex items-center gap-1">
             <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-            <span className="text-base font-medium text-gray-900">4.7</span>
+            <span className="text-base font-medium text-gray-900">
+              {item.rating}
+            </span>
           </div>
         </div>
 
@@ -50,7 +62,7 @@ export default function TourCard() {
                 fill="#B32053"
               />
             </svg>{" "}
-            <span className="text-lg text-gray-500">5 Days</span>
+            <span className="text-lg text-gray-500">{item.days} Days</span>
           </div>
           <Button
             variant={"green_secondary_button"}

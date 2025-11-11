@@ -1,7 +1,33 @@
 "use client";
-import Tabs from "@/components/landingPage/tabs";
+import Tabs, { TabsProps } from "@/components/landingPage/tabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+
+const tourCardData: TabsProps[] = [
+  {
+    image: "/landing page/tab icon.png",
+    title: "Verified Experiences",
+    description:
+      "All tours and activities are checked and rated by real travelers.",
+  },
+  {
+    image: "/landing page/tab icon 2.png",
+    title: "Secure Payments",
+    description:
+      "All tours and activities are checked and rated by real travelers.",
+  },
+  {
+    image: "/landing page/tab icon 3.png",
+    title: "Trusted Vendors",
+    description: "We partner only with licensed and reviewed local operators.",
+  },
+  {
+    image: "/landing page/tab icon 4.png",
+    title: "24/7 Support",
+    description:
+      "Our local support team is always ready to help you on your journey.",
+  },
+];
 
 export default function Section3() {
   return (
@@ -39,10 +65,9 @@ export default function Section3() {
             />
           </div>
           <div className="w-full relative h-fit col-span-4 lg:col-span-7 flex flex-col justify-start items-center gap-10">
-            <Tabs />
-            <Tabs />
-            <Tabs />
-            <Tabs />
+            {tourCardData.map((item) => (
+              <Tabs key={item.image} {...item} />
+            ))}
           </div>
         </div>
       </div>
