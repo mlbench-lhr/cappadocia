@@ -325,7 +325,7 @@ export default function DreamsAndGoals() {
             ref={dropdownRef}
             className="absolute top-[85px] left-0 w-full max-h-48 overflow-y-auto border rounded-md bg-white shadow-lg z-50"
           >
-            {filteredOptions.length > 0 ? (
+            {filteredOptions?.length > 0 ? (
               filteredOptions.map((option) => (
                 <div
                   key={option.label}

@@ -27,13 +27,13 @@ interface GenericDataTableProps<T> {
   pageSize?: number;
   customTabFilter?: (item: T, tab: string) => boolean;
   emptyStateImages?: { [title: string]: string };
-  currentPage: number
+  currentPage: number;
   setCurrentPage?: React.Dispatch<React.SetStateAction<number>>;
-  loading: boolean,
+  loading: boolean;
   setLoading?: React.Dispatch<React.SetStateAction<boolean>>;
-  querykey?: string
-  search: string
-  setSearch: React.Dispatch<React.SetStateAction<string>>
+  querykey?: string;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
   onAddUser?: (newUser: T) => void;
 }
 
@@ -56,13 +56,11 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
   querykey,
   search,
   setSearch,
-  onAddUser
+  onAddUser,
 }: GenericDataTableProps<T>) {
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const [showModal, setShowModal] = useState(false);
-
 
   const tabFilteredData = useMemo(() => {
     if (!activeTab || !customTabFilter) return data;
@@ -81,11 +79,10 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
     }
   };
 
-  const isEmpty = tabFilteredData.length === 0;
+  const isEmpty = tabFilteredData?.length === 0;
   // 🔸 Derive fallback key if title is missing
-  const fallbackTitle = !title && emptyStateImages
-    ? Object.keys(emptyStateImages)[0]
-    : undefined;
+  const fallbackTitle =
+    !title && emptyStateImages ? Object.keys(emptyStateImages)[0] : undefined;
 
   // 🔹 Use title or fallback title
   const effectiveTitle = title || fallbackTitle;
@@ -93,9 +90,8 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
   // 🔹 Get image path from effective title
   const emptyImage = effectiveTitle ? emptyStateImages?.[effectiveTitle] : null;
 
-
   // 📄 Paginate the filtered data
-  const totalPages = tabs.length;
+  const totalPages = tabs?.length;
   const currentData = tabFilteredData;
 
   const handleAddUser = (newUser: any) => {
@@ -104,15 +100,18 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
 
   return (
     <>
-      <div
-        className={`bg-white rounded-xl `}
-      >
+      <div className={`bg-white rounded-xl `}>
         <div
-          className={`flex items-center justify-between flex-wrap gap-4 ${custom_tabs?.length ? "mb-4" : "mb-6"
-            }`}
+          className={`flex items-center justify-between flex-wrap gap-4 ${
+            custom_tabs?.length ? "mb-4" : "mb-6"
+          }`}
         >
           {/* Title*/}
-          <div className={`flex ${tabs?.length ? "flex-col gap-2" : "items-center gap-4"}`}>
+          <div
+            className={`flex ${
+              tabs?.length ? "flex-col gap-2" : "items-center gap-4"
+            }`}
+          >
             {title && (
               <>
                 <h1 className="text-2xl font-bold text-gray-800  font-raleway">
@@ -121,16 +120,17 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
                 <p className="text-sm opacity-50">{size}</p>
               </>
             )}
-            {custom_tabs && custom_tabs.length > 0 && (
+            {custom_tabs && custom_tabs?.length > 0 && (
               <div className="flex items-center gap-2 bg-gray-100 p-2  rounded-lg shadow-sm">
                 {custom_tabs.map((tab) => (
                   <button
                     key={tab}
                     onClick={() => onTabChange?.(tab)}
-                    className={`px-3 py-1 rounded-md text-sm border ${tab === activeTab
-                      ? "bg-[var(--accent)] text-white"
-                      : "text-gray-600 hover:bg-gray-200"
-                      }`}
+                    className={`px-3 py-1 rounded-md text-sm border ${
+                      tab === activeTab
+                        ? "bg-[var(--accent)] text-white"
+                        : "text-gray-600 hover:bg-gray-200"
+                    }`}
                   >
                     {tab}
                   </button>
@@ -172,7 +172,13 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
         ) : !loading && isEmpty ? (
           <div className="flex flex-col items-center justify-center py-20">
             {emptyImage && (
-              <Image src={emptyImage} width={300} height={200} alt="No data" className="mb-4 object-contain" />
+              <Image
+                src={emptyImage}
+                width={300}
+                height={200}
+                alt="No data"
+                className="mb-4 object-contain"
+              />
             )}
             {/* {title && title === "All Users" && (
               <button
@@ -191,10 +197,7 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
                 <thead>
                   <tr className="font-raleway text-black border-b">
                     {columns.map((col, i) => (
-                      <th
-                        key={i}
-                        className={`py-2 px-4 font-medium text-left`}
-                      >
+                      <th key={i} className={`py-2 px-4 font-medium text-left`}>
                         {col.header}
                       </th>
                     ))}
@@ -202,20 +205,24 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
                 </thead>
                 <tbody>
                   {currentData.map((row) => (
-                    <tr key={row.id} className="border-b border-gray-200 last:border-b-0">
+                    <tr
+                      key={row.id}
+                      className="border-b border-gray-200 last:border-b-0"
+                    >
                       {columns.map((col, i) => (
                         <td
                           key={i}
                           className={`py-4 px-4 font-raleway text-left`}
                         >
-                          {col.cell ? col.cell(row) : (row as any)[col.accessor]}
+                          {col.cell
+                            ? col.cell(row)
+                            : (row as any)[col.accessor]}
                         </td>
                       ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
-
             </div>
 
             {/* Pagination */}
@@ -232,10 +239,11 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
                   <button
                     key={tab}
                     onClick={() => goToPage(Number(tab))}
-                    className={`w-9 h-9 rounded-md text-sm ${currentPage === Number(tab)
-                      ? "bg-[#B32053] text-white"
-                      : "text-gray-600 hover:bg-gray-200"
-                      }`}
+                    className={`w-9 h-9 rounded-md text-sm ${
+                      currentPage === Number(tab)
+                        ? "bg-[#B32053] text-white"
+                        : "text-gray-600 hover:bg-gray-200"
+                    }`}
                   >
                     {tab}
                   </button>
@@ -252,9 +260,7 @@ function GenericDataTable<T extends { id: string; tab?: string }>({
             </div>
           </>
         )}
-
       </div>
-
     </>
   );
 }

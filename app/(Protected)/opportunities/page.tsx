@@ -59,7 +59,7 @@ export default function BlogsPage() {
 
   const [opportunities, setOpportunities] = useState<any[]>([]);
   useEffect(() => {
-    if (opportunitiesFromRedux.length > 0) {
+    if (opportunitiesFromRedux?.length > 0) {
       setOpportunities(opportunitiesFromRedux);
     }
   }, []);
@@ -592,7 +592,7 @@ export default function BlogsPage() {
             Loading...
           </div>
         </div>
-      ) : opportunities.length > 0 ? (
+      ) : opportunities?.length > 0 ? (
         <>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
             {opportunities.map((item, index) => (

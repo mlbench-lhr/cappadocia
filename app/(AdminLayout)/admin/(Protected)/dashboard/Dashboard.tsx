@@ -42,7 +42,7 @@ function Sparkline({ points }: { points: number[] }) {
   const max = Math.max(...points);
   const min = Math.min(...points);
   const range = Math.max(1, max - min);
-  const stepX = w / (points.length - 1);
+  const stepX = w / (points?.length - 1);
 
   const d = points
     .map((p, i) => {
@@ -416,7 +416,7 @@ const Dashboard: React.FC = () => {
                   Recent Subscriptions
                 </h2>
                 <div className="space-y-0">
-                  {latestUsers.length > 0 ? (
+                  {latestUsers?.length > 0 ? (
                     latestUsers.map((user, index) => (
                       <UserCard key={`${user.type}-${index}`} user={user} />
                     ))

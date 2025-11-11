@@ -37,7 +37,7 @@ export default function CalendarPage() {
   const itemsPerPage = 10;
 
   // Calculate pagination
-  const totalPages = Math.ceil(notifications.length / itemsPerPage);
+  const totalPages = Math.ceil(notifications?.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentNotifications = notifications.slice(startIndex, endIndex);
@@ -126,7 +126,7 @@ export default function CalendarPage() {
                 </div>
               ))}
             </div>
-          ) : currentNotifications.length < 1 ? (
+          ) : currentNotifications?.length < 1 ? (
             <div className="flex flex-col gap-4 w-full">
               <div className="mx-auto w-full flex justify-center items-center flex-col pt-6 gap-y-2">
                 <Bell color="#D8E6DD" size={40} />

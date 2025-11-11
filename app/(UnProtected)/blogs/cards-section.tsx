@@ -81,7 +81,7 @@ export function CardSection() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {loading ? (
               <BlogCardsGridSkeleton />
-            ) : data?.blogs.length < 1 ? (
+            ) : data?.blogs?.length < 1 ? (
               <div className="col-span-3 mx-auto flex flex-col justify-center items-center gap-4">
                 <Image
                   src={"/blogs imgs/blogPlaceholder.png"}

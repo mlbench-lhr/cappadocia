@@ -9,7 +9,7 @@ export function AuthLayoutProvider({
 }) {
   return (
     <div className="h-full w-full flex justify-between">
-      <div className="hidden lg:block w-1/2 h-[100vh]">
+      <div className="hidden lg:block w-1/2 h-full">
         <Image
           src={showImage1 ? "/loginPageImage.png" : "/authPageImage2.png"}
           alt=""

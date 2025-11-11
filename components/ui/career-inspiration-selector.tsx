@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/ui/label";
 
 const CAREER_OPTIONS = [
   "Software Engineer",
@@ -33,25 +33,30 @@ const CAREER_OPTIONS = [
   "Pharmacist",
   "Dentist",
   "Physical Therapist",
-]
+];
 
 interface CareerInspirationSelectorProps {
-  value: string[]
-  onChange: (value: string[]) => void
+  value: string[];
+  onChange: (value: string[]) => void;
 }
 
-export function CareerInspirationSelector({ value, onChange }: CareerInspirationSelectorProps) {
+export function CareerInspirationSelector({
+  value,
+  onChange,
+}: CareerInspirationSelectorProps) {
   const toggleCareer = (career: string) => {
     if (value.includes(career)) {
-      onChange(value.filter((c) => c !== career))
+      onChange(value.filter((c) => c !== career));
     } else {
-      onChange([...value, career])
+      onChange([...value, career]);
     }
-  }
+  };
 
   return (
     <div className="space-y-4">
-      <Label className="label-style">Career Inspiration (Select all that interest you)</Label>
+      <Label className="label-style">
+        Career Inspiration (Select all that interest you)
+      </Label>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {CAREER_OPTIONS.map((career) => (
           <div
@@ -71,12 +76,15 @@ export function CareerInspirationSelector({ value, onChange }: CareerInspiration
         ))}
       </div>
 
-      {value.length > 0 && (
+      {value?.length > 0 && (
         <div className="mt-4">
           <Label className="label-style">Selected Careers:</Label>
           <div className="flex flex-wrap gap-2 mt-2">
             {value.map((career) => (
-              <span key={career} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+              <span
+                key={career}
+                className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm"
+              >
                 {career}
               </span>
             ))}
@@ -84,5 +92,5 @@ export function CareerInspirationSelector({ value, onChange }: CareerInspiration
         </div>
       )}
     </div>
-  )
+  );
 }

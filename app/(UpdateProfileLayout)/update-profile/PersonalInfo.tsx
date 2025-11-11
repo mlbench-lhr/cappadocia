@@ -332,7 +332,7 @@ export default function PersonalInfoComponent() {
                 <SelectValue placeholder="Select City" />
               </SelectTrigger>
               <SelectContent>
-                {cities.length > 0 ? (
+                {cities?.length > 0 ? (
                   cities.map((item) => (
                     <SelectItem key={item.name} value={item.name}>
                       {item.name}

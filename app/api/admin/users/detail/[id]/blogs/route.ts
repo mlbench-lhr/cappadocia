@@ -50,7 +50,7 @@ export const GET = async (
       .select("_id createdAt deadLine status title")
       .lean();
 
-    console.log("Blogs returned:", blogs.length);
+    console.log("Blogs returned:", blogs?.length);
 
     return NextResponse.json({
       blogs: blogs,

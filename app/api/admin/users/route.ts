@@ -50,8 +50,8 @@ export const GET = withAuth(async (req) => {
           createdBy: user._id,
         });
         console.log("user._id", user._id);
-        const total = blogs.length;
-        const completed = blogs.filter((m) => m.completed).length;
+        const total = blogs?.length;
+        const completed = blogs.filter((m) => m.completed)?.length;
         const progressPercent = total ? (completed / total) * 100 : 0;
 
         return {

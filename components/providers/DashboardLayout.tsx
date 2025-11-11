@@ -137,7 +137,7 @@ export function Navbar() {
         const json = await res.json();
         if (!isMounted) return;
         if (Array.isArray(json)) {
-          dispatch(setCount(json.length));
+          dispatch(setCount(json?.length));
           dispatch(setHasNew(json.some((n: any) => n.isUnread)));
         }
       } catch {

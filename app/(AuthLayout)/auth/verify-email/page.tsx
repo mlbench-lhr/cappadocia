@@ -50,7 +50,7 @@ export default function VerifyEmailPage() {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (otp.length !== 6) {
+    if (otp?.length !== 6) {
       setError("Please enter the complete 6-digit OTP");
       return;
     }
@@ -223,7 +223,7 @@ export default function VerifyEmailPage() {
             <Button
               type="submit"
               className="w-full mt-[8px]"
-              disabled={otp.length !== 6 || loading}
+              disabled={otp?.length !== 6 || loading}
               variant="main_green_button"
             >
               {loading ? "Verifying..." : "Continue"}

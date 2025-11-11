@@ -54,7 +54,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
     try {
       const { error } = await signIn(data.email, data.password);
       const userData = (await signIn(data.email, data.password)).data;
-      
+
       // dispatch(setReduxUser(userData.user));
       if (error) {
         setError(error.message);
@@ -227,7 +227,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
               Sign in with Google
             </Button>
 
-            <div className="plan-text-style-3">
+            <div className="plan-text-style-3 text-center">
               Don't have an account?{" "}
               <Link
                 href="/auth/signup"

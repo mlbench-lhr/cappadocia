@@ -56,7 +56,7 @@ export function OTPInput({
     onChange(pastedData);
 
     // Focus the next empty input or last input
-    const nextIndex = Math.min(pastedData.length, length - 1);
+    const nextIndex = Math.min(pastedData?.length, length - 1);
     inputRefs.current[nextIndex]?.focus();
   };
 

@@ -38,7 +38,7 @@ export const SimpleBarChart = ({
   const hasAnyData = data.some((d) => d.value > 0);
   const displayData = hasAnyData
     ? data
-    : data.slice(0, Math.min(5, data.length)); // Show max 5 empty bars
+    : data.slice(0, Math.min(5, data?.length)); // Show max 5 empty bars
 
   const maxValue = Math.max(...displayData.map((d) => d.value), 1); // Ensure minimum of 1 for scaling
 

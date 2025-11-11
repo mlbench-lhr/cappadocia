@@ -59,8 +59,8 @@ export default function RejectionModal({
       setError("Please fill out all fields.");
       return;
     }
-    if (newPassword.length < 6) {
-    setError("New password must be at least 6 characters.");
+    if (newPassword?.length < 6) {
+      setError("New password must be at least 6 characters.");
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -68,8 +68,8 @@ export default function RejectionModal({
       return;
     }
     try {
-    const res = await onSubmit({ oldPassword, newPassword, confirmPassword });
-      if(res.ok) {
+      const res = await onSubmit({ oldPassword, newPassword, confirmPassword });
+      if (res.ok) {
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -111,9 +111,15 @@ export default function RejectionModal({
 
           {/* Form */}
           <form onSubmit={submit} className="space-y-5">
-            <label htmlFor="reason" className="text-lg font-bold">Add Reason</label>
-            <textarea id="reason" rows={10} className="w-full h-40 rounded-2xl border-2 border-gray-200 p-2 focus:outline-none focus:border-primary_skin" placeholder="Enter your reason for rejection here..."></textarea>
-            
+            <label htmlFor="reason" className="text-lg font-bold">
+              Add Reason
+            </label>
+            <textarea
+              id="reason"
+              rows={10}
+              className="w-full h-40 rounded-2xl border-2 border-gray-200 p-2 focus:outline-none focus:border-primary_skin"
+              placeholder="Enter your reason for rejection here..."
+            ></textarea>
 
             {/* CTA */}
             <button

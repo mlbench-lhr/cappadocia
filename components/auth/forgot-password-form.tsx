@@ -109,7 +109,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (otp.length !== 6) {
+    if (otp?.length !== 6) {
       setError("Please enter the complete 6-digit OTP");
       return;
     }
@@ -152,7 +152,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
       return;
     }
 
-    if (newPassword.length < 6) {
+    if (newPassword?.length < 6) {
       setError("Password must be at least 8 characters");
       return;
     }
@@ -325,7 +325,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
             <Button
               type="submit"
               className="w-full mt-[8px]"
-              disabled={otp.length !== 6 || loading}
+              disabled={otp?.length !== 6 || loading}
               variant="main_green_button"
             >
               {loading ? "Verifying..." : "Verify OTP"}

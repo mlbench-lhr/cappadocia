@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const verifyResetOTPSchema = z.object({
   email: z.string().email("Invalid email address"),
-  otp: z.string().length(6, "OTP must be 6 digits"),
+  otp: z.string()?.length(6, "OTP must be 6 digits"),
 });
 
 export async function POST(request: NextRequest) {
@@ -22,10 +22,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Invalid OTP" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid OTP" }, { status: 400 });
     }
 
     if (

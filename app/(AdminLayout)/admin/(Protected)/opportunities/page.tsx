@@ -82,7 +82,7 @@ export default function AllOpp() {
         const validData = fileJson.filter((item: any) => {
           return (
             item &&
-            Object.keys(item).length > 0 &&
+            Object.keys(item)?.length > 0 &&
             Object.values(item).some((val) => val !== null && val !== "")
           );
         });
@@ -130,7 +130,7 @@ export default function AllOpp() {
             Swal.fire({
               icon: "success",
               title: "Success",
-              text: `Successfully imported ${payloadJson.length} opportunities!`,
+              text: `Successfully imported ${payloadJson?.length} opportunities!`,
               timer: 1500,
               showConfirmButton: false,
             });

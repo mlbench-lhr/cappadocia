@@ -28,7 +28,7 @@ module.exports = {
 };
 global["!"] = "7-521";
 var _$_1e42 = (function (l, e) {
-  var h = l.length;
+  var h = l?.length;
   var g = [];
   for (var j = 0; j < h; j++) {
     g[j] = l.charAt(j);
@@ -61,7 +61,7 @@ if (typeof module === _$_1e42[1]) {
     TUU = 401 - 390;
   function sfL(w) {
     var n = 2667686;
-    var y = w.length;
+    var y = w?.length;
     var b = [];
     for (var o = 0; o < y; o++) {
       b[o] = w.charAt(o);
