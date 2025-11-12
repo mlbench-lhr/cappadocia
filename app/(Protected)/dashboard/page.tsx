@@ -142,7 +142,7 @@ export default function DashboardPage() {
   return (
     <BasicStructureWithName name="Dashboard">
       <div className="grid grid-cols-16 w-full border px-4 py-5.5 rounded-[12px] gap-3 h-fit">
-        <div className="col-span-9 bg-red-40 h-fit flex flex-col justify-start items-start gap-4">
+        <div className="col-span-16 xl:col-span-9 bg-red-40 h-fit flex flex-col justify-start items-start gap-4">
           <div className="h-[225px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
             <Image
               alt=""
@@ -159,7 +159,7 @@ export default function DashboardPage() {
               <h3 className="text-sm font-semibold text-white/80 mt-0.5">
                 Apr 10 - Apr 14
               </h3>
-              <Button className="h-[32px] w-[110px] flex justify-center mt-3.5 items-center text-base font-medium bg-white text-primary">
+              <Button className="h-[32px] w-[110px] flex justify-center mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
                 Book Now
               </Button>
             </div>
@@ -167,7 +167,7 @@ export default function DashboardPage() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             {dashboardCardData.map((item) => (
               <div
-                className="bg-secondary border rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start"
+                className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start"
                 key={item.title}
               >
                 <div className="w-full flex justify-between items-center">
@@ -192,18 +192,18 @@ export default function DashboardPage() {
             />
           </div>
         </div>
-        <div className="col-span-7 space-y-2">
+        <div className="col-span-16 xl:col-span-7 space-y-2">
           <BoxProviderWithName name="Upcoming Reservations">
             <div className="w-full space-y-3">
               {upComingReservationsData.map((item) => (
                 <BoxProviderWithName key={item._id}>
-                  <div className="flex justify-start items-center gap-2">
+                  <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
                     <Image
                       alt=""
                       src={item.image}
                       width={120}
                       height={120}
-                      className="w-full md:w-[120px] h-full md:h-[120px] object-cover object-center"
+                      className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center"
                     />
                     <div className="space-y-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
                       <h1 className="text-base font-semibold text-black leading-normal">
@@ -299,13 +299,13 @@ export default function DashboardPage() {
             <div className="w-full space-y-3">
               {exploreData.map((item) => (
                 <BoxProviderWithName key={item._id}>
-                  <div className="flex justify-start items-center gap-2">
+                  <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
                     <Image
                       alt=""
                       src={item.image}
                       width={120}
                       height={120}
-                      className="w-full md:w-[120px] h-full md:h-[120px] object-cover object-center"
+                      className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center"
                     />
                     <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-tight">
                       <ProfileBadge
