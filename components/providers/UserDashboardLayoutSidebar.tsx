@@ -34,6 +34,41 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     link: "/dashboard",
     icon: <LayoutDashboard size={14} />,
   },
+  {
+    name: "My Bookings",
+    link: "/bookings",
+    icon: <LayoutDashboard size={14} />,
+  },
+  {
+    name: "Invoices",
+    link: "/invoices",
+    icon: <LayoutDashboard size={14} />,
+  },
+  {
+    name: "Favorites",
+    link: "/favorites",
+    icon: <LayoutDashboard size={14} />,
+  },
+  {
+    name: "Reviews",
+    link: "/reviews",
+    icon: <LayoutDashboard size={14} />,
+  },
+  {
+    name: "Settings",
+    link: "/settings",
+    icon: <LayoutDashboard size={14} />,
+  },
+  {
+    name: "Help",
+    link: "/help",
+    icon: <LayoutDashboard size={14} />,
+  },
+  {
+    name: "Messages",
+    link: "/messages",
+    icon: <LayoutDashboard size={14} />,
+  },
 ];
 
 export function Sidebar() {
@@ -58,24 +93,31 @@ export function Sidebar() {
         <aside
           className={`gap-[40px] hidden md:flex flex-col bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
         >
-          <div className="flex items-start justify-between font-semibold w-full">
+          <div className="flex items-center justify-between font-semibold w-full">
             <Link href={"/"}>
-              <Image src={logo.src} alt="" width={59} height={32} />
+              <Image
+                src={logo.src}
+                alt=""
+                width={59}
+                height={32}
+                className="w-[140px] h-auto"
+              />
             </Link>
             <button
               onClick={() => dispatch(toggleCollapse())}
-              className={`hidden ${!isCollapsed && "md:inline-flex"} mt-1`}
+              className={`hidden ${!isCollapsed && "md:inline-flex"} -mt-1`}
             >
               <X className="h-[16px] w-[16px]" />
             </button>
           </div>
-          <nav className="flex-1 space-y-[32px] overflow-auto plan-text-style-4">
+          <nav className="flex-1 space-y-2 overflow-auto plan-text-style-4">
             {pathsArray.map((item) => (
               <Link
                 href={item.link}
-                className={`text-primary w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
+                key={item.link}
+                className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                   pathname.includes(item.link)
-                    ? "bg-secondary"
+                    ? "text-primary bg-secondary"
                     : "hover:bg-secondary"
                 }`}
               >
@@ -118,6 +160,7 @@ export function Sidebar() {
               {pathsArray.map((item) => (
                 <Link
                   href={item.link}
+                  key={item.link}
                   className={`text-primary w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                     pathname.includes(item.link)
                       ? "bg-secondary"
@@ -175,6 +218,7 @@ export function Sidebar() {
             {pathsArray.map((item) => (
               <Link
                 href={item.link}
+                key={item.link}
                 className={`text-primary w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                   pathname.includes(item.link)
                     ? "bg-secondary"
