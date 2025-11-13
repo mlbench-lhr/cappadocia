@@ -185,8 +185,7 @@ export default function BookingsPage() {
             {(data, isLoading, refetch) => (
               <div className="w-full space-y-0">
                 <DynamicTable
-                  // data={data}
-                  data={bookings}
+                  data={data}
                   columns={columns}
                   itemsPerPage={7}
                   onRowClick={(item) => console.log("Clicked:", item)}
