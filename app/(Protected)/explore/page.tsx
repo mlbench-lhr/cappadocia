@@ -4,13 +4,10 @@ import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
-import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import { Car, ChevronDown, Star, Vegan } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { SearchComponent } from "@/components/SmallComponents/SearchComponent";
-import Link from "next/link";
 import {
   Popover,
   PopoverTrigger,
@@ -19,13 +16,7 @@ import {
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  ClockIcon,
-  HeartIcon,
-  PeopleIcon,
-  StarIcon,
-  VehicleIcon,
-} from "@/public/sidebarIcons/page";
+import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 
 export type DashboardCardProps = {
   image: string;
@@ -421,93 +412,7 @@ export default function ExplorePage() {
             >
               <div className="w-full space-y-3 grid grid-cols-12 gap-3">
                 {exploreData.map((item) => (
-                  <div className="space-y-3 col-span-12 md:col-span-6 lg:col-span-3">
-                    <BoxProviderWithName
-                      key={item._id}
-                      noBorder={true}
-                      className="border md:border !px-3.5"
-                    >
-                      <div className="flex justify-start items-start flex-col rounded-t-xl overflow-hidden relative">
-                        <Image
-                          alt=""
-                          src={item.image}
-                          width={120}
-                          height={120}
-                          className="w-full h-[120px] object-cover object-center"
-                        />
-                        <div className="bg-white cursor-pointer h-[26px] w-[26px] rounded-[6px] absolute top-3 right-3 flex justify-center items-center">
-                          <HeartIcon color="#B32053" />
-                        </div>
-                        <div className="w-full h-[25px] flex text-white bg-primary justify-between items-center mb-2 px-1.5">
-                          <div className="flex justify-start items-center gap-1">
-                            <ClockIcon color="white" />
-                            <span className="text-[10px] font-[400]">
-                              5 Days
-                            </span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <PeopleIcon color="white" />
-                            <span className="text-[10px] font-[400]">
-                              {item.groupSize} People
-                            </span>
-                          </div>
-                        </div>
-                        <div className="space-y-1 w-full text-[rgba(34,30,31,0.50)] text-xs font-normal leading-tight">
-                          <ProfileBadge
-                            title="SkyView Balloon Tours"
-                            subTitle={
-                              "TÜRSAB Number: " +
-                              item.vendorDetails.tursabNumber
-                            }
-                            image="/userDashboard/img2.png"
-                          />
-                          <Link
-                            href={`/explore/detail/${item._id}`}
-                            className="text-base font-semibold text-black line-clamp-1 hover:underline"
-                          >
-                            {item.title}
-                          </Link>
-                          <div className="flex justify-start items-center gap-1">
-                            <span className="font-semibold">Group Size: </span>
-                            <span className="">
-                              Up to {item.groupSize} people
-                            </span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <VehicleIcon color="rgba(0, 0, 0, 0.7)" />
-                            <span className="">
-                              Pickup:
-                              {item.pickupAvailable
-                                ? " Available"
-                                : " Not Available"}{" "}
-                            </span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <span className="text-base font-medium text-black">
-                              ${item.price}
-                            </span>
-                            <span className="">/Person</span>
-                          </div>
-
-                          <div className="w-full flex justify-between items-center -mt-1">
-                            <div className="flex justify-start items-center gap-2">
-                              <div className="flex justify-start items-center gap-1">
-                                <StarIcon />
-                                <span className="">{item.rating}</span>
-                              </div>
-                            </div>
-                            <Button
-                              variant={"green_secondary_button"}
-                              className="w-[92px] flex font-[500]"
-                              style={{ height: "26px", fontSize: "10px" }}
-                            >
-                              Book Now
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </BoxProviderWithName>
-                  </div>
+                  <TourAndActivityCard item={item} />
                 ))}
               </div>
             </BoxProviderWithName>
@@ -520,93 +425,7 @@ export default function ExplorePage() {
             >
               <div className="w-full space-y-3 grid grid-cols-12 gap-3">
                 {exploreData.map((item) => (
-                  <div className="space-y-3 col-span-12 md:col-span-6 lg:col-span-3">
-                    <BoxProviderWithName
-                      key={item._id}
-                      noBorder={true}
-                      className="border md:border !px-3.5"
-                    >
-                      <div className="flex justify-start items-start flex-col rounded-t-xl overflow-hidden relative">
-                        <Image
-                          alt=""
-                          src={item.image}
-                          width={120}
-                          height={120}
-                          className="w-full h-[120px] object-cover object-center"
-                        />
-                        <div className="bg-white h-[26px] w-[26px] rounded-[6px] absolute top-3 right-3 flex justify-center items-center">
-                          <HeartIcon color="#B32053" />
-                        </div>
-                        <div className="w-full h-[25px] flex text-white bg-primary justify-between items-center mb-2 px-1.5">
-                          <div className="flex justify-start items-center gap-1">
-                            <ClockIcon color="white" />
-                            <span className="text-[10px] font-[400]">
-                              5 Days
-                            </span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <PeopleIcon color="white" />
-                            <span className="text-[10px] font-[400]">
-                              {item.groupSize} People
-                            </span>
-                          </div>
-                        </div>
-                        <div className="space-y-1 w-full text-[rgba(34,30,31,0.50)] text-xs font-normal leading-tight">
-                          <ProfileBadge
-                            title="SkyView Balloon Tours"
-                            subTitle={
-                              "TÜRSAB Number: " +
-                              item.vendorDetails.tursabNumber
-                            }
-                            image="/userDashboard/img2.png"
-                          />
-                          <Link
-                            href={`/explore/detail/${item._id}`}
-                            className="text-base font-semibold text-black line-clamp-1 hover:underline"
-                          >
-                            {item.title}
-                          </Link>
-                          <div className="flex justify-start items-center gap-1">
-                            <span className="font-semibold">Group Size: </span>
-                            <span className="">
-                              Up to {item.groupSize} people
-                            </span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <VehicleIcon color="rgba(0, 0, 0, 0.7)" />
-                            <span className="">
-                              Pickup:
-                              {item.pickupAvailable
-                                ? " Available"
-                                : " Not Available"}{" "}
-                            </span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <span className="text-base font-medium text-black">
-                              ${item.price}
-                            </span>
-                            <span className="">/Person</span>
-                          </div>
-
-                          <div className="w-full flex justify-between items-center -mt-1">
-                            <div className="flex justify-start items-center gap-2">
-                              <div className="flex justify-start items-center gap-1">
-                                <StarIcon />
-                                <span className="">{item.rating}</span>
-                              </div>
-                            </div>
-                            <Button
-                              variant={"green_secondary_button"}
-                              className="w-[92px] flex font-[500]"
-                              style={{ height: "26px", fontSize: "10px" }}
-                            >
-                              Book Now
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    </BoxProviderWithName>
-                  </div>
+                  <TourAndActivityCard item={item} />
                 ))}
               </div>
             </BoxProviderWithName>
