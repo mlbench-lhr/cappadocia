@@ -15,28 +15,29 @@ import {
 } from "@/components/ui/popover";
 import { toggleCollapse, toggleSidebar } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
-import { Lock, Menu } from "lucide-react";
+import { ChevronDown, Lock, Menu } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { setCount, setHasNew } from "@/lib/store/slices/notificationSlice";
 import DeleteAccountDialog from "../DeleteAccountDialog";
+import { NotificationIcon } from "@/public/sidebarIcons/page";
 
 function ProfileMenu() {
   const userData = useAppSelector((state) => state.auth.user);
 
   return (
     <div className="relative">
-      <div className="w-[48px] h-[48px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
+      <div className="w-[38px] h-[38px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
         <Popover>
           <PopoverTrigger asChild>
-            <div className="w-[48px] h-[48px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
+            <div className="w-[38px] h-[38px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
               {userData?.avatar ? (
                 <Image
                   src={userData?.avatar as string}
                   alt="user avatar"
-                  width={48}
-                  height={48}
-                  className="object-cover w-[48px] h-[48px]"
+                  width={38}
+                  height={38}
+                  className="object-cover w-[38px] h-[38px]"
                 />
               ) : (
                 <span className="text-lg font-medium">
@@ -79,8 +80,9 @@ const IconMenu = ({ className = "" }: { className?: string }) => (
 
 export function Navbar() {
   const dispatch = useAppDispatch();
-  const { isOpen, isCollapsed } = useSelector((s: RootState) => s.sidebar);
+  const { isCollapsed } = useSelector((s: RootState) => s.sidebar);
   const hasNew = useAppSelector((s) => s.notification.hasNew);
+  const userData = useAppSelector((state) => state.auth.user);
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -148,19 +150,22 @@ export function Navbar() {
               <IconMenu className="h-5 w-5" />
             </button>
           </div>
-          <div className="hidden md:flex items-center gap-[32px]">
+          <div className="hidden md:flex items-center gap-3">
+            <div>
+              <div className="text-[14px] font-medium">
+                {userData?.fullName}
+              </div>
+              <div className="text-[12px] font-[400]">{userData?.email}</div>
+            </div>
+            <div className="relative cursor-pointer">
+              <ProfileMenu />
+            </div>
             <Link
               href={"/Notifications"}
-              className="relative"
+              className="relative cursor-pointer bg-secondary w-[38px] h-[38px] flex justify-center items-center rounded-full"
               onClick={() => dispatch(setHasNew(false))}
             >
-              <Image
-                src={bell.src}
-                alt=""
-                width={24}
-                height={24}
-                className="cursor-pointer"
-              />
+              <NotificationIcon color="#B32053" />
               {hasNew && (
                 <span
                   className="absolute -top-1 -right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"
@@ -168,9 +173,6 @@ export function Navbar() {
                 />
               )}
             </Link>
-            <div className="relative cursor-pointer">
-              <ProfileMenu />
-            </div>
           </div>
         </div>
       </div>

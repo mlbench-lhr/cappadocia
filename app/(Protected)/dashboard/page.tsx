@@ -165,13 +165,15 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-            {dashboardCardData.map((item) => (
+            {dashboardCardData.map((item, index) => (
               <div
-                className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start"
-                key={item.title}
+                className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
+                key={index}
               >
                 <div className="w-full flex justify-between items-center">
-                  <h1 className="text-4xl font-semibold">{item.title}</h1>
+                  <h1 className="text-4xl font-semibold line-clamp-1">
+                    {item.title}
+                  </h1>
                   <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
                     <Image alt="" src={item.image} width={24} height={24} />
                   </div>
@@ -195,9 +197,9 @@ export default function DashboardPage() {
         <div className="col-span-16 xl:col-span-7 space-y-2">
           <BoxProviderWithName name="Upcoming Reservations">
             <div className="w-full space-y-3">
-              {upComingReservationsData.map((item) => (
+              {upComingReservationsData.map((item, index) => (
                 <BoxProviderWithName
-                  key={item._id}
+                  key={index}
                   noBorder={true}
                   className="!border !px-3.5"
                 >
@@ -209,8 +211,8 @@ export default function DashboardPage() {
                       height={120}
                       className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center"
                     />
-                    <div className="space-y-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
-                      <h1 className="text-base font-semibold text-black leading-normal">
+                    <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
+                      <h1 className="text-base font-semibold text-black leading-tight line-clamp-1">
                         {item.title}
                       </h1>
                       <div className="flex justify-start items-center gap-1">
@@ -280,7 +282,7 @@ export default function DashboardPage() {
                         </svg>{" "}
                         <span className="">Booking ID: #{item.bookingId} </span>
                       </div>
-                      <div className="w-full flex justify-between items-center">
+                      <div className="w-full flex justify-between items-center mt-2">
                         <StatusBadge status={item.status} />
                         <Link
                           href={item._id}
@@ -301,9 +303,9 @@ export default function DashboardPage() {
             rightSideLabel="See All"
           >
             <div className="w-full space-y-3">
-              {exploreData.map((item) => (
+              {exploreData.map((item, index) => (
                 <BoxProviderWithName
-                  key={item._id}
+                  key={index}
                   noBorder={true}
                   className="!border !px-3.5"
                 >
@@ -323,7 +325,7 @@ export default function DashboardPage() {
                         }
                         image="/userDashboard/img2.png"
                       />
-                      <span className="text-base font-semibold text-black">
+                      <span className="text-base font-semibold text-black line-clamp-1">
                         {item.title}
                       </span>
                       <div className="flex justify-start items-center gap-1">

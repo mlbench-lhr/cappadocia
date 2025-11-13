@@ -15,6 +15,16 @@ import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMediaQuery } from "react-responsive";
+import {
+  BookingIcon,
+  DashboardIcon,
+  FavoritesIcon,
+  HelpIcon,
+  InvoiceIcon,
+  MessageIcon,
+  ReviewsIcon,
+  SettingsIcon,
+} from "@/public/sidebarIcons/page";
 
 const IconClose = ({ className = "" }: { className?: string }) => (
   <svg
@@ -32,42 +42,42 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
   {
     name: "Dashboard",
     link: "/dashboard",
-    icon: <LayoutDashboard size={14} />,
+    icon: DashboardIcon,
   },
   {
     name: "My Bookings",
     link: "/bookings",
-    icon: <LayoutDashboard size={14} />,
+    icon: BookingIcon,
   },
   {
     name: "Invoices",
     link: "/invoices",
-    icon: <LayoutDashboard size={14} />,
+    icon: InvoiceIcon,
   },
   {
     name: "Favorites",
     link: "/favorites",
-    icon: <LayoutDashboard size={14} />,
+    icon: FavoritesIcon,
   },
   {
     name: "Reviews",
     link: "/reviews",
-    icon: <LayoutDashboard size={14} />,
+    icon: ReviewsIcon,
   },
   {
     name: "Settings",
     link: "/settings",
-    icon: <LayoutDashboard size={14} />,
+    icon: SettingsIcon,
   },
   {
     name: "Help",
     link: "/help",
-    icon: <LayoutDashboard size={14} />,
+    icon: HelpIcon,
   },
   {
     name: "Messages",
     link: "/messages",
-    icon: <LayoutDashboard size={14} />,
+    icon: MessageIcon,
   },
 ];
 
@@ -111,20 +121,25 @@ export function Sidebar() {
             </button>
           </div>
           <nav className="flex-1 space-y-2 overflow-auto plan-text-style-4">
-            {pathsArray.map((item) => (
-              <Link
-                href={item.link}
-                key={item.link}
-                className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                  pathname.includes(item.link)
-                    ? "text-primary bg-secondary"
-                    : "hover:bg-secondary"
-                }`}
-              >
-                {item.icon}
-                {!isCollapsed && item.name}
-              </Link>
-            ))}
+            {pathsArray.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  href={item.link}
+                  key={item.link}
+                  className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
+                    pathname.includes(item.link)
+                      ? "text-primary bg-secondary"
+                      : "hover:bg-secondary"
+                  }`}
+                >
+                  <Icon
+                    color={pathname.includes(item.link) ? "#B32053" : "#6B6B6B"}
+                  />
+                  {!isCollapsed && item.name}
+                </Link>
+              );
+            })}
           </nav>
           <div className="p-4 border-t hidden">
             <button
@@ -157,20 +172,27 @@ export function Sidebar() {
               </button>
             </div>
             <nav className="flex-1 space-y-[32px] overflow-auto plan-text-style-4">
-              {pathsArray.map((item) => (
-                <Link
-                  href={item.link}
-                  key={item.link}
-                  className={`text-primary w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                    pathname.includes(item.link)
-                      ? "bg-secondary"
-                      : "hover:bg-secondary"
-                  }`}
-                >
-                  {item.icon}
-                  {!isCollapsed && item.name}
-                </Link>
-              ))}
+              {pathsArray.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <Link
+                    href={item.link}
+                    key={item.link}
+                    className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
+                      pathname.includes(item.link)
+                        ? "text-primary bg-secondary"
+                        : "hover:bg-secondary"
+                    }`}
+                  >
+                    <Icon
+                      color={
+                        pathname.includes(item.link) ? "#B32053" : "#6B6B6B"
+                      }
+                    />
+                    {!isCollapsed && item.name}
+                  </Link>
+                );
+              })}
             </nav>
             <div className="p-4 border-t hidden">
               <button
@@ -196,9 +218,9 @@ export function Sidebar() {
                 <Image
                   src={userData?.avatar as string}
                   alt=""
-                  width={48}
-                  height={48}
-                  className="rounded-full overflow-hidden bg-green-400 flex items-center justify-center cursor-pointer w-[48px] h-[48px] object-cover object-center"
+                  width={38}
+                  height={38}
+                  className="rounded-full overflow-hidden bg-green-400 flex items-center justify-center cursor-pointer w-[38px] h-[38px] object-cover object-center"
                 />
               ) : (
                 <>{userData?.firstName?.split("")[0]}</>
@@ -211,29 +233,37 @@ export function Sidebar() {
                 <IconClose className="h-5 w-5" />
               </button>
             </div>
-            <div className="plan-text-style-4">{userData?.fullName}</div>
+            <div>
+              <div className="text-md font-medium">{userData?.email}</div>
+              <div className="text-sm font-normal">{userData?.fullName}</div>
+            </div>
           </div>
 
           <nav className="flex flex-col justify-start items-start gap-[24px] px-2 py-4 space-y-1 overflow-auto plan-text-style-4">
-            {pathsArray.map((item) => (
-              <Link
-                href={item.link}
-                key={item.link}
-                className={`text-primary w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                  pathname.includes(item.link)
-                    ? "bg-secondary"
-                    : "hover:bg-secondary"
-                }`}
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            ))}
+            {pathsArray.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  href={item.link}
+                  key={item.link}
+                  className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
+                    pathname.includes(item.link)
+                      ? "text-primary bg-secondary"
+                      : "hover:bg-secondary"
+                  }`}
+                >
+                  <Icon
+                    color={pathname.includes(item.link) ? "#B32053" : "#6B6B6B"}
+                  />
+                  {item.name}
+                </Link>
+              );
+            })}
             <Link
               href={"/Notifications"}
-              className={`text-primary w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
+              className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                 pathname.includes("Notifications")
-                  ? "bg-secondary"
+                  ? "text-primary bg-secondary"
                   : "hover:bg-secondary"
               }`}
             >
