@@ -114,7 +114,11 @@ type PriceRangeFilter = {
 };
 type RatingFilter = { rating: number };
 
-export default function ExplorePage() {
+export default function ExplorePage({
+  type = "both",
+}: {
+  type: "both" | "tour" | "activity";
+}) {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
@@ -207,7 +211,9 @@ export default function ExplorePage() {
 
   return (
     <BasicStructureWithName
-      name="Explore Cappadocia"
+      name={
+        type === "both" ? "Explore Cappadocia" : "Explore Cappadocia " + type
+      }
       showBackOption
       rightSideComponent={
         <SearchComponent
@@ -404,31 +410,37 @@ export default function ExplorePage() {
         </div>
         <BoxProviderWithName className="">
           <div className="w-full space-y-0">
-            <BoxProviderWithName
-              noBorder={true}
-              name="Popular Tours"
-              rightSideLink="/dashboard"
-              rightSideLabel="View All Tours"
-            >
-              <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-                {exploreData.map((item) => (
-                  <TourAndActivityCard item={item} />
-                ))}
-              </div>
-            </BoxProviderWithName>
-            <BoxProviderWithName
-              className="!py-0"
-              noBorder={true}
-              name="Popular Activities"
-              rightSideLink="/dashboard"
-              rightSideLabel="View All Activities"
-            >
-              <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-                {exploreData.map((item) => (
-                  <TourAndActivityCard item={item} />
-                ))}
-              </div>
-            </BoxProviderWithName>
+            {(type === "both" || type === "tour") && (
+              <BoxProviderWithName
+                noBorder={true}
+                name="Popular Tours"
+                rightSideLink={type === "both" ? "/explore/tour" : undefined}
+                rightSideLabel="View All Tours"
+              >
+                <div className="w-full space-y-3 grid grid-cols-12 gap-3">
+                  {exploreData.map((item) => (
+                    <TourAndActivityCard item={item} />
+                  ))}
+                </div>
+              </BoxProviderWithName>
+            )}
+            {(type === "both" || type === "activity") && (
+              <BoxProviderWithName
+                className="!py-0"
+                noBorder={true}
+                name="Popular Activities"
+                rightSideLink={
+                  type === "both" ? "/explore/activity" : undefined
+                }
+                rightSideLabel="View All Activities"
+              >
+                <div className="w-full space-y-3 grid grid-cols-12 gap-3">
+                  {exploreData.map((item) => (
+                    <TourAndActivityCard item={item} />
+                  ))}
+                </div>
+              </BoxProviderWithName>
+            )}
           </div>
         </BoxProviderWithName>
       </div>

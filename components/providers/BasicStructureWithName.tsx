@@ -29,7 +29,9 @@ export const BasicStructureWithName = ({
               <ChevronLeft />
             </div>
           )}
-          <h1 className="text-xl md:text-[22px] font-[600]">{name}</h1>
+          <h1 className="text-xl md:text-[22px] font-[600] capitalize">
+            {name}
+          </h1>
         </div>
         {RightSideComponent &&
           (typeof RightSideComponent === "function" ? (
