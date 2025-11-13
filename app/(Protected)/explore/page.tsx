@@ -10,6 +10,7 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { ChevronDown } from "lucide-react";
 import { SearchComponent } from "@/components/SmallComponents/SearchComponent";
+import Link from "next/link";
 
 export type DashboardCardProps = {
   image: string;
@@ -102,17 +103,12 @@ const exploreData: exploreProps[] = [
   },
 ];
 
-export default function DashboardPage() {
+export default function ExplorePage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<
-    (
-      | "all"
-      | { duration: string }
-      | { priceRange: string }
-      | { rating: string }
-    )[]
+    ("all" | { duration: Date } | { priceRange: string } | { rating: string })[]
   >(["all"]);
 
   useEffect(() => {
@@ -135,7 +131,7 @@ export default function DashboardPage() {
           <div
             className={`${
               filters.includes("all") ? " bg-secondary text-primary" : "border"
-            } px-4 py-3 leading-tight rounded-[14px]`}
+            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
           >
             All
           </div>
@@ -144,7 +140,7 @@ export default function DashboardPage() {
               filters.some((f) => typeof f === "object" && "duration" in f)
                 ? " bg-secondary text-primary"
                 : "border"
-            } px-4 py-3 leading-tight rounded-[14px] flex justify-between items-center gap-2`}
+            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
           >
             Duration
             <ChevronDown size={16} />
@@ -154,7 +150,7 @@ export default function DashboardPage() {
               filters.some((f) => typeof f === "object" && "priceRange" in f)
                 ? " bg-secondary text-primary"
                 : "border"
-            } px-4 py-3 leading-tight rounded-[14px] flex justify-between items-center gap-2`}
+            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
           >
             Price Range
             <ChevronDown size={16} />
@@ -164,7 +160,7 @@ export default function DashboardPage() {
               filters.some((f) => typeof f === "object" && "rating" in f)
                 ? " bg-secondary text-primary"
                 : "border"
-            } px-4 py-3 leading-tight rounded-[14px] flex justify-between items-center gap-2`}
+            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
           >
             Rating
             <ChevronDown size={16} />
@@ -194,7 +190,7 @@ export default function DashboardPage() {
                           height={120}
                           className="w-full h-[120px] object-cover object-center"
                         />
-                        <div className="bg-white h-[26px] w-[26px] rounded-[6px] absolute top-3 right-3 flex justify-center items-center">
+                        <div className="bg-white cursor-pointer h-[26px] w-[26px] rounded-[6px] absolute top-3 right-3 flex justify-center items-center">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="14"
@@ -253,9 +249,12 @@ export default function DashboardPage() {
                             }
                             image="/userDashboard/img2.png"
                           />
-                          <span className="text-base font-semibold text-black line-clamp-1">
+                          <Link
+                            href={`/explore/detail/${item._id}`}
+                            className="text-base font-semibold text-black line-clamp-1 hover:underline"
+                          >
                             {item.title}
-                          </span>
+                          </Link>
                           <div className="flex justify-start items-center gap-1">
                             <span className="font-semibold">Group Size: </span>
                             <span className="">
@@ -405,9 +404,12 @@ export default function DashboardPage() {
                             }
                             image="/userDashboard/img2.png"
                           />
-                          <span className="text-base font-semibold text-black line-clamp-1">
+                          <Link
+                            href={`/explore/detail/${item._id}`}
+                            className="text-base font-semibold text-black line-clamp-1 hover:underline"
+                          >
                             {item.title}
-                          </span>
+                          </Link>
                           <div className="flex justify-start items-center gap-1">
                             <span className="font-semibold">Group Size: </span>
                             <span className="">
@@ -477,7 +479,6 @@ export default function DashboardPage() {
             </BoxProviderWithName>
           </div>
         </BoxProviderWithName>
-        d
       </div>
     </BasicStructureWithName>
   );
