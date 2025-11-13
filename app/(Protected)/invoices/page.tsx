@@ -143,7 +143,7 @@ export default function BookingsPage() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/admin/bookings/detail/${item._id}`}
+          href={`/invoices/detail/${item._id}`}
           className="text-[#B32053] underline"
         >
           View Details
