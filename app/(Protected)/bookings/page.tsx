@@ -57,26 +57,16 @@ const bookingData: bookingProps[] = [
   },
 ];
 
-type DurationFilter = { duration: { from: Date | null; to: Date | null } };
-type PriceRangeFilter = {
-  priceRange: { min: number | null; max: number | null };
-};
-type RatingFilter = { rating: number };
-
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState<
-    ("all" | DurationFilter | PriceRangeFilter | RatingFilter)[]
-  >(["all"]);
+  const [filters, setFilters] = useState<string[]>(["all"]);
   console.log("filters-------", filters);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
-  const isAllActive = filters.includes("all");
 
   return (
     <BasicStructureWithName
@@ -91,35 +81,43 @@ export default function BookingsPage() {
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          <div
-            className={`cursor-pointer ${
-              isAllActive ? " bg-secondary text-primary" : "border"
-            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
-          >
-            All
-          </div>
-          <div
-            className={`cursor-pointer ${
-              isAllActive ? " bg-secondary text-primary" : "border"
-            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
-          >
-            Upcoming
-          </div>
-          <div
-            className={`cursor-pointer ${
-              isAllActive ? " bg-secondary text-primary" : "border"
-            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
-          >
-            Past
-          </div>
-          <div
-            className={`cursor-pointer ${
-              isAllActive ? " bg-secondary text-primary" : "border"
-            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
-          >
-            Cancelled
-          </div>
+          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
+            const isActive =
+              (filter === "all" && filters.includes("all")) ||
+              filters.includes(filter.toLowerCase());
+
+            const handleClick = () => {
+              if (filter === "all") {
+                setFilters(["all"]);
+              } else {
+                setFilters((prev) => {
+                  const withoutAll = prev.filter((f) => f !== "all");
+                  if (withoutAll.includes(filter.toLowerCase() as any)) {
+                    const updated = withoutAll.filter(
+                      (f) => f !== filter.toLowerCase()
+                    );
+                    return updated.length === 0 ? ["all"] : updated;
+                  } else {
+                    return [...withoutAll, filter.toLowerCase()];
+                  }
+                });
+              }
+            };
+
+            return (
+              <div
+                key={filter}
+                onClick={handleClick}
+                className={`cursor-pointer ${
+                  isActive ? "bg-secondary text-primary" : "border"
+                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
+              >
+                {filter}
+              </div>
+            );
+          })}
         </div>
+
         <BoxProviderWithName className="">
           <div className="w-full space-y-0 bg-red-400"></div>
         </BoxProviderWithName>
