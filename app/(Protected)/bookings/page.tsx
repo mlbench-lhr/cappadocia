@@ -14,6 +14,9 @@ import moment from "moment";
 import Link from "next/link";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { StatusText } from "@/components/SmallComponents/StatusText";
+import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
+import { Button } from "@/components/ui/button";
 
 export type DashboardCardProps = {
   image: string;
@@ -64,13 +67,31 @@ const bookingData: bookingProps[] = [
     _id: "4",
   },
 ];
+// Loading skeleton component
+const BookingsLoadingSkeleton = () => (
+  <div className="w-full space-y-4 animate-pulse">
+    {[...Array(7)].map((_, i) => (
+      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+    ))}
+  </div>
+);
+
+// No data component
+const NoBookingsFound = () => (
+  <NoDataComponent
+    text="You don’t have any bookings yet."
+    actionComponent={
+      <Button variant={"main_green_button"}>Start Exploring Now</Button>
+    }
+  />
+);
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<string[]>(["all"]);
-  console.log("filters-------", filters);
+  const [bookings, setBookings] = useState<bookingProps[]>(bookingData);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -107,7 +128,7 @@ export default function BookingsPage() {
       accessor: "date",
       render: (item) => {
         return (
-          <span>{moment(item.dueDate).format("MMM DD, YYYY | hh:mm AA")}</span>
+          <span>{moment(item.date).format("MMM DD, YYYY | hh:mm AA")}</span>
         );
       },
     },
@@ -116,7 +137,7 @@ export default function BookingsPage() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/admin/opportunities/detail/${item.id}`}
+          href={`/admin/bookings/detail/${item._id}`}
           className="text-[#B32053] underline"
         >
           View Details
@@ -124,6 +145,13 @@ export default function BookingsPage() {
       ),
     },
   ];
+
+  // Prepare query params for the API
+  const queryParams = {
+    search: searchQuery,
+    filters: filters.includes("all") ? [] : filters,
+    // You can add more params like sortBy, sortOrder, etc.
+  };
 
   return (
     <BasicStructureWithName
@@ -137,6 +165,7 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+        {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
           {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
             const isActive =
@@ -175,17 +204,30 @@ export default function BookingsPage() {
           })}
         </div>
 
-        <BoxProviderWithName className="">
-          <div className="w-full space-y-0">
-            <DynamicTable
-              data={bookingData}
-              columns={columns}
-              itemsPerPage={7}
-              onRowClick={(item) => console.log("Clicked:", item)}
-              isLoading={false}
-              type="Opportunities"
-            />
-          </div>
+        <BoxProviderWithName noBorder={true}>
+          {/* Server Pagination Provider wraps the table */}
+          <ServerPaginationProvider<bookingProps>
+            apiEndpoint="/api/bookings" // Your API endpoint
+            setState={setBookings} // Optional: if you need bookings in state
+            presentData={bookings} // Optional: if you need bookings in state
+            queryParams={queryParams}
+            LoadingComponent={BookingsLoadingSkeleton}
+            NoDataComponent={NoBookingsFound}
+            itemsPerPage={7}
+          >
+            {(data, isLoading, refetch) => (
+              <div className="w-full space-y-0">
+                <DynamicTable
+                  // data={data}
+                  data={bookings}
+                  columns={columns}
+                  itemsPerPage={7}
+                  onRowClick={(item) => console.log("Clicked:", item)}
+                  isLoading={isLoading}
+                />
+              </div>
+            )}
+          </ServerPaginationProvider>
         </BoxProviderWithName>
       </div>
     </BasicStructureWithName>
