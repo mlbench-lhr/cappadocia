@@ -13,7 +13,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
+interface DateRangePickerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
   value?: { from: Date | null; to: Date | null };
   onChange?: (val: { from: Date | null; to: Date | null }) => void;
 }
