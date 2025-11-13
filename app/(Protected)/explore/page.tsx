@@ -170,7 +170,7 @@ export default function DashboardPage() {
             <ChevronDown size={16} />
           </div>
         </div>
-        <BoxProviderWithName>
+        <BoxProviderWithName className="">
           <div className="w-full space-y-0">
             <BoxProviderWithName
               noBorder={true}

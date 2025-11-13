@@ -196,7 +196,11 @@ export default function DashboardPage() {
           <BoxProviderWithName name="Upcoming Reservations">
             <div className="w-full space-y-3">
               {upComingReservationsData.map((item) => (
-                <BoxProviderWithName key={item._id}>
+                <BoxProviderWithName
+                  key={item._id}
+                  noBorder={true}
+                  className="!border !px-3.5"
+                >
                   <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
                     <Image
                       alt=""
@@ -301,7 +305,7 @@ export default function DashboardPage() {
                 <BoxProviderWithName
                   key={item._id}
                   noBorder={true}
-                  className="border md:border !px-3.5"
+                  className="!border !px-3.5"
                 >
                   <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
                     <Image
