@@ -13,14 +13,43 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+interface DateRangePickerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  value?: { from: Date | null; to: Date | null };
+  onChange?: (val: { from: Date | null; to: Date | null }) => void;
+}
 
 export function DateRangePicker({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2025, 0, 1),
-    to: new Date(2025, 0, 10),
-  });
+  value,
+  onChange,
+}: DateRangePickerProps) {
+  const [date, setDate] = React.useState<DateRange | undefined>(
+    value?.from || value?.to
+      ? { from: value.from || undefined, to: value.to || undefined }
+      : undefined
+  );
+
+  // Update local state when parent value changes
+  React.useEffect(() => {
+    if (value?.from !== date?.from || value?.to !== date?.to) {
+      setDate(
+        value?.from || value?.to
+          ? { from: value.from || undefined, to: value.to || undefined }
+          : undefined
+      );
+    }
+  }, [value]);
+
+  const handleSelect = (range: DateRange | undefined) => {
+    setDate(range);
+    if (onChange) {
+      onChange({
+        from: range?.from ?? null,
+        to: range?.to ?? null,
+      });
+    }
+  };
 
   return (
     <div className={cn("grid gap-2", className)}>
@@ -28,7 +57,7 @@ export function DateRangePicker({
         <PopoverTrigger asChild>
           <Button
             id="date"
-            variant={"outline"}
+            variant="outline"
             className={cn(
               "w-[300px] justify-start text-left font-normal",
               !date && "text-muted-foreground"
@@ -53,9 +82,8 @@ export function DateRangePicker({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleSelect}
             numberOfMonths={2}
           />
         </PopoverContent>
