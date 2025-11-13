@@ -6,6 +6,14 @@ import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { SearchComponent } from "@/components/SmallComponents/SearchComponent";
+import {
+  Column,
+  DynamicTable,
+} from "@/app/(AdminLayout)/admin/Components/Table/page";
+import moment from "moment";
+import Link from "next/link";
+import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
+import { StatusText } from "@/components/SmallComponents/StatusText";
 
 export type DashboardCardProps = {
   image: string;
@@ -68,6 +76,55 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
+  const columns: Column[] = [
+    {
+      header: "Booking ID",
+      accessor: "bookingId",
+      render: (item) => <span>#{item?._id?.replace(/\D/g, "").slice(-5)}</span>,
+    },
+    {
+      header: "Tour Title",
+      accessor: "title",
+    },
+    {
+      header: "Tour Status",
+      accessor: "tourStatus",
+      render: (item) => <StatusText status={item.tourStatus} />,
+    },
+    {
+      header: "Status",
+      accessor: "paymentStatus",
+      render: (item) => (
+        <StatusBadge
+          status={item.paymentStatus}
+          textClasses="text-base font-normal"
+          widthClasses="w-[93px]"
+        />
+      ),
+    },
+    {
+      header: "Date",
+      accessor: "date",
+      render: (item) => {
+        return (
+          <span>{moment(item.dueDate).format("MMM DD, YYYY | hh:mm AA")}</span>
+        );
+      },
+    },
+    {
+      header: "Action",
+      accessor: "role",
+      render: (item) => (
+        <Link
+          href={`/admin/opportunities/detail/${item.id}`}
+          className="text-[#B32053] underline"
+        >
+          View Details
+        </Link>
+      ),
+    },
+  ];
+
   return (
     <BasicStructureWithName
       name="My Bookings"
@@ -119,7 +176,16 @@ export default function BookingsPage() {
         </div>
 
         <BoxProviderWithName className="">
-          <div className="w-full space-y-0 bg-red-400"></div>
+          <div className="w-full space-y-0">
+            <DynamicTable
+              data={bookingData}
+              columns={columns}
+              itemsPerPage={7}
+              onRowClick={(item) => console.log("Clicked:", item)}
+              isLoading={false}
+              type="Opportunities"
+            />
+          </div>
         </BoxProviderWithName>
       </div>
     </BasicStructureWithName>
