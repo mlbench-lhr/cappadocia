@@ -20,23 +20,25 @@ import { Button } from "@/components/ui/button";
 
 export type DashboardCardProps = {
   image: string;
-  title: string;
+  amount: string;
   description: string;
 };
 
 export type bookingProps = {
   bookingId: string;
-  title: string;
+  amount: number;
   tourStatus: "Upcoming" | "Completed" | "Cancelled";
   paymentStatus: "Paid" | "Refunded" | "Pending" | "Cancelled";
   date: Date;
   _id: string;
+  currency: "€" | "₺" | "$";
 };
 
 const bookingData: bookingProps[] = [
   {
     bookingId: "BKG001",
-    title: "City Tour",
+    amount: 20,
+    currency: "$",
     tourStatus: "Upcoming",
     paymentStatus: "Paid",
     date: new Date("2025-12-01"),
@@ -44,7 +46,8 @@ const bookingData: bookingProps[] = [
   },
   {
     bookingId: "BKG002",
-    title: "Mountain Hike",
+    amount: 20,
+    currency: "$",
     tourStatus: "Completed",
     paymentStatus: "Refunded",
     date: new Date("2025-10-15"),
@@ -52,7 +55,8 @@ const bookingData: bookingProps[] = [
   },
   {
     bookingId: "BKG003",
-    title: "Beach Trip",
+    amount: 20,
+    currency: "$",
     tourStatus: "Cancelled",
     paymentStatus: "Cancelled",
     date: new Date("2025-11-20"),
@@ -60,7 +64,8 @@ const bookingData: bookingProps[] = [
   },
   {
     bookingId: "BKG004",
-    title: "Museum Visit",
+    amount: 20,
+    currency: "$",
     tourStatus: "Upcoming",
     paymentStatus: "Pending",
     date: new Date("2025-12-10"),
@@ -99,18 +104,19 @@ export default function BookingsPage() {
 
   const columns: Column[] = [
     {
+      header: "Invoice ID",
+      accessor: "bookingId",
+      render: (item) => <span>#{item?._id?.replace(/\D/g, "").slice(-5)}</span>,
+    },
+    {
       header: "Booking ID",
       accessor: "bookingId",
       render: (item) => <span>#{item?._id?.replace(/\D/g, "").slice(-5)}</span>,
     },
     {
-      header: "Tour Title",
-      accessor: "title",
-    },
-    {
-      header: "Tour Status",
-      accessor: "tourStatus",
-      render: (item) => <StatusText status={item.tourStatus} />,
+      header: "Amount (€/$/₺)",
+      accessor: "amount",
+      render: (item) => <span>{item.currency + item?.amount}</span>,
     },
     {
       header: "Status",
@@ -155,7 +161,7 @@ export default function BookingsPage() {
 
   return (
     <BasicStructureWithName
-      name="My Bookings"
+      name="Invoices"
       showBackOption
       rightSideComponent={
         <SearchComponent
@@ -165,45 +171,6 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
-        {/* Filter buttons */}
-        <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
-            const isActive =
-              (filter === "all" && filters.includes("all")) ||
-              filters.includes(filter.toLowerCase());
-
-            const handleClick = () => {
-              if (filter === "all") {
-                setFilters(["all"]);
-              } else {
-                setFilters((prev) => {
-                  const withoutAll = prev.filter((f) => f !== "all");
-                  if (withoutAll.includes(filter.toLowerCase() as any)) {
-                    const updated = withoutAll.filter(
-                      (f) => f !== filter.toLowerCase()
-                    );
-                    return updated.length === 0 ? ["all"] : updated;
-                  } else {
-                    return [...withoutAll, filter.toLowerCase()];
-                  }
-                });
-              }
-            };
-
-            return (
-              <div
-                key={filter}
-                onClick={handleClick}
-                className={`cursor-pointer ${
-                  isActive ? "bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
-              >
-                {filter}
-              </div>
-            );
-          })}
-        </div>
-
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<bookingProps>
