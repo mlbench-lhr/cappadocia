@@ -8,16 +8,20 @@ export const BoxProviderWithName = ({
   rightSideLink,
   rightSideLabel,
   className,
+  noBorder = false,
 }: {
   name?: string;
   rightSideLink?: string;
   rightSideLabel?: string;
   className?: string;
   children: React.ReactNode;
+  noBorder?: Boolean;
 }) => {
   return (
     <div
-      className={`${className} w-full flex flex-col justify-start items-start gap-2 border rounded-2xl px-3.5 py-3`}
+      className={`${className} w-full flex flex-col justify-start items-start gap-2 ${
+        !noBorder && "border-0 md:border"
+      } rounded-2xl px-0 md:px-3.5 py-3`}
     >
       {(name || rightSideLink) && (
         <div className="flex justify-between w-full items-center">

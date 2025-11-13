@@ -196,7 +196,11 @@ export default function DashboardPage() {
           <BoxProviderWithName name="Upcoming Reservations">
             <div className="w-full space-y-3">
               {upComingReservationsData.map((item) => (
-                <BoxProviderWithName key={item._id}>
+                <BoxProviderWithName
+                  key={item._id}
+                  noBorder={true}
+                  className="!border !px-3.5"
+                >
                   <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
                     <Image
                       alt=""
@@ -293,12 +297,16 @@ export default function DashboardPage() {
           </BoxProviderWithName>
           <BoxProviderWithName
             name="Explore Cappadocia"
-            rightSideLink="/dashboard"
+            rightSideLink="/explore"
             rightSideLabel="See All"
           >
             <div className="w-full space-y-3">
               {exploreData.map((item) => (
-                <BoxProviderWithName key={item._id}>
+                <BoxProviderWithName
+                  key={item._id}
+                  noBorder={true}
+                  className="!border !px-3.5"
+                >
                   <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
                     <Image
                       alt=""
