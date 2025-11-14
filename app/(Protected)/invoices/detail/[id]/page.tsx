@@ -8,8 +8,9 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 import { InvoiceTextBoxes } from "@/components/InvoiceTextBoxes";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
+import DownloadInvoiceButton from "../../DownloadButton";
 
-type InvoiceData = {
+export type InvoiceData = {
   invoice: {
     invoiceNumber: string;
     invoiceDate: string; // ISO date string (YYYY-MM-DD)
@@ -131,12 +132,7 @@ export default function BookingsPage() {
                 />
               ))}
             </div>
-            <Button variant={"main_green_button"} asChild>
-              <div className="flex justify-start items-center gap-2">
-                Download Invoice
-                <Download />
-              </div>
-            </Button>
+            <DownloadInvoiceButton />
           </div>
         </BoxProviderWithName>
       </div>
