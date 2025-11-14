@@ -10,11 +10,13 @@ export const BoxProviderWithName = ({
   className,
   noBorder = false,
   rightSideComponent,
+  textClasses = " text-base font-semibold ",
 }: {
   name?: string;
   rightSideLink?: string;
   rightSideLabel?: string;
   className?: string;
+  textClasses?: string;
   children: React.ReactNode;
   noBorder?: Boolean;
   rightSideComponent?: React.ReactNode | React.ComponentType<any>;
@@ -28,9 +30,7 @@ export const BoxProviderWithName = ({
     >
       {(name || rightSideLink) && (
         <div className="flex justify-between w-full items-center">
-          {name && (
-            <h1 className="text-base font-semibold leading-tight">{name}</h1>
-          )}
+          {name && <h1 className={`${textClasses} leading-tight`}>{name}</h1>}
           {rightSideLink && (
             <Link
               href={rightSideLink}

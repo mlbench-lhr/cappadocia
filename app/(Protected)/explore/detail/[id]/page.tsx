@@ -28,6 +28,15 @@ import {
 } from "@/components/SmallComponents/IconAndTextTab";
 import { exploreProps } from "../../page";
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Link from "next/link";
 
 export type InvoiceData = {
   invoice: {
@@ -439,6 +448,80 @@ export default function BookingsPage() {
                     className="w-full h-[490px] rounded-xl object-cover"
                   />
                 </div>
+              </div>
+            </BoxProviderWithName>
+            <BoxProviderWithName
+              name="Select your travel date and number of guests to see if this tour is available."
+              className="mt-4"
+              rightSideLink="/explore"
+              rightSideLabel="See All"
+            >
+              <div className="w-full grid grid-cols-3 md:grid-cols-9 gap-3">
+                <div className="space-y-1 col-span-3">
+                  <Label className="text-[14px] font-semibold">
+                    Select Date
+                  </Label>
+                  <Select>
+                    <SelectTrigger className="w-full">
+                      Nov 2, 2025
+                    </SelectTrigger>
+                    <SelectContent className="w-full">
+                      <SelectItem value="Internships">Internships</SelectItem>
+                      <SelectItem value="Summer Program">
+                        Summer Program
+                      </SelectItem>
+                      <SelectItem value="Clubs">Clubs</SelectItem>
+                      <SelectItem value="Community Service">
+                        Community Service
+                      </SelectItem>
+                      <SelectItem value="Competitions">Competitions</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1 col-span-3">
+                  <Label className="text-[14px] font-semibold">Language</Label>
+                  <Select>
+                    <SelectTrigger className="w-full">English</SelectTrigger>
+                    <SelectContent className="w-full">
+                      <SelectItem value="Internships">Internships</SelectItem>
+                      <SelectItem value="Summer Program">
+                        Summer Program
+                      </SelectItem>
+                      <SelectItem value="Clubs">Clubs</SelectItem>
+                      <SelectItem value="Community Service">
+                        Community Service
+                      </SelectItem>
+                      <SelectItem value="Competitions">Competitions</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-1 col-span-3">
+                  <Label className="text-[14px] font-semibold">
+                    Participate
+                  </Label>
+                  <Select>
+                    <SelectTrigger className="w-full">English</SelectTrigger>
+                    <SelectContent className="w-full">
+                      <SelectItem value="Internships">Internships</SelectItem>
+                      <SelectItem value="Summer Program">
+                        Summer Program
+                      </SelectItem>
+                      <SelectItem value="Clubs">Clubs</SelectItem>
+                      <SelectItem value="Community Service">
+                        Community Service
+                      </SelectItem>
+                      <SelectItem value="Competitions">Competitions</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="flex justify-start items-center gap-5 mt-4">
+                <span className="text-primary text-[18px] font-semibold">
+                  Available — €120 per person
+                </span>
+                <Button variant={"main_green_button"} size={"sm"}>
+                  <Link href={"/bookings/book"}>Book now</Link>
+                </Button>
               </div>
             </BoxProviderWithName>
             <BoxProviderWithName
