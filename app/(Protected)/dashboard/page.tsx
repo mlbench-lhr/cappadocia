@@ -225,7 +225,7 @@ export default function DashboardPage() {
                       <div className="flex justify-start items-center gap-1">
                         <ClockIcon color="rgba(0, 0, 0, 0.5)" />
                         <span className="">
-                          {moment(item.date).format("MMM DD, YYYY | hh:mm AA")}
+                          {moment(item.date).format("MMM DD, YYYY | hh:mm A")}
                         </span>
                       </div>
                       <div className="flex justify-start items-center gap-1">
