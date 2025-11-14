@@ -254,7 +254,7 @@ export default function DashboardPage() {
                       <div className="w-full flex justify-between items-center mt-2">
                         <StatusBadge status={item.status} />
                         <Link
-                          href={item._id}
+                          href={`/explore/detail/${item._id}`}
                           className="text-primary underline hover:no-underline text-xs font-normal"
                         >
                           View Details
