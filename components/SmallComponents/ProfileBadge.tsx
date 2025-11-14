@@ -1,28 +1,62 @@
 import Image from "next/image";
 
+const imageSizes: Record<string, string> = {
+  small: "w-[30px] h-[30px]",
+  medium: "w-[40px] h-[40px]",
+  large: "w-[60px] h-[60px]",
+  custom: "w-[60px] h-[60px]",
+};
+
+const headingTextSize: Record<string, string> = {
+  small: "text-[10px]",
+  medium: "text-[13px]",
+  large: "text-[18px]",
+  custom: "text-[16px]",
+};
+
+const descTextSize: Record<string, string> = {
+  small: "text-[8px]",
+  medium: "text-[13px]",
+  large: "text-[12px]",
+  custom: "text-[14px]",
+};
+
 export const ProfileBadge = ({
   image,
   title,
   subTitle,
+  size = "small",
+  icon,
 }: {
   image?: string;
   title: string;
   subTitle: string;
+  icon?: any;
+  size?: "small" | "medium" | "large" | "custom";
 }) => {
   return (
-    <div className={`flex justify-start items-center gap-1.5`}>
+    <div
+      className={`flex justify-start items-center ${
+        size === "custom" ? "gap-3.5" : "gap-1.5"
+      }`}
+    >
       {image && (
         <Image
           src={image}
-          className="rounded-full object-cover w-[30px] h-[30px]"
+          className={`rounded-full object-cover ${imageSizes[size]}`}
           alt=""
           width={30}
           height={30}
         />
       )}
+      {icon && icon}
       <div className={`flex flex-col justify-start leading-tight items-start`}>
-        <h4 className="text-[10px] font-medium text-black">{title}</h4>
-        <h5 className="text-[8px] font-normal text-[rgba(0,0,0,0.50)]">
+        <h4 className={`${headingTextSize[size]} font-medium text-black`}>
+          {title}
+        </h4>
+        <h5
+          className={`${descTextSize[size]} font-normal text-[rgba(0,0,0,0.50)]`}
+        >
           {subTitle}
         </h5>
       </div>

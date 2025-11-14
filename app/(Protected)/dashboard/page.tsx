@@ -182,7 +182,7 @@ export default function DashboardPage() {
                     {item.title}
                   </h1>
                   <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                    <Image alt="" src={item.image} width={24} height={24} />
+                    <Image alt="" src={item.image} width={20} height={20} />
                   </div>
                 </div>
                 <span className="text-base font-medium">
@@ -254,7 +254,7 @@ export default function DashboardPage() {
                       <div className="w-full flex justify-between items-center mt-2">
                         <StatusBadge status={item.status} />
                         <Link
-                          href={item._id}
+                          href={`/explore/detail/${item._id}`}
                           className="text-primary underline hover:no-underline text-xs font-normal"
                         >
                           View Details
