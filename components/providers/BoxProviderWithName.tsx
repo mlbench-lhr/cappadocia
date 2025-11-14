@@ -9,6 +9,7 @@ export const BoxProviderWithName = ({
   rightSideLabel,
   className,
   noBorder = false,
+  rightSideComponent,
 }: {
   name?: string;
   rightSideLink?: string;
@@ -16,7 +17,9 @@ export const BoxProviderWithName = ({
   className?: string;
   children: React.ReactNode;
   noBorder?: Boolean;
+  rightSideComponent?: React.ReactNode | React.ComponentType<any>;
 }) => {
+  const RightSideComponent = rightSideComponent;
   return (
     <div
       className={`${className} w-full flex flex-col justify-start items-start gap-2 ${
@@ -36,6 +39,12 @@ export const BoxProviderWithName = ({
               <h1>{rightSideLabel}</h1>
             </Link>
           )}
+          {RightSideComponent &&
+            (typeof RightSideComponent === "function" ? (
+              <RightSideComponent />
+            ) : (
+              RightSideComponent
+            ))}
         </div>
       )}
       <div className="w-full">{children}</div>
