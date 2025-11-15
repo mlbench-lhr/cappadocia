@@ -217,21 +217,23 @@ export function LoginForm({
         {!isAdmin && (
           <>
             {/* Google Login */}
-            <Button
-              type="button"
-              variant="outline"
-              className="border-none bg-[#FFEAF4] w-full h-[46px] text-primary cursor-pointer"
-              onClick={handleGoogleLogin}
-              disabled={loading}
-            >
-              <Image
-                width={20}
-                height={20}
-                alt=""
-                src={coloredGoogleIcon.src || "/placeholder.svg"}
-              />
-              Sign in with Google
-            </Button>
+            {!isVendor && (
+              <Button
+                type="button"
+                variant="outline"
+                className="border-none bg-[#FFEAF4] w-full h-[46px] text-primary cursor-pointer"
+                onClick={handleGoogleLogin}
+                disabled={loading}
+              >
+                <Image
+                  width={20}
+                  height={20}
+                  alt=""
+                  src={coloredGoogleIcon.src || "/placeholder.svg"}
+                />
+                Sign in with Google
+              </Button>
+            )}
 
             <div className="plan-text-style-3 text-center">
               Don't have an account?{" "}

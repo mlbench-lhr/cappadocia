@@ -47,7 +47,31 @@ export const TextInputComponent = ({
         placeholder={placeholderTemp}
         className="h-[44px] bg-white"
         required
-        disabled
+        disabled={disabled}
+      />
+    </div>
+  );
+};
+
+export const FileInputComponent = ({
+  label,
+  placeholder,
+  disabled = false,
+}: {
+  label: string;
+  placeholder?: string;
+  disabled?: boolean;
+}) => {
+  const placeholderTemp = placeholder || "Enter " + label;
+  return (
+    <div className="space-y-1 col-span-1">
+      <Label className="text-[14px] font-semibold">{label}</Label>
+      <Input
+        type="file"
+        placeholder={placeholderTemp}
+        className="h-[44px] bg-white cursor-pointer"
+        required
+        disabled={disabled}
       />
     </div>
   );

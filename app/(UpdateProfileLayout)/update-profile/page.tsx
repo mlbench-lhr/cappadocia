@@ -10,9 +10,7 @@ import { setReduxUser } from "@/lib/store/slices/authSlice";
 import { setUpdateProfileStep } from "@/lib/store/slices/generalSlice";
 
 export default function UpdateProfile() {
-  const updateProfileStep = useAppSelector(
-    (state) => state.general.updateProfileStep
-  );
+  const signupSteps = useAppSelector((state) => state.general.signupSteps);
   const userData = useAppSelector((state) => state.auth.user);
   console.log(
     "userData?.extracurricularsAndAwards?.awards",
@@ -48,7 +46,7 @@ export default function UpdateProfile() {
     fetchUserData();
   }, [dispatch]);
 
-  if (updateProfileStep === 4) {
+  if (signupSteps === 4) {
     return <Success />;
   }
   const handleStepClick = (name: string, index: number) => {
@@ -80,7 +78,7 @@ export default function UpdateProfile() {
               >
                 <div
                   className={`w-[20px] md:w-[24px] h-[20px] md:h-[24px] rounded-full flex justify-center items-center font-[500] text-[11px] lg:text-[16px] ${
-                    updateProfileStep === index || index < updateProfileStep
+                    signupSteps === index || index < signupSteps
                       ? "text-white bg-[#B32053]"
                       : "text-black bg-[#D5DCD6]"
                   }`}
@@ -97,7 +95,7 @@ export default function UpdateProfile() {
               {index !== 3 && (
                 <div
                   className={`w-[38px] md:w-[66px] h-[1px] border-t-[1px] ${
-                    index < updateProfileStep
+                    index < signupSteps
                       ? "border-[#B32053]"
                       : "border-[#D5DCD6]"
                   } ms-2 me-[16px] mb-0`}
@@ -106,7 +104,7 @@ export default function UpdateProfile() {
             </div>
           ))}
         </div>
-        {steps[updateProfileStep]?.component}
+        {steps[signupSteps]?.component}
       </div>
     </div>
   );

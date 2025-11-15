@@ -72,7 +72,7 @@ export default function ExtracurricularsAndAwards() {
         extracurricularsAndAwards?: Partial<FormData>;
       })
     | null;
-  const updateProfileStep = useAppSelector((s) => s.general.updateProfileStep);
+  const signupSteps = useAppSelector((s) => s.general.signupSteps);
   const [gradeLevel, setGradeLevel] = useState<string[]>(["Loading...."]);
   const [rlOptions, setRlOptions] = useState<string[]>(["Loading...."]);
   const [aTOptions, setATOptions] = useState<string[]>(["Loading...."]);
@@ -589,7 +589,7 @@ export default function ExtracurricularsAndAwards() {
 
         {/* Buttons */}
         <div className="w-full flex justify-end gap-2">
-          {updateProfileStep !== 0 && (
+          {signupSteps !== 0 && (
             <Button
               type="button"
               variant="green_secondary_button"
