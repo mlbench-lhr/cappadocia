@@ -11,10 +11,10 @@ import {
 } from "@/components/SmallComponents/InputComponents";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
-import {
-  IconAndTextTab,
-  IconAndTextTab2,
-} from "@/components/SmallComponents/IconAndTextTab";
+import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export type DashboardCardProps = {
   image: string;
@@ -108,7 +108,7 @@ export default function BookingsPage() {
         >
           <BoxProviderWithName
             noBorder={true}
-            className="bg-[#FFF5DF] w-full md:w-[500px]"
+            className=" !px-3.5 !py-3 bg-[#FFF5DF] w-full md:w-[500px] "
             textClasses=" text-[18px] font-semibold "
           >
             <IconAndTextTab2
@@ -129,8 +129,27 @@ export default function BookingsPage() {
                   />
                 </svg>
               }
-            ></IconAndTextTab2>
+            />
           </BoxProviderWithName>
+          <BoxProviderWithName noBorder={true} className="!p-0 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <TextInputComponent label="Nationality" />
+            </div>
+          </BoxProviderWithName>
+          <div className="w-full lg:w-1/2 mt-4">
+            <Image
+              src={"/userDashboard/map.png"}
+              alt=""
+              width={300}
+              height={490}
+              className="w-full h-[490px] rounded-xl object-cover"
+            />
+          </div>
+          <div className="w-full md:w-[235px] mt-4">
+            <Button variant={"main_green_button"} className="w-full" asChild>
+              <Link href={"/bookings/payment"}>Next</Link>
+            </Button>
+          </div>
         </BoxProviderWithName>
       </div>
     </BasicStructureWithName>

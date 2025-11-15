@@ -33,9 +33,11 @@ export const SelectInputComponent = ({
 export const TextInputComponent = ({
   label,
   placeholder,
+  disabled = false,
 }: {
   label: string;
   placeholder?: string;
+  disabled?: boolean;
 }) => {
   const placeholderTemp = placeholder || "Enter " + label;
   return (
@@ -45,6 +47,7 @@ export const TextInputComponent = ({
         placeholder={placeholderTemp}
         className="h-[44px] bg-white"
         required
+        disabled
       />
     </div>
   );

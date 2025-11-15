@@ -2,6 +2,7 @@ import React from "react";
 import { Star } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export type TourCardProps = {
   image: string;
@@ -69,7 +70,7 @@ export default function TourCard(item: TourCardProps) {
             className="text-xs"
             style={{ height: "34px" }}
           >
-            Book Now
+            <Link href={"/bookings/book"}>Book now</Link>
           </Button>
         </div>
       </div>
