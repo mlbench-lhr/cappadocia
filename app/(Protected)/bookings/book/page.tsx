@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export type DashboardCardProps = {
   image: string;
@@ -145,8 +146,8 @@ export default function BookingsPage() {
             />
           </div>
           <div className="w-full md:w-[235px] mt-4">
-            <Button variant={"main_green_button"} className="w-full">
-              Next
+            <Button variant={"main_green_button"} className="w-full" asChild>
+              <Link href={"/bookings/payment"}>Next</Link>
             </Button>
           </div>
         </BoxProviderWithName>
