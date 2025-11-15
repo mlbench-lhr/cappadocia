@@ -28,7 +28,13 @@ type LoginFormValues = {
   password: string;
 };
 
-export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
+export function LoginForm({
+  isAdmin,
+  isVendor,
+}: {
+  isAdmin?: Boolean;
+  isVendor?: Boolean;
+}) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -230,7 +236,7 @@ export function LoginForm({ isAdmin }: { isAdmin?: Boolean }) {
             <div className="plan-text-style-3 text-center">
               Don't have an account?{" "}
               <Link
-                href="/auth/signup"
+                href={isVendor ? "/vendor/auth/signup" : "/auth/signup"}
                 className="text-[#B32053] font-[500] hover:underline"
               >
                 Sign Up
