@@ -119,7 +119,9 @@ export default function BookingsPage() {
         </div>
         <div className="w-full md:w-[300px] mt-4">
           <Button variant={"main_green_button"} className="w-full" asChild>
-            <Link href={"/bookings/payment"}>Pay Now & Confirm Booking</Link>
+            <Link href={"/bookings/bookingConfirmation"}>
+              Pay Now & Confirm Booking
+            </Link>
           </Button>
         </div>
       </div>

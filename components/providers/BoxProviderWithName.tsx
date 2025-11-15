@@ -30,15 +30,11 @@ export const BoxProviderWithName = ({
     >
       {(name || rightSideLink) && (
         <div className="flex justify-between w-full items-start">
-          {name && (
-            <h1 className={`${textClasses} leading-tight w-[calc(100%-65px)]`}>
-              {name}
-            </h1>
-          )}
+          {name && <h1 className={`${textClasses} leading-tight `}>{name}</h1>}
           {rightSideLink && (
             <Link
               href={rightSideLink}
-              className="text-xs font-medium leading-tight text-primary underline mt-1 w-[70px] hover:no-underline text-end"
+              className="text-xs font-medium leading-tight text-primary underline mt-1 hover:no-underline text-end"
             >
               <h1>{rightSideLabel}</h1>
             </Link>

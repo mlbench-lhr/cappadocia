@@ -1,24 +1,25 @@
+import { StarIcon } from "@/public/sidebarIcons/page";
 import Image from "next/image";
 
 const imageSizes: Record<string, string> = {
-  small: "w-[30px] h-[30px]",
-  medium: "w-[40px] h-[40px]",
-  large: "w-[60px] h-[60px]",
-  custom: "w-[60px] h-[60px]",
+  small: " w-[30px] h-[30px] ",
+  medium: " w-[40px] h-[40px] ",
+  large: " w-[60px] h-[60px] ",
+  custom: " w-[70px] h-[70px] ",
 };
 
 const headingTextSize: Record<string, string> = {
-  small: "text-[10px]",
-  medium: "text-[13px]",
-  large: "text-[18px]",
-  custom: "text-[16px]",
+  small: " text-[10px] ",
+  medium: " text-[13px] ",
+  large: " text-[18px] ",
+  custom: " text-[16px] ",
 };
 
 const descTextSize: Record<string, string> = {
-  small: "text-[8px]",
-  medium: "text-[13px]",
-  large: "text-[12px]",
-  custom: "text-[14px]",
+  small: " text-[8px] ",
+  medium: " text-[13px] ",
+  large: " text-[12px] ",
+  custom: " text-[14px] ",
 };
 
 export const ProfileBadge = ({
@@ -27,13 +28,16 @@ export const ProfileBadge = ({
   subTitle,
   size = "small",
   icon,
+  extraComponent,
 }: {
   image?: string;
   title: string;
   subTitle: string;
   icon?: any;
   size?: "small" | "medium" | "large" | "custom";
+  extraComponent?: React.ReactNode | React.ComponentType<any>;
 }) => {
+  const ExtraComponent = extraComponent;
   return (
     <div
       className={`flex justify-start items-center ${
@@ -59,6 +63,12 @@ export const ProfileBadge = ({
         >
           {subTitle}
         </h5>
+        {ExtraComponent &&
+          (typeof ExtraComponent === "function" ? (
+            <ExtraComponent />
+          ) : (
+            ExtraComponent
+          ))}{" "}
       </div>
     </div>
   );
