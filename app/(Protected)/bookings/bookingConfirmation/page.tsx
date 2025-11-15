@@ -116,7 +116,10 @@ export default function BookingsPage() {
                     <BoxProviderWithName>
                       <div className="w-full flex flex-col gap-3 justify-between items-center">
                         <div className="w-full flex justify-between items-center">
-                          <div className="w-[calc(100%-100px)]">
+                          <Link
+                            href={`/vendor/detail/1`}
+                            className="w-[calc(100%-100px)]"
+                          >
                             <ProfileBadge
                               size="custom"
                               title="SkyView Balloon Tours"
@@ -135,7 +138,7 @@ export default function BookingsPage() {
                                 </div>
                               }
                             />
-                          </div>
+                          </Link>
                           <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">
                             <IconAndTextTab2
                               icon={<LocationIcon />}

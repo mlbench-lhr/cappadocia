@@ -10,7 +10,7 @@ export const IconAndTextTab = ({ text, icon }: { text: string; icon: any }) => {
 export const IconAndTextTab2 = ({
   text,
   icon,
-  textClasses = "text-[12px] font-medium text-primary leading-[10px]",
+  textClasses = " text-[12px] font-medium text-primary leading-[10px] ",
   alignClass = "items-center",
 }: {
   text: string;
