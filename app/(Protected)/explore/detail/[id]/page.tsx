@@ -223,45 +223,45 @@ export default function BookingsPage() {
               subTitle={"TÜRSAB Number: " + 324234}
               image="/userDashboard/img2.png"
             />
-            <h1 className="text-[26px] font-semibold mt-2">
+            <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
               Blue Tour – Hidden Cappadocia
             </h1>
-            <div className="grid grid-cols-10 h-fit lg:h-[360px] gap-3.5">
-              <div className="col-span-4 rounded-[14px] overflow-hidden">
+            <div className="grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
+              <div className="col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
                 <Image
                   src={"/userDashboard/img20.png"}
                   alt=""
                   width={100}
                   height={100}
-                  className="w-full h-auto lg:h-full object-cover object-center"
+                  className="w-full h-full lg:h-full object-cover object-center"
                 />
               </div>
-              <div className="col-span-2 rounded-[14px] overflow-hidden">
+              <div className="col-span-5 lg:col-span-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
                 <Image
                   src={"/userDashboard/img21.png"}
                   alt=""
                   width={100}
                   height={100}
-                  className="w-full h-auto lg:h-full object-cover object-center"
+                  className="w-full h-full lg:h-full object-cover object-center"
                 />
               </div>
-              <div className="col-span-4 grid grid-row-2 rounded-[14px] overflow-hidden gap-y-3.5">
-                <div className="row-span-1 rounded-[14px] overflow-hidden">
+              <div className="col-span-10 bg-red-40 lg:col-span-4 grid lg:grid-cols-none grid-cols-2 grid-rows-none lg:grid-row-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full gap-x-2 lg:gap-x-0 gap-y-0 lg:gap-y-3.5">
+                <div className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1">
                   <Image
                     src={"/userDashboard/img22.png"}
                     alt=""
                     width={100}
                     height={100}
-                    className="w-full h-auto lg:h-full object-cover object-center"
+                    className="w-full h-full lg:h-full object-cover object-center"
                   />
                 </div>
-                <div className="row-span-1 rounded-[14px] overflow-hidden">
+                <div className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1">
                   <Image
                     src={"/userDashboard/img23.png"}
                     alt=""
                     width={100}
                     height={100}
-                    className="w-full h-auto lg:h-full object-cover object-center"
+                    className="w-full h-full lg:h-full object-cover object-center"
                   />
                 </div>
               </div>
@@ -318,11 +318,11 @@ export default function BookingsPage() {
                   </div>
                 </BoxProviderWithName>
                 <BoxProviderWithName className="text-base !p-0" noBorder={true}>
-                  <div className="w-full bg-secondary rounded-2xl border px-0 md:px-3.5 py-3 flex flex-col justify-start items-start gap-0 h-fit">
+                  <div className="w-full bg-secondary rounded-2xl border px-2 md:px-3.5 py-3 flex flex-col justify-start items-start gap-0 h-fit">
                     <span className="text-[12px] font-normal text-[#6E7070]">
                       From
                     </span>
-                    <span className="text-[26px] font-semibold text-primary">
+                    <span className="text-[20px] md:text-[26px] font-semibold text-primary">
                       $569.00
                     </span>
                     <span className="text-[12px] font-normal text-[#6E7070]">
@@ -515,7 +515,7 @@ export default function BookingsPage() {
                   </Select>
                 </div>
               </div>
-              <div className="flex justify-start items-center gap-5 mt-4">
+              <div className="flex justify-start items-start md:items-center flex-col md:flex-row gap-2 md:gap-5 mt-4">
                 <span className="text-primary text-[18px] font-semibold">
                   Available — €120 per person
                 </span>
@@ -545,7 +545,7 @@ export default function BookingsPage() {
               rightSideLabel="See All"
             >
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="col-span-1 rounded-2xl px-0 md:px-3.5 py-3 bg-secondary border">
+                <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border">
                   <div className="flex justify-start items-center w-full gap-3">
                     <span className="text-[14px] font-medium text-primary">
                       5
@@ -587,7 +587,7 @@ export default function BookingsPage() {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-1 rounded-2xl px-0 md:px-3.5 py-3 bg-secondary border flex flex-col justify-center items-center gap-2">
+                <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border flex flex-col justify-center items-center gap-2">
                   <h1 className="text-4xl md:text-[56px] font-semibold text-primary">
                     4.0
                   </h1>
@@ -605,14 +605,14 @@ export default function BookingsPage() {
               </div>
             </BoxProviderWithName>
             <BoxProviderWithName
-              name="Reviews"
+              name="All Reviews"
               noBorder={true}
               className="!p-0 mt-4"
               rightSideLink="/explore"
               rightSideLabel="See All"
             >
               <div className="w-full flex-col flex justify-start items-center gap-3.5">
-                <div className="rounded-2xl px-0 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">
+                <div className="rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">
                   <div className="w-full flex justify-between items-center">
                     <ProfileBadge
                       size="medium"
@@ -646,7 +646,7 @@ export default function BookingsPage() {
                     Cappadocia at sunrise is something I’ll never forget.
                   </span>
                 </div>
-                <div className="rounded-2xl px-0 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">
+                <div className="rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">
                   <div className="w-full flex justify-between items-center">
                     <ProfileBadge
                       size="medium"

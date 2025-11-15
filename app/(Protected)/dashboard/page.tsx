@@ -167,7 +167,7 @@ export default function DashboardPage() {
                 Apr 10 - Apr 14
               </h3>
               <Button className="h-[32px] w-[110px] flex justify-center mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
-                Book Now
+                <Link href={"/bookings/book"}>Book now</Link>
               </Button>
             </div>
           </div>
@@ -329,7 +329,7 @@ export default function DashboardPage() {
                           className="w-[92px] flex font-[500]"
                           style={{ height: "26px", fontSize: "10px" }}
                         >
-                          Book Now
+                          <Link href={"/bookings/book"}>Book now</Link>
                         </Button>
                       </div>
                     </div>

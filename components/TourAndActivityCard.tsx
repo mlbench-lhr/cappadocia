@@ -85,7 +85,7 @@ export const TourAndActivityCard = ({ item }: { item: exploreProps }) => {
                 className="w-[92px] flex font-[500]"
                 style={{ height: "26px", fontSize: "10px" }}
               >
-                Book Now
+                <Link href={"/bookings/book"}>Book now</Link>
               </Button>
             </div>
           </div>
