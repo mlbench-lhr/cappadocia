@@ -2,7 +2,7 @@
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import {
@@ -15,9 +15,14 @@ import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import AddressLocationSelector, { LocationData } from "@/components/map";
-import { Plus } from "lucide-react";
-import { addToArray } from "@/lib/store/slices/addbooking";
+import AddressLocationSelector from "@/components/map";
+import { Plus, Trash2 } from "lucide-react";
+import {
+  addToArray,
+  setField,
+  updateArrayItem,
+  removeArrayItem,
+} from "@/lib/store/slices/addbooking";
 
 export type DashboardCardProps = {
   image: string;
@@ -26,7 +31,6 @@ export type DashboardCardProps = {
 };
 
 export default function BookingsPage() {
-  const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const bookingState = useAppSelector((s) => s.addBooking);
@@ -35,10 +39,6 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
 
   return (
     <BasicStructureWithName name="Book Now" showBackOption>
@@ -54,10 +54,21 @@ export default function BookingsPage() {
               label="Select Date"
               placeholder="Select Date"
               options={["Nov 2,2025", "Apr 2, 2025"]}
+              value={bookingState.selectDate || undefined}
+              onChange={(value) =>
+                dispatch(setField({ field: "selectDate", value }))
+              }
+              required
             />
             <TextInputComponent
               label="Participants"
               placeholder="Enter no of participants"
+              type="number"
+              value={bookingState.participants || undefined}
+              onChange={(value) =>
+                dispatch(setField({ field: "participants", value }))
+              }
+              required
             />
           </div>
         </BoxProviderWithName>
@@ -68,13 +79,33 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <TextInputComponent label="Email Address" />
-            <TextInputComponent label="Full Name" />
+            <TextInputComponent
+              label="Email Address"
+              type="email"
+              value={bookingState.email || undefined}
+              onChange={(value) =>
+                dispatch(setField({ field: "email", value }))
+              }
+              required
+            />
+            <TextInputComponent
+              label="Full Name"
+              value={bookingState.fullName || undefined}
+              onChange={(value) =>
+                dispatch(setField({ field: "fullName", value }))
+              }
+              required
+            />
             <div className="space-y-1 col-span-1">
-              <Label className="text-[14px] font-semibold">Phone Number</Label>
+              <Label className="text-[14px] font-semibold">
+                Phone Number
+                <span className="text-red-500 ml-1">*</span>
+              </Label>
               <PhoneNumberInput
-                phoneNumber={phoneNumber}
-                setPhoneNumber={setPhoneNumber}
+                phoneNumber={bookingState.phoneNumber || ""}
+                setPhoneNumber={(value) =>
+                  dispatch(setField({ field: "phoneNumber", value }))
+                }
               />
             </div>
           </div>
@@ -107,18 +138,88 @@ export default function BookingsPage() {
           }
         >
           <div className="space-y-4">
-            {bookingState.travelers.map((item, index) => (
+            {bookingState.travelers.map((traveler, index) => (
               <BoxProviderWithName
                 key={index}
                 noBorder={true}
                 className="!p-0"
                 name={`Traveler ${index + 1}`}
+                rightSideComponent={
+                  bookingState.travelers.length > 1 ? (
+                    <Button
+                      variant={"destructive"}
+                      size={"sm"}
+                      onClick={() =>
+                        dispatch(removeArrayItem({ field: "travelers", index }))
+                      }
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  ) : null
+                }
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <TextInputComponent label="Full Name" />
-                  <TextInputComponent label="Date of Birth" />
-                  <TextInputComponent label="Nationality" />
-                  <TextInputComponent label="Passport Number / TC ID Number" />
+                  <TextInputComponent
+                    label="Full Name"
+                    value={traveler.fullName}
+                    onChange={(value) =>
+                      dispatch(
+                        updateArrayItem({
+                          field: "travelers",
+                          index,
+                          key: "fullName",
+                          value,
+                        })
+                      )
+                    }
+                    required
+                  />
+                  <TextInputComponent
+                    label="Date of Birth"
+                    type="date"
+                    value={traveler.dob}
+                    onChange={(value) =>
+                      dispatch(
+                        updateArrayItem({
+                          field: "travelers",
+                          index,
+                          key: "dob",
+                          value,
+                        })
+                      )
+                    }
+                    required
+                  />
+                  <TextInputComponent
+                    label="Nationality"
+                    value={traveler.nationality}
+                    onChange={(value) =>
+                      dispatch(
+                        updateArrayItem({
+                          field: "travelers",
+                          index,
+                          key: "nationality",
+                          value,
+                        })
+                      )
+                    }
+                    required
+                  />
+                  <TextInputComponent
+                    label="Passport Number / TC ID Number"
+                    value={traveler.passport}
+                    onChange={(value) =>
+                      dispatch(
+                        updateArrayItem({
+                          field: "travelers",
+                          index,
+                          key: "passport",
+                          value,
+                        })
+                      )
+                    }
+                    required
+                  />
                 </div>
               </BoxProviderWithName>
             ))}
@@ -157,14 +258,33 @@ export default function BookingsPage() {
           </BoxProviderWithName>
           <BoxProviderWithName noBorder={true} className="!p-0 mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <RadioInputComponent label="Where would you like to be picked up?" />
+              <RadioInputComponent
+                label="Where would you like to be picked up?"
+                options={[
+                  { value: "now", label: "Add location now" },
+                  { value: "later", label: "Add later" },
+                ]}
+                value={bookingState.pickupLocation ? "now" : "later"}
+                onChange={(value) => {
+                  if (value === "later") {
+                    dispatch(
+                      setField({ field: "pickupLocation", value: null })
+                    );
+                  }
+                }}
+              />
             </div>
           </BoxProviderWithName>
           <div className="w-full lg:w-1/2 mt-4">
             <AddressLocationSelector
-              value={location1}
+              value={
+                bookingState.pickupLocation || {
+                  address: "",
+                  coordinates: null,
+                }
+              }
               onChange={(data) => {
-                setLocation1(data);
+                dispatch(setField({ field: "pickupLocation", value: data }));
               }}
               readOnly={false}
               label="Location"

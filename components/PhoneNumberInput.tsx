@@ -6,7 +6,7 @@ export default function PhoneNumberInput({
   setPhoneNumber,
 }: {
   phoneNumber: string;
-  setPhoneNumber: any;
+  setPhoneNumber: (value: string) => void;
 }) {
   return (
     <PhoneInput
