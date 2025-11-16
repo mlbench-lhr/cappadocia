@@ -12,9 +12,9 @@ import {
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import AddressLocationSelector, { LocationData } from "@/components/map";
 
 export type DashboardCardProps = {
   image: string;
@@ -29,6 +29,10 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
 
   return (
     <BasicStructureWithName name="Book Now" showBackOption>
@@ -137,12 +141,14 @@ export default function BookingsPage() {
             </div>
           </BoxProviderWithName>
           <div className="w-full lg:w-1/2 mt-4">
-            <Image
-              src={"/userDashboard/map.png"}
-              alt=""
-              width={300}
-              height={490}
-              className="w-full h-[490px] rounded-xl object-cover"
+            <AddressLocationSelector
+              value={location1}
+              onChange={(data) => {
+                setLocation1(data);
+              }}
+              readOnly={true}
+              label="Enter Your Business Address"
+              placeholder="Type address or click on map"
             />
           </div>
           <div className="w-full md:w-[235px] mt-4">

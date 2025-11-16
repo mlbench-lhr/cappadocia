@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
@@ -29,7 +29,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import Link from "next/link";
-import Map from "@/components/map";
+import AddressLocationSelector, { LocationData } from "@/components/map";
 
 export type InvoiceData = {
   invoice: {
@@ -205,6 +205,10 @@ export default function BookingsPage() {
       </div>
     );
   };
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
   return (
     <BasicStructureWithName name="Details" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
@@ -219,7 +223,7 @@ export default function BookingsPage() {
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
               Blue Tour – Hidden Cappadocia
             </h1>
-            <div className="grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
+            <div className="w-full grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
               <div className="col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
                 <Image
                   src={"/userDashboard/img20.png"}
@@ -433,14 +437,15 @@ export default function BookingsPage() {
                   </div>
                 </div>
                 <div className="w-full col-span-1">
-                  {/* <Image
-                    src={"/userDashboard/map.png"}
-                    alt=""
-                    width={300}
-                    height={490}
-                    className="w-full h-[490px] rounded-xl object-cover"
-                  /> */}
-                  <Map />
+                  <AddressLocationSelector
+                    value={location1}
+                    onChange={(data) => {
+                      setLocation1(data);
+                    }}
+                    readOnly={true}
+                    label="Enter Your Business Address"
+                    placeholder="Type address or click on map"
+                  />
                 </div>
               </div>
             </BoxProviderWithName>

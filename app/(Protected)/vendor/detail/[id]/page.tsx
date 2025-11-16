@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import { exploreProps } from "../../../dashboard/page";
+import AddressLocationSelector, { LocationData } from "@/components/map";
 
 export type InvoiceData = {
   invoice: {
@@ -206,6 +207,11 @@ export default function BookingsPage() {
       </div>
     );
   };
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
+
   return (
     <BasicStructureWithName name="Vendor Profile" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
@@ -320,12 +326,15 @@ export default function BookingsPage() {
                       subTitle={"Cappadocia,Turkey"}
                       icon={<LocationIcon color="rgba(0, 0, 0, 0.5)" />}
                     />
-                    <Image
-                      src={"/userDashboard/map.png"}
-                      alt=""
-                      width={300}
-                      height={188}
-                      className="w-full h-[188px] rounded-xl object-cover"
+                    <AddressLocationSelector
+                      value={location1}
+                      onChange={(data) => {
+                        setLocation1(data);
+                      }}
+                      readOnly={true}
+                      label="Enter Your Business Address"
+                      className=" w-full h-[188px] rounded-xl "
+                      placeholder="Type address or click on map"
                     />
                   </div>
                 </BoxProviderWithName>

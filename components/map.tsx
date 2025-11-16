@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, JSX } from "react";
 import { Locate } from "lucide-react";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 
 // Extend Window interface to include google
 declare global {
@@ -106,15 +108,33 @@ interface MapInstance {
   autocomplete: google.maps.places.Autocomplete | null;
 }
 
-export default function AddressLocationSelector(): JSX.Element {
-  const [address, setAddress] = useState<string>("");
-  console.log("address-----", address);
+// Location data to be stored in DB
+export interface LocationData {
+  address: string;
+  coordinates: LatLng | null;
+}
 
-  const [mapCenter, setMapCenter] = useState<LatLng>({
-    lat: 35.2271,
-    lng: -80.8431,
-  }); // Charlotte, NC
-  const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
+// Component Props
+interface AddressLocationSelectorProps {
+  value: LocationData;
+  onChange: (data: LocationData) => void;
+  readOnly?: boolean;
+  label?: string;
+  placeholder?: string;
+  className?: string;
+}
+
+export default function AddressLocationSelector({
+  value,
+  onChange,
+  readOnly = false,
+  label = "Registered Business Address",
+  placeholder = "Enter Your Address",
+  className = " w-full h-[490px] rounded-xl ",
+}: AddressLocationSelectorProps): JSX.Element {
+  const [mapCenter, setMapCenter] = useState<LatLng>(
+    value.coordinates || { lat: 35.2271, lng: -80.8431 }
+  );
   const [isMapLoaded, setIsMapLoaded] = useState<boolean>(false);
   const mapRef = useRef<MapInstance>({
     map: null,
@@ -144,13 +164,22 @@ export default function AddressLocationSelector(): JSX.Element {
     }
   }, [isMapLoaded]);
 
+  // Update map when value changes externally
+  useEffect(() => {
+    if (mapRef.current.map && mapRef.current.marker && value.coordinates) {
+      mapRef.current.map.setCenter(value.coordinates);
+      mapRef.current.marker.setPosition(value.coordinates);
+      setMapCenter(value.coordinates);
+    }
+  }, [value.coordinates]);
+
   const initializeMap = (): void => {
     const mapElement = document.getElementById("map");
     if (!mapElement) return;
 
     const map = new google.maps.Map(mapElement, {
       center: mapCenter,
-      zoom: 14,
+      zoom: value.coordinates ? 15 : 14,
       styles: [
         {
           featureType: "poi",
@@ -163,68 +192,85 @@ export default function AddressLocationSelector(): JSX.Element {
     // Add marker
     const marker = new google.maps.Marker({
       map: map,
-      draggable: true,
+      position: value.coordinates || undefined,
+      draggable: !readOnly,
       animation: google.maps.Animation.DROP,
     });
 
     mapRef.current.map = map;
     mapRef.current.marker = marker;
 
-    // Click on map to set marker
-    map.addListener("click", (e: google.maps.MapMouseEvent) => {
-      if (e.latLng) {
-        marker.setPosition(e.latLng);
-        setMarkerPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-        reverseGeocode(e.latLng);
-      }
-    });
-
-    // Drag marker
-    marker.addListener("dragend", (e: google.maps.MapMouseEvent) => {
-      if (e.latLng) {
-        setMarkerPosition({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-        reverseGeocode(e.latLng);
-      }
-    });
-
-    // Initialize autocomplete
-    const input = document.getElementById("address-input") as HTMLInputElement;
-    if (input) {
-      const autocomplete = new google.maps.places.Autocomplete(input);
-      autocomplete.bindTo("bounds", map);
-      mapRef.current.autocomplete = autocomplete;
-
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        if (!place.geometry || !place.geometry.location) return;
-
-        if (place.geometry.viewport) {
-          map.fitBounds(place.geometry.viewport);
-        } else {
-          map.setCenter(place.geometry.location);
-          map.setZoom(17);
+    if (!readOnly) {
+      // Click on map to set marker
+      map.addListener("click", (e: google.maps.MapMouseEvent) => {
+        if (e.latLng) {
+          const newCoords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+          marker.setPosition(e.latLng);
+          reverseGeocode(e.latLng, newCoords);
         }
-
-        marker.setPosition(place.geometry.location);
-        setMarkerPosition({
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng(),
-        });
-        setAddress(place.formatted_address || "");
       });
+
+      // Drag marker
+      marker.addListener("dragend", (e: google.maps.MapMouseEvent) => {
+        if (e.latLng) {
+          const newCoords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+          reverseGeocode(e.latLng, newCoords);
+        }
+      });
+
+      // Initialize autocomplete
+      const input = document.getElementById(
+        "address-input"
+      ) as HTMLInputElement;
+      if (input) {
+        const autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo("bounds", map);
+        mapRef.current.autocomplete = autocomplete;
+
+        autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (!place.geometry || !place.geometry.location) return;
+
+          if (place.geometry.viewport) {
+            map.fitBounds(place.geometry.viewport);
+          } else {
+            map.setCenter(place.geometry.location);
+            map.setZoom(17);
+          }
+
+          const newCoords = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          };
+
+          marker.setPosition(place.geometry.location);
+          onChange({
+            address: place.formatted_address || "",
+            coordinates: newCoords,
+          });
+        });
+      }
     }
   };
 
-  const reverseGeocode = (latLng: google.maps.LatLng | LatLng): void => {
+  const reverseGeocode = (
+    latLng: google.maps.LatLng | LatLng,
+    coords: LatLng
+  ): void => {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({ location: latLng }, (results, status) => {
       if (status === "OK" && results && results[0]) {
-        setAddress(results[0].formatted_address);
+        onChange({
+          address: results[0].formatted_address,
+          coordinates: coords,
+        });
       }
     });
   };
 
   const getCurrentLocation = (): void => {
+    if (readOnly) return;
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position: GeolocationPosition) => {
@@ -233,13 +279,12 @@ export default function AddressLocationSelector(): JSX.Element {
             lng: position.coords.longitude,
           };
           setMapCenter(pos);
-          setMarkerPosition(pos);
 
           if (mapRef.current.map && mapRef.current.marker) {
             mapRef.current.map.setCenter(pos);
             mapRef.current.map.setZoom(15);
             mapRef.current.marker.setPosition(pos);
-            reverseGeocode(pos);
+            reverseGeocode(pos, pos);
           }
         },
         () => {
@@ -254,62 +299,68 @@ export default function AddressLocationSelector(): JSX.Element {
   const handleAddressChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    setAddress(e.target.value);
+    if (!readOnly) {
+      onChange({
+        ...value,
+        address: e.target.value,
+      });
+    }
   };
 
   return (
     <div className="w-full">
       <div className="space-y-6 w-full">
-        <label
-          htmlFor="address-input"
-          className="block text-xl font-semibold mb-3 text-gray-900"
+        {!readOnly && (
+          <div className="space-y-1">
+            <Label
+              htmlFor="address-input"
+              className="text-[14px] font-semibold"
+            >
+              {label}
+            </Label>
+
+            <div className="relative">
+              <Input
+                id="address-input"
+                type="text"
+                value={value.address}
+                onChange={handleAddressChange}
+                placeholder={placeholder}
+                readOnly={readOnly}
+                disabled={readOnly}
+                className="h-[44px] bg-white cursor-pointer"
+              />
+              {!readOnly && (
+                <button
+                  onClick={getCurrentLocation}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  title="Use current location"
+                  type="button"
+                >
+                  <Locate className="w-5 h-5 text-gray-600" />
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div
+          className={` relative bg-gray-200 overflow-hidden shadow-md ${className}`}
         >
-          Registered Business Address
-        </label>
-
-        <div className="relative">
-          <input
-            id="address-input"
-            type="text"
-            value={address}
-            onChange={handleAddressChange}
-            placeholder="Enter Your Address"
-            className="w-full px-4 py-4 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <button
-            onClick={getCurrentLocation}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors"
-            title="Use current location"
-            type="button"
-          >
-            <Locate className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
-
-        <div className="relative w-full h-96 bg-gray-200 rounded-lg overflow-hidden shadow-md">
           {!isMapLoaded ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading map...</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Note: This demo uses a placeholder. Add your Google Maps API
-                  key to enable full functionality.
+                <p className="text-sm text-gray-500 mt-2 px-4">
+                  Note: This demo uses a placeholder API key. Add your Google
+                  Maps API key to enable full functionality.
                 </p>
               </div>
             </div>
           ) : null}
-          <div id="map" className="w-full h-full"></div>
+          <div id="map" className={className}></div>
         </div>
-
-        {markerPosition && (
-          <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold">Coordinates:</span>{" "}
-              {markerPosition.lat.toFixed(6)}, {markerPosition.lng.toFixed(6)}
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );

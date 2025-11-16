@@ -1,10 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
-import { Label } from "@/components/ui/label";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +9,7 @@ import {
 } from "@/lib/store/slices/generalSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 import { ChevronLeft } from "lucide-react";
+import AddressLocationSelector, { LocationData } from "@/components/map";
 
 export function VendorSignUpStep2({ isVendor }: { isVendor?: Boolean }) {
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -20,6 +17,10 @@ export function VendorSignUpStep2({ isVendor }: { isVendor?: Boolean }) {
   const handleNext = () => {
     dispatch(updateProfileStepNext());
   };
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
   return (
     <Card className="w-full max-w-md auth-box-shadows min-h-fit max-h-full">
       <CardHeader className="space-y-1">
@@ -36,7 +37,16 @@ export function VendorSignUpStep2({ isVendor }: { isVendor?: Boolean }) {
       </CardHeader>
       <CardContent className="space-y-2">
         <div className="grid grid-cols-1 gap-4">
-          <TextInputComponent label="Registered Business Address" />
+          <AddressLocationSelector
+            value={location1}
+            onChange={(data) => {
+              setLocation1(data);
+            }}
+            readOnly={false}
+            label="Address & Location"
+            className=" w-full h-[188px] rounded-xl "
+            placeholder="Enter Address & Location"
+          />
           <Button variant={"main_green_button"} onClick={handleNext}>
             Next
           </Button>
