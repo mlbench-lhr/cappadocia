@@ -4,7 +4,8 @@ import sidebarSlice from "./slices/sidebarSlice";
 import generalSlice from "./slices/generalSlice";
 import adminSlice from "./slices/adminSlice";
 import opportunitySlice from "./slices/opportunitySlice";
-import blogslice from "./slices/blogSlice";
+import blogSlice from "./slices/blogSlice";
+import addBookingSlice from "./slices/addbooking";
 import calendarSlice from "./slices/calendarSlice";
 import notificationSlice from "./slices/notificationSlice";
 
@@ -15,7 +16,8 @@ export const store = configureStore({
     general: generalSlice,
     admin: adminSlice,
     opportunity: opportunitySlice,
-    blog: blogslice,
+    blog: blogSlice,
+    addBooking: addBookingSlice,
     calendar: calendarSlice,
     notification: notificationSlice,
   },

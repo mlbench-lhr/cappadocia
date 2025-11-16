@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
@@ -13,10 +13,11 @@ import {
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import { Plus } from "lucide-react";
+import { addToArray } from "@/lib/store/slices/addbooking";
 
 export type DashboardCardProps = {
   image: string;
@@ -28,6 +29,9 @@ export default function BookingsPage() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const bookingState = useAppSelector((s) => s.addBooking);
+  console.log("bookingState-------", bookingState);
+
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
@@ -80,31 +84,45 @@ export default function BookingsPage() {
           className="!p-0"
           name="Travelers Details"
           textClasses=" text-[18px] font-semibold "
+          rightSideComponent={
+            <Button
+              variant={"green_secondary_button"}
+              size={"sm"}
+              onClick={() => {
+                dispatch(
+                  addToArray({
+                    field: "travelers",
+                    value: {
+                      fullName: "",
+                      dob: "",
+                      nationality: "",
+                      passport: "",
+                    },
+                  })
+                );
+              }}
+            >
+              Add Traveler <Plus className="ml-2 h-4 w-4" />
+            </Button>
+          }
         >
-          <BoxProviderWithName
-            noBorder={true}
-            className="!p-0"
-            name="Traveler 1"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInputComponent label="Full Name" />
-              <TextInputComponent label="Date of Birth" />
-              <TextInputComponent label="Nationality" />
-              <TextInputComponent label="Passport Number / TC ID Number" />
-            </div>
-          </BoxProviderWithName>
-          <BoxProviderWithName
-            noBorder={true}
-            className="!p-0 mt-4"
-            name="Traveler 1"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInputComponent label="Full Name" />
-              <TextInputComponent label="Date of Birth" />
-              <TextInputComponent label="Nationality" />
-              <TextInputComponent label="Passport Number / TC ID Number" />
-            </div>
-          </BoxProviderWithName>
+          <div className="space-y-4">
+            {bookingState.travelers.map((item, index) => (
+              <BoxProviderWithName
+                key={index}
+                noBorder={true}
+                className="!p-0"
+                name={`Traveler ${index + 1}`}
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <TextInputComponent label="Full Name" />
+                  <TextInputComponent label="Date of Birth" />
+                  <TextInputComponent label="Nationality" />
+                  <TextInputComponent label="Passport Number / TC ID Number" />
+                </div>
+              </BoxProviderWithName>
+            ))}
+          </div>
         </BoxProviderWithName>
         <BoxProviderWithName
           noBorder={true}
