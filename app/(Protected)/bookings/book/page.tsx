@@ -115,7 +115,7 @@ export default function BookingsPage() {
   }, []);
 
   const onSubmit = (data: BookingFormData) => {
-    // console.log("Form submitted:", data);
+    console.log("Form submitted:", data);
     // router.push("/bookings/payment");
   };
 
@@ -147,10 +147,7 @@ export default function BookingsPage() {
 
   return (
     <BasicStructureWithName name="Book Now" showBackOption>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4"
-      >
+      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
         {/* Trip Details */}
         <BoxProviderWithName
           noBorder={true}
@@ -390,15 +387,16 @@ export default function BookingsPage() {
           </div>
           <div className="w-full md:w-[235px] mt-4">
             <Button
-              type="submit"
               variant={"main_green_button"}
               className="w-full"
+              type="button"
+              onClick={handleSubmit(onSubmit)}
             >
               Next
             </Button>
           </div>
         </BoxProviderWithName>
-      </form>
+      </div>
     </BasicStructureWithName>
   );
 }
