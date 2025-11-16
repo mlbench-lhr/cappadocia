@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import {
+  RadioInputComponent,
   SelectInputComponent,
   TextInputComponent,
 } from "@/components/SmallComponents/InputComponents";
@@ -113,11 +114,11 @@ export default function BookingsPage() {
         >
           <BoxProviderWithName
             noBorder={true}
-            className=" !px-3.5 !py-3 bg-[#FFF5DF] w-full md:w-[500px] "
+            className=" !px-3.5 !py-3 bg-[#FFF5DF] w-full md:w-[550px] "
             textClasses=" text-[18px] font-semibold "
           >
             <IconAndTextTab2
-              alignClass=" items-start !gap-3"
+              alignClass=" items-center !gap-3"
               textClasses=" text-black/80 text-[14px] font-medium "
               text="Note: Please add your pick-up location at least 24 hours before your activity so your activity provider can assist you."
               icon={
@@ -138,7 +139,7 @@ export default function BookingsPage() {
           </BoxProviderWithName>
           <BoxProviderWithName noBorder={true} className="!p-0 mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInputComponent label="Nationality" />
+              <RadioInputComponent label="Where would you like to be picked up?" />
             </div>
           </BoxProviderWithName>
           <div className="w-full lg:w-1/2 mt-4">
@@ -147,8 +148,8 @@ export default function BookingsPage() {
               onChange={(data) => {
                 setLocation1(data);
               }}
-              readOnly={true}
-              label="Enter Your Business Address"
+              readOnly={false}
+              label="Location"
               placeholder="Type address or click on map"
             />
           </div>

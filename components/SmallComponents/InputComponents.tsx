@@ -1,5 +1,6 @@
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 
 export const SelectInputComponent = ({
@@ -49,6 +50,30 @@ export const TextInputComponent = ({
         required
         disabled={disabled}
       />
+    </div>
+  );
+};
+
+export const RadioInputComponent = ({ label }: { label: string }) => {
+  return (
+    <div className="space-y-2 col-span-1">
+      <Label className="text-[14px] font-semibold">{label}</Label>
+      <RadioGroup
+        value={"Add later"}
+        onValueChange={(val) => {
+          console.log("val-------", val);
+        }}
+        className="flex gap-14 flex-col md:flex-row justify-start items-center flex-wrap"
+      >
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="Add location now" id="Add location now" />
+          <Label htmlFor="Add location now">Add location now</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="Add later" id="Add later" />
+          <Label htmlFor="Add later">Add later</Label>
+        </div>
+      </RadioGroup>{" "}
     </div>
   );
 };

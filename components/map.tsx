@@ -328,7 +328,7 @@ export default function AddressLocationSelector({
                 placeholder={placeholder}
                 readOnly={readOnly}
                 disabled={readOnly}
-                className="h-[44px] bg-white cursor-pointer"
+                className="h-[44px] bg-white"
               />
               {!readOnly && (
                 <button
