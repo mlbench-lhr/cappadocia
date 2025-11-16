@@ -13,10 +13,10 @@ import {
 import moment from "moment";
 import Link from "next/link";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
-import { StatusText } from "@/components/SmallComponents/StatusText";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
 import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 export type DashboardCardProps = {
   image: string;
@@ -27,44 +27,49 @@ export type DashboardCardProps = {
 export type bookingProps = {
   bookingId: string;
   title: string;
-  tourStatus: "Upcoming" | "Completed" | "Cancelled";
-  paymentStatus: "Paid" | "Refunded" | "Pending" | "Cancelled";
+  tourStatus:
+    | "Upcoming"
+    | "Completed"
+    | "Cancelled"
+    | "Active"
+    | "Pending Admin Approval";
   date: Date;
   _id: string;
+  price: string;
 };
 
 const bookingData: bookingProps[] = [
   {
     bookingId: "BKG001",
     title: "City Tour",
-    tourStatus: "Upcoming",
-    paymentStatus: "Paid",
+    tourStatus: "Active",
     date: new Date("2025-12-01"),
     _id: "1",
+    price: "€250",
   },
   {
     bookingId: "BKG002",
     title: "Mountain Hike",
-    tourStatus: "Completed",
-    paymentStatus: "Refunded",
+    tourStatus: "Pending Admin Approval",
     date: new Date("2025-10-15"),
     _id: "2",
+    price: "€250",
   },
   {
     bookingId: "BKG003",
     title: "Beach Trip",
     tourStatus: "Cancelled",
-    paymentStatus: "Cancelled",
     date: new Date("2025-11-20"),
     _id: "3",
+    price: "€250",
   },
   {
     bookingId: "BKG004",
     title: "Museum Visit",
-    tourStatus: "Upcoming",
-    paymentStatus: "Pending",
+    tourStatus: "Pending Admin Approval",
     date: new Date("2025-12-10"),
     _id: "4",
+    price: "€250",
   },
 ];
 // Loading skeleton component
@@ -108,23 +113,24 @@ export default function BookingsPage() {
       accessor: "title",
     },
     {
-      header: "Tour Status",
-      accessor: "tourStatus",
-      render: (item) => <StatusText status={item.tourStatus} />,
+      header: "Price/per person",
+      accessor: "title",
     },
     {
-      header: "Status",
-      accessor: "paymentStatus",
+      header: "Tour Status",
+      accessor: "tourStatus",
       render: (item) => (
-        <StatusBadge
-          status={item.paymentStatus}
-          textClasses="text-base font-normal"
-          widthClasses="w-[93px]"
-        />
+        <div className="flex justify-start items-center">
+          <StatusBadge
+            status={item.tourStatus}
+            textClasses="text-base font-normal"
+            widthClasses="w-fit"
+          />
+        </div>
       ),
     },
     {
-      header: "Date",
+      header: "Next Available Date",
       accessor: "date",
       render: (item) => {
         return (
@@ -155,12 +161,18 @@ export default function BookingsPage() {
 
   return (
     <BasicStructureWithName
-      name="My Bookings"
+      name="Tours & Activities"
       rightSideComponent={
-        <SearchComponent
-          searchQuery={searchQuery}
-          onChangeFunc={setSearchQuery}
-        />
+        <div className="flex justify-start items-center gap-2">
+          <Button className="" variant={"main_green_button"}>
+            <Link href={"/explore"}>Add Tour/Activity</Link>
+            <Plus className="mr-2 h-4 w-4" />
+          </Button>
+          <SearchComponent
+            searchQuery={searchQuery}
+            onChangeFunc={setSearchQuery}
+          />
+        </div>
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">

@@ -7,17 +7,8 @@ import { BasicStructureWithName } from "@/components/providers/BasicStructureWit
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
-import moment from "moment";
-import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
-import Link from "next/link";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import {
-  BookingIcon,
-  ClockIcon,
-  PeopleIcon,
-  StarIcon,
-  VehicleIcon,
-} from "@/public/sidebarIcons/page";
+import { StarIcon } from "@/public/sidebarIcons/page";
 import {
   Select,
   SelectContent,
@@ -286,14 +277,14 @@ export default function DashboardPage() {
                   />
                 }
                 rightSideComponent={
-                  <div className="text-[26px] font-semibold text-primary">
+                  <div className="md:xl md:text-[26px] font-semibold text-primary">
                     $569.00
                   </div>
                 }
                 noBorder={true}
                 className="!px-0"
               >
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 mt-2 items-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mt-2 gap-y-2 items-center">
                   <div className="flex flex-col justify-start items-start">
                     <span className="text-xs font-normal text-black/70">
                       Tour Title
