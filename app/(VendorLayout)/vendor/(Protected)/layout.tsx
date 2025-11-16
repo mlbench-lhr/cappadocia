@@ -1,5 +1,5 @@
 import "@/app/globals.css";
-import DashboardLayout from "@/components/providers/DashboardLayout";
+import DashboardLayout from "@/components/providers/VendorDashboardLayout";
 import { Inter } from "next/font/google";
 
 const inter = Inter({

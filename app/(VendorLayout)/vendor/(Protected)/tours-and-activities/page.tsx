@@ -104,11 +104,6 @@ export default function BookingsPage() {
 
   const columns: Column[] = [
     {
-      header: "Booking ID",
-      accessor: "bookingId",
-      render: (item) => <span>#{item?._id?.replace(/\D/g, "").slice(-5)}</span>,
-    },
-    {
       header: "Tour Title",
       accessor: "title",
     },
@@ -143,7 +138,7 @@ export default function BookingsPage() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/bookings/detail/${item._id}`}
+          href={`/vendor/tours-and-activities/detail/${item._id}`}
           className="text-[#B32053] underline"
         >
           View Details
