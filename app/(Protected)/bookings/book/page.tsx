@@ -7,14 +7,14 @@ import { BasicStructureWithName } from "@/components/providers/BasicStructureWit
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import {
   RadioInputComponent,
-  SelectInputComponent,
+  FormSelectInput,
+  FormTextInput,
   TextInputComponent,
 } from "@/components/SmallComponents/InputComponents";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import AddressLocationSelector from "@/components/map";
 import { Plus, Trash2 } from "lucide-react";
 import {
@@ -23,26 +23,135 @@ import {
   updateArrayItem,
   removeArrayItem,
 } from "@/lib/store/slices/addbooking";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
 
-export type DashboardCardProps = {
-  image: string;
-  title: string;
-  description: string;
-};
+// Validation schema
+const LatLng = z.object({
+  lat: z.number(),
+  lng: z.number(),
+});
+export const LocationData = z.object({
+  address: z.string().min(1, ""),
+  coordinates: LatLng.nullable().refine((v) => v !== null, {
+    message: "Select any location from map",
+  }),
+});
+
+const bookingSchema = z.object({
+  selectDate: z.string().min(1, "Please select a date"),
+  participants: z
+    .string()
+    .min(1, "Number of participants is required")
+    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+      message: "Must be a positive number",
+    }),
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  phoneNumber: z.string().min(10, "Valid phone number is required"),
+  travelers: z
+    .array(
+      z.object({
+        fullName: z.string().min(2, "Full name must be at least 2 characters"),
+        dob: z.string().min(1, "Date of birth is required"),
+        nationality: z.string().min(2, "Nationality is required"),
+        passport: z.string().min(5, "Valid passport/ID number is required"),
+      })
+    )
+    .min(1, "At least one traveler is required"),
+  pickupLocation: LocationData.nullable().refine((v) => !v?.coordinates, {
+    message: "Select any location from map",
+  }),
+});
+
+type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const bookingState = useAppSelector((s) => s.addBooking);
-  console.log("bookingState-------", bookingState);
+  console.log("bookingState:", bookingState);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<BookingFormData>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      selectDate: bookingState.selectDate || "",
+      participants: bookingState.participants || "",
+      email: bookingState.email || "",
+      fullName: bookingState.fullName || "",
+      phoneNumber: bookingState.phoneNumber || "",
+      travelers: bookingState.travelers,
+      pickupLocation: bookingState.pickupLocation,
+    },
+  });
+
+  console.log("errors:", errors);
+  // Sync form values with Redux store
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name && !name.startsWith("travelers")) {
+        dispatch(
+          setField({
+            field: name as any,
+            value: value[name as keyof typeof value],
+          })
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, dispatch]);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
+  const onSubmit = (data: BookingFormData) => {
+    // console.log("Form submitted:", data);
+    // router.push("/bookings/payment");
+  };
+
+  const handleAddTraveler = () => {
+    const newTraveler = {
+      fullName: "",
+      dob: "",
+      nationality: "",
+      passport: "",
+    };
+    dispatch(addToArray({ field: "travelers", value: newTraveler }));
+    setValue("travelers", [...bookingState.travelers, newTraveler]);
+  };
+
+  const handleRemoveTraveler = (index: number) => {
+    dispatch(removeArrayItem({ field: "travelers", index }));
+    const updatedTravelers = bookingState.travelers.filter(
+      (_, i) => i !== index
+    );
+    setValue("travelers", updatedTravelers);
+  };
+
+  const handleTravelerUpdate = (index: number, key: string, value: string) => {
+    dispatch(updateArrayItem({ field: "travelers", index, key, value }));
+    const updatedTravelers = [...bookingState.travelers];
+    updatedTravelers[index] = { ...updatedTravelers[index], [key]: value };
+    setValue("travelers", updatedTravelers);
+  };
+
   return (
     <BasicStructureWithName name="Book Now" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4"
+      >
+        {/* Trip Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -50,28 +159,26 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectInputComponent
+            <FormSelectInput
+              control={control}
+              name="selectDate"
               label="Select Date"
               placeholder="Select Date"
               options={["Nov 2,2025", "Apr 2, 2025"]}
-              value={bookingState.selectDate || undefined}
-              onChange={(value) =>
-                dispatch(setField({ field: "selectDate", value }))
-              }
               required
             />
-            <TextInputComponent
+            <FormTextInput
+              control={control}
+              name="participants"
               label="Participants"
               placeholder="Enter no of participants"
               type="number"
-              value={bookingState.participants || undefined}
-              onChange={(value) =>
-                dispatch(setField({ field: "participants", value }))
-              }
               required
             />
           </div>
         </BoxProviderWithName>
+
+        {/* Contact Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -79,21 +186,17 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <TextInputComponent
+            <FormTextInput
+              control={control}
+              name="email"
               label="Email Address"
               type="email"
-              value={bookingState.email || undefined}
-              onChange={(value) =>
-                dispatch(setField({ field: "email", value }))
-              }
               required
             />
-            <TextInputComponent
+            <FormTextInput
+              control={control}
+              name="fullName"
               label="Full Name"
-              value={bookingState.fullName || undefined}
-              onChange={(value) =>
-                dispatch(setField({ field: "fullName", value }))
-              }
               required
             />
             <div className="space-y-1 col-span-1">
@@ -101,15 +204,28 @@ export default function BookingsPage() {
                 Phone Number
                 <span className="text-red-500 ml-1">*</span>
               </Label>
-              <PhoneNumberInput
-                phoneNumber={bookingState.phoneNumber || ""}
-                setPhoneNumber={(value) =>
-                  dispatch(setField({ field: "phoneNumber", value }))
-                }
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <PhoneNumberInput
+                      phoneNumber={field.value}
+                      setPhoneNumber={field.onChange}
+                    />
+                    {error && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {error.message}
+                      </p>
+                    )}
+                  </>
+                )}
               />
             </div>
           </div>
         </BoxProviderWithName>
+
+        {/* Travelers Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -117,21 +233,10 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
           rightSideComponent={
             <Button
+              type="button"
               variant={"green_secondary_button"}
               size={"sm"}
-              onClick={() => {
-                dispatch(
-                  addToArray({
-                    field: "travelers",
-                    value: {
-                      fullName: "",
-                      dob: "",
-                      nationality: "",
-                      passport: "",
-                    },
-                  })
-                );
-              }}
+              onClick={handleAddTraveler}
             >
               Add Traveler <Plus className="ml-2 h-4 w-4" />
             </Button>
@@ -147,11 +252,10 @@ export default function BookingsPage() {
                 rightSideComponent={
                   bookingState.travelers.length > 1 ? (
                     <Button
+                      type="button"
                       variant={"destructive"}
                       size={"sm"}
-                      onClick={() =>
-                        dispatch(removeArrayItem({ field: "travelers", index }))
-                      }
+                      onClick={() => handleRemoveTraveler(index)}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -163,68 +267,46 @@ export default function BookingsPage() {
                     label="Full Name"
                     value={traveler.fullName}
                     onChange={(value) =>
-                      dispatch(
-                        updateArrayItem({
-                          field: "travelers",
-                          index,
-                          key: "fullName",
-                          value,
-                        })
-                      )
+                      handleTravelerUpdate(index, "fullName", value)
                     }
                     required
+                    error={errors.travelers?.[index]?.fullName?.message}
                   />
                   <TextInputComponent
                     label="Date of Birth"
                     type="date"
                     value={traveler.dob}
                     onChange={(value) =>
-                      dispatch(
-                        updateArrayItem({
-                          field: "travelers",
-                          index,
-                          key: "dob",
-                          value,
-                        })
-                      )
+                      handleTravelerUpdate(index, "dob", value)
                     }
                     required
+                    error={errors.travelers?.[index]?.dob?.message}
                   />
                   <TextInputComponent
                     label="Nationality"
                     value={traveler.nationality}
                     onChange={(value) =>
-                      dispatch(
-                        updateArrayItem({
-                          field: "travelers",
-                          index,
-                          key: "nationality",
-                          value,
-                        })
-                      )
+                      handleTravelerUpdate(index, "nationality", value)
                     }
                     required
+                    error={errors.travelers?.[index]?.nationality?.message}
                   />
                   <TextInputComponent
                     label="Passport Number / TC ID Number"
                     value={traveler.passport}
                     onChange={(value) =>
-                      dispatch(
-                        updateArrayItem({
-                          field: "travelers",
-                          index,
-                          key: "passport",
-                          value,
-                        })
-                      )
+                      handleTravelerUpdate(index, "passport", value)
                     }
                     required
+                    error={errors.travelers?.[index]?.passport?.message}
                   />
                 </div>
               </BoxProviderWithName>
             ))}
           </div>
         </BoxProviderWithName>
+
+        {/* Pickup Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -270,34 +352,53 @@ export default function BookingsPage() {
                     dispatch(
                       setField({ field: "pickupLocation", value: null })
                     );
+                    setValue("pickupLocation", null);
                   }
                 }}
               />
             </div>
           </BoxProviderWithName>
           <div className="w-full lg:w-1/2 mt-4">
-            <AddressLocationSelector
-              value={
-                bookingState.pickupLocation || {
-                  address: "",
-                  coordinates: null,
-                }
-              }
-              onChange={(data) => {
-                dispatch(setField({ field: "pickupLocation", value: data }));
-              }}
-              readOnly={false}
-              label="Location"
-              placeholder="Type address or click on map"
+            <Controller
+              name="pickupLocation"
+              control={control}
+              render={({ field }) => (
+                <AddressLocationSelector
+                  value={
+                    field.value || {
+                      address: "",
+                      coordinates: null,
+                    }
+                  }
+                  onChange={(data) => {
+                    field.onChange(data);
+                    dispatch(
+                      setField({ field: "pickupLocation", value: data })
+                    );
+                  }}
+                  readOnly={false}
+                  label="Location"
+                  placeholder="Type address or click on map"
+                />
+              )}
             />
+            {errors.pickupLocation?.coordinates?.message && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.pickupLocation?.coordinates?.message}
+              </p>
+            )}
           </div>
           <div className="w-full md:w-[235px] mt-4">
-            <Button variant={"main_green_button"} className="w-full" asChild>
-              <Link href={"/bookings/payment"}>Next</Link>
+            <Button
+              type="submit"
+              variant={"main_green_button"}
+              className="w-full"
+            >
+              Next
             </Button>
           </div>
         </BoxProviderWithName>
-      </div>
+      </form>
     </BasicStructureWithName>
   );
 }

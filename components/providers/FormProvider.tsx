@@ -1,334 +1,238 @@
 import { ReactNode } from "react";
-import {
-  useForm,
-  FormProvider,
-  FieldValues,
-  UseFormProps,
-} from "react-hook-form";
+import { useForm, Controller, FieldValues, Path } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+
+export type ValidationRule = {
+  required?: boolean | string;
+  minLength?: { value: number; message: string };
+  maxLength?: { value: number; message: string };
+  pattern?: { value: RegExp; message: string };
+  min?: { value: number; message: string };
+  max?: { value: number; message: string };
+  validate?: Record<string, (value: any) => boolean | string>;
+};
 
 export type FormField = {
   name: string;
-  label: string;
-  type: "text" | "select" | "radio" | "phone" | "file" | "custom";
+  label?: string;
+  type?:
+    | "text"
+    | "email"
+    | "number"
+    | "date"
+    | "tel"
+    | "select"
+    | "radio"
+    | "custom";
   placeholder?: string;
-  options?: string[] | number[];
-  radioOptions?: { value: string; label: string }[];
-  defaultValue?: any;
+  validation?: ValidationRule;
+  options?: string[] | { value: string; label: string }[];
+  component?: (props: {
+    value: any;
+    onChange: (value: any) => void;
+    error?: string;
+  }) => ReactNode;
   disabled?: boolean;
-  required?: boolean;
-  rules?: {
-    required?: string | boolean;
-    pattern?: { value: RegExp; message: string };
-    minLength?: { value: number; message: string };
-    maxLength?: { value: number; message: string };
-    validate?: (value: any) => boolean | string;
-  };
-  customComponent?: ReactNode;
-  gridSpan?: 1 | 2;
 };
 
-export type FormSection = {
-  title: string;
+export type FormValidationProviderProps<T extends FieldValues> = {
   fields: FormField[];
-  className?: string;
-};
-
-type FormProviderComponentProps<T extends FieldValues> = {
-  sections: FormSection[];
+  defaultValues: T;
   onSubmit: (data: T) => void | Promise<void>;
-  defaultValues?: UseFormProps<T>["defaultValues"];
-  children?: ReactNode;
-  formOptions?: UseFormProps<T>;
+  submitButtonText?: string;
+  submitButtonVariant?: string;
+  submitButtonClassName?: string;
+  children?: (renderProps: {
+    renderField: (fieldName: string) => ReactNode;
+    control: any;
+    errors: any;
+    watch: any;
+  }) => ReactNode;
 };
 
-export function FormProviderComponent<T extends FieldValues>({
-  sections,
-  onSubmit,
+export function FormValidationProvider<T extends FieldValues>({
+  fields,
   defaultValues,
+  onSubmit,
+  submitButtonText = "Next",
+  submitButtonVariant = "main_green_button",
+  submitButtonClassName = "w-full md:w-[235px]",
   children,
-  formOptions,
-}: FormProviderComponentProps<T>) {
-  const methods = useForm<T>({
+}: FormValidationProviderProps<T>) {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm<T>({
     defaultValues,
-    mode: "onBlur",
-    ...formOptions,
+    mode: "onChange",
   });
 
-  const handleSubmit = methods.handleSubmit(async (data) => {
-    await onSubmit(data);
-  });
+  const renderField = (fieldName: string) => {
+    const field = fields.find((f) => f.name === fieldName);
+    if (!field) return null;
 
-  return (
-    <FormProvider {...methods}>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        {sections.map((section, idx) => (
-          <FormSection key={idx} section={section} />
-        ))}
-        {children}
-      </form>
-    </FormProvider>
-  );
-}
-
-function FormSection({ section }: { section: FormSection }) {
-  return (
-    <div className={section.className}>
-      <h3 className="text-[18px] font-semibold mb-4">{section.title}</h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {section.fields.map((field) => (
-          <FormFieldRenderer key={field.name} field={field} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function FormFieldRenderer({ field }: { field: FormField }) {
-  const gridClass =
-    field.gridSpan === 2 ? "col-span-1 md:col-span-2" : "col-span-1";
-
-  if (field.type === "custom" && field.customComponent) {
-    return <div className={gridClass}>{field.customComponent}</div>;
-  }
-
-  return (
-    <div className={gridClass}>
-      {field.type === "text" && (
-        <ControlledTextInput
-          name={field.name}
-          label={field.label}
-          placeholder={field.placeholder}
-          disabled={field.disabled}
-          rules={field.rules}
-        />
-      )}
-      {field.type === "select" && (
-        <ControlledSelectInput
-          name={field.name}
-          label={field.label}
-          placeholder={field.placeholder || "Select"}
-          options={field.options || []}
-          rules={field.rules}
-        />
-      )}
-      {field.type === "radio" && (
-        <ControlledRadioInput
-          name={field.name}
-          label={field.label}
-          options={field.radioOptions || []}
-          rules={field.rules}
-        />
-      )}
-      {field.type === "file" && (
-        <ControlledFileInput
-          name={field.name}
-          label={field.label}
-          placeholder={field.placeholder}
-          disabled={field.disabled}
-          rules={field.rules}
-        />
-      )}
-    </div>
-  );
-}
-
-// Controlled Input Components
-import { useFormContext, Controller } from "react-hook-form";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-
-function ControlledTextInput({
-  name,
-  label,
-  placeholder,
-  disabled,
-  rules,
-}: {
-  name: string;
-  label: string;
-  placeholder?: string;
-  disabled?: boolean;
-  rules?: any;
-}) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
-  const error = errors[name];
-
-  return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      render={({ field }) => (
-        <div className="space-y-1">
-          <Label className="text-[14px] font-semibold">{label}</Label>
-          <Input
-            {...field}
-            placeholder={placeholder || `Enter ${label}`}
-            className="h-[44px] bg-white"
-            disabled={disabled}
-          />
-          {error && (
-            <p className="text-red-500 text-xs mt-1">
-              {error.message as string}
-            </p>
-          )}
-        </div>
-      )}
-    />
-  );
-}
-
-function ControlledSelectInput({
-  name,
-  label,
-  placeholder,
-  options,
-  rules,
-}: {
-  name: string;
-  label: string;
-  placeholder: string;
-  options: string[] | number[];
-  rules?: any;
-}) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
-  const error = errors[name];
-
-  return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      render={({ field }) => (
-        <div className="space-y-1">
-          <Label className="text-[14px] font-semibold">{label}</Label>
-          <Select onValueChange={field.onChange} value={field.value}>
-            <SelectTrigger className="w-full h-[44px]">
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((item) => (
-                <SelectItem key={item} value={item.toString()}>
-                  {item}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {error && (
-            <p className="text-red-500 text-xs mt-1">
-              {error.message as string}
-            </p>
-          )}
-        </div>
-      )}
-    />
-  );
-}
-
-function ControlledRadioInput({
-  name,
-  label,
-  options,
-  rules,
-}: {
-  name: string;
-  label: string;
-  options: { value: string; label: string }[];
-  rules?: any;
-}) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
-  const error = errors[name];
-
-  return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      render={({ field }) => (
-        <div className="space-y-2">
-          <Label className="text-[14px] font-semibold">{label}</Label>
-          <RadioGroup
-            value={field.value}
-            onValueChange={field.onChange}
-            className="flex gap-14 flex-col md:flex-row justify-start items-center flex-wrap"
-          >
-            {options.map((option) => (
-              <div key={option.value} className="flex items-center space-x-2">
-                <RadioGroupItem value={option.value} id={option.value} />
-                <Label htmlFor={option.value}>{option.label}</Label>
+    return (
+      <Controller
+        name={field.name as Path<T>}
+        control={control}
+        rules={field.validation}
+        render={({ field: { onChange, value }, fieldState: { error } }) => {
+          if (field.component) {
+            return (
+              <div className="space-y-1">
+                {field.label && (
+                  <Label className="text-[14px] font-semibold">
+                    {field.label}
+                    {field.validation?.required && (
+                      <span className="text-red-500 ml-1">*</span>
+                    )}
+                  </Label>
+                )}
+                {field.component({ value, onChange, error: error?.message })}
+                {error && (
+                  <p className="text-red-500 text-sm mt-1">{error.message}</p>
+                )}
               </div>
-            ))}
-          </RadioGroup>
-          {error && (
-            <p className="text-red-500 text-xs mt-1">
-              {error.message as string}
-            </p>
-          )}
-        </div>
-      )}
-    />
-  );
-}
+            );
+          }
 
-function ControlledFileInput({
-  name,
-  label,
-  placeholder,
-  disabled,
-  rules,
-}: {
-  name: string;
-  label: string;
-  placeholder?: string;
-  disabled?: boolean;
-  rules?: any;
-}) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
-  const error = errors[name];
+          switch (field.type) {
+            case "select":
+              return (
+                <div className="space-y-1">
+                  {field.label && (
+                    <Label className="text-[14px] font-semibold">
+                      {field.label}
+                      {field.validation?.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
+                    </Label>
+                  )}
+                  <select
+                    value={value || ""}
+                    onChange={(e) => onChange(e.target.value)}
+                    disabled={field.disabled}
+                    className={`w-full px-3 py-2 border rounded-md ${
+                      error ? "border-red-500" : "border-gray-300"
+                    }`}
+                  >
+                    <option value="">
+                      {field.placeholder || "Select an option"}
+                    </option>
+                    {field.options?.map((opt, idx) => {
+                      const optValue =
+                        typeof opt === "string" ? opt : opt.value;
+                      const optLabel =
+                        typeof opt === "string" ? opt : opt.label;
+                      return (
+                        <option key={idx} value={optValue}>
+                          {optLabel}
+                        </option>
+                      );
+                    })}
+                  </select>
+                  {error && (
+                    <p className="text-red-500 text-sm mt-1">{error.message}</p>
+                  )}
+                </div>
+              );
+
+            case "radio":
+              return (
+                <div className="space-y-2">
+                  {field.label && (
+                    <Label className="text-[14px] font-semibold">
+                      {field.label}
+                      {field.validation?.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
+                    </Label>
+                  )}
+                  <div className="flex flex-col gap-2">
+                    {field.options?.map((opt, idx) => {
+                      const optValue =
+                        typeof opt === "string" ? opt : opt.value;
+                      const optLabel =
+                        typeof opt === "string" ? opt : opt.label;
+                      return (
+                        <label
+                          key={idx}
+                          className="flex items-center gap-2 cursor-pointer"
+                        >
+                          <input
+                            type="radio"
+                            value={optValue}
+                            checked={value === optValue}
+                            onChange={(e) => onChange(e.target.value)}
+                            disabled={field.disabled}
+                            className="cursor-pointer"
+                          />
+                          <span>{optLabel}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                  {error && (
+                    <p className="text-red-500 text-sm mt-1">{error.message}</p>
+                  )}
+                </div>
+              );
+
+            default:
+              return (
+                <div className="space-y-1">
+                  {field.label && (
+                    <Label className="text-[14px] font-semibold">
+                      {field.label}
+                      {field.validation?.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
+                    </Label>
+                  )}
+                  <input
+                    type={field.type || "text"}
+                    value={value || ""}
+                    onChange={(e) => onChange(e.target.value)}
+                    placeholder={field.placeholder}
+                    disabled={field.disabled}
+                    className={`w-full px-3 py-2 border rounded-md ${
+                      error ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  {error && (
+                    <p className="text-red-500 text-sm mt-1">{error.message}</p>
+                  )}
+                </div>
+              );
+          }
+        }}
+      />
+    );
+  };
 
   return (
-    <Controller
-      name={name}
-      control={control}
-      rules={rules}
-      render={({ field: { onChange, value, ...field } }) => (
-        <div className="space-y-1">
-          <Label className="text-[14px] font-semibold">{label}</Label>
-          <Input
-            {...field}
-            type="file"
-            placeholder={placeholder || `Enter ${label}`}
-            className="h-[44px] bg-white cursor-pointer"
-            disabled={disabled}
-            onChange={(e) => onChange(e.target.files)}
-          />
-          {error && (
-            <p className="text-red-500 text-xs mt-1">
-              {error.message as string}
-            </p>
-          )}
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+      {children ? (
+        children({ renderField, control, errors, watch })
+      ) : (
+        <div className="space-y-4">
+          {fields.map((field) => (
+            <div key={field.name}>{renderField(field.name)}</div>
+          ))}
         </div>
       )}
-    />
+      <div className={`mt-4 ${submitButtonClassName}`}>
+        <Button
+          type="submit"
+          variant={submitButtonVariant as any}
+          className="w-full"
+        >
+          {submitButtonText}
+        </Button>
+      </div>
+    </form>
   );
 }
