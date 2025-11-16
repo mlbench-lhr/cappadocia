@@ -29,6 +29,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import Link from "next/link";
+import Map from "@/components/map";
 
 export type InvoiceData = {
   invoice: {
@@ -432,13 +433,14 @@ export default function BookingsPage() {
                   </div>
                 </div>
                 <div className="w-full col-span-1">
-                  <Image
+                  {/* <Image
                     src={"/userDashboard/map.png"}
                     alt=""
                     width={300}
                     height={490}
                     className="w-full h-[490px] rounded-xl object-cover"
-                  />
+                  /> */}
+                  <Map />
                 </div>
               </div>
             </BoxProviderWithName>
