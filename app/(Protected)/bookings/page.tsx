@@ -156,7 +156,6 @@ export default function BookingsPage() {
   return (
     <BasicStructureWithName
       name="My Bookings"
-      showBackOption
       rightSideComponent={
         <SearchComponent
           searchQuery={searchQuery}

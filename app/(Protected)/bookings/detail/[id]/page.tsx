@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import Image from "next/image";
@@ -36,6 +36,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { Textarea } from "@/components/ui/textarea";
 import DownloadInvoiceButton from "@/app/(Protected)/invoices/DownloadButton";
+import AddressLocationSelector, { LocationData } from "@/components/map";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -62,6 +63,10 @@ export default function BookingsPage() {
     status: "Paid",
     _id: "1",
   };
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
 
   return (
     <BasicStructureWithName
@@ -210,12 +215,15 @@ export default function BookingsPage() {
                             text={`Location: Cappadocia,Turkey`}
                             textClasses="text-black/70"
                           />
-                          <Image
-                            src={"/userDashboard/map.png"}
-                            alt=""
-                            width={300}
-                            height={188}
-                            className="w-full h-[188px] rounded-xl"
+                          <AddressLocationSelector
+                            value={location1}
+                            onChange={(data) => {
+                              setLocation1(data);
+                            }}
+                            readOnly={true}
+                            label="Enter Your Business Address"
+                            className=" w-full h-[188px] rounded-xl "
+                            placeholder="Type address or click on map"
                           />
                           <div className="w-full flex flex-col justify-start items-start gap-2">
                             <div className="w-full flex justify-between items-center">

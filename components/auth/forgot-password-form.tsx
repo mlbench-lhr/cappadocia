@@ -18,6 +18,7 @@ import { forgotPassword } from "@/lib/auth/auth-helpers";
 import { ChevronLeft, Check, EyeOff, Eye } from "lucide-react";
 import Swal from "sweetalert2";
 import { useForm, Controller } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 type EmailFormValues = {
   email: string;
@@ -40,7 +41,7 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [email, setEmail] = useState("");
-
+  const router = useRouter();
   const {
     control: emailControl,
     handleSubmit: handleEmailSubmit,
@@ -430,13 +431,13 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
   return (
     <Card className="w-full max-w-md auth-box-shadows">
       <CardHeader className="space-y-1">
-        <Link
-          href={isAdmin ? "/admin/auth/login" : "/auth/login"}
-          className="text-sm text-muted-foreground hover:text-foreground flex items-center justify-start mb-[28px]"
+        <div
+          onClick={() => router.back()}
+          className="text-sm cursor-pointer text-muted-foreground hover:text-foreground flex items-center justify-start mb-[28px]"
         >
           <ChevronLeft className="mr-2 h-[24px] w-[24px]" color="#B32053" />
           <span className="text-base font-semibold">Go Back</span>
-        </Link>
+        </div>
         <CardTitle className="heading-text-style-4">Forgot Password?</CardTitle>
         <CardDescription className="plan-text-style-3">
           Enter the email address linked to your account, and we'll send you a

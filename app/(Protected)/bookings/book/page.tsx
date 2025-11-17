@@ -1,38 +1,154 @@
 "use client";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import {
-  SelectInputComponent,
+  RadioInputComponent,
+  FormSelectInput,
+  FormTextInput,
   TextInputComponent,
 } from "@/components/SmallComponents/InputComponents";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import AddressLocationSelector from "@/components/map";
+import { Plus, Trash2 } from "lucide-react";
+import {
+  addToArray,
+  setField,
+  updateArrayItem,
+  removeArrayItem,
+} from "@/lib/store/slices/addbooking";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
 
-export type DashboardCardProps = {
-  image: string;
-  title: string;
-  description: string;
-};
+// Validation schema
+const LatLng = z.object({
+  lat: z.number(),
+  lng: z.number(),
+});
+export const LocationData = z.object({
+  address: z.string().min(1, ""),
+  coordinates: LatLng.nullable().refine((v) => v !== null, {
+    message: "Select any location from map",
+  }),
+});
+
+const bookingSchema = z.object({
+  selectDate: z.string().min(1, "Please select a date"),
+  participants: z
+    .string()
+    .min(1, "Number of participants is required")
+    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+      message: "Must be a positive number",
+    }),
+  email: z.string().email("Invalid email address").min(1, "Email is required"),
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  phoneNumber: z.string().min(10, "Valid phone number is required"),
+  travelers: z
+    .array(
+      z.object({
+        fullName: z.string().min(2, "Full name must be at least 2 characters"),
+        dob: z.string().min(1, "Date of birth is required"),
+        nationality: z.string().min(2, "Nationality is required"),
+        passport: z.string().min(5, "Valid passport/ID number is required"),
+      })
+    )
+    .min(1, "At least one traveler is required"),
+  pickupLocation: LocationData.nullable().refine((v) => !v?.coordinates, {
+    message: "Select any location from map",
+  }),
+});
+
+type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookingsPage() {
-  const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const bookingState = useAppSelector((s) => s.addBooking);
+  console.log("bookingState:", bookingState);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<BookingFormData>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      selectDate: bookingState.selectDate || "",
+      participants: bookingState.participants || "",
+      email: bookingState.email || "",
+      fullName: bookingState.fullName || "",
+      phoneNumber: bookingState.phoneNumber || "",
+      travelers: bookingState.travelers,
+      pickupLocation: bookingState.pickupLocation,
+    },
+  });
+
+  console.log("errors:", errors);
+  // Sync form values with Redux store
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name && !name.startsWith("travelers")) {
+        dispatch(
+          setField({
+            field: name as any,
+            value: value[name as keyof typeof value],
+          })
+        );
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, dispatch]);
+
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
+  const onSubmit = (data: BookingFormData) => {
+    console.log("Form submitted:", data);
+    // router.push("/bookings/payment");
+  };
+
+  const handleAddTraveler = () => {
+    const newTraveler = {
+      fullName: "",
+      dob: "",
+      nationality: "",
+      passport: "",
+    };
+    dispatch(addToArray({ field: "travelers", value: newTraveler }));
+    setValue("travelers", [...bookingState.travelers, newTraveler]);
+  };
+
+  const handleRemoveTraveler = (index: number) => {
+    dispatch(removeArrayItem({ field: "travelers", index }));
+    const updatedTravelers = bookingState.travelers.filter(
+      (_, i) => i !== index
+    );
+    setValue("travelers", updatedTravelers);
+  };
+
+  const handleTravelerUpdate = (index: number, key: string, value: string) => {
+    dispatch(updateArrayItem({ field: "travelers", index, key, value }));
+    const updatedTravelers = [...bookingState.travelers];
+    updatedTravelers[index] = { ...updatedTravelers[index], [key]: value };
+    setValue("travelers", updatedTravelers);
+  };
+
   return (
     <BasicStructureWithName name="Book Now" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
+        {/* Trip Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -40,17 +156,26 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <SelectInputComponent
+            <FormSelectInput
+              control={control}
+              name="selectDate"
               label="Select Date"
               placeholder="Select Date"
               options={["Nov 2,2025", "Apr 2, 2025"]}
+              required
             />
-            <TextInputComponent
+            <FormTextInput
+              control={control}
+              name="participants"
               label="Participants"
               placeholder="Enter no of participants"
+              type="number"
+              required
             />
           </div>
         </BoxProviderWithName>
+
+        {/* Contact Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -58,48 +183,127 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <TextInputComponent label="Email Address" />
-            <TextInputComponent label="Full Name" />
+            <FormTextInput
+              control={control}
+              name="email"
+              label="Email Address"
+              type="email"
+              required
+            />
+            <FormTextInput
+              control={control}
+              name="fullName"
+              label="Full Name"
+              required
+            />
             <div className="space-y-1 col-span-1">
-              <Label className="text-[14px] font-semibold">Phone Number</Label>
-              <PhoneNumberInput
-                phoneNumber={phoneNumber}
-                setPhoneNumber={setPhoneNumber}
+              <Label className="text-[14px] font-semibold">
+                Phone Number
+                <span className="text-red-500 ml-1">*</span>
+              </Label>
+              <Controller
+                name="phoneNumber"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <>
+                    <PhoneNumberInput
+                      phoneNumber={field.value}
+                      setPhoneNumber={field.onChange}
+                    />
+                    {error && (
+                      <p className="text-sm text-red-500 mt-1">
+                        {error.message}
+                      </p>
+                    )}
+                  </>
+                )}
               />
             </div>
           </div>
         </BoxProviderWithName>
+
+        {/* Travelers Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
           name="Travelers Details"
           textClasses=" text-[18px] font-semibold "
+          rightSideComponent={
+            <Button
+              type="button"
+              variant={"green_secondary_button"}
+              size={"sm"}
+              onClick={handleAddTraveler}
+            >
+              Add Traveler <Plus className="ml-2 h-4 w-4" />
+            </Button>
+          }
         >
-          <BoxProviderWithName
-            noBorder={true}
-            className="!p-0"
-            name="Traveler 1"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInputComponent label="Full Name" />
-              <TextInputComponent label="Date of Birth" />
-              <TextInputComponent label="Nationality" />
-              <TextInputComponent label="Passport Number / TC ID Number" />
-            </div>
-          </BoxProviderWithName>
-          <BoxProviderWithName
-            noBorder={true}
-            className="!p-0 mt-4"
-            name="Traveler 1"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInputComponent label="Full Name" />
-              <TextInputComponent label="Date of Birth" />
-              <TextInputComponent label="Nationality" />
-              <TextInputComponent label="Passport Number / TC ID Number" />
-            </div>
-          </BoxProviderWithName>
+          <div className="space-y-4">
+            {bookingState.travelers.map((traveler, index) => (
+              <BoxProviderWithName
+                key={index}
+                noBorder={true}
+                className="!p-0"
+                name={`Traveler ${index + 1}`}
+                rightSideComponent={
+                  bookingState.travelers.length > 1 ? (
+                    <Button
+                      type="button"
+                      variant={"destructive"}
+                      size={"sm"}
+                      onClick={() => handleRemoveTraveler(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  ) : null
+                }
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <TextInputComponent
+                    label="Full Name"
+                    value={traveler.fullName}
+                    onChange={(value) =>
+                      handleTravelerUpdate(index, "fullName", value)
+                    }
+                    required
+                    error={errors.travelers?.[index]?.fullName?.message}
+                  />
+                  <TextInputComponent
+                    label="Date of Birth"
+                    type="date"
+                    value={traveler.dob}
+                    onChange={(value) =>
+                      handleTravelerUpdate(index, "dob", value)
+                    }
+                    required
+                    error={errors.travelers?.[index]?.dob?.message}
+                  />
+                  <TextInputComponent
+                    label="Nationality"
+                    value={traveler.nationality}
+                    onChange={(value) =>
+                      handleTravelerUpdate(index, "nationality", value)
+                    }
+                    required
+                    error={errors.travelers?.[index]?.nationality?.message}
+                  />
+                  <TextInputComponent
+                    label="Passport Number / TC ID Number"
+                    value={traveler.passport}
+                    onChange={(value) =>
+                      handleTravelerUpdate(index, "passport", value)
+                    }
+                    required
+                    error={errors.travelers?.[index]?.passport?.message}
+                  />
+                </div>
+              </BoxProviderWithName>
+            ))}
+          </div>
         </BoxProviderWithName>
+
+        {/* Pickup Details */}
         <BoxProviderWithName
           noBorder={true}
           className="!p-0"
@@ -108,11 +312,11 @@ export default function BookingsPage() {
         >
           <BoxProviderWithName
             noBorder={true}
-            className=" !px-3.5 !py-3 bg-[#FFF5DF] w-full md:w-[500px] "
+            className=" !px-3.5 !py-3 bg-[#FFF5DF] w-full md:w-[550px] "
             textClasses=" text-[18px] font-semibold "
           >
             <IconAndTextTab2
-              alignClass=" items-start !gap-3"
+              alignClass=" items-center !gap-3"
               textClasses=" text-black/80 text-[14px] font-medium "
               text="Note: Please add your pick-up location at least 24 hours before your activity so your activity provider can assist you."
               icon={
@@ -133,21 +337,62 @@ export default function BookingsPage() {
           </BoxProviderWithName>
           <BoxProviderWithName noBorder={true} className="!p-0 mt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInputComponent label="Nationality" />
+              <RadioInputComponent
+                label="Where would you like to be picked up?"
+                options={[
+                  { value: "now", label: "Add location now" },
+                  { value: "later", label: "Add later" },
+                ]}
+                value={bookingState.pickupLocation ? "now" : "later"}
+                onChange={(value) => {
+                  if (value === "later") {
+                    dispatch(
+                      setField({ field: "pickupLocation", value: null })
+                    );
+                    setValue("pickupLocation", null);
+                  }
+                }}
+              />
             </div>
           </BoxProviderWithName>
           <div className="w-full lg:w-1/2 mt-4">
-            <Image
-              src={"/userDashboard/map.png"}
-              alt=""
-              width={300}
-              height={490}
-              className="w-full h-[490px] rounded-xl object-cover"
+            <Controller
+              name="pickupLocation"
+              control={control}
+              render={({ field }) => (
+                <AddressLocationSelector
+                  value={
+                    field.value || {
+                      address: "",
+                      coordinates: null,
+                    }
+                  }
+                  onChange={(data) => {
+                    field.onChange(data);
+                    dispatch(
+                      setField({ field: "pickupLocation", value: data })
+                    );
+                  }}
+                  readOnly={false}
+                  label="Location"
+                  placeholder="Type address or click on map"
+                />
+              )}
             />
+            {errors.pickupLocation?.coordinates?.message && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.pickupLocation?.coordinates?.message}
+              </p>
+            )}
           </div>
           <div className="w-full md:w-[235px] mt-4">
-            <Button variant={"main_green_button"} className="w-full" asChild>
-              <Link href={"/bookings/payment"}>Next</Link>
+            <Button
+              variant={"main_green_button"}
+              className="w-full"
+              type="button"
+              onClick={handleSubmit(onSubmit)}
+            >
+              Next
             </Button>
           </div>
         </BoxProviderWithName>

@@ -42,7 +42,7 @@ export default function DreamsAndGoals() {
   const userData = useAppSelector((s) => s.auth.user) as
     | (User & { dreamsAndGoals?: Partial<FormData> })
     | null;
-  const updateProfileStep = useAppSelector((s) => s.general.updateProfileStep);
+  const signupSteps = useAppSelector((s) => s.general.signupSteps);
 
   const {
     handleSubmit,
@@ -752,7 +752,7 @@ export default function DreamsAndGoals() {
       </div>
 
       <div className="w-full flex justify-end gap-2">
-        {updateProfileStep !== 0 && (
+        {signupSteps !== 0 && (
           <Button
             type="button"
             variant="green_secondary_button"

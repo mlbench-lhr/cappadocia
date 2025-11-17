@@ -204,7 +204,6 @@
   border-radius: 8px;
   background: var(--Schemes-Surface, #f5fbf5);
   display: flex;
-  height: 46px;
   padding: var(--Components-Button-Spacing-Y, 14px)
     var(--Components-Button-Spacing-X, 16px);
   justify-content: center;

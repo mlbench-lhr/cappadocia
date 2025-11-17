@@ -25,7 +25,7 @@ type SignupFormValues = {
   agreedToTerms: boolean;
 };
 
-export function SignupForm() {
+export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -390,7 +390,7 @@ export function SignupForm() {
         <div className="plan-text-style-3 text-center">
           Already have an account?{" "}
           <Link
-            href="/auth/login"
+            href={isVendor ? "/vendor/auth/login" : "/auth/login"}
             className="text-[#B32053] font-[500] hover:underline"
           >
             Login

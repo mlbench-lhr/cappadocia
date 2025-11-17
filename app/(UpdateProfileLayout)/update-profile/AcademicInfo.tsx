@@ -89,7 +89,7 @@ export default function AcademicInfo() {
         academicInfo?: Partial<FormData>;
       })
     | null;
-  const updateProfileStep = useAppSelector((s) => s.general.updateProfileStep);
+  const signupSteps = useAppSelector((s) => s.general.signupSteps);
   const [gradeLevel, setGradeLevel] = useState<string[]>(["Loading...."]);
   useEffect(() => {
     async function getFields() {
@@ -855,7 +855,7 @@ export default function AcademicInfo() {
 
       {/* Buttons */}
       <div className="w-full flex justify-end gap-2">
-        {updateProfileStep !== 0 && (
+        {signupSteps !== 0 && (
           <Button
             type="button"
             variant="green_secondary_button"
