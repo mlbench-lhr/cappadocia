@@ -21,6 +21,7 @@ import {
   TourIcon,
   VehicleIcon,
 } from "@/public/allIcons/page";
+import ImageSlider from "./ImageSlider";
 
 export type DashboardCardProps = {
   image: any;
@@ -194,15 +195,7 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-          <div className="h-[360px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
-            <Image
-              alt=""
-              src={"/userDashboard/img2.png"}
-              width={0}
-              height={360}
-              className="w-full h-[360px] absolute top-0 left-0 object-cover object-center"
-            />
-          </div>
+          <ImageSlider />
         </div>
         <div className="col-span-16 xl:col-span-7 space-y-2">
           <BoxProviderWithName name="Upcoming Reservations">
