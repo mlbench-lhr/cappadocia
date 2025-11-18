@@ -32,6 +32,64 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
+  const startStripeCheckout = async () => {
+    try {
+      // DUMMY TEST DATA
+      const dummyPayload = {
+        items: [
+          {
+            id: "item_001",
+            name: "Buffet Classic",
+            quantity: 2,
+            price: 24900,
+          },
+          {
+            id: "item_002",
+            name: "Drinks Package",
+            quantity: 1,
+            price: 9900,
+          },
+        ],
+        deliveryFee: 1500,
+        serviceFee: 500,
+        total: 61300,
+        deliveryDetails: {
+          deliveryDate: "2025-01-18T18:30",
+          deliveryAddress: "Test Street 12, 10115 Berlin",
+          contactName: "John Doe",
+          phoneNumber: "+491701234567",
+          emailAddress: "john.doe@test.com",
+          companyName: "TestCorp GmbH",
+          numberOfGuests: 45,
+          eventName: "Corporate Dinner",
+          specialNotes: "Please deliver through side entrance.",
+        },
+        currency: "eur",
+      };
+
+      const res = await fetch("/api/checkout/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(dummyPayload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data?.error || "Failed to start checkout");
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error("Stripe checkout URL not available");
+      }
+    } catch (err: any) {
+      console.log("err-------", err);
+    }
+  };
+
   return (
     <BasicStructureWithName name="Payment" showBackOption>
       <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -118,10 +176,12 @@ export default function BookingsPage() {
           </BoxProviderWithName>
         </div>
         <div className="w-full md:w-[300px] mt-4">
-          <Button variant={"main_green_button"} className="w-full" asChild>
-            <Link href={"/bookings/bookingConfirmation"}>
-              Pay Now & Confirm Booking
-            </Link>
+          <Button
+            variant={"main_green_button"}
+            className="w-full"
+            onClick={startStripeCheckout}
+          >
+            Pay Now & Confirm Booking
           </Button>
         </div>
       </div>
