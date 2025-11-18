@@ -18,7 +18,7 @@ import {
   StarIcon,
   PhoneIcon,
   MailIcon,
-} from "@/public/sidebarIcons/page";
+} from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { exploreProps } from "@/app/(Protected)/dashboard/page";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";

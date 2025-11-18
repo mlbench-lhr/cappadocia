@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
-        <div className="h-fit min-h-screen flex flex-col w-full px-[20px] xl:px-[100px] py-[32px]">
+        <div className="h-fit min-h-screen flex flex-col w-full px-[20px]  lg:px-[80px] 2xl:px-[90px] py-[32px]">
           <div className="w-full pb-[32px] flex items-center justify-start h-[110px]">
             <Link href="/dashboard" className="flex items-center space-x-2">
               <img src={logo.src} alt="Logo" />

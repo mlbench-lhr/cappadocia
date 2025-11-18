@@ -52,6 +52,47 @@ export function LoginForm({
     },
   });
 
+  const handleResendOtp = async (email: string) => {
+    setError("");
+
+    try {
+      const response = await fetch("/api/auth/resend-verification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "OTP Resent!",
+          text: "A new OTP has been sent to your email.",
+          confirmButtonColor: "#22c55e",
+        });
+      } else {
+        setError(data.error || "Failed to resend OTP");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: data.error || "Failed to resend OTP",
+          confirmButtonColor: "#22c55e", // match shadcn green if you want
+        });
+      }
+    } catch (err) {
+      setError("Failed to resend OTP");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to resend OTP",
+        confirmButtonColor: "#22c55e", // match shadcn green if you want
+      });
+    }
+  };
+
   const handleEmailLogin = async (data: LoginFormValues) => {
     setLoading(true);
     setError("");
@@ -63,6 +104,20 @@ export function LoginForm({
 
       // dispatch(setReduxUser(userData.user));
       if (error) {
+        if (error?.message?.includes("verify your email")) {
+          Swal.fire({
+            title: "Verification Error",
+            text: "You need to verify your email — resend code?",
+            icon: "error",
+            confirmButtonColor: "#B32053",
+            confirmButtonText: "Resend OTP",
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+              router.push(`/auth/verify-email?email=${data.email}`);
+              await handleResendOtp(data.email);
+            }
+          });
+        }
         setError(error.message);
       } else if (userData?.user.role === "admin") {
         router.push("/admin/dashboard");
@@ -95,7 +150,7 @@ export function LoginForm({
   };
 
   useEffect(() => {
-    if (error) {
+    if (error && !error?.includes("verify your email")) {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -174,7 +229,7 @@ export function LoginForm({
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                className="absolute right-0 top-1/2 -translate-y-1/2 h-full px-3 py-2 hover:bg-transparent"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (

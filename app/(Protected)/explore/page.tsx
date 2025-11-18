@@ -228,7 +228,7 @@ export default function ExplorePage({
             onClick={() => clearAllFilters()}
             className={`cursor-pointer ${
               isAllActive ? " bg-secondary text-primary" : "border"
-            } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
+            } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
           >
             All
           </div>
@@ -239,15 +239,15 @@ export default function ExplorePage({
               <div
                 className={`cursor-pointer ${
                   isDurationActive ? " bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
+                } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
               >
                 Duration
                 <ChevronDown size={16} />
               </div>
             </PopoverTrigger>
-            <PopoverContent className="w-[300px] p-4">
-              <div className="space-y-3">
-                <Label>Choose date range</Label>
+            <PopoverContent className="w-fit p-4 relative md:absolute left-2 md:left-0">
+              <div className="space-y-2">
+                <Label className="text-sm">Choose date range</Label>
                 <DateRangePicker
                   value={{ from: tempFrom, to: tempTo }}
                   onChange={(val: { from: Date | null; to: Date | null }) => {
@@ -257,17 +257,6 @@ export default function ExplorePage({
                   }}
                 />
                 <div className="flex justify-end gap-2">
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setTempFrom(null);
-                      setTempTo(null);
-                      applyDurationFilter(null, null);
-                      setDurationOpen(false);
-                    }}
-                  >
-                    Clear
-                  </Button>
                   <Button
                     onClick={() => {
                       applyDurationFilter(tempFrom, tempTo);
@@ -289,7 +278,7 @@ export default function ExplorePage({
               <div
                 className={`cursor-pointer ${
                   isPriceActive ? " bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
+                } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
               >
                 Price Range
                 <ChevronDown size={16} />
@@ -298,9 +287,10 @@ export default function ExplorePage({
             <PopoverContent className="w-[300px] p-4">
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <Label>Min</Label>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Min</Label>
                     <Input
+                      className="text-sm"
                       value={tempMinPrice === "" ? "" : String(tempMinPrice)}
                       onChange={(e) => {
                         const v = e.target.value;
@@ -310,9 +300,10 @@ export default function ExplorePage({
                       type="number"
                     />
                   </div>
-                  <div>
-                    <Label>Max</Label>
+                  <div className="space-y-2">
+                    <Label className="text-sm">Max</Label>
                     <Input
+                      className="text-sm"
                       value={tempMaxPrice === "" ? "" : String(tempMaxPrice)}
                       onChange={(e) => {
                         const v = e.target.value;
@@ -325,17 +316,6 @@ export default function ExplorePage({
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setTempMinPrice("");
-                      setTempMaxPrice("");
-                      removeFilterKind("priceRange");
-                      setPriceOpen(false);
-                    }}
-                  >
-                    Clear
-                  </Button>
                   <Button
                     onClick={() => {
                       const min =
@@ -360,17 +340,18 @@ export default function ExplorePage({
               <div
                 className={`cursor-pointer ${
                   isRatingActive ? " bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
+                } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
               >
                 Rating
                 <ChevronDown size={16} />
               </div>
             </PopoverTrigger>
             <PopoverContent className="w-[260px] p-4">
-              <div className="space-y-3">
-                <Label>Minimum rating</Label>
+              <div className="space-y-2">
+                <Label className="text-sm">Minimum rating</Label>
                 <div className="flex items-center gap-2">
                   <Input
+                    className="text-sm"
                     type="number"
                     min={0}
                     max={5}
@@ -384,16 +365,6 @@ export default function ExplorePage({
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button
-                    variant="ghost"
-                    onClick={() => {
-                      setTempRating(null);
-                      removeFilterKind("rating");
-                      setRatingOpen(false);
-                    }}
-                  >
-                    Clear
-                  </Button>
                   <Button
                     onClick={() => {
                       applyRatingFilter(tempRating);

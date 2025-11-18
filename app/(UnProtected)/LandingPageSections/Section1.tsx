@@ -19,7 +19,7 @@ export default function Section1() {
             alt=""
             width={100}
             height={100}
-            className="w-full h-[500px] md:h-[653px] object-cover object-center"
+            className="w-full h-[500px] md:h-[653px] object-cover object-left"
           />
           <div className="w-full flex flex-col items-center text-center absolute top-1/2 translate-y-[-55%] left-0 justify-center gap-2">
             <h1 className="font-bold text-3xl md:text-[47px] w-[90%] md:w-[485px] text-white leading-tight">
@@ -71,7 +71,6 @@ export default function Section1() {
                 />
               </svg>
               <DeadlinePicker date={date} setDate={setDate} />
-              <ChevronDown color="#B32053" />
             </div>
             <Button
               variant={"main_green_button"}

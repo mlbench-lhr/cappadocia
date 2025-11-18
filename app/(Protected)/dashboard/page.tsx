@@ -14,13 +14,16 @@ import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import {
   BookingIcon,
   ClockIcon,
+  DollarIcon,
+  PaymentIcon2,
   PeopleIcon,
   StarIcon,
+  TourIcon,
   VehicleIcon,
-} from "@/public/sidebarIcons/page";
+} from "@/public/allIcons/page";
 
 export type DashboardCardProps = {
-  image: string;
+  image: any;
   title: string;
   description: string;
 };
@@ -53,22 +56,22 @@ export type exploreProps = {
 
 const dashboardCardData: DashboardCardProps[] = [
   {
-    image: "/Icons/db1.png",
+    image: <BookingIcon color="white" />,
     title: "5",
     description: "Total Bookings",
   },
   {
-    image: "/Icons/db2.png",
+    image: <TourIcon color="white" />,
     title: "4",
     description: "Upcoming Trips",
   },
   {
-    image: "/Icons/db3.png",
+    image: <DollarIcon color="white" />,
     title: "$1,250",
     description: "Payments Done",
   },
   {
-    image: "/Icons/db4.png",
+    image: <PaymentIcon2 color="white" />,
     title: "$150",
     description: "Pending Payments",
   },
@@ -167,7 +170,7 @@ export default function DashboardPage() {
                 Apr 10 - Apr 14
               </h3>
               <Button className="h-[32px] w-[110px] flex justify-center mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
-                <Link href={"/bookings/book"}>Book now</Link>
+                <Link href={"/explore"}>Book now</Link>
               </Button>
             </div>
           </div>
@@ -182,7 +185,7 @@ export default function DashboardPage() {
                     {item.title}
                   </h1>
                   <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                    <Image alt="" src={item.image} width={20} height={20} />
+                    {item.image}
                   </div>
                 </div>
                 <span className="text-base font-medium">

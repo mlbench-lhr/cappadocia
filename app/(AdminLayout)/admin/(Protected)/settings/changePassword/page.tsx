@@ -80,7 +80,7 @@ export function ChangePass() {
             type="button"
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
+            className="absolute right-0 bottom-2 h-full px-3 py-2 hover:bg-transparent"
             onClick={() => setShowPassword3(!showPassword3)}
           >
             {showPassword3 ? (
@@ -107,7 +107,7 @@ export function ChangePass() {
             type="button"
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
+            className="absolute right-0 bottom-2 h-full px-3 py-2 hover:bg-transparent"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
@@ -134,7 +134,7 @@ export function ChangePass() {
             type="button"
             variant="ghost"
             size="sm"
-            className="absolute right-0 top-3 h-full px-3 py-2 hover:bg-transparent"
+            className="absolute right-0 bottom-2 h-full px-3 py-2 hover:bg-transparent"
             onClick={() => setShowPassword2(!showPassword2)}
           >
             {showPassword2 ? (
@@ -155,9 +155,7 @@ export function ChangePass() {
       </div>
 
       {/* Submit Button */}
-
     </div>
-
   );
 }
 
