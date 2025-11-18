@@ -32,7 +32,7 @@ const tourCardData: TabsProps[] = [
 export default function Section3() {
   return (
     <div className="w-full h-fit pt-24">
-      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] xl:px-[100px] gap-14">
+      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] gap-14">
         <div className="w-full flex flex-col md:flex-row justify-between items-center h-fit gap-4 md:gap-0">
           <div className="w-full md:w-fit h-fit flex flex-row md:flex-col justify-between md:justify-start gap-8 items-center md:items-start">
             <h1 className="font-semibold text-xl md:text-4xl">
@@ -47,24 +47,24 @@ export default function Section3() {
             </span>
           </div>
         </div>
-        <div className="w-full grid grid-cols-4 lg:grid-cols-16 gap-4">
-          <div className="w-full relative h-fit col-span-4 lg:col-span-9 flex flex-col md:flex-row justify-start items-center gap-3.5">
+        <div className="w-full grid grid-cols-4 xl:grid-cols-16 gap-6 xl:gap-4">
+          <div className="w-full relative h-fit col-span-4 xl:col-span-10 [@media(min-width:1350px)]:col-span-9 flex flex-col md:flex-row justify-start items-center gap-3.5">
             <Image
               src={"/landing page/image (4).png"}
-              alt="Cappadocia cave dwellings"
-              className="w-full md:w-[323px] h-[516px] object-cover object-center rounded-[10px]"
+              alt="appadocia cave dwellings"
+              className="w-full xl:w-[323px] h-[516px] object-cover object-center rounded-[10px]"
               width={323}
               height={516}
             />
             <Image
               src={"/landing page/image (5).png"}
               alt="Cappadocia cave dwellings"
-              className="w-full md:w-[319px] h-[414px] object-cover object-center rounded-[10px]"
+              className="w-full xl:w-[319px] h-[414px] object-cover object-center rounded-[10px]"
               width={319}
               height={414}
             />
           </div>
-          <div className="w-full relative h-fit col-span-4 lg:col-span-7 flex flex-col justify-start items-center gap-10">
+          <div className="w-full relative h-fit col-span-4 xl:col-span-6 [@media(min-width:1350px)]:col-span-7 flex flex-col justify-start items-center gap-8 w-[calc(100%-80px)]:gap-10">
             {tourCardData.map((item) => (
               <Tabs key={item.image} {...item} />
             ))}

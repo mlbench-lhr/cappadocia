@@ -38,8 +38,8 @@ const tourCardData: TourCardProps[] = [
 export default function Section2() {
   return (
     <div className="w-full h-fit">
-      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] xl:px-[100px] gap-14">
-        <div className="w-full flex flex-col md:flex-row justify-between items-center h-fit gap-4 md:gap-0">
+      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] gap-14">
+        <div className="w-full flex flex-col md:flex-row justify-between items-start h-fit gap-4 md:gap-0">
           <div className="w-full md:w-fit h-fit flex flex-row md:flex-col justify-between md:justify-start gap-8 items-center md:items-start">
             <h1 className="font-semibold text-xl md:text-4xl">
               Book Your Adventure <br className="hidden md:block" /> Now
@@ -54,7 +54,7 @@ export default function Section2() {
             </span>
           </div>
         </div>
-        <div className="w-full grid grid-cols-4 md:grid-cols-8 lg:grid-cols-16 gap-4">
+        <div className="w-full grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
           {tourCardData.map((item) => (
             <TourCard key={item.image} {...item} />
           ))}

@@ -277,13 +277,14 @@ export function Sidebar() {
               <Image src={pencil.src} alt="" width={16} height={16} />
               Update Profile
             </Link>
+             */}
             <Link
               href={"/settings/changePassword"}
               className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2"
             >
               <Lock size={16} strokeWidth={2} />
               Change Password
-            </Link> */}
+            </Link>
 
             <div className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2">
               <LogoutDialog />

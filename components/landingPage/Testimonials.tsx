@@ -60,22 +60,24 @@ const Star = ({ filled }: any) => (
 
 const TestimonialCard = ({ testimonial, isCenter }: any) => (
   <div
-    className={`bg-white rounded-3xl p-8 shadow-lg transition-all duration-300 ${
+    className={`bg-white rounded-3xl p-8 md:p-4 lg:p-8 shadow-lg transition-all duration-300 ${
       isCenter ? "scale-100" : "scale-85 md:scale-90"
     }`}
   >
-    <div className="flex items-start justify-between mb-6">
-      <div className="flex items-center gap-4">
+    <div className="flex items-start justify-between mb-6 md:mb-2 lg:mb-6">
+      <div className="flex items-center gap-6 md:gap-2 lg:gap-6">
         <img
           src={testimonial.image}
           alt={testimonial.name}
-          className="w-14 h-14 rounded-full object-cover"
+          className="w-14 md:w-10 lg:w-14 h-14 md:h-10 lg:h-14 rounded-full object-cover"
         />
         <div>
-          <h3 className="text-[#1a1a2e] font-semibold text-lg">
+          <h3 className="text-[#113D48] font-semibold text-lg md:text-sm lg:text-lg">
             {testimonial.name}
           </h3>
-          <p className="text-gray-500 text-sm">{testimonial.role}</p>
+          <p className="text-gray-500 text-sm md:text-xs lg:text-sm">
+            {testimonial.role}
+          </p>
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -89,7 +91,7 @@ const TestimonialCard = ({ testimonial, isCenter }: any) => (
         </span>
       </div>
     </div>
-    <p className="text-gray-600 leading-relaxed text-base">
+    <p className="text-gray-600 leading-relaxed text-base md:text-sm lg:text-base pb-0 md:pb-4 lg:pb-0">
       {testimonial.text}
     </p>
     <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-serif">
@@ -172,7 +174,7 @@ export default function TravelersTestimonials() {
           {/* Desktop View - 3 Cards */}
           <div className="w-full hidden md:block overflow-hidden py-8 h-fit">
             <div className="w-[100%] flex justify-center items-center h-fit">
-              <div className="grid grid-cols-3 gap-0 w-[120%] items-center -mt-4 -mx-[10%]">
+              <div className="grid grid-cols-3 gap-0 w-[120%] items-center -mt-4 -mx-[8%]">
                 {getVisibleTestimonials().map(
                   ({ testimonial, isCenter, offset }) => (
                     <div

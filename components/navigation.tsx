@@ -60,7 +60,7 @@ export function Navigation() {
 
   return (
     <nav
-      className="h-[70px] md:h-[110px] flex items-center px-[20px] xl:px-[100px] bg-white shadow-sm relative"
+      className="h-[70px] md:h-[110px] flex items-center px-[20px]  lg:px-[80px] 2xl:px-[90px] bg-white shadow-sm relative"
       style={{ zIndex: 110 }}
     >
       <div className="flex justify-between items-center w-full">

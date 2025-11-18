@@ -52,10 +52,10 @@ function ProfileMenu() {
                 <Image src={pencil.src} alt="" width={16} height={16} />
                 <span className="block px-4 py-2 text-sm">Update Profile</span>
               </Link> */}
-              {/* <Link href={"/settings/changePassword"} className="flex gap-1">
+              <Link href={"/settings/changePassword"} className="flex gap-1">
                 <Lock size={16} strokeWidth={2} className="mt-2" />
                 <span className="block px-4 py-2 text-sm">Change Password</span>
-              </Link> */}
+              </Link>
               <LogoutDialog />
               <DeleteAccountDialog />
             </div>

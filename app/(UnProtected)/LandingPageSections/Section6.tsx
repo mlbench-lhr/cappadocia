@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function Section6() {
   return (
     <div className="w-full h-fit pt-24">
-      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] xl:px-[115px] pt-[20px] lg:pt-[35px] pb-[40px] lg:pb-[90px] bg-[#FFEAF4] gap-14">
+      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-[40px] lg:pb-[90px] bg-[#FFEAF4] overflow-hidden gap-14">
         <div className="w-full flex justify-center items-center h-fit">
           <h1 className="font-semibold text-xl md:text-4xl">
             Get in Touch With Us

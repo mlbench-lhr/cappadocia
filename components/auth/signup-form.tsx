@@ -252,7 +252,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                className="absolute right-0 top-1/2 translate-y-[-50%] h-full px-3 py-2 hover:bg-transparent"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
@@ -294,7 +294,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                className="absolute right-0 top-1/2 translate-y-[-50%] h-full px-3 py-2 hover:bg-transparent"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
