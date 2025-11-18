@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import Link from "next/link";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import ParticipantsSelector from "@/components/SmallComponents/ParticipantsSelector";
 
 export type InvoiceData = {
   invoice: {
@@ -453,8 +454,6 @@ export default function BookingsPage() {
             <BoxProviderWithName
               name="Select your travel date and number of guests to see if this tour is available."
               className="mt-4"
-              rightSideLink="/explore"
-              rightSideLabel="See All"
             >
               <div className="w-full grid grid-cols-3 md:grid-cols-9 gap-3">
                 <div className="space-y-1 col-span-3">
@@ -466,15 +465,8 @@ export default function BookingsPage() {
                       Nov 2, 2025
                     </SelectTrigger>
                     <SelectContent className="w-full">
-                      <SelectItem value="Internships">Internships</SelectItem>
-                      <SelectItem value="Summer Program">
-                        Summer Program
-                      </SelectItem>
-                      <SelectItem value="Clubs">Clubs</SelectItem>
-                      <SelectItem value="Community Service">
-                        Community Service
-                      </SelectItem>
-                      <SelectItem value="Competitions">Competitions</SelectItem>
+                      <SelectItem value="Nov 2,2025">Nov 2,2025</SelectItem>
+                      <SelectItem value="Apr 2, 2025">Apr 2, 2025</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -483,36 +475,14 @@ export default function BookingsPage() {
                   <Select>
                     <SelectTrigger className="w-full">English</SelectTrigger>
                     <SelectContent className="w-full">
-                      <SelectItem value="Internships">Internships</SelectItem>
-                      <SelectItem value="Summer Program">
-                        Summer Program
-                      </SelectItem>
-                      <SelectItem value="Clubs">Clubs</SelectItem>
-                      <SelectItem value="Community Service">
-                        Community Service
-                      </SelectItem>
-                      <SelectItem value="Competitions">Competitions</SelectItem>
+                      <SelectItem value="English">English</SelectItem>
+                      <SelectItem value="Turkish">Turkish</SelectItem>
+                      <SelectItem value="Chinese">Chinese</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-1 col-span-3">
-                  <Label className="text-[14px] font-semibold">
-                    Participate
-                  </Label>
-                  <Select>
-                    <SelectTrigger className="w-full">English</SelectTrigger>
-                    <SelectContent className="w-full">
-                      <SelectItem value="Internships">Internships</SelectItem>
-                      <SelectItem value="Summer Program">
-                        Summer Program
-                      </SelectItem>
-                      <SelectItem value="Clubs">Clubs</SelectItem>
-                      <SelectItem value="Community Service">
-                        Community Service
-                      </SelectItem>
-                      <SelectItem value="Competitions">Competitions</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <ParticipantsSelector />{" "}
                 </div>
               </div>
               <div className="flex justify-start items-start md:items-center flex-col md:flex-row gap-2 md:gap-5 mt-4">
@@ -541,8 +511,6 @@ export default function BookingsPage() {
               name="Reviews"
               noBorder={true}
               className="!p-0 mt-4"
-              rightSideLink="/explore"
-              rightSideLabel="See All"
             >
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border">
@@ -608,8 +576,6 @@ export default function BookingsPage() {
               name="All Reviews"
               noBorder={true}
               className="!p-0 mt-4"
-              rightSideLink="/explore"
-              rightSideLabel="See All"
             >
               <div className="w-full flex-col flex justify-start items-center gap-3.5">
                 <div className="rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">

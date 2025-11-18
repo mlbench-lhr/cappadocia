@@ -4,10 +4,8 @@ import type React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import logo from "@/public/logo.png";
-import bell from "@/public/bell.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
-import pencil from "@/public/pencil.svg";
 import {
   Popover,
   PopoverContent,
@@ -27,40 +25,49 @@ function ProfileMenu() {
 
   return (
     <div className="relative">
-      <div className="w-[38px] h-[38px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
-        <Popover>
-          <PopoverTrigger asChild>
-            <div className="w-[38px] h-[38px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center cursor-pointer">
-              {userData?.avatar ? (
-                <Image
-                  src={userData?.avatar as string}
-                  alt="user avatar"
-                  width={38}
-                  height={38}
-                  className="object-cover w-[38px] h-[38px]"
-                />
-              ) : (
-                <span className="text-lg font-medium">
-                  {userData?.fullName?.charAt(0)}
-                </span>
-              )}
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="w-[234px] overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 p-0 right-0 md:right-0 absolute">
-            <div className="py-1 p-[20px]">
-              {/* <Link href={"/update-profile"} className="flex gap-1">
+      <div className="w-fit h-fit flex items-center justify-center ">
+        <div className="flex justify-start items-center gap-2 ">
+          <div className="w-[38px] h-[38px] rounded-full overflow-hidden bg-slate-200 flex items-center justify-center">
+            {userData?.avatar ? (
+              <Image
+                src={userData?.avatar as string}
+                alt="user avatar"
+                width={38}
+                height={38}
+                className="object-cover w-[38px] h-[38px]"
+              />
+            ) : (
+              <span className="text-lg font-medium">
+                {userData?.fullName?.charAt(0)}
+              </span>
+            )}
+          </div>
+          <Popover>
+            <PopoverTrigger asChild>
+              <ChevronDown
+                size={22}
+                className="cursor-pointer"
+                color="#B32053"
+              />
+            </PopoverTrigger>
+            <PopoverContent className="w-[234px] overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 p-0 top-6 right-0 md:-right-8 absolute">
+              <div className="py-1 p-[20px]">
+                {/* <Link href={"/update-profile"} className="flex gap-1">
                 <Image src={pencil.src} alt="" width={16} height={16} />
                 <span className="block px-4 py-2 text-sm">Update Profile</span>
               </Link> */}
-              <Link href={"/settings/changePassword"} className="flex gap-1">
-                <Lock size={16} strokeWidth={2} className="mt-2" />
-                <span className="block px-4 py-2 text-sm">Change Password</span>
-              </Link>
-              <LogoutDialog />
-              <DeleteAccountDialog />
-            </div>
-          </PopoverContent>
-        </Popover>
+                <Link href={"/settings/changePassword"} className="flex gap-1">
+                  <Lock size={16} strokeWidth={2} className="mt-2" />
+                  <span className="block px-4 py-2 text-sm">
+                    Change Password
+                  </span>
+                </Link>
+                <LogoutDialog />
+                <DeleteAccountDialog />
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
     </div>
   );
@@ -157,7 +164,7 @@ export function Navbar() {
               </div>
               <div className="text-[12px] font-[400]">{userData?.email}</div>
             </div>
-            <div className="relative cursor-pointer">
+            <div className="relative">
               <ProfileMenu />
             </div>
             <Link
