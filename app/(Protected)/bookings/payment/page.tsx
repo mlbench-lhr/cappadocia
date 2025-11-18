@@ -15,7 +15,7 @@ import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import { ClockIcon, StarIcon } from "@/public/sidebarIcons/page";
+import { ClockIcon, StarIcon } from "@/public/allIcons/page";
 import Link from "next/link";
 
 export type DashboardCardProps = {

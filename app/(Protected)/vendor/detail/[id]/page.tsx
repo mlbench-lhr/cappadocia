@@ -19,7 +19,7 @@ import {
   StarIcon,
   PhoneIcon,
   MailIcon,
-} from "@/public/sidebarIcons/page";
+} from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 import { Label } from "@/components/ui/label";

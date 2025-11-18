@@ -24,7 +24,7 @@ import {
   MessageIcon,
   ReviewsIcon,
   SettingsIcon,
-} from "@/public/sidebarIcons/page";
+} from "@/public/allIcons/page";
 
 const IconClose = ({ className = "" }: { className?: string }) => (
   <svg
@@ -270,7 +270,7 @@ export function Sidebar() {
               <Image src={bell.src} alt="" width={16} height={16} />
               Notifications
             </Link>
-            <Link
+            {/* <Link
               href={"/update-profile"}
               className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2"
             >
@@ -283,7 +283,7 @@ export function Sidebar() {
             >
               <Lock size={16} strokeWidth={2} />
               Change Password
-            </Link>
+            </Link> */}
 
             <div className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2">
               <LogoutDialog />

@@ -14,7 +14,7 @@ import {
   PhoneIcon,
   MailIcon,
   StarIcon,
-} from "@/public/sidebarIcons/page";
+} from "@/public/allIcons/page";
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import Link from "next/link";

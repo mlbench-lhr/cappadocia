@@ -8,7 +8,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import { StarIcon } from "@/public/sidebarIcons/page";
+import { StarIcon } from "@/public/allIcons/page";
 import {
   Select,
   SelectContent,

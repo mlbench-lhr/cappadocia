@@ -20,7 +20,7 @@ import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { setCount, setHasNew } from "@/lib/store/slices/notificationSlice";
 import DeleteAccountDialog from "../DeleteAccountDialog";
-import { NotificationIcon } from "@/public/sidebarIcons/page";
+import { NotificationIcon } from "@/public/allIcons/page";
 
 function ProfileMenu() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -48,14 +48,14 @@ function ProfileMenu() {
           </PopoverTrigger>
           <PopoverContent className="w-[234px] overflow-hidden rounded-md bg-white shadow-lg ring-1 ring-black/5 p-0 right-0 md:right-0 absolute">
             <div className="py-1 p-[20px]">
-              <Link href={"/update-profile"} className="flex gap-1">
+              {/* <Link href={"/update-profile"} className="flex gap-1">
                 <Image src={pencil.src} alt="" width={16} height={16} />
                 <span className="block px-4 py-2 text-sm">Update Profile</span>
-              </Link>
-              <Link href={"/settings/changePassword"} className="flex gap-1">
+              </Link> */}
+              {/* <Link href={"/settings/changePassword"} className="flex gap-1">
                 <Lock size={16} strokeWidth={2} className="mt-2" />
                 <span className="block px-4 py-2 text-sm">Change Password</span>
-              </Link>
+              </Link> */}
               <LogoutDialog />
               <DeleteAccountDialog />
             </div>

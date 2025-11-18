@@ -17,7 +17,8 @@ import {
   CrossIcon,
   LocationIcon,
   StarIcon,
-} from "@/public/sidebarIcons/page";
+  PaymentIcon,
+} from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { exploreProps } from "../../page";
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
@@ -298,7 +299,7 @@ export default function BookingsPage() {
                       size="custom"
                       title="Tour Duration"
                       subTitle={"4 hours"}
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.50)" size={22} />}
+                      icon={<ClockIcon color="#D8018D" size={20} />}
                     />
                     <ProfileBadge
                       size="custom"
@@ -310,7 +311,7 @@ export default function BookingsPage() {
                       size="custom"
                       title="Payment Options"
                       subTitle={"Book Now, Pay Later Available"}
-                      icon={<WorldIcon />}
+                      icon={<PaymentIcon />}
                     />
                   </div>
                 </BoxProviderWithName>

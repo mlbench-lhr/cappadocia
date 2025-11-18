@@ -6,7 +6,7 @@ import {
   PeopleIcon,
   StarIcon,
   VehicleIcon,
-} from "@/public/sidebarIcons/page";
+} from "@/public/allIcons/page";
 import { ProfileBadge } from "./SmallComponents/ProfileBadge";
 import Link from "next/link";
 import { Button } from "./ui/button";

@@ -1,4 +1,4 @@
-import { StarIcon } from "@/public/sidebarIcons/page";
+import { StarIcon } from "@/public/allIcons/page";
 import Image from "next/image";
 
 const imageSizes: Record<string, string> = {
