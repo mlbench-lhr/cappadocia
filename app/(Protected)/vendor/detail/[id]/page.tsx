@@ -32,6 +32,8 @@ import {
 import Link from "next/link";
 import { exploreProps } from "../../../dashboard/page";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
+import LightboxProvider from "@/components/providers/LightBoxProvider";
 
 export type InvoiceData = {
   invoice: {
@@ -218,20 +220,24 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full overflow-hidden h-[320px] relative">
-              <Image
-                src={"/userDashboard/vcimg.png"}
-                alt=""
-                width={100}
-                height={100}
-                className="w-full h-[280px] object-cover object-center rounded-[10px]"
-              />
-              <Image
-                src={"/userDashboard/img2.png"}
-                alt=""
-                width={100}
-                height={100}
-                className="h-[90px] md:h-[180px] w-[90px] md:w-[180px] object-cover object-center rounded-full absolute left-4 sm:left-8 lg:left-14 bottom-0 ring-2 ring-white"
-              />
+              <LightboxProvider images={["/userDashboard/vcimg.png"]}>
+                <Image
+                  src={"/userDashboard/vcimg.png"}
+                  alt=""
+                  width={100}
+                  height={100}
+                  className="w-full h-[280px] object-cover object-center rounded-[10px]"
+                />
+              </LightboxProvider>
+              <LightboxProvider images={["/userDashboard/img2.png"]}>
+                <Image
+                  src={"/userDashboard/img2.png"}
+                  alt=""
+                  width={100}
+                  height={100}
+                  className="h-[90px] md:h-[180px] w-[90px] md:w-[180px] object-cover object-center rounded-full absolute left-4 sm:left-8 lg:left-14 bottom-0 ring-2 ring-white"
+                />
+              </LightboxProvider>
             </div>
             <div className="w-full flex flex-col md:flex-row justify-between items-start -mt-10 sm:-mt-8 md:mt-3 lg:-mt-8 pb-4 gap-3 md:gap-0">
               <div className="flex flex-col justify-center items-start ps-[110px] sm:ps-[140px] w-full md:ps-0 lg:ps-[230px]">
@@ -341,46 +347,7 @@ export default function BookingsPage() {
               </div>
             </div>
             <BoxProviderWithName name="Gallery" className=" mt-4">
-              <div className="grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
-                <div className="col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
-                  <Image
-                    src={"/userDashboard/img20.png"}
-                    alt=""
-                    width={100}
-                    height={100}
-                    className="w-full h-full lg:h-full object-cover object-center"
-                  />
-                </div>
-                <div className="col-span-5 lg:col-span-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
-                  <Image
-                    src={"/userDashboard/img21.png"}
-                    alt=""
-                    width={100}
-                    height={100}
-                    className="w-full h-full lg:h-full object-cover object-center"
-                  />
-                </div>
-                <div className="col-span-10 bg-red-40 lg:col-span-4 grid lg:grid-cols-none grid-cols-2 grid-rows-none lg:grid-row-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full gap-x-2 lg:gap-x-0 gap-y-0 lg:gap-y-3.5">
-                  <div className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1">
-                    <Image
-                      src={"/userDashboard/img22.png"}
-                      alt=""
-                      width={100}
-                      height={100}
-                      className="w-full h-full lg:h-full object-cover object-center"
-                    />
-                  </div>
-                  <div className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1">
-                    <Image
-                      src={"/userDashboard/img23.png"}
-                      alt=""
-                      width={100}
-                      height={100}
-                      className="w-full h-full lg:h-full object-cover object-center"
-                    />
-                  </div>
-                </div>
-              </div>
+              <ImageGallery />
             </BoxProviderWithName>
             <BoxProviderWithName
               name="Reviews"

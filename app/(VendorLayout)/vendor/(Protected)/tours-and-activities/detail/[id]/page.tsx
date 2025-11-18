@@ -15,10 +15,12 @@ import {
   WorldIcon,
   CrossIcon,
   LocationIcon,
+  PaymentIcon,
 } from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { exploreProps } from "@/app/(Protected)/dashboard/page";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 
 export type InvoiceData = {
   invoice: {
@@ -206,46 +208,7 @@ export default function BookingsPage() {
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
               Blue Tour – Hidden Cappadocia
             </h1>
-            <div className="w-full grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
-              <div className="col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
-                <Image
-                  src={"/userDashboard/img20.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="w-full h-full lg:h-full object-cover object-center"
-                />
-              </div>
-              <div className="col-span-5 lg:col-span-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full">
-                <Image
-                  src={"/userDashboard/img21.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="w-full h-full lg:h-full object-cover object-center"
-                />
-              </div>
-              <div className="col-span-10 bg-red-40 lg:col-span-4 grid lg:grid-cols-none grid-cols-2 grid-rows-none lg:grid-row-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full gap-x-2 lg:gap-x-0 gap-y-0 lg:gap-y-3.5">
-                <div className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1">
-                  <Image
-                    src={"/userDashboard/img22.png"}
-                    alt=""
-                    width={100}
-                    height={100}
-                    className="w-full h-full lg:h-full object-cover object-center"
-                  />
-                </div>
-                <div className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1">
-                  <Image
-                    src={"/userDashboard/img23.png"}
-                    alt=""
-                    width={100}
-                    height={100}
-                    className="w-full h-full lg:h-full object-cover object-center"
-                  />
-                </div>
-              </div>
-            </div>
+            <ImageGallery />
             <BoxProviderWithName
               name="Trip Description:"
               className="text-base mt-2"
@@ -281,7 +244,7 @@ export default function BookingsPage() {
                       size="custom"
                       title="Tour Duration"
                       subTitle={"4 hours"}
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.50)" size={22} />}
+                      icon={<ClockIcon color="#D8018D" size={20} />}
                     />
                     <ProfileBadge
                       size="custom"
@@ -293,7 +256,7 @@ export default function BookingsPage() {
                       size="custom"
                       title="Payment Options"
                       subTitle={"Book Now, Pay Later Available"}
-                      icon={<WorldIcon />}
+                      icon={<PaymentIcon />}
                     />
                   </div>
                 </BoxProviderWithName>

@@ -96,6 +96,7 @@
     "vaul": "latest",
     "vue": "latest",
     "vue-router": "latest",
+    "yet-another-react-lightbox": "^3.25.0",
     "zod": "3.25.67"
   },
   "devDependencies": {
