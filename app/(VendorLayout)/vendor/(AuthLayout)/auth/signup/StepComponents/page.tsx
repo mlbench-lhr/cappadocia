@@ -1,28 +1,63 @@
 "use client";
-import { setUpdateProfileStep } from "@/lib/store/slices/generalSlice";
-import { VendorSignUpStep1 } from "./Step1";
+import {
+  setUpdateProfileStep,
+  updateProfileStepBack,
+  updateProfileStepNext,
+} from "@/lib/store/slices/generalSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { VendorSignUpStep2 } from "./Step2";
-import { VendorSignUpStep3 } from "./Step3";
-import { VendorSignUpStep4 } from "./Step4";
-import { VendorSignUpStep5 } from "./Step5";
 import Success from "@/app/(UpdateProfileLayout)/update-profile/Success";
+import VendorSignupStep1 from "./Step1";
+import VendorSignupStep2 from "./Step2";
+import VendorSignupStep3 from "./Step3";
+import VendorSignupStep4 from "./Step4";
+import VendorSignupStep5 from "./Step5";
 
 const VendorSignUp = () => {
   const signupSteps = useAppSelector((state) => state.general.signupSteps);
   console.log("signupSteps-----", signupSteps);
   const dispatch = useAppDispatch();
+
+  const handleNext = () => {
+    if (signupSteps < 5) {
+      dispatch(updateProfileStepNext());
+    } else {
+      console.log("Vendor registration completed:", vendorState);
+    }
+  };
+
+  const handleBack = () => {
+    if (signupSteps > 1) {
+      dispatch(updateProfileStepBack());
+    }
+  };
+
   const steps = [
-    { component: <VendorSignUpStep1 />, name: "VendorSignUpStep1" },
-    { component: <VendorSignUpStep2 />, name: "VendorSignUpStep2" },
-    { component: <VendorSignUpStep3 />, name: "VendorSignUpStep3" },
-    { component: <VendorSignUpStep4 />, name: "VendorSignUpStep4" },
-    { component: <VendorSignUpStep5 />, name: "VendorSignUpStep5" },
+    {
+      component: <VendorSignupStep1 onNext={handleNext} />,
+      name: "VendorSignUpStep1",
+    },
+    {
+      component: <VendorSignupStep2 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep2",
+    },
+    {
+      component: <VendorSignupStep3 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep3",
+    },
+    {
+      component: <VendorSignupStep4 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep4",
+    },
+    {
+      component: <VendorSignupStep5 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep5",
+    },
   ];
   const handleStepClick = (name: string, index: number) => {
     console.log(name, index);
     dispatch(setUpdateProfileStep(index));
   };
+  const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
 
   if (signupSteps === 5) {
     return <Success />;

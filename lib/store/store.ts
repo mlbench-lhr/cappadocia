@@ -5,6 +5,7 @@ import generalSlice from "./slices/generalSlice";
 import adminSlice from "./slices/adminSlice";
 import opportunitySlice from "./slices/opportunitySlice";
 import blogSlice from "./slices/blogSlice";
+import vendorSlice from "./slices/vendorSlice";
 import addBookingSlice from "./slices/addbooking";
 import calendarSlice from "./slices/calendarSlice";
 import notificationSlice from "./slices/notificationSlice";
@@ -19,6 +20,7 @@ export const store = configureStore({
     blog: blogSlice,
     addBooking: addBookingSlice,
     calendar: calendarSlice,
+    vendor: vendorSlice,
     notification: notificationSlice,
   },
   middleware: (getDefaultMiddleware) =>

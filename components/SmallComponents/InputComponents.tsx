@@ -318,3 +318,96 @@ export function FormFileInput<T extends FieldValues>({
     />
   );
 }
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
+
+interface FileInputProps {
+  label: string;
+  onFileSelect: (file: string) => void;
+  files?: string[];
+  onFileRemove?: (index: number) => void;
+  error?: string;
+  required?: boolean;
+  accept?: string;
+}
+
+export function FileInput({
+  label,
+  onFileSelect,
+  files = [],
+  onFileRemove,
+  error,
+  required,
+  accept = "image/*,.pdf",
+}: FileInputProps) {
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size should be less than 5MB.");
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const base64String = e.target?.result as string;
+        onFileSelect(base64String);
+      };
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error("File upload failed:", error);
+      alert("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <Label className="text-[14px] font-semibold">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </Label>
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+        <Input
+          type="file"
+          onChange={handleFileSelect}
+          disabled={isUploading}
+          accept={accept}
+          className="cursor-pointer"
+        />
+      </div>
+      {files.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-sm font-medium">Uploaded files:</p>
+          {files.map((file, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between bg-gray-100 p-2 rounded"
+            >
+              <span className="text-sm truncate">File {index + 1}</span>
+              {onFileRemove && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => onFileRemove(index)}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      {error && <p className="text-sm text-red-500">{error}</p>}
+    </div>
+  );
+}
