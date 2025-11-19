@@ -1,10 +1,12 @@
 import api from "@/lib/api/axios-config";
+import { VendorDetails } from "../mongodb/models/User";
 
 export interface SignUpData {
   fullName: string;
   email: string;
   phoneNumber: string;
   password: string;
+  vendorDetails?: VendorDetails;
 }
 
 export interface SignInData {

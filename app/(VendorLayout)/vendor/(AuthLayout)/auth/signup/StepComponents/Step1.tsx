@@ -45,6 +45,7 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
     handleSubmit,
     formState: { errors },
     watch,
+    getValues,
   } = useForm<Step1FormData>({
     resolver: zodResolver(step1Schema),
     defaultValues: {
@@ -57,7 +58,7 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
       tursabNumber: vendorState.tursabNumber || "",
     },
   });
-  console.log("errors----", errors);
+  console.log("getValues----", getValues());
 
   useEffect(() => {
     const subscription = watch((value) => {

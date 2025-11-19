@@ -11,16 +11,78 @@ import VendorSignupStep2 from "./Step2";
 import VendorSignupStep3 from "./Step3";
 import VendorSignupStep4 from "./Step4";
 import VendorSignupStep5 from "./Step5";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { VendorDetails } from "@/lib/mongodb/models/User";
+import { signUp } from "@/lib/auth/auth-helpers";
+import Swal from "sweetalert2";
+
+type SignupFormValues = {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  agreedToTerms?: boolean;
+  vendorDetails?: VendorDetails;
+};
 
 const VendorSignUp = () => {
   const signupSteps = useAppSelector((state) => state.general.signupSteps);
-  console.log("signupSteps-----", signupSteps);
+  const vendorData = useAppSelector((s) => s.vendor.vendorDetails);
+  console.log("vendorData-----", vendorData);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+  const handleEmailSignup = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const signupData: SignupFormValues = {
+        fullName: vendorData?.companyName ? vendorData?.companyName : "",
+        email: vendorData?.businessEmail ? vendorData?.businessEmail : "",
+        phoneNumber: vendorData?.contactPhoneNumber
+          ? vendorData?.contactPhoneNumber
+          : "",
+        password: vendorData?.password ? vendorData?.password : "",
+        vendorDetails: vendorData,
+      };
+      console.log("signupData", signupData);
 
+      const { data: res, error } = await signUp(signupData);
+      if (error) {
+        setError(error.message);
+      } else {
+        if (res?.requiresVerification) {
+          setSuccess(true);
+        } else {
+          router.push("/dashboard");
+        }
+      }
+      dispatch(updateProfileStepNext());
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error || "Please try again.",
+        confirmButtonColor: "#22c55e",
+      });
+    }
+  }, [error]);
   const handleNext = () => {
-    if (signupSteps < 5) {
+    if (signupSteps < 4) {
       dispatch(updateProfileStepNext());
     } else {
+      handleEmailSignup();
       console.log("Vendor registration completed:", vendorState);
     }
   };
