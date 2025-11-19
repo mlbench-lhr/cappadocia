@@ -11,8 +11,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { ChevronLeft } from "lucide-react";
 import AddressLocationSelector, { LocationData } from "@/components/map";
 
-export function VendorSignUpStep2({ isVendor }: { isVendor?: Boolean }) {
-  const [phoneNumber, setPhoneNumber] = useState("");
+export function VendorSignUpStep2() {
   const dispatch = useAppDispatch();
   const handleNext = () => {
     dispatch(updateProfileStepNext());

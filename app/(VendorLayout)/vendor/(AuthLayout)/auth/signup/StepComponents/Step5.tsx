@@ -18,7 +18,7 @@ import { useAppDispatch } from "@/lib/store/hooks";
 import { ChevronLeft } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export function VendorSignUpStep5({ isVendor }: { isVendor?: Boolean }) {
+export function VendorSignUpStep5() {
   const [check, setCheck] = useState(false);
   const dispatch = useAppDispatch();
   const handleNext = () => {
@@ -65,15 +65,6 @@ export function VendorSignUpStep5({ isVendor }: { isVendor?: Boolean }) {
           <Button variant={"main_green_button"} onClick={handleNext}>
             Next
           </Button>
-        </div>
-        <div className="plan-text-style-3 text-center">
-          Already have an account?
-          <Link
-            href={isVendor ? "/vendor/auth/login" : "/auth/login"}
-            className="text-[#B32053] font-[500] hover:underline"
-          >
-            Login
-          </Link>
         </div>
       </CardContent>
     </Card>

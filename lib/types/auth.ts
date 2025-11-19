@@ -1,3 +1,5 @@
+import { VendorDetails } from "../mongodb/models/User";
+
 export interface User {
   id: string;
   email: string;
@@ -12,6 +14,7 @@ export interface User {
   blogTier: "Tier 1" | "Tier 2" | "Tier 3";
   profileUpdated: boolean;
   dataUpdated: boolean;
+  vendorDetails: VendorDetails;
 }
 export interface PersonalInfo {
   firstName?: string;

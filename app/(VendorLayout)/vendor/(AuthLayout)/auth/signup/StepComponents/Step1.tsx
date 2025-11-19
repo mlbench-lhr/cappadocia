@@ -10,13 +10,12 @@ import { Button } from "@/components/ui/button";
 import { updateProfileStepNext } from "@/lib/store/slices/generalSlice";
 import { useAppDispatch } from "@/lib/store/hooks";
 
-export function VendorSignUpStep1({ isVendor }: { isVendor?: Boolean }) {
+export function VendorSignUpStep1() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useAppDispatch();
   const handleNext = () => {
     dispatch(updateProfileStepNext());
   };
-
   return (
     <Card className="w-full max-w-md auth-box-shadows min-h-fit max-h-full">
       <CardHeader className="space-y-1">

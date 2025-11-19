@@ -1,14 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  FileInputComponent,
-  TextInputComponent,
-} from "@/components/SmallComponents/InputComponents";
-import { Label } from "@/components/ui/label";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
-import { useState } from "react";
+import { FileInputComponent } from "@/components/SmallComponents/InputComponents";
 import { Button } from "@/components/ui/button";
 import {
   updateProfileStepBack,
@@ -17,8 +10,7 @@ import {
 import { useAppDispatch } from "@/lib/store/hooks";
 import { ChevronLeft } from "lucide-react";
 
-export function VendorSignUpStep3({ isVendor }: { isVendor?: Boolean }) {
-  const [phoneNumber, setPhoneNumber] = useState("");
+export function VendorSignUpStep3() {
   const dispatch = useAppDispatch();
   const handleNext = () => {
     dispatch(updateProfileStepNext());
