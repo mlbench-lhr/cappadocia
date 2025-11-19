@@ -80,7 +80,7 @@ export default function BookingsPage() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/vendor/vendor-application/detail/${item._id}`}
+          href={`/admin/vendor-applications/detail/${item._id}`}
           className="text-[#B32053] underline"
         >
           View Details
