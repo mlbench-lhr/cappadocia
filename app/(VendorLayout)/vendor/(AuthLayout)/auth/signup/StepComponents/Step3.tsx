@@ -8,33 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { addDocument, removeDocument } from "@/lib/store/slices/vendorSlice";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
-
-const uploadFile = async (file: File, folder: string): Promise<string> => {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append(
-    "upload_preset",
-    process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || ""
-  );
-  formData.append("folder", folder);
-
-  const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/auto/upload`,
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Upload failed");
-  }
-
-  const data = await response.json();
-  return data.secure_url;
-};
+import { uploadFile } from "@/lib/utils/upload";
 
 const step3Schema = z.object({
   documents: z.array(z.string()).min(1, "At least one document is required"),
@@ -55,6 +31,7 @@ export default function VendorSignupStep3({
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string>("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const {
     formState: { errors },
@@ -64,35 +41,41 @@ export default function VendorSignupStep3({
       documents: vendorState.documents || [],
     },
   });
-
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type (PDF or JPG)
-    if (!["application/pdf", "image/jpeg", "image/jpg"].includes(file.type)) {
-      setUploadError("Please select a PDF or JPG file.");
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
       return;
     }
 
-    // Validate file size (10MB limit for documents)
-    if (file.size > 10 * 1024 * 1024) {
-      setUploadError("Document size should be less than 10MB.");
+    // Validate file size (5MB limit for avatars)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image size should be less than 5MB.");
       return;
     }
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setPreviewUrl(e.target?.result as string);
+    };
+    reader.readAsDataURL(file);
 
     setIsUploading(true);
-    setUploadError("");
     try {
-      const url = await uploadFile(file, "vendor-documents");
+      const url = await uploadFile(file, "avatars");
+      console.log("url-----", url);
       dispatch(addDocument(url));
+      setPreviewUrl(null);
     } catch (error) {
-      console.error("Document upload failed:", error);
-      setUploadError("Upload failed. Please try again.");
+      console.error("Avatar upload failed:", error);
+      alert("Upload failed. Please try again.");
+      setPreviewUrl(null);
     } finally {
       setIsUploading(false);
-      // Clear input
-      e.target.value = "";
     }
   };
 
