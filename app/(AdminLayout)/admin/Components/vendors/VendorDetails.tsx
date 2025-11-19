@@ -1,21 +1,22 @@
 "use client";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import RejectVendorDialog from "@/components/RejectVendorDialog";
 import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
-import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 interface BusinessDetailsProps {}
 
 const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
   const [data, setData] = useState<VendorDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [actionLoading, setActionLoading] = useState<boolean>(false);
 
   const router = useRouter();
-  const { id } = useParams();
-  console.log("data----", data);
+  const { id }: { id: string } = useParams();
   useEffect(() => {
     const getData = async () => {
       try {
@@ -33,6 +34,25 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
     };
     getData();
   }, []);
+  const accept = async () => {
+    try {
+      setActionLoading(true);
+      await axios.put(`/api/admin/vendor-applications/update/${id}`, {
+        isRoleVerified: true,
+      });
+      setActionLoading(false);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: `Vendor approved Successfully`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      router.push("/admin/vendor-applications");
+    } catch (error) {
+      console.log("err---", error);
+    }
+  };
   const handleBack = () => {
     router.back();
   };
@@ -144,15 +164,17 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         </div>
 
         {/* Map */}
-        <div className="mb-6 w-[400px]">
-          <AddressLocationSelector
-            value={data?.address as LocationData}
-            readOnly={true}
-            label="Enter Your Business Address"
-            className=" w-full h-[188px] rounded-xl "
-            placeholder="Type address or click on map"
-          />{" "}
-        </div>
+        {data?.address && (
+          <div className="mb-6 w-[400px]">
+            <AddressLocationSelector
+              value={data?.address as LocationData}
+              readOnly={true}
+              label="Enter Your Business Address"
+              className=" w-full h-[188px] rounded-xl "
+              placeholder="Type address or click on map"
+            />{" "}
+          </div>
+        )}
 
         {/* About Us Section */}
         <div className="border rounded-lg p-6 mb-6 w-[622px]">
@@ -169,21 +191,23 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
               className="flex items-center gap-2 border py-2 pl-2 pr-14 rounded-lg w-fit"
             >
               <div className="bg-red-500 text-white px-2 uppercase py-1 rounded text-xs font-semibold">
-                {item.split(".").pop()} {index + 1}
+                {item?.split(".")?.pop()} {index + 1}
               </div>
-              <span className="text-sm">{item.split("/").pop()}</span>
+              <span className="text-sm">{item?.split("/")?.pop()}</span>
             </div>
           ))}
         </div>
 
         {/* Action Buttons */}
         <div className="flex gap-3">
-          <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold">
-            Accept
+          <button
+            onClick={accept}
+            disabled={actionLoading}
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
+          >
+            {actionLoading ? "Accepting" : "Accept"}
           </button>
-          <button className="bg-red-600 hover:bg-red-700 text-white px-8 rounded-lg font-semibold">
-            Reject
-          </button>
+          <RejectVendorDialog id={id} />
         </div>
       </div>
     </div>

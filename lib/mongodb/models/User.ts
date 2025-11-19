@@ -38,6 +38,10 @@ export interface IUser extends Document {
   avatar?: string;
   isEmailVerified: boolean;
   isRoleVerified: boolean;
+  roleRejected: {
+    isRoleRejected: boolean;
+    reason?: string;
+  };
   dataUpdated: boolean;
   emailVerificationOTP?: string;
   emailVerificationOTPExpires?: Date;
@@ -73,6 +77,10 @@ const UserSchema = new Schema<IUser>(
     avatar: { type: String, default: null },
     isEmailVerified: { type: Boolean, default: false },
     isRoleVerified: { type: Boolean, default: false },
+    roleRejected: {
+      isRoleRejected: { type: Boolean, default: false },
+      reason: { type: String },
+    },
     emailVerificationOTP: { type: String, default: null },
     emailVerificationOTPExpires: { type: Date, default: null },
     resetPasswordOTP: { type: String, default: null },

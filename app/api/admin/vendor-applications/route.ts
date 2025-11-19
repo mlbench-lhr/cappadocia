@@ -15,7 +15,11 @@ export const GET = withAuth(async (req) => {
     await connectDB();
 
     // Build search query
-    const searchQuery: any = { role: "vendor", isRoleVerified: false };
+    const searchQuery: any = {
+      role: "vendor",
+      isRoleVerified: false,
+      roleRejected: { $exists: false },
+    };
 
     if (searchTerm.trim()) {
       searchQuery.$or = [

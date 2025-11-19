@@ -144,6 +144,40 @@ export const TextInputComponent = ({
   );
 };
 
+export const TextAreaInputComponent = ({
+  label,
+  placeholder,
+  disabled = false,
+  required = false,
+  value,
+  onChange,
+  type = "text",
+  error,
+}: BaseInputProps & {
+  type?: "text" | "email" | "number" | "tel" | "password" | "date";
+}) => {
+  const placeholderTemp = placeholder || "Enter " + label;
+  return (
+    <div className="space-y-1 col-span-1">
+      <Label className="text-[14px] font-semibold">
+        {label}
+        {required && <span className="text-red-500 ml-1">*</span>}
+      </Label>
+      <Textarea
+        placeholder={placeholderTemp}
+        className={`h-[44px] bg-white ${
+          error ? "border-red-500 focus-visible:ring-red-500" : ""
+        }`}
+        required={required}
+        disabled={disabled}
+        value={value || ""}
+        onChange={(e) => onChange?.(e.target.value)}
+      />
+      {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
+    </div>
+  );
+};
+
 // Form-controlled Text Input Component
 export function FormTextInput<T extends FieldValues>({
   label,
@@ -321,6 +355,7 @@ export function FormFileInput<T extends FieldValues>({
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { Textarea } from "../ui/textarea";
 
 interface FileInputProps {
   label: string;
