@@ -1,22 +1,8 @@
-import {
-  AcademicInfo,
-  DreamsAndGoals,
-  extracurricularsAndAwards,
-  PersonalInfo,
-  User,
-} from "@/lib/types/auth";
+import { User } from "@/lib/types/auth";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
-  user:
-    | (User & {
-        personalInfo?: PersonalInfo;
-        academicInfo?: AcademicInfo;
-        dreamsAndGoals?: DreamsAndGoals;
-        extracurricularsAndAwards?: extracurricularsAndAwards;
-        role?: string;
-      })
-    | null;
+  user: User | null;
 }
 
 const initialState: AuthState = {

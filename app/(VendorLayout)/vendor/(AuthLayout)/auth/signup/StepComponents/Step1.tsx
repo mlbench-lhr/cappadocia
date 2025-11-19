@@ -28,6 +28,8 @@ export function VendorSignUpStep1() {
           <TextInputComponent label="Company / Operator Name" />
           <TextInputComponent label="Contact Person Name" />
           <TextInputComponent label="Business Email" />
+          <TextInputComponent label="Password" />
+          <TextInputComponent label="Confirm Password" />
           <div className="space-y-1 col-span-1">
             <Label className="text-[14px] font-semibold">Phone Number</Label>
             <PhoneNumberInput
