@@ -4,10 +4,13 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useAppSelector } from "@/lib/store/hooks";
 
 export function Navigation() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const user_id = useAppSelector((s) => s.auth.user?.id);
+  console.log("user_id", user_id);
 
   const navLinks = (
     <>
@@ -96,7 +99,9 @@ export function Navigation() {
           {/* Desktop Button */}
           <div className="flex items-center space-x-4">
             <Button asChild variant={"main_green_button"}>
-              <Link href="/dashboard">Login Now</Link>
+              <Link href="/dashboard">
+                {user_id ? "Get Started" : "Login Now"}
+              </Link>
             </Button>
           </div>
         </div>
