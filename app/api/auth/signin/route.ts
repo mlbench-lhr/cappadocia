@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb/connection";
-import User from "@/lib/mongodb/models/User";
+import User, { IUser } from "@/lib/mongodb/models/User";
 import { comparePassword } from "@/lib/auth/password";
 import { generateToken } from "@/lib/auth/jwt";
 import { z } from "zod";
@@ -19,10 +19,22 @@ export async function POST(request: NextRequest) {
     const validatedData = signinSchema.parse(body);
 
     // Find user by email
-    const user = await User.findOne({ email: validatedData.email });
+    const user: IUser | null = await User.findOne({
+      email: validatedData.email,
+    });
     if (!user) {
       return NextResponse.json(
         { error: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
+
+    if (user?.role === "vendor" && !user.isRoleVerified) {
+      return NextResponse.json(
+        {
+          error:
+            "Your vendor account is not is not verified yet, please try again later.",
+        },
         { status: 401 }
       );
     }
@@ -65,7 +77,6 @@ export async function POST(request: NextRequest) {
       fullName: user.fullName,
       avatar: user.avatar,
       isEmailVerified: user.isEmailVerified,
-      extracurricularsAndAwards: user.extracurricularsAndAwards,
       role: user.role,
     };
 

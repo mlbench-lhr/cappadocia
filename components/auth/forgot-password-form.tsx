@@ -29,7 +29,13 @@ type PasswordFormValues = {
   confirmPassword: string;
 };
 
-export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
+export function ForgotPasswordForm({
+  isAdmin,
+  isVendor,
+}: {
+  isAdmin?: Boolean;
+  isVendor?: Boolean;
+}) {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [resendLoading, setResendLoading] = useState(false);
@@ -225,7 +231,15 @@ export function ForgotPasswordForm({ isAdmin }: { isAdmin?: Boolean }) {
         </CardHeader>
         <CardContent className="mt-[38px]">
           <Button asChild className="w-full" variant="main_green_button">
-            <Link href={isAdmin ? "/admin/auth/login" : "/auth/login"}>
+            <Link
+              href={
+                isAdmin
+                  ? "/admin/auth/login"
+                  : isVendor
+                  ? "/vendor/auth/login"
+                  : "/auth/login"
+              }
+            >
               Back to Login
             </Link>
           </Button>

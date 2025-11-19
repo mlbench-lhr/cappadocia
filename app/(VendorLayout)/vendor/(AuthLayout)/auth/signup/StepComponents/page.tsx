@@ -78,6 +78,16 @@ const VendorSignUp = () => {
       });
     }
   }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const email = vendorData.businessEmail;
+      router.push(
+        `/vendor/auth/verify-email?email=${encodeURIComponent(email || "")}`
+      );
+    }
+  }, [success, router]);
+
   const handleNext = () => {
     if (signupSteps < 4) {
       dispatch(updateProfileStepNext());
@@ -121,9 +131,9 @@ const VendorSignUp = () => {
   };
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
 
-  if (signupSteps === 5) {
-    return <Success />;
-  }
+  // if (signupSteps === 5) {
+  //   return <Success />;
+  // }
   return (
     <div>
       <div className="flex justify-start mx-auto w-fit items-center mb-6">
