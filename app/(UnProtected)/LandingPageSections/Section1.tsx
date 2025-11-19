@@ -21,15 +21,15 @@ export default function Section1() {
     },
     {
       image: "/landing page/pic2.jpg", // Add more images
-      title: "Experience Hot Air Balloon Rides",
+      title: "Discover the Best Tours & Activities in Cappadocia",
       subtitle:
-        "Soar above the fairy chimneys and witness breathtaking sunrise views.",
+        "Book local experiences, guided tours, and adventures — all in one place.",
     },
     {
       image: "/landing page/pic3.jpg", // Add more images
-      title: "Explore Ancient Cave Cities",
+      title: "Discover the Best Tours & Activities in Cappadocia",
       subtitle:
-        "Discover the rich history and unique architecture of Cappadocia.",
+        "Book local experiences, guided tours, and adventures — all in one place.",
     },
   ];
 
