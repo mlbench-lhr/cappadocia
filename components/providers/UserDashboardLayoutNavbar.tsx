@@ -136,7 +136,7 @@ export function Navbar() {
               alt=""
               width={59}
               height={32}
-              className="flex md:hidden"
+              className="flex md:hidden w-[140px] h-auto"
             />
 
             <button
