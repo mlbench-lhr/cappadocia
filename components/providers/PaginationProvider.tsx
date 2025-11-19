@@ -81,22 +81,18 @@ export function ServerPaginationProvider<T = any>({
 
         // Flexible response structure handling
         // Adjust these based on your API response format
-        const responseData =
-          result.data || result.results || result.items || result;
+        const responseData = result.data;
         const pagination = result.pagination || result.meta || {};
 
         const fetchedData = Array.isArray(responseData) ? responseData : [];
-        const total =
-          pagination.totalPages ||
-          pagination.total_pages ||
-          Math.ceil(
-            (pagination.total || pagination.totalItems || fetchedData.length) /
-              itemsPerPage
-          );
-        const totalCount =
-          pagination.total || pagination.totalItems || fetchedData.length;
+        const total = pagination.totalPages;
+        const totalCount = pagination.total;
+        console.log("presentData---", presentData);
+        if (!presentData) {
+          console.log("responseData---", responseData);
+          setData(fetchedData);
+        }
 
-        // setData(fetchedData);
         setTotalPages(total);
         setTotalItems(totalCount);
 
@@ -107,7 +103,9 @@ export function ServerPaginationProvider<T = any>({
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err instanceof Error ? err.message : "Failed to fetch data");
-        // setData([]);
+        if (!presentData) {
+          setData([]);
+        }
         setTotalPages(1);
       } finally {
         setIsFetching(false);
@@ -124,7 +122,7 @@ export function ServerPaginationProvider<T = any>({
 
   useEffect(() => {
     fetchData(currentPage);
-  }, [currentPage, fetchData]);
+  }, [currentPage]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
@@ -144,7 +142,12 @@ export function ServerPaginationProvider<T = any>({
   }
 
   // Show no data component if no data after loading
-  if (!isInitialLoading && data.length === 0 && NoDataComponent) {
+  if (
+    presentData &&
+    !isInitialLoading &&
+    data.length === 0 &&
+    NoDataComponent
+  ) {
     return <NoDataComponent />;
   }
 
