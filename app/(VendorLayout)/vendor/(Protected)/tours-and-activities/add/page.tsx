@@ -9,27 +9,18 @@ import {
   RadioInputComponent,
   FormSelectInput,
   FormTextInput,
-  TextInputComponent,
   FormTextAreaInput,
 } from "@/components/SmallComponents/InputComponents";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
-import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { Button } from "@/components/ui/button";
-import AddressLocationSelector from "@/components/map";
-import { Loader2, Plus, Trash2, X } from "lucide-react";
-import {
-  addToArray,
-  setField,
-  updateArrayItem,
-  removeArrayItem,
-} from "@/lib/store/slices/addbooking";
-import { useForm, Controller } from "react-hook-form";
+import { Loader2, Minus, Plus, X } from "lucide-react";
+import { setField } from "@/lib/store/slices/addbooking";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
-import { uploadFile, uploadMultipleFiles } from "@/lib/utils/upload";
+import { uploadMultipleFiles } from "@/lib/utils/upload";
 import { removeDocument } from "@/lib/store/slices/vendorSlice";
+import { Input } from "@/components/ui/input";
 
 // Validation schema
 const LatLng = z.object({
@@ -78,6 +69,18 @@ export default function BookingsPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [cancellationPolicy, setCancellationPolicy] = useState<string>("");
+  const [cancellationPolicyHours, setCancellationPolicyHours] =
+    useState<number>(0);
+
+  useEffect(() => {
+    setCancellationPolicy(
+      `Free cancellation up to ${
+        cancellationPolicyHours || "X"
+      } hours before tour`
+    );
+  }, [cancellationPolicyHours]);
+
   console.log("bookingState:", bookingState);
 
   const {
@@ -100,7 +103,6 @@ export default function BookingsPage() {
   });
 
   console.log("errors:", errors);
-  // Sync form values with Redux store
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name && !name.startsWith("travelers")) {
@@ -121,20 +123,16 @@ export default function BookingsPage() {
 
   const onSubmit = (data: BookingFormData) => {
     console.log("Form submitted:", data);
-    // router.push("/bookings/payment");
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (5MB limit for avatars)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image size should be less than 5MB.");
       return;
     }
-
-    // Create preview
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreviewUrl(e.target?.result as string);
@@ -162,7 +160,6 @@ export default function BookingsPage() {
   return (
     <BasicStructureWithName name="Add Tours / Activity" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
-        {/* Trip Details */}
         <BoxProviderWithName
           name="Tour Information"
           textClasses=" text-[18px] font-semibold "
@@ -259,30 +256,73 @@ export default function BookingsPage() {
             </div>{" "}
           </div>
         </BoxProviderWithName>
-
-        {/* Contact Details */}
         <BoxProviderWithName
           name="Policies & Languages"
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormTextInput
+            <div className="space-y-1 col-span-1">
+              <Label className="text-[14px] font-semibold">
+                Cancellation Policy
+                <span className="text-red-500 ml-1">*</span>
+              </Label>
+              <div className="relative">
+                <Input
+                  type={"text"}
+                  placeholder={cancellationPolicy}
+                  className={`bg-white pe-30 ${
+                    errors.email?.message
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : ""
+                  }`}
+                  readOnly
+                  required={true}
+                  value={cancellationPolicy || ""}
+                />
+                <div className="absolute right-3 flex w-f justify-center items-center gap-0 top-1/2 translate-y-[-50%]">
+                  <button
+                    onClick={() =>
+                      setCancellationPolicyHours(cancellationPolicyHours - 1)
+                    }
+                    className="p-2 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    disabled={cancellationPolicyHours === 0}
+                  >
+                    <Minus size={15} className=" text-gray-600" />
+                  </button>
+                  <input
+                    className="text-center text-[12px] font-normal w-8 text-primary"
+                    value={cancellationPolicyHours}
+                    onChange={(e) => {
+                      setCancellationPolicyHours(e.target.valueAsNumber);
+                    }}
+                    type="number"
+                  />
+                  <button
+                    onClick={() =>
+                      setCancellationPolicyHours(cancellationPolicyHours + 1)
+                    }
+                    className="p-2 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                  >
+                    <Plus size={15} className=" text-gray-600" />
+                  </button>
+                </div>
+              </div>
+              {errors.email?.message && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.email?.message}
+                </p>
+              )}
+            </div>
+            <FormSelectInput
               control={control}
-              name="email"
-              label="Cancellation Policy"
-              type="email"
-              required
-            />
-            <FormTextInput
-              control={control}
-              name="fullName"
+              name="selectDate"
               label="Languages Offered"
+              placeholder="Select Category"
+              options={["English", "Chinese", "Turkish"]}
               required
             />
           </div>
         </BoxProviderWithName>
-
-        {/* Pickup Details */}
         <BoxProviderWithName
           name="Duration & Pickup Option"
           textClasses=" text-[18px] font-semibold "
@@ -291,7 +331,7 @@ export default function BookingsPage() {
             <FormTextInput
               control={control}
               name="email"
-              label="Cancellation Policy"
+              label="Duration"
               type="number"
               required
             />
