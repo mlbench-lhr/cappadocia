@@ -28,6 +28,7 @@ type SignupFormValues = {
 export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("Passwords do not match");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -50,6 +51,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
   });
 
   const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
 
   const handleEmailSignup = async (data: SignupFormValues) => {
     setLoading(true);
@@ -105,6 +107,14 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
       });
     }
   }, [error]);
+
+  useEffect(() => {
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords do not match");
+    } else {
+      setErrorMsg("");
+    }
+  }, [password, confirmPassword]);
 
   useEffect(() => {
     if (success) {
@@ -304,11 +314,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
                 )}
               </Button>
             </div>
-            {errors.confirmPassword && (
-              <p className="text-red-500 text-sm">
-                {errors.confirmPassword.message}
-              </p>
-            )}
+            {errorMsg && <p className="text-red-500 text-sm">{errorMsg}</p>}
           </div>
 
           <div>
