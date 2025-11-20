@@ -23,6 +23,7 @@ export interface ToursAndActivityState {
   cancellationPolicy: string;
   duration: number;
   slots: Slot[];
+  status: "Pending Admin Approval" | "Active" | "Rejected" | "Upcoming";
 }
 
 const initialState: ToursAndActivityState = {
@@ -36,6 +37,7 @@ const initialState: ToursAndActivityState = {
   included: [],
   notIncluded: [],
   itinerary: [],
+  status: "Pending Admin Approval",
   cancellationPolicy: "",
   duration: 0,
   slots: [

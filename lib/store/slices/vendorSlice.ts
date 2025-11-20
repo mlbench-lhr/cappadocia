@@ -1,3 +1,4 @@
+import { LocationData } from "@/components/map";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export interface VendorDetails {
@@ -8,15 +9,7 @@ export interface VendorDetails {
   confirmPassword: string;
   contactPhoneNumber: string;
   tursabNumber: string;
-  address: {
-    address?: string | undefined;
-    coordinates?:
-      | {
-          lat?: number;
-          lng?: number;
-        }
-      | undefined;
-  };
+  address: LocationData;
   documents: string[];
   aboutUs: string;
   languages: string[];
@@ -44,7 +37,10 @@ const initialState: VendorState = {
     tursabNumber: "",
     address: {
       address: "",
-      coordinates: undefined,
+      coordinates: {
+        lat: 0,
+        lng: 0,
+      },
     },
     documents: [],
     aboutUs: "",

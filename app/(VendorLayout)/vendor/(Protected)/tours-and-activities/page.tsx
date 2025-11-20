@@ -113,11 +113,11 @@ export default function BookingsPage() {
     },
     {
       header: "Tour Status",
-      accessor: "tourStatus",
+      accessor: "status",
       render: (item) => (
         <div className="flex justify-start items-center">
           <StatusBadge
-            status={item.tourStatus}
+            status={item.status}
             textClasses="text-base font-normal"
             widthClasses="w-fit"
           />
@@ -129,7 +129,7 @@ export default function BookingsPage() {
       accessor: "date",
       render: (item) => {
         return (
-          <span>{moment(item.date).format("MMM DD, YYYY | hh:mm A")}</span>
+          <span>{moment(item.createdAt).format("MMM DD, YYYY | hh:mm A")}</span>
         );
       },
     },
@@ -215,9 +215,8 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<bookingProps>
-            apiEndpoint="/api/bookings" // Your API endpoint
+            apiEndpoint="/api/toursAndActivity/getAll" // Your API endpoint
             setState={setBookings} // Optional: if you need bookings in state
-            presentData={bookings} // Optional: if you need bookings in state
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}

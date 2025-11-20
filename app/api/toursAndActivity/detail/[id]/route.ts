@@ -8,7 +8,7 @@ export async function GET(
 ) {
   await connectDB();
 
-  const item = await ToursAndActivity.findById(params.id);
+  const item = await ToursAndActivity.findById(params.id).populate("vendor");
   if (!item)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
 

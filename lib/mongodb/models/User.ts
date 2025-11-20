@@ -1,3 +1,4 @@
+import { LocationData } from "@/components/map";
 import mongoose, { type Document, Schema } from "mongoose";
 
 export interface VendorDetails {
@@ -8,13 +9,7 @@ export interface VendorDetails {
   businessEmail: string;
   contactPhoneNumber: string;
   tursabNumber: string;
-  address: {
-    address: string;
-    coordinates: {
-      lat: number;
-      lng: number;
-    } | null;
-  };
+  address: LocationData;
   documents: string[];
   aboutUs: string;
   languages: string[];
