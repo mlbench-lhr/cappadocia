@@ -93,6 +93,7 @@ export function DynamicTable({
 }: DynamicTableProps) {
   // Internal state for client-side pagination (fallback)
   const [internalPage, setInternalPage] = useState(1);
+  console.log("data----", data);
 
   // Determine if using server-side or client-side pagination
   const isServerPagination = !!serverPagination;
@@ -121,6 +122,8 @@ export function DynamicTable({
   if (isLoading) {
     return <TableSkeleton columns={4} />;
   }
+  console.log("currentData---", currentData);
+
   if (currentData?.length < 1) {
     return (
       <div className="mx-auto w-full flex justify-center items-center flex-col pt-6 gap-y-2 text-sm md:text-[24px] text-[#7B849A]">

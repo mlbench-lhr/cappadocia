@@ -117,7 +117,7 @@ export interface LocationData {
 // Component Props
 interface AddressLocationSelectorProps {
   value: LocationData;
-  onChange: (data: LocationData) => void;
+  onChange?: (data: LocationData) => void;
   readOnly?: boolean;
   label?: string;
   placeholder?: string;
@@ -244,10 +244,12 @@ export default function AddressLocationSelector({
           };
 
           marker.setPosition(place.geometry.location);
-          onChange({
-            address: place.formatted_address || "",
-            coordinates: newCoords,
-          });
+          if (onChange) {
+            onChange({
+              address: place.formatted_address || "",
+              coordinates: newCoords,
+            });
+          }
         });
       }
     }
@@ -259,7 +261,7 @@ export default function AddressLocationSelector({
   ): void => {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({ location: latLng }, (results, status) => {
-      if (status === "OK" && results && results[0]) {
+      if (status === "OK" && results && results[0] && onChange) {
         onChange({
           address: results[0].formatted_address,
           coordinates: coords,
@@ -299,7 +301,7 @@ export default function AddressLocationSelector({
   const handleAddressChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    if (!readOnly) {
+    if (!readOnly && onChange) {
       onChange({
         ...value,
         address: e.target.value,

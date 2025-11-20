@@ -1,6 +1,8 @@
 import mongoose, { type Document, Schema } from "mongoose";
 
 export interface VendorDetails {
+  confirmPassword?: string;
+  password?: string;
   companyName: string;
   contactPersonName: string;
   businessEmail: string;
@@ -35,6 +37,11 @@ export interface IUser extends Document {
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
+  isRoleVerified: boolean;
+  roleRejected: {
+    isRoleRejected: boolean;
+    reason?: string;
+  };
   dataUpdated: boolean;
   emailVerificationOTP?: string;
   emailVerificationOTPExpires?: Date;
@@ -69,6 +76,11 @@ const UserSchema = new Schema<IUser>(
     role: { type: String, default: "user", enum: ["user", "admin", "vendor"] },
     avatar: { type: String, default: null },
     isEmailVerified: { type: Boolean, default: false },
+    isRoleVerified: { type: Boolean, default: false },
+    roleRejected: {
+      isRoleRejected: { type: Boolean, default: false },
+      reason: { type: String },
+    },
     emailVerificationOTP: { type: String, default: null },
     emailVerificationOTPExpires: { type: Date, default: null },
     resetPasswordOTP: { type: String, default: null },

@@ -1,32 +1,139 @@
 "use client";
-import { setUpdateProfileStep } from "@/lib/store/slices/generalSlice";
-import { VendorSignUpStep1 } from "./Step1";
+import {
+  setUpdateProfileStep,
+  updateProfileStepBack,
+  updateProfileStepNext,
+} from "@/lib/store/slices/generalSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { VendorSignUpStep2 } from "./Step2";
-import { VendorSignUpStep3 } from "./Step3";
-import { VendorSignUpStep4 } from "./Step4";
-import { VendorSignUpStep5 } from "./Step5";
 import Success from "@/app/(UpdateProfileLayout)/update-profile/Success";
+import VendorSignupStep1 from "./Step1";
+import VendorSignupStep2 from "./Step2";
+import VendorSignupStep3 from "./Step3";
+import VendorSignupStep4 from "./Step4";
+import VendorSignupStep5 from "./Step5";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { VendorDetails } from "@/lib/mongodb/models/User";
+import { signUp } from "@/lib/auth/auth-helpers";
+import Swal from "sweetalert2";
+
+type SignupFormValues = {
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  password: string;
+  agreedToTerms?: boolean;
+  vendorDetails?: VendorDetails;
+};
 
 const VendorSignUp = () => {
   const signupSteps = useAppSelector((state) => state.general.signupSteps);
-  console.log("signupSteps-----", signupSteps);
+  const vendorData = useAppSelector((s) => s.vendor.vendorDetails);
+  console.log("vendorData-----", vendorData);
   const dispatch = useAppDispatch();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+  const handleEmailSignup = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const signupData: SignupFormValues = {
+        fullName: vendorData?.companyName ? vendorData?.companyName : "",
+        email: vendorData?.businessEmail ? vendorData?.businessEmail : "",
+        phoneNumber: vendorData?.contactPhoneNumber
+          ? vendorData?.contactPhoneNumber
+          : "",
+        password: vendorData?.password ? vendorData?.password : "",
+        vendorDetails: vendorData,
+      };
+      console.log("signupData", signupData);
+
+      const { data: res, error } = await signUp(signupData);
+      if (error) {
+        setError(error.message);
+      } else {
+        if (res?.requiresVerification) {
+          setSuccess(true);
+        } else {
+          router.push("/dashboard");
+        }
+      }
+      dispatch(updateProfileStepNext());
+    } catch (err) {
+      setError("An unexpected error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error || "Please try again.",
+        confirmButtonColor: "#22c55e",
+      });
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      const email = vendorData.businessEmail;
+      router.push(
+        `/vendor/auth/verify-email?email=${encodeURIComponent(email || "")}`
+      );
+    }
+  }, [success, router]);
+
+  const handleNext = () => {
+    if (signupSteps < 4) {
+      dispatch(updateProfileStepNext());
+    } else {
+      handleEmailSignup();
+      console.log("Vendor registration completed:", vendorState);
+    }
+  };
+
+  const handleBack = () => {
+    if (signupSteps > 1) {
+      dispatch(updateProfileStepBack());
+    }
+  };
+
   const steps = [
-    { component: <VendorSignUpStep1 />, name: "VendorSignUpStep1" },
-    { component: <VendorSignUpStep2 />, name: "VendorSignUpStep2" },
-    { component: <VendorSignUpStep3 />, name: "VendorSignUpStep3" },
-    { component: <VendorSignUpStep4 />, name: "VendorSignUpStep4" },
-    { component: <VendorSignUpStep5 />, name: "VendorSignUpStep5" },
+    {
+      component: <VendorSignupStep1 onNext={handleNext} />,
+      name: "VendorSignUpStep1",
+    },
+    {
+      component: <VendorSignupStep2 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep2",
+    },
+    {
+      component: <VendorSignupStep3 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep3",
+    },
+    {
+      component: <VendorSignupStep4 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep4",
+    },
+    {
+      component: <VendorSignupStep5 onNext={handleNext} onBack={handleBack} />,
+      name: "VendorSignUpStep5",
+    },
   ];
   const handleStepClick = (name: string, index: number) => {
     console.log(name, index);
     dispatch(setUpdateProfileStep(index));
   };
+  const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
 
-  if (signupSteps === 5) {
-    return <Success />;
-  }
+  // if (signupSteps === 5) {
+  //   return <Success />;
+  // }
   return (
     <div>
       <div className="flex justify-start mx-auto w-fit items-center mb-6">

@@ -80,7 +80,7 @@ export default function VerifyEmailPage() {
           showConfirmButton: false,
         });
         setTimeout(() => {
-          router.push("/auth/login");
+          router.push("/vendor/auth/login");
         }, 1500);
       } else {
         setError(data.error || "Invalid OTP. Please try again.");
@@ -190,7 +190,7 @@ export default function VerifyEmailPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <Button asChild className="w-full">
-                  <Link href="/auth/signup">Try Again</Link>
+                  <Link href="/vendor/auth/signup">Try Again</Link>
                 </Button>
               </CardContent>
             </Card>

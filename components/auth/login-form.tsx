@@ -122,6 +122,9 @@ export function LoginForm({
       } else if (userData?.user.role === "admin") {
         router.push("/admin/dashboard");
         router.refresh();
+      } else if (userData?.user.role === "vendor") {
+        router.push("/vendor/dashboard");
+        router.refresh();
       } else {
         router.push("/dashboard");
         router.refresh();

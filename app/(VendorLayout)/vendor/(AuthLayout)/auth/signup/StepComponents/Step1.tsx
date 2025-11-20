@@ -2,46 +2,215 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
-import { Label } from "@/components/ui/label";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { updateProfileStepNext } from "@/lib/store/slices/generalSlice";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { useEffect } from "react";
+import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
+import { setVendorField } from "@/lib/store/slices/vendorSlice";
 
-export function VendorSignUpStep1({ isVendor }: { isVendor?: Boolean }) {
-  const [phoneNumber, setPhoneNumber] = useState("");
+const step1Schema = z
+  .object({
+    companyName: z
+      .string()
+      .min(2, "Company name must be at least 2 characters"),
+    contactPersonName: z
+      .string()
+      .min(2, "Contact person name must be at least 2 characters"),
+    businessEmail: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string().min(8, "Confirm password is required"),
+    contactPhoneNumber: z.string().min(10, "Valid phone number is required"),
+    tursabNumber: z.string().min(2, "TÜRSAB number is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"],
+  });
+
+type Step1FormData = z.infer<typeof step1Schema>;
+
+interface VendorSignupStep1Props {
+  onNext?: () => void;
+}
+
+export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
   const dispatch = useAppDispatch();
-  const handleNext = () => {
-    dispatch(updateProfileStepNext());
+  const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    getValues,
+  } = useForm<Step1FormData>({
+    resolver: zodResolver(step1Schema),
+    defaultValues: {
+      companyName: vendorState.companyName || "",
+      contactPersonName: vendorState.contactPersonName || "",
+      businessEmail: vendorState.businessEmail || "",
+      password: vendorState.password || "",
+      confirmPassword: vendorState.confirmPassword || "",
+      contactPhoneNumber: vendorState.contactPhoneNumber || "",
+      tursabNumber: vendorState.tursabNumber || "",
+    },
+  });
+  console.log("getValues----", getValues());
+
+  useEffect(() => {
+    const subscription = watch((value) => {
+      Object.keys(value).forEach((key) => {
+        dispatch(
+          setVendorField({
+            field: key as any,
+            value: value[key as keyof typeof value],
+          })
+        );
+      });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, dispatch]);
+
+  const onSubmit = (data: Step1FormData) => {
+    Object.keys(data).forEach((key) => {
+      dispatch(
+        setVendorField({
+          field: key as any,
+          value: data[key as keyof typeof data],
+        })
+      );
+    });
+    onNext?.();
   };
 
   return (
-    <Card className="w-full max-w-md auth-box-shadows min-h-fit max-h-full">
+    <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="heading-text-style-4">
+        <CardTitle className="text-2xl font-bold">
           Vendor Application Form
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="grid grid-cols-1 gap-4">
-          <TextInputComponent label="Company / Operator Name" />
-          <TextInputComponent label="Contact Person Name" />
-          <TextInputComponent label="Business Email" />
-          <div className="space-y-1 col-span-1">
-            <Label className="text-[14px] font-semibold">Phone Number</Label>
-            <PhoneNumberInput
-              phoneNumber={phoneNumber}
-              setPhoneNumber={setPhoneNumber}
+      <CardContent className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="grid grid-cols-1 gap-4">
+            <Controller
+              name="companyName"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="Company / Operator Name"
+                  placeholder="Enter company name"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.companyName?.message}
+                  required
+                />
+              )}
             />
+
+            <Controller
+              name="contactPersonName"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="Contact Person Name"
+                  placeholder="Enter contact person name"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.contactPersonName?.message}
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="businessEmail"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="Business Email"
+                  type="email"
+                  placeholder="Enter business email"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.businessEmail?.message}
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="Password"
+                  type="password"
+                  placeholder="Enter password"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.password?.message}
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="confirmPassword"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="Confirm Password"
+                  type="password"
+                  placeholder="Confirm password"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.confirmPassword?.message}
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="contactPhoneNumber"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="Phone Number"
+                  placeholder="Enter phone number"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.contactPhoneNumber?.message}
+                  required
+                />
+              )}
+            />
+
+            <Controller
+              name="tursabNumber"
+              control={control}
+              render={({ field }) => (
+                <TextInputComponent
+                  label="TÜRSAB Number"
+                  placeholder="Enter TÜRSAB number"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.tursabNumber?.message}
+                  required
+                />
+              )}
+            />
+
+            <Button type="submit" className="w-full mt-2">
+              Next
+            </Button>
           </div>
-          <TextInputComponent label="TÜRSAB Number" />
-          <Button variant={"main_green_button"} onClick={handleNext}>
-            Next
-          </Button>
-        </div>
-        <div className="plan-text-style-3 text-center">
+        </form>
+
+        <div className="text-center text-sm">
           Already have an account?{" "}
           <Link
             href={"/vendor/auth/login"}

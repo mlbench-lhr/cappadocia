@@ -1,18 +1,66 @@
 import { type NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb/connection";
-import User from "@/lib/mongodb/models/User";
+import User, { IUser } from "@/lib/mongodb/models/User";
 import { hashPassword } from "@/lib/auth/password";
 import { generateOTP, getOTPExpiryTime } from "@/lib/auth/otp";
 import { sendVerificationEmail } from "@/lib/email/email-service";
 import { z } from "zod";
 
+export const CoordinatesSchema = z.object({
+  lat: z
+    .number()
+    .min(-90, { message: "lat must be >= -90" })
+    .max(90, { message: "lat must be <= 90" }),
+  lng: z
+    .number()
+    .min(-180, { message: "lng must be >= -180" })
+    .max(180, { message: "lng must be <= 180" }),
+});
+
+export const AddressSchema = z.object({
+  address: z.string().min(1, { message: "address is required" }),
+  coordinates: CoordinatesSchema.nullable(),
+});
+
+export const PaymentInfoSchema = z.object({
+  ibanNumber: z.string().min(1, { message: "IBAN is required" }),
+  bankName: z.string().min(1, { message: "bankName is required" }),
+  accountHolderName: z
+    .string()
+    .min(1, { message: "accountHolderName is required" }),
+  currency: z.string().min(1, { message: "currency is required" }),
+});
+
+const VendorDetailsSchema = z.object({
+  password: z
+    .string()
+    .min(8, { message: "password must be at least 8 characters" }),
+  companyName: z.string().min(1, { message: "companyName is required" }),
+  contactPersonName: z
+    .string()
+    .min(1, { message: "contactPersonName is required" }),
+  businessEmail: z
+    .string()
+    .email({ message: "businessEmail must be a valid email" }),
+  contactPhoneNumber: z
+    .string()
+    .min(5, { message: "contactPhoneNumber is required" }),
+  tursabNumber: z.string().min(1, { message: "tursabNumber is required" }),
+  address: AddressSchema,
+  documents: z.array(z.string()), // change to z.string().url() if these are URLs
+  aboutUs: z.string(),
+  languages: z
+    .array(z.string())
+    .min(1, { message: "at least one language is required" }),
+  paymentInfo: PaymentInfoSchema,
+});
+
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  phoneNumber: z
-    .string()
-    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phoneNumber number"),
+  phoneNumber: z.string(),
+  vendorDetails: VendorDetailsSchema,
 });
 
 export async function POST(request: NextRequest) {
@@ -20,8 +68,8 @@ export async function POST(request: NextRequest) {
     await connectDB();
 
     const body = await request.json();
+    console.log("body------", body);
     const validatedData = signupSchema.parse(body);
-    console.log("validatedData------", validatedData);
 
     // Check if user already exists by email
     const existingUserByEmail = await User.findOne({
@@ -52,7 +100,7 @@ export async function POST(request: NextRequest) {
     const emailVerificationOTPExpires = getOTPExpiryTime();
 
     // Create user
-    const user = new User({
+    const user: IUser = new User({
       email: validatedData.email,
       password: hashedPassword,
       fullName: validatedData.fullName,
@@ -61,7 +109,10 @@ export async function POST(request: NextRequest) {
       emailVerificationOTP: emailVerificationOTP,
       emailVerificationOTPExpires: emailVerificationOTPExpires,
     });
-
+    if (validatedData.vendorDetails) {
+      user.vendorDetails = validatedData.vendorDetails;
+      user.role = "vendor";
+    }
     await user.save();
 
     try {
