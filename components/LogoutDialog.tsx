@@ -29,6 +29,9 @@ export default function LogoutDialog({
     if (userRole === "user") {
       router.push("/auth/login");
       window.location.href = "/auth/login";
+    } else if (userRole === "vendor") {
+      router.push("/vendor/auth/login");
+      window.location.href = "/vendor/auth/login";
     } else {
       router.push("/admin/auth/login");
       window.location.href = "/admin/auth/login";
