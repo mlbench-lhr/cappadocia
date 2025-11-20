@@ -452,7 +452,7 @@ export default function BookingsPage() {
                   Available — €120 per person
                 </span>
                 <Button variant={"main_green_button"} size={"sm"}>
-                  <Link href={"/bookings/book"}>Book now</Link>
+                  <Link href={"/explore/detail/1"}>Book now</Link>
                 </Button>
               </div>
             </BoxProviderWithName>

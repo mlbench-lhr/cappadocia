@@ -70,7 +70,7 @@ export default function TourCard(item: TourCardProps) {
             className="text-xs"
             style={{ height: "34px" }}
           >
-            <Link href={"/bookings/book"}>Book now</Link>
+            <Link href={"/explore/detail/1"}>Book now</Link>
           </Button>
         </div>
       </div>

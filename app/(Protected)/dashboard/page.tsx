@@ -325,7 +325,7 @@ export default function DashboardPage() {
                           className="w-[92px] flex font-[500]"
                           style={{ height: "26px", fontSize: "10px" }}
                         >
-                          <Link href={"/bookings/book"}>Book now</Link>
+                          <Link href={"/explore/detail/1"}>Book now</Link>
                         </Button>
                       </div>
                     </div>
