@@ -10,7 +10,7 @@ import Section8 from "./LandingPageSections/Section8";
 
 export default function app() {
   return (
-    <div className="w-full h-fit pb-20">
+    <div className="w-full h-fit">
       <Section1 />
       <Section2 />
       <Section3 />

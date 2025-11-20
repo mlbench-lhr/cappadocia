@@ -3,6 +3,7 @@ import TourCard, {
   TourCardProps,
 } from "@/components/landingPage/landingPageTourCard";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const tourCardData: TourCardProps[] = [
   {
@@ -44,7 +45,9 @@ export default function Section2() {
             <h1 className="font-semibold text-xl md:text-4xl">
               Book Your Adventure <br className="hidden md:block" /> Now
             </h1>
-            <Button variant={"main_green_button"}>Explore Tours</Button>
+            <Button variant={"main_green_button"} asChild>
+              <Link href={"/explore"}>Explore Tours</Link>
+            </Button>
           </div>
           <div className="w-full md:w-[415px] h-fit">
             <span className="font-normal text-lg md:text-[22px] text-[rgba(9,9,9,0.50)] leading-tight">

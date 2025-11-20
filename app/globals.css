@@ -124,6 +124,9 @@
     @apply bg-background text-foreground;
   }
 }
+html {
+  scroll-behavior: smooth;
+}
 .hero-text-css {
   color: var(--Schemes-On-Surface, #171d1a);
   text-align: center;
