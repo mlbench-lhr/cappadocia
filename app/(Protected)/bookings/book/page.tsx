@@ -147,7 +147,7 @@ export default function BookingsPage() {
 
   return (
     <BasicStructureWithName name="Book Now" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
+      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4 xl:w-[80%]">
         {/* Trip Details */}
         <BoxProviderWithName
           noBorder={true}

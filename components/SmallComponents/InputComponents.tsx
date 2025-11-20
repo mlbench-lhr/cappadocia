@@ -131,7 +131,7 @@ export const TextInputComponent = ({
       <Input
         type={type}
         placeholder={placeholderTemp}
-        className={`h-[44px] bg-white ${
+        className={`bg-white ${
           error ? "border-red-500 focus-visible:ring-red-500" : ""
         }`}
         required={required}
