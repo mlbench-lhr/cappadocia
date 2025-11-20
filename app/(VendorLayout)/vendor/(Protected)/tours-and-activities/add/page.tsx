@@ -26,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { uploadMultipleFiles } from "@/lib/utils/upload";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const tourFormSchema = z.object({
   title: z.string().min(1, "Tour title is required"),
@@ -55,6 +57,7 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const toursState = useAppSelector((s) => s.tourAndActivity);
   const [isUploading, setIsUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState<string>("");
   const [cancellationPolicyHours, setCancellationPolicyHours] =
     useState<number>(0);
@@ -63,7 +66,7 @@ export default function BookingsPage() {
   const [newNotIncluded, setNewNotIncluded] = useState<string>("");
   const [newItinerary, setNewItinerary] = useState<string>("");
   console.log("toursState---", toursState);
-
+  const router = useRouter();
   const {
     control,
     handleSubmit,
@@ -129,7 +132,7 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, [isMobile, dispatch]);
 
-  const onSubmit = (data: TourFormData) => {
+  const onSubmit = async (data: TourFormData) => {
     console.log("Form submitted:", data);
     // Sync all arrays to Redux before submission
     dispatch(setField({ field: "uploads", value: data.uploads }));
@@ -137,6 +140,16 @@ export default function BookingsPage() {
     dispatch(setField({ field: "notIncluded", value: data.notIncluded }));
     dispatch(setField({ field: "itinerary", value: data.itinerary }));
     dispatch(setField({ field: "languages", value: selectedLanguages }));
+    try {
+      setLoading(true);
+      await axios.post("/api/toursAndActivity/add", {
+        toursState,
+      });
+      router.push("/vendor/tours-and-activities");
+      setLoading(true);
+    } catch (error) {
+      console.log("error-", error);
+    }
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -684,6 +697,9 @@ export default function BookingsPage() {
             className="w-full"
             type="button"
             onClick={handleSubmit(onSubmit)}
+            disabled={loading}
+            loading={loading}
+            loadingText={"Loading..."}
           >
             Next
           </Button>

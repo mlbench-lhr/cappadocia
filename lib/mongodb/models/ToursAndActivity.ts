@@ -15,13 +15,15 @@ export interface ToursAndActivity {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  slots: {
-    startDate: Date;
-    endDate: Date;
-    adultPrice: number;
-    childPrice: number;
-    seatsAvailable: number;
-  };
+  slots: [
+    {
+      startDate: Date;
+      endDate: Date;
+      adultPrice: number;
+      childPrice: number;
+      seatsAvailable: number;
+    }
+  ];
   isVerified: boolean;
   rejected: {
     isRejected: boolean;
@@ -49,13 +51,15 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     itinerary: { type: [String], default: [] },
     cancellationPolicy: { type: String, required: true },
     duration: { type: Number, required: true },
-    slots: {
-      startDate: { type: Date, required: true },
-      endDate: { type: Date, required: true },
-      adultPrice: { type: Number, required: true },
-      childPrice: { type: Number, required: true },
-      seatsAvailable: { type: Number, required: true },
-    },
+    slots: [
+      {
+        startDate: { type: Date, required: true },
+        endDate: { type: Date, required: true },
+        adultPrice: { type: Number, required: true },
+        childPrice: { type: Number, required: true },
+        seatsAvailable: { type: Number, required: true },
+      },
+    ],
     isVerified: { type: Boolean, default: false },
     rejected: {
       isRejected: { type: Boolean, default: false },
