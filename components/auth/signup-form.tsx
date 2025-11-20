@@ -109,7 +109,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
   }, [error]);
 
   useEffect(() => {
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword && password && confirmPassword) {
       setErrorMsg("Passwords do not match");
     } else {
       setErrorMsg("");

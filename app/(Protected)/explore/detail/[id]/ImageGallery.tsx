@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-export default function ImageGallery() {
+export default function ImageGallery({
+  imagesParam = [],
+}: {
+  imagesParam: string[];
+}) {
   const [open, setOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
-
-  // Define your images array
-  const images = [
-    { src: "/userDashboard/img20.png", alt: "Image 1" },
-    { src: "/userDashboard/img21.png", alt: "Image 2" },
-    { src: "/userDashboard/img22.png", alt: "Image 3" },
-    { src: "/userDashboard/img23.png", alt: "Image 4" },
-  ];
+  const images = imagesParam.map((item, index) => {
+    return { src: item, alt: "Image" + index };
+  });
 
   const handleImageClick = (index: any) => {
     setPhotoIndex(index);
@@ -24,50 +23,55 @@ export default function ImageGallery() {
       <div className="w-full grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
         {/* First Image */}
         <div
-          className="col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full cursor-pointer hover:opacity-90 transition-opacity"
+          className={`col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full cursor-pointer hover:opacity-90 transition-opacity`}
           onClick={() => handleImageClick(0)}
         >
           <img
-            src={images[0].src}
-            alt={images[0].alt}
+            src={images[0]?.src}
+            alt={images[0]?.alt}
             className="w-full h-full object-cover object-center"
           />
         </div>
 
-        {/* Second Image */}
-        <div
-          className="col-span-5 lg:col-span-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full cursor-pointer hover:opacity-90 transition-opacity"
-          onClick={() => handleImageClick(1)}
-        >
-          <img
-            src={images[1].src}
-            alt={images[1].alt}
-            className="w-full h-full object-cover object-center"
-          />
-        </div>
+        {images.length > 1 && (
+          <div
+            className="col-span-5 lg:col-span-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full cursor-pointer hover:opacity-90 transition-opacity"
+            onClick={() => handleImageClick(1)}
+          >
+            <img
+              src={images[1]?.src}
+              alt={images[1]?.alt}
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        )}
 
         {/* Third and Fourth Images Container */}
         <div className="col-span-10 lg:col-span-4 grid lg:grid-cols-none grid-cols-2 grid-rows-none lg:grid-rows-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full gap-x-2 lg:gap-x-0 gap-y-0 lg:gap-y-3.5">
-          <div
-            className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => handleImageClick(2)}
-          >
-            <img
-              src={images[2].src}
-              alt={images[2].alt}
-              className="w-full h-full object-cover object-center"
-            />
-          </div>
-          <div
-            className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => handleImageClick(3)}
-          >
-            <img
-              src={images[3].src}
-              alt={images[3].alt}
-              className="w-full h-full object-cover object-center"
-            />
-          </div>
+          {images.length > 2 && (
+            <div
+              className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => handleImageClick(2)}
+            >
+              <img
+                src={images[2]?.src}
+                alt={images[2]?.alt}
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+          )}
+          {images.length > 3 && (
+            <div
+              className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => handleImageClick(3)}
+            >
+              <img
+                src={images[3]?.src}
+                alt={images[3]?.alt}
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+          )}
         </div>
       </div>
 

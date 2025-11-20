@@ -124,6 +124,7 @@ export interface UserResponse {
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
 
   useEffect(() => {
@@ -143,6 +144,7 @@ export default function BookingsPage() {
 
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [actionLoading, setActionLoading] = useState<boolean>(false);
   console.log("data?.vendor?.vendorDetails?.address-----", data);
 
   const { id }: { id: string } = useParams();
@@ -163,6 +165,42 @@ export default function BookingsPage() {
     };
     getData();
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/toursAndActivity/detail/${id}`);
+        if (response.data?.user) {
+          setData(response.data?.user);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  const accept = async () => {
+    try {
+      setActionLoading(true);
+      await axios.put(`/api/toursAndActivity/update/${id}`, {
+        isVerified: true,
+      });
+      setActionLoading(false);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: `Vendor approved Successfully`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      router.push("/admin/tours-and-activities");
+    } catch (error) {
+      console.log("err---", error);
+    }
+  };
 
   if (loading) {
     return <BasicStructureWithName name="">Loading....</BasicStructureWithName>;
@@ -299,6 +337,16 @@ export default function BookingsPage() {
             </BoxProviderWithName>
           </div>
         </BoxProviderWithName>
+        <div className="flex gap-3">
+          <button
+            onClick={accept}
+            disabled={actionLoading}
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
+          >
+            {actionLoading ? "Accepting" : "Accept"}
+          </button>
+          <RejectVendorDialog type={"activity"} id={id} />
+        </div>
       </div>
     </BasicStructureWithName>
   );

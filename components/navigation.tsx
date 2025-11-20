@@ -2,59 +2,71 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "@/lib/store/hooks";
 
 export function Navigation() {
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user_id = useAppSelector((s) => s.auth.user?.id);
-  console.log("user_id", user_id);
+  console.log("user_id", user_id, pathname);
+  console.log("pathname----", pathname);
 
   const navLinks = (
     <>
       <Link
         href="/"
         className={
-          pathname === "/"
+          pathname === "home"
             ? "font-[600] text-[16px]"
             : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
-        onClick={() => setIsMobileMenuOpen(false)}
+        onClick={() => {
+          setIsMobileMenuOpen(false);
+          setPathname("home");
+        }}
       >
         Home
       </Link>
       <Link
-        href="/About"
+        href="#About"
         className={
-          pathname === "/About"
+          pathname.includes("About")
             ? "font-[600] text-[16px]"
             : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
-        onClick={() => setIsMobileMenuOpen(false)}
+        onClick={() => {
+          setIsMobileMenuOpen(false);
+          setPathname("About");
+        }}
       >
         About Us
       </Link>
       <Link
-        href="/ToursAndActivities"
+        href="/explore"
         className={
-          pathname === "/ToursAndActivities"
+          pathname.includes("/ToursAndActivities")
             ? "font-[600] text-[16px]"
             : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
-        onClick={() => setIsMobileMenuOpen(false)}
+        onClick={() => {
+          setIsMobileMenuOpen(false);
+          setPathname("ToursAndActivities");
+        }}
       >
         Tours & Activities
       </Link>
       <Link
-        href="/Contact"
+        href="#Contact"
         className={
-          pathname === "/Contact"
+          pathname.includes("Contact")
             ? "font-[600] text-[16px]"
             : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
         }
-        onClick={() => setIsMobileMenuOpen(false)}
+        onClick={() => {
+          setIsMobileMenuOpen(false);
+          setPathname("Contact");
+        }}
       >
         Contact
       </Link>
@@ -63,7 +75,7 @@ export function Navigation() {
 
   return (
     <nav
-      className="h-[70px] md:h-[110px] flex items-center px-[20px]  lg:px-[80px] 2xl:px-[90px] bg-white shadow-sm relative"
+      className="h-[70px] md:h-[80px] flex items-center px-[20px]  lg:px-[80px] 2xl:px-[90px] bg-white shadow-sm relative"
       style={{ zIndex: 110 }}
     >
       <div className="flex justify-between items-center w-full">

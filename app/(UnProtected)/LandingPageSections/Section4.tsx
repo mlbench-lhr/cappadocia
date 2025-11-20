@@ -6,7 +6,7 @@ export default function Section4() {
   const [date, setDate] = useState();
 
   return (
-    <div className="w-full h-fit pt-24">
+    <div className="w-full h-fit pt-12">
       <div className="w-full flex flex-col items-center justify-center h-fit relative z-0">
         <div className="w-full flex flex-col items-center h-[653px] justify-end relative z-0">
           <Image

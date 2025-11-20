@@ -15,10 +15,10 @@ export function Footer() {
         <div className="px-[20px] md:px-[0px] flex justify-start items-center gap-[48px] lg:gap-[24px] pe-0 md:pe-20">
           <div className="flex justify-between items-start gap-y-[10px] gap-x-[40px] flex-col text-base">
             <span className="font-[600] text-white">Quick Links</span>
-            <Link href="/About">About</Link>
-            <Link href="/WhyChoose">Why choose</Link>
-            <Link href="/Contact">Contact</Link>
-            <Link href="/Become-a-vendor">Become a vendor</Link>
+            <Link href="#About">About</Link>
+            <Link href="#WhyChoose">Why choose</Link>
+            <Link href="#Contact">Contact</Link>
+            <Link href="/vendor/auth/signup">Become a vendor</Link>
           </div>
         </div>
         <div className="w-full px-[20px] md:px-[0px] py-8 border-y-2 border-[rgba(255,255,255,0.50)] font-[400] text-[12px] flex justify-center md:justify-start gap-2 md:gap-4 items-center">

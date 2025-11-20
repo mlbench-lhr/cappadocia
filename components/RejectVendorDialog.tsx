@@ -16,7 +16,13 @@ import { useState } from "react";
 import { TextAreaInputComponent } from "./SmallComponents/InputComponents";
 import Swal from "sweetalert2";
 
-export default function RejectVendorDialog({ id }: { id: string }) {
+export default function RejectVendorDialog({
+  id,
+  type,
+}: {
+  id: string;
+  type?: "activity" | "vendor";
+}) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
   const [reason, setReason] = useState("");
@@ -33,6 +39,29 @@ export default function RejectVendorDialog({ id }: { id: string }) {
       });
       setDeleting(false);
       router.push("/admin/vendor-applications");
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: `Vendor rejected Successfully`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.log("err---", error);
+    }
+  };
+
+  const handleConfirmActivity = async () => {
+    try {
+      setDeleting(true);
+      await axios.put(`/api/toursAndActivity/update/${id}`, {
+        rejected: {
+          isRejected: true,
+          reason: reason,
+        },
+      });
+      setDeleting(false);
+      router.push("/admin/tours-and-activities");
       Swal.fire({
         icon: "success",
         title: "Success",
@@ -73,7 +102,9 @@ export default function RejectVendorDialog({ id }: { id: string }) {
               <div className="w-full">
                 <DialogClose asChild>
                   <Button
-                    onClick={handleConfirm}
+                    onClick={
+                      type === "vendor" ? handleConfirm : handleConfirmActivity
+                    }
                     variant={"main_green_button"}
                     className="w-full !bg-red-500"
                     disabled={deleting}

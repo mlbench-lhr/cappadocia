@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { SwitchRoles } from "@/components/SmallComponents/SwitchRoles";
 
 export function AuthLayoutProvider({
   children,
@@ -15,6 +15,7 @@ export function AuthLayoutProvider({
         } hidden lg:flex w-[50%] min-h-screen max-h-full`}
       ></div>
       <div className="w-full lg:w-1/2 h-full">
+        {showImage1 && <SwitchRoles />}
         <div className="flex justify-center items-start lg:items-center w-full h-[100vh] bg-white min-h-fit max-h-full">
           <div className="flex-1 flex items-start lg:items-center justify-center py-6 lg:py-2 px-4 sm:px-6 lg:px-8 min-h-fit max-h-full">
             <div className="w-full max-w-md space-y-8 min-h-fit max-h-full">

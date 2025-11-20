@@ -4,8 +4,8 @@ import Image from "next/image";
 
 export default function Section7() {
   return (
-    <div className="w-full h-fit pt-24">
-      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-[40px] lg:pb-[90px] gap-14">
+    <div className="w-full h-fit pt-12" id="About">
+      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-12 lg:pb-12 gap-14">
         <div className="w-full flex justify-start items-center gap-y-10 gap-x-15 flex-wrap">
           <div className="relative flex justify-center items-center w-full lg:w-fit h-fit z-[0]">
             <Image

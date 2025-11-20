@@ -138,7 +138,7 @@ export default function BookingsPage() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/vendor/tours-and-activities/detail/${item._id}`}
+          href={`/admin/tours-and-activities/detail/${item._id}`}
           className="text-[#B32053] underline"
         >
           View Details
@@ -160,7 +160,7 @@ export default function BookingsPage() {
       rightSideComponent={
         <div className="flex justify-start items-center gap-2">
           <Button className="" variant={"main_green_button"}>
-            <Link href={`/vendor/tours-and-activities/add`}>
+            <Link href={`/admin/tours-and-activities/add`}>
               Add Tour/Activity
             </Link>
             <Plus className="mr-2 h-4 w-4" />
