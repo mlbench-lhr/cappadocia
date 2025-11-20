@@ -210,6 +210,37 @@ export function FormTextInput<T extends FieldValues>({
   );
 }
 
+export function FormTextAreaInput<T extends FieldValues>({
+  label,
+  placeholder,
+  disabled = false,
+  required = false,
+  control,
+  name,
+  type = "text",
+}: FormInputProps<T> & {
+  type?: "text" | "email" | "number" | "tel" | "password" | "date";
+}) {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState: { error } }) => (
+        <TextAreaInputComponent
+          label={label}
+          placeholder={placeholder}
+          disabled={disabled}
+          required={required}
+          type={type}
+          value={field.value}
+          onChange={field.onChange}
+          error={error?.message}
+        />
+      )}
+    />
+  );
+}
+
 // Regular Radio Input Component (non-form)
 export const RadioInputComponent = ({
   label,
@@ -235,7 +266,7 @@ export const RadioInputComponent = ({
       <RadioGroup
         value={value}
         onValueChange={onChange}
-        className="flex gap-14 flex-col md:flex-row justify-start items-center flex-wrap"
+        className="flex gap-14 flex-col md:flex-row justify-start items-end mt-4 flex-wrap"
       >
         {options.map((option) => (
           <div key={option.value} className="flex items-center space-x-2">

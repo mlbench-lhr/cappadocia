@@ -160,7 +160,9 @@ export default function BookingsPage() {
       rightSideComponent={
         <div className="flex justify-start items-center gap-2">
           <Button className="" variant={"main_green_button"}>
-            <Link href={"/explore"}>Add Tour/Activity</Link>
+            <Link href={`/vendor/tours-and-activities/add`}>
+              Add Tour/Activity
+            </Link>
             <Plus className="mr-2 h-4 w-4" />
           </Button>
           <SearchComponent
