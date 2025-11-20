@@ -31,29 +31,31 @@ export const PaymentInfoSchema = z.object({
   currency: z.string().min(1, { message: "currency is required" }),
 });
 
-const VendorDetailsSchema = z.object({
-  password: z
-    .string()
-    .min(8, { message: "password must be at least 8 characters" }),
-  companyName: z.string().min(1, { message: "companyName is required" }),
-  contactPersonName: z
-    .string()
-    .min(1, { message: "contactPersonName is required" }),
-  businessEmail: z
-    .string()
-    .email({ message: "businessEmail must be a valid email" }),
-  contactPhoneNumber: z
-    .string()
-    .min(5, { message: "contactPhoneNumber is required" }),
-  tursabNumber: z.string().min(1, { message: "tursabNumber is required" }),
-  address: AddressSchema,
-  documents: z.array(z.string()), // change to z.string().url() if these are URLs
-  aboutUs: z.string(),
-  languages: z
-    .array(z.string())
-    .min(1, { message: "at least one language is required" }),
-  paymentInfo: PaymentInfoSchema,
-});
+const VendorDetailsSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { message: "password must be at least 8 characters" }),
+    companyName: z.string().min(1, { message: "companyName is required" }),
+    contactPersonName: z
+      .string()
+      .min(1, { message: "contactPersonName is required" }),
+    businessEmail: z
+      .string()
+      .email({ message: "businessEmail must be a valid email" }),
+    contactPhoneNumber: z
+      .string()
+      .min(5, { message: "contactPhoneNumber is required" }),
+    tursabNumber: z.string().min(1, { message: "tursabNumber is required" }),
+    address: AddressSchema,
+    documents: z.array(z.string()), // change to z.string().url() if these are URLs
+    aboutUs: z.string(),
+    languages: z
+      .array(z.string())
+      .min(1, { message: "at least one language is required" }),
+    paymentInfo: PaymentInfoSchema,
+  })
+  .optional();
 
 const signupSchema = z.object({
   email: z.string().email("Invalid email address"),
