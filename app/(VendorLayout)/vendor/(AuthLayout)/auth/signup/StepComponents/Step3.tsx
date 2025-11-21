@@ -111,7 +111,7 @@ export default function VendorSignupStep3({
             <div className="relative">
               <input
                 type="file"
-                accept=".pdf,.jpg,.jpeg"
+                accept=".pdf,.jpg,.jpeg,.png"
                 onChange={handleFileSelect}
                 disabled={isUploading}
                 className="hidden"

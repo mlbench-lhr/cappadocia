@@ -1,5 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { uploadToCloudinary } from "@/lib/cloudinary/upload";
+import {
+  uploadPdfToCloudinary,
+  uploadToCloudinary,
+} from "@/lib/cloudinary/upload";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,7 +40,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await uploadToCloudinary(file, folder);
+    const result =
+      file.type === "application/pdf"
+        ? await uploadPdfToCloudinary(file, folder)
+        : await uploadToCloudinary(file, folder);
 
     return NextResponse.json({
       success: true,
