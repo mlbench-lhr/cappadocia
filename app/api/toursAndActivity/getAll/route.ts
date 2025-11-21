@@ -9,17 +9,22 @@ export async function GET(req: NextRequest) {
   const page = Number(url.searchParams.get("page")) || 1;
   const limit = Number(url.searchParams.get("limit")) || 7;
   const searchTerm = url.searchParams.get("search") || "";
+  const category = url.searchParams.get("category");
 
   const query: any = {};
 
   if (searchTerm) {
     query.title = { $regex: searchTerm, $options: "i" };
   }
+  if (category) {
+    query.category = category;
+  }
 
   const skip = (page - 1) * limit;
 
   const [items, total] = await Promise.all([
     ToursAndActivity.find(query)
+      .populate("vendor")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 }),

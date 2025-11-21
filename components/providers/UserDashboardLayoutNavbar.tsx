@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import logo from "@/public/logo.png";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -16,7 +15,7 @@ import Image from "next/image";
 import { ChevronDown, Lock, Menu } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
-import { setCount, setHasNew } from "@/lib/store/slices/notificationSlice";
+import { setHasNew } from "@/lib/store/slices/notificationSlice";
 import DeleteAccountDialog from "../DeleteAccountDialog";
 import { NotificationIcon } from "@/public/allIcons/page";
 
@@ -90,41 +89,6 @@ export function Navbar() {
   const { isCollapsed } = useSelector((s: RootState) => s.sidebar);
   const hasNew = useAppSelector((s) => s.notification.hasNew);
   const userData = useAppSelector((state) => state.auth.user);
-  useEffect(() => {
-    let isMounted = true;
-    const controller = new AbortController();
-
-    async function load() {
-      try {
-        const res = await fetch("/api/notifications", {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-        if (!res.ok) return;
-        const json = await res.json();
-        if (!isMounted) return;
-        if (Array.isArray(json)) {
-          dispatch(setCount(json?.length));
-          dispatch(setHasNew(json.some((n: any) => n.isUnread)));
-        }
-      } catch {
-        // ignore fetch aborts / errors
-      }
-    }
-
-    // initial load
-    load();
-
-    // revalidate on focus (replacement for SWR's revalidateOnFocus)
-    const onFocus = () => load();
-    window.addEventListener("focus", onFocus);
-
-    return () => {
-      isMounted = false;
-      controller.abort();
-      window.removeEventListener("focus", onFocus);
-    };
-  }, [dispatch]);
 
   return (
     <header className="w-full bg-white border-b h-[78px] flex justify-end items-center">

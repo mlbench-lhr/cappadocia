@@ -3,5 +3,5 @@
 import ExplorePage from "../page";
 
 export default function ExploreTourPage() {
-  return <ExplorePage type="tour" />;
+  return <ExplorePage type="Tour" />;
 }

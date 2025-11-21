@@ -18,12 +18,6 @@ import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-export type DashboardCardProps = {
-  image: string;
-  title: string;
-  description: string;
-};
-
 export type bookingProps = {
   bookingId: string;
   title: string;
@@ -97,6 +91,7 @@ export default function BookingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<string[]>(["all"]);
   const [bookings, setBookings] = useState<bookingProps[]>(bookingData);
+  const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -108,21 +103,18 @@ export default function BookingsPage() {
       accessor: "title",
     },
     {
-      header: "Price/per person",
-      accessor: "title",
+      header: "Vendor",
+      accessor: "vendor",
+      render: (item) => {
+        return <span>{item?.vendor?.vendorDetails?.contactPersonName}</span>;
+      },
     },
     {
-      header: "Tour Status",
-      accessor: "status",
-      render: (item) => (
-        <div className="flex justify-start items-center">
-          <StatusBadge
-            status={item.status}
-            textClasses="text-base font-normal"
-            widthClasses="w-fit"
-          />
-        </div>
-      ),
+      header: "Price",
+      accessor: "price",
+      render: (item) => {
+        return <span>$ {item?.slots?.[0]?.adultPrice}</span>;
+      },
     },
     {
       header: "Next Available Date",
@@ -157,6 +149,7 @@ export default function BookingsPage() {
   return (
     <BasicStructureWithName
       name="Tours & Activities"
+      subHeading={"Total Applications: " + totalItems}
       rightSideComponent={
         <div className="flex justify-start items-center gap-2">
           <Button className="" variant={"main_green_button"}>
@@ -173,45 +166,6 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
-        {/* Filter buttons */}
-        <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
-            const isActive =
-              (filter === "all" && filters.includes("all")) ||
-              filters.includes(filter.toLowerCase());
-
-            const handleClick = () => {
-              if (filter === "all") {
-                setFilters(["all"]);
-              } else {
-                setFilters((prev) => {
-                  const withoutAll = prev.filter((f) => f !== "all");
-                  if (withoutAll.includes(filter.toLowerCase() as any)) {
-                    const updated = withoutAll.filter(
-                      (f) => f !== filter.toLowerCase()
-                    );
-                    return updated.length === 0 ? ["all"] : updated;
-                  } else {
-                    return [...withoutAll, filter.toLowerCase()];
-                  }
-                });
-              }
-            };
-
-            return (
-              <div
-                key={filter}
-                onClick={handleClick}
-                className={`cursor-pointer ${
-                  isActive ? "bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
-              >
-                {filter}
-              </div>
-            );
-          })}
-        </div>
-
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<bookingProps>
@@ -220,6 +174,7 @@ export default function BookingsPage() {
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}
+            setTotalItems={setTotalItems}
             itemsPerPage={7}
           >
             {(data, isLoading, refetch) => (

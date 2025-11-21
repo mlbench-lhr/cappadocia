@@ -5,7 +5,7 @@ import "yet-another-react-lightbox/styles.css";
 export default function ImageGallery({
   imagesParam = [],
 }: {
-  imagesParam: string[];
+  imagesParam: string[] | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);

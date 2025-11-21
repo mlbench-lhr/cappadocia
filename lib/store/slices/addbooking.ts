@@ -7,7 +7,7 @@ interface LatLng {
 
 export interface LocationData {
   address: string;
-  coordinates: LatLng;
+  coordinates: LatLng | null;
 }
 
 interface Traveler {

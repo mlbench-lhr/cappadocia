@@ -13,6 +13,9 @@ import {
   View,
   Eye,
   UserPlus,
+  User2,
+  UserCheck,
+  UserCog,
 } from "lucide-react";
 import Image from "next/image";
 import greenGraphLine from "@/public/green graph line.svg";
@@ -364,6 +367,51 @@ const Dashboard: React.FC = () => {
           <StatCard
             icon={<View color="#B32053" />}
             title="Website Views"
+            value={overview?.app?.total}
+            trend={overview?.app?.percentageChange}
+            trendColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}
+            points={[3]}
+            isLoading={loading}
+          />
+          <StatCard
+            icon={<Users color="#B32053" />}
+            title="Total Users"
+            value={overview?.blogs?.total}
+            trend={overview?.blogs?.percentageChange}
+            trendColorVar={overview?.blogs?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.blogs?.incremented ? "#B32053" : "#BA1A1A"}
+            points={[3]}
+            isLoading={loading}
+          />
+          <StatCard
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M10 3.29C9.28623 3.5032 8.61107 3.82896 8 4.255V13H10V3.29ZM7.539 15C8.27424 15.8792 9.06096 16.714 9.895 17.5H14.105C14.875 16.771 15.705 15.912 16.461 15H7.539ZM16 4.255C15.3889 3.82896 14.7138 3.5032 14 3.29V13H16V4.255ZM15.5 18.934C16.63 17.862 17.908 16.502 18.943 15.06C20.05 13.517 21 11.716 21 10C21 8.8181 20.7672 7.64778 20.3149 6.55585C19.8626 5.46392 19.1997 4.47177 18.364 3.63604C17.5282 2.80031 16.5361 2.13738 15.4442 1.68508C14.3522 1.23279 13.1819 1 12 1C10.8181 1 9.64778 1.23279 8.55585 1.68508C7.46392 2.13738 6.47177 2.80031 5.63604 3.63604C4.80031 4.47177 4.13738 5.46392 3.68508 6.55585C3.23279 7.64778 3 8.8181 3 10C3 11.716 3.95 13.517 5.057 15.06C6.092 16.502 7.37 17.862 8.5 18.934V23H15.5V18.934Z"
+                  fill="#B32053"
+                />
+              </svg>
+            }
+            title="Total Booking"
+            value={overview?.blog?.total}
+            trend={overview?.blog?.percentageChange}
+            trendColorVar={overview?.blog?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.blog?.incremented ? "#B32053" : "#BA1A1A"}
+            points={[3]}
+            isLoading={loading}
+          />
+          <StatCard
+            icon={<UserCog color="#B32053" />}
+            title="Total Vendors"
             value={overview?.app?.total}
             trend={overview?.app?.percentageChange}
             trendColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}

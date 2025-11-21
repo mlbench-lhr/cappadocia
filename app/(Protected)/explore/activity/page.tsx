@@ -2,6 +2,6 @@
 
 import ExplorePage from "../page";
 
-export default function ExploreActivityPage() {
-  return <ExplorePage type="activity" />;
+export default function ExploreTourPage() {
+  return <ExplorePage type="Activity" />;
 }

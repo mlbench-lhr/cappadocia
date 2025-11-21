@@ -16,7 +16,10 @@ import {
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { TourAndActivityCard } from "@/components/TourAndActivityCard";
+import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import axios from "axios";
+import ExploreTours from "./tours/toursCom";
+import ExploreActivities from "./activity/activitiesCom";
 
 export type DashboardCardProps = {
   image: string;
@@ -50,64 +53,6 @@ export type exploreProps = {
   };
 };
 
-const exploreData: exploreProps[] = [
-  {
-    image: "/userDashboard/img8.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img4.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.5,
-    groupSize: 20,
-    price: 120,
-    pickupAvailable: true,
-    _id: "1",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img2.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 3.9,
-    groupSize: 20,
-    price: 250,
-    pickupAvailable: true,
-    _id: "2",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img9.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.8,
-    groupSize: 20,
-    price: 95,
-    pickupAvailable: true,
-    _id: "3",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-];
 type DurationFilter = { duration: { from: Date | null; to: Date | null } };
 type PriceRangeFilter = {
   priceRange: { min: number | null; max: number | null };
@@ -117,7 +62,7 @@ type RatingFilter = { rating: number };
 export default function ExplorePage({
   type = "both",
 }: {
-  type: "both" | "tour" | "activity";
+  type: "both" | "Tour" | "Activity";
 }) {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
@@ -208,6 +153,51 @@ export default function ExplorePage({
   const isRatingActive = filters.some(
     (f) => typeof f === "object" && "rating" in (f as any)
   );
+  const [tours, setTours] = useState<ToursAndActivityWithVendor[]>();
+  const [activity, setActivity] = useState<ToursAndActivityWithVendor[]>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/toursAndActivity/getAll`);
+        console.log("response----", response);
+
+        if (response.data?.data) {
+          setActivity(response.data?.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(
+          `/api/toursAndActivity/getAll?category=`
+        );
+        console.log("response----", response);
+
+        if (response.data?.data) {
+          setActivity(response.data?.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  if (!tours && !activity) {
+    return null;
+  }
 
   return (
     <BasicStructureWithName
@@ -381,37 +371,8 @@ export default function ExplorePage({
         </div>
         <BoxProviderWithName className="">
           <div className="w-full space-y-0">
-            {(type === "both" || type === "tour") && (
-              <BoxProviderWithName
-                noBorder={true}
-                name="Popular Tours"
-                rightSideLink={type === "both" ? "/explore/tour" : undefined}
-                rightSideLabel="View All Tours"
-              >
-                <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-                  {exploreData.map((item) => (
-                    <TourAndActivityCard item={item} />
-                  ))}
-                </div>
-              </BoxProviderWithName>
-            )}
-            {(type === "both" || type === "activity") && (
-              <BoxProviderWithName
-                className="!py-0"
-                noBorder={true}
-                name="Popular Activities"
-                rightSideLink={
-                  type === "both" ? "/explore/activity" : undefined
-                }
-                rightSideLabel="View All Activities"
-              >
-                <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-                  {exploreData.map((item) => (
-                    <TourAndActivityCard item={item} />
-                  ))}
-                </div>
-              </BoxProviderWithName>
-            )}
+            {(type === "both" || type === "Tour") && <ExploreTours />}
+            {(type === "both" || type === "Activity") && <ExploreActivities />}
           </div>
         </BoxProviderWithName>
       </div>

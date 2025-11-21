@@ -6,7 +6,7 @@ import mongoose, { type Document, Schema, Types } from "mongoose";
 export interface ToursAndActivity {
   vendor: Types.ObjectId;
   title: string;
-  category?: string;
+  category?: "Tour" | "Activity";
   description?: string;
   uploads: string[];
   languages: string[];
@@ -33,8 +33,9 @@ export interface ToursAndActivity {
   };
 }
 export interface ToursAndActivityWithVendor {
+  _id: string;
   title: string;
-  category?: string;
+  category?: "Tour" | "Activity";
   description?: string;
   uploads: string[];
   languages: string[];
@@ -60,6 +61,7 @@ export interface ToursAndActivityWithVendor {
     reason?: string;
   };
   vendor: {
+    avatar: string;
     vendorDetails: VendorDetails;
   };
 }

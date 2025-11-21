@@ -12,6 +12,7 @@ export interface User {
   updatedAt?: string;
   phoneNumber: string;
   blogTier: "Tier 1" | "Tier 2" | "Tier 3";
+  role: "admin" | "user" | "vendor";
   profileUpdated: boolean;
   dataUpdated: boolean;
   vendorDetails: VendorDetails;

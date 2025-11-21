@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { TableSkeleton } from "./Loader";
-import { Database, Sprout, Trophy, Users } from "lucide-react";
+import { Database, Sprout, Users } from "lucide-react";
 
 // Column Definition Interface
 export interface Column {

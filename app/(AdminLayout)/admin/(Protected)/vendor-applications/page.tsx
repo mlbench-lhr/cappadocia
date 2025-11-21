@@ -14,6 +14,7 @@ import Link from "next/link";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
 import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
+import moment from "moment";
 
 export type vendorProps = {
   _id: string;
@@ -48,6 +49,7 @@ export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
+  const [totalItems, setTotalItems] = useState<number>(0);
   const [filters, setFilters] = useState<string[]>(["all"]);
 
   useEffect(() => {
@@ -62,6 +64,9 @@ export default function BookingsPage() {
     {
       header: "Date Applied",
       accessor: "dateApplied",
+      render: (item) => (
+        <span>{moment(item.createdAt).format("MMM DD, YYYY")}</span>
+      ),
     },
     {
       header: "Contact Person",
@@ -99,6 +104,7 @@ export default function BookingsPage() {
   return (
     <BasicStructureWithName
       name="Vendor Applications"
+      subHeading={"Total Applications: " + totalItems}
       rightSideComponent={
         <div className="flex justify-start items-center gap-2">
           <SearchComponent
@@ -109,45 +115,6 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
-        {/* Filter buttons */}
-        <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
-            const isActive =
-              (filter === "all" && filters.includes("all")) ||
-              filters.includes(filter.toLowerCase());
-
-            const handleClick = () => {
-              if (filter === "all") {
-                setFilters(["all"]);
-              } else {
-                setFilters((prev) => {
-                  const withoutAll = prev.filter((f) => f !== "all");
-                  if (withoutAll.includes(filter.toLowerCase() as any)) {
-                    const updated = withoutAll.filter(
-                      (f) => f !== filter.toLowerCase()
-                    );
-                    return updated.length === 0 ? ["all"] : updated;
-                  } else {
-                    return [...withoutAll, filter.toLowerCase()];
-                  }
-                });
-              }
-            };
-
-            return (
-              <div
-                key={filter}
-                onClick={handleClick}
-                className={`cursor-pointer ${
-                  isActive ? "bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
-              >
-                {filter}
-              </div>
-            );
-          })}
-        </div>
-
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<vendorProps>
@@ -156,6 +123,7 @@ export default function BookingsPage() {
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}
             itemsPerPage={7}
+            setTotalItems={setTotalItems}
           >
             {(data, isLoading, refetch) => (
               <div className="w-full space-y-0">

@@ -9,28 +9,11 @@ import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
-  CancellationPolicyIcon,
-  ClockIcon,
-  CheckIcon,
-  Vehicle2Icon,
-  WorldIcon,
-  CrossIcon,
   LocationIcon,
   StarIcon,
   PhoneIcon,
   MailIcon,
 } from "@/public/allIcons/page";
-import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
-import { TourAndActivityCard } from "@/components/TourAndActivityCard";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import Link from "next/link";
-import { exploreProps } from "../../../dashboard/page";
 import AddressLocationSelector, { LocationData } from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
@@ -92,108 +75,6 @@ export type InvoiceData = {
     email: string;
   };
 };
-const invoiceData: InvoiceData = {
-  invoice: {
-    invoiceNumber: "INV-001245",
-    invoiceDate: "2025-10-12",
-    bookingId: "BK-000789",
-  },
-  tourDetails: {
-    title: "Hot Air Balloon Sunrise Ride",
-    dateTime: "2025-10-14T05:15:00",
-    participants: {
-      adults: 2,
-      children: 1,
-    },
-    durationHours: 3,
-    meetingPoint: "Göreme Town Square, Cappadocia",
-  },
-  travelerInformation: {
-    fullName: "Sarah Mitchell",
-    passportNumber: "C98765432",
-    nationality: "United Kingdom",
-    contact: "+90 384 555 9876",
-    email: "Info@Skyadventures.Com",
-  },
-  paymentDetails: {
-    method: "MasterCard **** 4421",
-    transactionId: "TXN-568742195",
-    currency: "EUR",
-    amountPaid: 450.0,
-    status: "Paid",
-  },
-  priceBreakdown: {
-    basePrice: { adults: 2, currency: "€", perAdult: 160, total: 320 },
-    childPrice: { children: 1, currency: "€", perChild: 100, total: 100 },
-    serviceFee: 20,
-    totalPaid: 450,
-  },
-  vendorInformation: {
-    operator: "Cappadocia Sky Adventures",
-    tursabNumber: "11098",
-    contact: "+90 384 555 9876",
-    email: "Info@Skyadventures.Com",
-  },
-};
-
-const exploreData: exploreProps[] = [
-  {
-    image: "/userDashboard/img8.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img9.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img8.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img9.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-];
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -202,13 +83,7 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-  const LocationIconWithPadding = () => {
-    return (
-      <div className="py-2 bg-white">
-        <LocationIcon color="rgba(0, 0, 0, 0.50)" />
-      </div>
-    );
-  };
+
   const [location1, setLocation1] = useState<LocationData>({
     address: "1600 Amphitheatre Parkway, Mountain View, CA",
     coordinates: { lat: 37.4224764, lng: -122.0842499 },
@@ -347,7 +222,7 @@ export default function BookingsPage() {
               </div>
             </div>
             <BoxProviderWithName name="Gallery" className=" mt-4">
-              <ImageGallery />
+              <ImageGallery imagesParam={["/landing page/img 7.png"]} />
             </BoxProviderWithName>
             <BoxProviderWithName
               name="Reviews"

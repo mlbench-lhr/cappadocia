@@ -12,7 +12,7 @@ export interface Slot {
 export interface ToursAndActivityState {
   vendor: string | null;
   title: string;
-  category?: string;
+  category?: "Tour" | "Activity";
   description?: string;
   uploads: string[];
   languages: string[];
@@ -29,7 +29,7 @@ export interface ToursAndActivityState {
 const initialState: ToursAndActivityState = {
   vendor: null,
   title: "",
-  category: "",
+  category: "Tour",
   description: "",
   uploads: [],
   languages: [],
