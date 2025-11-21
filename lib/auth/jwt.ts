@@ -13,7 +13,7 @@ if (!JWT_SECRET) {
 export interface JWTPayload {
   userId: string;
   email: string;
-  role: "admin" | "user";
+  role: "admin" | "user" | "vendor";
 }
 
 export function generateToken(user: IUser): string {

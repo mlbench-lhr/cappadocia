@@ -16,12 +16,12 @@ export default function Section4() {
             height={100}
             className="w-full h-[653px] object-cover object-center"
           />
-          <div className="w-full flex flex-col md:flex-row items-center text-start justify-between absolute translate-y-[-50%] md:translate-y-[0%] top-1/2 md:top-auto bottom-auto md:bottom-10 left-0 gap-2 px-5 md:px-15">
-            <div className="w-fit flex flex-col items-start text-start justify-start gap-15">
-              <h1 className="font-bold text-3xl md:text-[52px] w-[90%] md:w-[560px] text-white leading-tight">
+          <div className="w-full flex flex-col lg:flex-row items-end text-start justify-between absolute translate-y-[-50%] lg:translate-y-[0%] top-1/2 lg:top-auto bottom-auto lg:bottom-10 left-0 gap-2 px-5 lg:px-15">
+            <div className="w-full lg:w-fit flex flex-col items-start text-start justify-start gap-6">
+              <h1 className="font-bold text-3xl lg:text-[46px] w-[90%] lg:w-[500px] text-white leading-tight">
                 Cappadocia Gallery
               </h1>
-              <h2 className="font-[400] text-xl md:text-[29px] w-[90%] md:w-[485px] text-[rgba(255,255,255,0.70)] leading-tight">
+              <h2 className="font-[400] text-xl md:text-2xl w-[90%] md:w-[485px] text-[rgba(255,255,255,0.70)] leading-tight">
                 Experience stunning landscapes, vibrant skies, and unforgettable
                 memories captured by our travelers and partners.
               </h2>
@@ -32,21 +32,21 @@ export default function Section4() {
                 alt=""
                 width={223}
                 height={179}
-                className="w-[223px] h-[179px] object-cover object-center rounded-[15px] overflow-hidden"
+                className="w-[223px] h-[150px] md:h-[179px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               <Image
                 src={"/landing page/img 8.png"}
                 alt=""
                 width={233}
                 height={200}
-                className="w-[233px] h-[200px] object-cover object-center rounded-[15px] overflow-hidden"
+                className="w-[233px] h-[170px] md:h-[200px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               <Image
                 src={"/landing page/img 9.png"}
                 alt=""
                 width={233}
                 height={237}
-                className="w-[233px] h-[237px] object-cover object-center rounded-[15px] overflow-hidden"
+                className="w-[233px] h-[200px] md:h-[237px] object-cover object-center rounded-[15px] overflow-hidden"
               />
             </div>
           </div>

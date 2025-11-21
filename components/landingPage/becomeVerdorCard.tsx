@@ -14,8 +14,8 @@ export default function BecomeVendorCard({
         {icon}
       </div>
       <div className="w-[calc(100%)] h-fit flex justify-start items-start flex-col gap-1">
-        <h3 className="text-[18px] font-semibold">{heading}</h3>
-        <h4 className="text-[18px] font-[500] text-[rgba(0,0,0,0.50)] leading-tight">
+        <h3 className="text-sm md:text-base font-semibold">{heading}</h3>
+        <h4 className="text-sm md:text-base font-[500] text-[rgba(0,0,0,0.50)] leading-tight">
           {text}
         </h4>
       </div>

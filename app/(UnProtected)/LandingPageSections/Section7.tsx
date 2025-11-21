@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Section7() {
   return (
-    <div className="w-full h-fit pt-12" id="About">
+    <div className="w-full h-fit pt-10" id="About">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-12 lg:pb-12 gap-14">
         <div className="w-full flex justify-start items-center gap-y-10 gap-x-15 flex-wrap">
           <div className="relative flex justify-center items-center w-full lg:w-fit h-fit z-[0]">
@@ -18,7 +18,7 @@ export default function Section7() {
           </div>
           <div className="w-full lg:w-[calc(100%-460px)] 2xl:w-[calc(100%-590px)] flex flex-col justify-start items-start gap-4 md:gap-12">
             <h1 className="font-semibold text-2xl md:text-[37px]">About Us </h1>
-            <p className="w-full 2xl:w-[550px] text-sm md:text-lg leading-tight">
+            <p className="w-full 2xl:w-[550px] text-sm md:text-base leading-tight">
               Welcome to Cappadocia Activities & Tours, your trusted online
               marketplace for discovering and booking unforgettable experiences
               across Cappadocia.
@@ -33,7 +33,7 @@ export default function Section7() {
               booking a hot air balloon ride, an ATV adventure, or a cultural
               day tour.
             </p>
-            <Button variant={"main_green_button"}>Read more </Button>
+            {/* <Button variant={"main_green_button"}>Read more </Button> */}
           </div>
         </div>
       </div>

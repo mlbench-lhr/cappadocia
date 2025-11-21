@@ -19,10 +19,10 @@ export default function Tabs(item: TabsProps) {
         />
       </div>
       <div className="w-full md:w-[calc(100%-50px)] [@media(min-width:1350px)]:w-[calc(100%-80px)] text-center md:text-start h-fit flex justify-start items-start flex-col gap-1">
-        <h3 className="text-[18px] font-semibold w-full md:w-fit text-center md:text-start">
+        <h3 className="text-sm md:text-base font-semibold w-full md:w-fit text-center md:text-start">
           {item.title}
         </h3>
-        <h4 className="text-[18px] font-[500] text-[rgba(0,0,0,0.50)] leading-tight">
+        <h4 className="text-sm md:text-base font-[500] text-[rgba(0,0,0,0.50)] leading-tight">
           {item.description}
         </h4>
       </div>
