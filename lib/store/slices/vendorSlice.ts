@@ -72,13 +72,7 @@ export const vendorSlice = createSlice({
     },
 
     // Update nested address object
-    setVendorAddress: (
-      state,
-      action: PayloadAction<{
-        address: string;
-        coordinates: { lat: number; lng: number } | undefined;
-      }>
-    ) => {
+    setVendorAddress: (state, action: PayloadAction<LocationData>) => {
       state.vendorDetails.address = action.payload;
     },
 

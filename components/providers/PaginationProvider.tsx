@@ -25,6 +25,7 @@ type ServerPaginationProviderProps<T> = {
   itemsPerPage?: number;
   enabled?: boolean;
   presentData?: any;
+  setTotalItems?: any;
 };
 
 export function ServerPaginationProvider<T = any>({
@@ -37,13 +38,13 @@ export function ServerPaginationProvider<T = any>({
   itemsPerPage = 10,
   enabled = true,
   presentData,
+  setTotalItems,
 }: ServerPaginationProviderProps<T>) {
   const [data, setData] = useState<T[]>(presentData ? presentData : []);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(
@@ -94,7 +95,9 @@ export function ServerPaginationProvider<T = any>({
         }
 
         setTotalPages(total);
-        setTotalItems(totalCount);
+        if (setTotalItems) {
+          setTotalItems(totalCount);
+        }
 
         // Call setState if provided
         if (setState) {

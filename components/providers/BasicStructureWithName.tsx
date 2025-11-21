@@ -6,10 +6,12 @@ import { useRouter } from "next/navigation";
 export const BasicStructureWithName = ({
   children,
   name,
+  subHeading,
   showBackOption = false,
   rightSideComponent,
 }: {
   name: string;
+  subHeading?: string;
   children: React.ReactNode;
   showBackOption?: boolean;
   rightSideComponent?: React.ReactNode | React.ComponentType<any>;
@@ -29,9 +31,12 @@ export const BasicStructureWithName = ({
               <ChevronLeft />
             </div>
           )}
-          <h1 className="text-xl md:text-[22px] font-[600] capitalize">
-            {name}
-          </h1>
+          <div className="">
+            <h1 className="text-xl md:text-[22px] font-[600] capitalize">
+              {name}
+            </h1>
+            <span>{subHeading}</span>
+          </div>
         </div>
         {RightSideComponent &&
           (typeof RightSideComponent === "function" ? (

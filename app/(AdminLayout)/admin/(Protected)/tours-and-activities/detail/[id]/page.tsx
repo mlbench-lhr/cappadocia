@@ -20,107 +20,10 @@ import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import AddressLocationSelector, { LocationData } from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 import RejectVendorDialog from "@/components/RejectVendorDialog";
-import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import {
-  ToursAndActivity,
-  ToursAndActivityWithVendor,
-} from "@/lib/mongodb/models/ToursAndActivity";
-
-export type InvoiceData = {
-  invoice: {
-    invoiceNumber: string;
-    invoiceDate: string; // ISO date string (YYYY-MM-DD)
-    bookingId: string;
-  };
-  tourDetails: {
-    title: string;
-    dateTime: string; // ISO date-time string
-    participants: {
-      adults: number;
-      children: number;
-    };
-    durationHours: number;
-    meetingPoint: string;
-  };
-  travelerInformation: {
-    fullName: string;
-    passportNumber: string;
-    nationality: string;
-    contact: string;
-    email: string;
-  };
-  paymentDetails: {
-    method: string;
-    transactionId: string;
-    currency: string;
-    amountPaid: number;
-    status: "Paid" | "Pending" | "Failed";
-  };
-  priceBreakdown: {
-    basePrice: {
-      adults: number;
-      currency: string;
-      perAdult: number;
-      total: number;
-    };
-    childPrice: {
-      children: number;
-      currency: string;
-      perChild: number;
-      total: number;
-    };
-    participants?: {
-      adults: number;
-      children?: number;
-    };
-    serviceFee: number;
-    totalPaid: number;
-  };
-  vendorInformation: {
-    operator: string;
-    tursabNumber: string;
-    contact: string;
-    email: string;
-  };
-};
-
-export interface UserResponse {
-  id: string;
-  _id: string;
-
-  email: string;
-  fullName: string;
-  phoneNumber: string;
-  avatar: string | null;
-  googleId: string | null;
-  password: string | null;
-
-  role: string;
-  isRoleVerified: boolean;
-  isEmailVerified: boolean;
-
-  roleRejected: {
-    isRoleRejected: boolean;
-    reason?: string;
-  };
-
-  emailVerificationOTP: string | null;
-  emailVerificationOTPExpires: string | null;
-
-  resetPasswordOTP: string | null;
-  resetPasswordOTPExpires: string | null;
-
-  dataUpdated: boolean;
-
-  vendorDetails?: VendorDetails; // ← short and clean
-
-  createdAt: string;
-  updatedAt: string;
-  __v?: number;
-}
+import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -157,22 +60,6 @@ export default function BookingsPage() {
 
         if (response.data?.data) {
           setData(response.data?.data);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.log("err---", error);
-      }
-    };
-    getData();
-  }, []);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoading(true);
-        let response = await axios.get(`/api/toursAndActivity/detail/${id}`);
-        if (response.data?.user) {
-          setData(response.data?.user);
         }
         setLoading(false);
       } catch (error) {
@@ -312,6 +199,7 @@ export default function BookingsPage() {
                   <div className="relative w-full h-full bg-red-00 flex flex-col justify-between items-start">
                     {data?.itinerary.map((item, index) => (
                       <IconAndTextTab2
+                        key={index}
                         icon={<LocationIconWithPadding />}
                         text={item}
                         textClasses="text-black text-[14px] font-normal pt-2"

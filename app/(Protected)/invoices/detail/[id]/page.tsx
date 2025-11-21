@@ -6,8 +6,6 @@ import { useEffect } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { InvoiceTextBoxes } from "@/components/InvoiceTextBoxes";
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
 import DownloadInvoiceButton from "../../DownloadButton";
 
 export type InvoiceData = {

@@ -10,18 +10,16 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import Link from "next/link";
-import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import {
   BookingIcon,
   ClockIcon,
   DollarIcon,
   PaymentIcon2,
   PeopleIcon,
-  StarIcon,
   TourIcon,
-  VehicleIcon,
 } from "@/public/allIcons/page";
 import ImageSlider from "./ImageSlider";
+import { ExploreCappadocia } from "./ExploreCappadocia";
 
 export type DashboardCardProps = {
   image: any;
@@ -262,78 +260,7 @@ export default function DashboardPage() {
               ))}
             </div>
           </BoxProviderWithName>
-          <BoxProviderWithName
-            name="Explore Cappadocia"
-            rightSideLink="/explore"
-            rightSideLabel="See All"
-          >
-            <div className="w-full space-y-3">
-              {exploreData.map((item, index) => (
-                <BoxProviderWithName
-                  key={index}
-                  noBorder={true}
-                  className="!border !px-3.5"
-                >
-                  <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
-                    <Image
-                      alt=""
-                      src={item.image}
-                      width={120}
-                      height={120}
-                      className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center"
-                    />
-                    <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-tight">
-                      <ProfileBadge
-                        title="SkyView Balloon Tours"
-                        subTitle={
-                          "TÜRSAB Number: " + item.vendorDetails.tursabNumber
-                        }
-                        image="/userDashboard/img2.png"
-                      />
-                      <span className="text-base font-semibold text-black line-clamp-1">
-                        {item.title}
-                      </span>
-                      <div className="flex justify-start items-center gap-1">
-                        <span className="font-semibold">Group Size: </span>
-                        <span className="">Up to {item.groupSize} people</span>
-                      </div>
-                      <div className="flex justify-start items-center gap-1">
-                        <VehicleIcon color="rgba(0, 0, 0, 0.7)" />
-                        <span className="">
-                          Pickup:
-                          {item.pickupAvailable
-                            ? " Available"
-                            : " Not Available"}{" "}
-                        </span>
-                      </div>
-
-                      <div className="w-full flex justify-between items-center">
-                        <div className="flex justify-start items-center gap-2">
-                          <div className="flex justify-start items-center gap-1">
-                            <span className="text-base font-medium text-black">
-                              ${item.price}
-                            </span>
-                            <span className="">/Person</span>
-                          </div>
-                          <div className="flex justify-start items-center gap-1">
-                            <StarIcon />
-                            <span className="">{item.rating}</span>
-                          </div>
-                        </div>
-                        <Button
-                          variant={"green_secondary_button"}
-                          className="w-[92px] flex font-[500]"
-                          style={{ height: "26px", fontSize: "10px" }}
-                        >
-                          <Link href={"/explore/detail/1"}>Book now</Link>
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </BoxProviderWithName>
-              ))}
-            </div>
-          </BoxProviderWithName>
+          <ExploreCappadocia />
         </div>
       </div>
     </BasicStructureWithName>

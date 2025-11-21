@@ -17,7 +17,7 @@ export const GET = withAuth(async (req) => {
     // Build search query
     const searchQuery: any = {
       role: "vendor",
-      isRoleVerified: false,
+      // isRoleVerified: false,
       roleRejected: { $exists: false },
     };
 
