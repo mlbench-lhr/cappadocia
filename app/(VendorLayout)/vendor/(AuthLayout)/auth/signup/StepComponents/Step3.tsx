@@ -45,12 +45,6 @@ export default function VendorSignupStep3({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    if (!file.type.startsWith("image/")) {
-      alert("Please select an image file.");
-      return;
-    }
-
     // Validate file size (5MB limit for avatars)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image size should be less than 5MB.");

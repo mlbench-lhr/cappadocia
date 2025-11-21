@@ -35,6 +35,11 @@ const VendorSignUp = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+
+  // useEffect(() => {
+  //   dispatch(setUpdateProfileStep(4));
+  // }, []);
+
   const handleEmailSignup = async () => {
     setLoading(true);
     setError("");
@@ -56,11 +61,11 @@ const VendorSignUp = () => {
       } else {
         if (res?.requiresVerification) {
           setSuccess(true);
+          dispatch(updateProfileStepNext());
         } else {
           router.push("/dashboard");
         }
       }
-      dispatch(updateProfileStepNext());
     } catch (err) {
       setError("An unexpected error occurred");
     } finally {
@@ -121,7 +126,13 @@ const VendorSignUp = () => {
       name: "VendorSignUpStep4",
     },
     {
-      component: <VendorSignupStep5 onNext={handleNext} onBack={handleBack} />,
+      component: (
+        <VendorSignupStep5
+          onNext={handleNext}
+          onBack={handleBack}
+          loading={loading}
+        />
+      ),
       name: "VendorSignUpStep5",
     },
   ];
@@ -131,9 +142,9 @@ const VendorSignUp = () => {
   };
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
 
-  // if (signupSteps === 5) {
-  //   return <Success />;
-  // }
+  if (signupSteps === 5) {
+    return <Success />;
+  }
   return (
     <div>
       <div className="flex justify-start mx-auto w-fit items-center mb-6">
