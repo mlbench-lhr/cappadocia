@@ -14,21 +14,21 @@ export type TourCardProps = {
 
 export default function TourCard(item: TourCardProps) {
   return (
-    <div className="col-span-4 w-full h-[430px] bg-white rounded-[16px] overflow-hidden shadow-lg border border-gray-200 flex flex-col justify-start items-start">
-      <div className="w-full relative h-[275px]">
+    <div className="col-span-4 w-full h-fit md:h-[430px] pb-3 md:pb-0 bg-white rounded-[16px] overflow-hidden shadow-lg border border-gray-200 flex flex-col justify-start items-start">
+      <div className="w-full relative h-[250px] md:h-[275px]">
         <Image
           src={item.image}
           alt="Cappadocia cave dwellings"
-          className="w-full h-[275px] object-cover object-center"
+          className="w-full h-[250px] md:h-[275px] object-cover object-center"
           width={300}
           height={275}
         />
       </div>
 
       {/* Content */}
-      <div className="px-3 w-full pt-5 flex flex-col justify-start items-start gap-4">
+      <div className="px-3 w-full pt-5 flex flex-col justify-start items-start gap-2 md:gap-4">
         {/* Title */}
-        <h2 className="text-[18px] font-[600] text-gray-900 line-clamp-1">
+        <h2 className="text-base md:text-[18px] font-[600] text-gray-900 line-clamp-1">
           {item.title}
         </h2>
 

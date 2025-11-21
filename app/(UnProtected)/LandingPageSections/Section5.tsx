@@ -32,7 +32,7 @@ export default function Section5() {
     <div className="w-full h-fit pt-12">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px]  lg:px-[80px] 2xl:px-[90px] gap-12">
         <div className="w-full flex flex-col md:flex-row justify-between items-start h-fit gap-4 md:gap-0">
-          <div className="w-full md:w-fit h-fit flex flex-row md:flex-col justify-between md:justify-start gap-6 items-center md:items-start">
+          <div className="w-full md:w-fit h-fit flex flex-col-reverse sm:flex-row md:flex-col justify-between md:justify-start gap-3 sm:gap-6 items-center md:items-start">
             <h1 className="font-semibold text-lg md:text-3xl">
               Grow Your Tour Business <br className="hidden md:block" /> with Us
             </h1>

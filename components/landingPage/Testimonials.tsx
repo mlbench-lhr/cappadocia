@@ -60,28 +60,28 @@ const Star = ({ filled }: any) => (
 
 const TestimonialCard = ({ testimonial, isCenter }: any) => (
   <div
-    className={`bg-white rounded-3xl p-8 md:p-4 lg:p-8 shadow-lg transition-all duration-300 ${
+    className={`bg-white rounded-3xl p-5 md:p-4 lg:p-8 shadow-lg transition-all duration-300 ${
       isCenter ? "scale-100" : "scale-85 md:scale-90"
     }`}
   >
-    <div className="flex items-start justify-between mb-6 md:mb-2 lg:mb-6">
-      <div className="flex items-center gap-6 md:gap-2 lg:gap-6">
+    <div className="flex items-start justify-between mb-4 md:mb-2 lg:mb-6">
+      <div className="flex items-center gap-2 md:gap-2 lg:gap-6">
         <img
           src={testimonial.image}
           alt={testimonial.name}
-          className="w-14 md:w-10 lg:w-14 h-14 md:h-10 lg:h-14 rounded-full object-cover"
+          className="w-10 md:w-10 lg:w-14 h-10 md:h-10 lg:h-14 rounded-full object-cover"
         />
         <div>
-          <h3 className="text-[#113D48] font-semibold text-lg md:text-sm lg:text-lg">
+          <h3 className="text-[#113D48] font-semibold text-sm md:text-sm lg:text-lg">
             {testimonial.name}
           </h3>
-          <p className="text-gray-500 text-sm md:text-xs lg:text-sm">
+          <p className="text-gray-500 text-xs md:text-xs lg:text-sm">
             {testimonial.role}
           </p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <div className="flex gap-0.5">
+      <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex gap-0 md:gap-0.5">
           {[1, 2, 3, 4, 5].map((star) => (
             <Star key={star} filled={star <= testimonial.rating} />
           ))}
@@ -91,7 +91,7 @@ const TestimonialCard = ({ testimonial, isCenter }: any) => (
         </span>
       </div>
     </div>
-    <p className="text-gray-600 leading-relaxed text-base md:text-sm lg:text-base pb-0 md:pb-4 lg:pb-0">
+    <p className="text-gray-600 leading-tight md:leading-relaxed text-sm md:text-sm lg:text-base pb-4 md:pb-4 lg:pb-0">
       {testimonial.text}
     </p>
     <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-serif">

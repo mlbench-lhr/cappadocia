@@ -120,7 +120,7 @@ export default function Section1() {
             ))}
           </div>
         </div>
-        <div className="h-fit md:h-fit w-[93%] md:w-[80%] pt-3.5 pb-[21px] px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2">
+        <div className="h-fit md:h-fit w-[93%] md:w-[80%] pt-3 pb-3 px-3 md:pt-3.5 md:pb-[21px] md:px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2">
           <h2 className="font-semibold text-md md:text-lg leading-tight">
             Find your tour and activities
           </h2>
