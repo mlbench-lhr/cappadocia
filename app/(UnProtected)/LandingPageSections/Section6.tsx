@@ -7,7 +7,7 @@ export default function Section6() {
     <div className="w-full h-fit pt-12" id="Contact">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-[40px] lg:pb-[90px] bg-[#FFEAF4] overflow-hidden gap-14">
         <div className="w-full flex justify-center items-center h-fit">
-          <h1 className="font-semibold text-xl md:text-4xl">
+          <h1 className="font-semibold text-lg md:text-3xl">
             Get in Touch With Us
           </h1>
         </div>

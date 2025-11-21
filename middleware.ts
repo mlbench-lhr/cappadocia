@@ -4,17 +4,31 @@ import { verifyToken } from "@/lib/auth/jwt";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const protectedRoutes = ["/dashboard", "/admin/dashboard", "/admin/blogs"];
+  const protectedRoutes = [
+    "/dashboard",
+    "/explore",
+    "/explore/detail",
+    "/admin/dashboard",
+    "/admin/blogs",
+    "/vendor/dashboard",
+    "/vendor/tours-and-activities",
+  ];
+
   const authRoutes = [
     "/auth/login",
     "/auth/signup",
     "/auth/forgot-password",
+
     "/admin/auth/login",
     "/admin/auth/forgot-password",
+
+    "/vendor/auth/login",
+    "/vendor/auth/signup",
   ];
 
   const isProtected = protectedRoutes.some((r) => pathname.startsWith(r));
   const isAdmin = pathname.startsWith("/admin");
+  const isVendor = pathname.startsWith("/vendor");
   const isAuthRoute = authRoutes.includes(pathname);
 
   // Get token
@@ -30,38 +44,70 @@ export async function middleware(request: NextRequest) {
       user = null;
     }
   }
-  
+
+  // Redirect /admin
   if (pathname === "/admin") {
     if (!user) {
       return NextResponse.redirect(new URL("/admin/auth/login", request.url));
     }
     return NextResponse.redirect(new URL("/admin/dashboard", request.url));
   }
-  // If logged in and visiting auth route → redirect to proper dashboard
+
+  // Redirect /vendor
+  if (pathname === "/vendor") {
+    if (!user) {
+      return NextResponse.redirect(new URL("/vendor/auth/login", request.url));
+    }
+    return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
+  }
+
+  // If logged in and visiting any auth route
   if (user && isAuthRoute) {
     return NextResponse.redirect(
       new URL(
-        user.role === "admin" ? "/admin/dashboard" : "/dashboard",
+        user.role === "admin"
+          ? "/admin/dashboard"
+          : user.role === "vendor"
+          ? "/vendor/dashboard"
+          : "/dashboard",
         request.url
       )
     );
   }
 
-  // If not logged in and accessing protected route → redirect to proper login
+  // Not logged in → protected route access
   if (!user && isProtected) {
     return NextResponse.redirect(
-      new URL(isAdmin ? "/admin/auth/login" : "/auth/login", request.url)
+      new URL(
+        isAdmin
+          ? "/admin/auth/login"
+          : isVendor
+          ? "/vendor/auth/login"
+          : "/auth/login",
+        request.url
+      )
     );
   }
 
-  // Role mismatch protection (logged in but accessing wrong area)
+  // Role mismatch
   if (user) {
-    if (user.role === "user" && isAdmin && !isAuthRoute) {
+    // user trying to access admin or vendor
+    if (user.role === "user" && (isAdmin || isVendor)) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
+    // vendor trying to access admin
+    if (user.role === "vendor" && isAdmin) {
+      return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
+    }
+
+    // admin trying to access vendor
+    if (user.role === "admin" && isVendor) {
+      return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
   }
 
-  // Refresh cookie if token valid
+  // Refresh cookie if valid
   if (user && token) {
     const response = NextResponse.next();
     response.cookies.set("auth_token", token, {

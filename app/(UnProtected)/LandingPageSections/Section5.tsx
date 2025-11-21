@@ -19,7 +19,7 @@ const data: BecomeVendorCardType[] = [
   {
     icon: <PaymentIcon3 />,
     heading: "Flexible Pricing",
-    text: "Set your own prices, run seasonal promotions, and offer special discounts—all while keeping full control over how you monetize your tours and activities.",
+    text: "Set your own prices, run seasonal promotions, and offer special discounts—all while keeping full control over how you monetize your tours and activities effectively every day.",
   },
   {
     icon: <StarIcon size="26" color={"#B32053"} />,
@@ -30,10 +30,10 @@ const data: BecomeVendorCardType[] = [
 export default function Section5() {
   return (
     <div className="w-full h-fit pt-12">
-      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px]  lg:px-[80px] 2xl:px-[90px] gap-14">
-        <div className="w-full flex flex-col md:flex-row justify-between items-center h-fit gap-4 md:gap-0">
-          <div className="w-full md:w-fit h-fit flex flex-row md:flex-col justify-between md:justify-start gap-8 items-center md:items-start">
-            <h1 className="font-semibold text-xl md:text-4xl">
+      <div className="w-full flex flex-col items-center justify-center h-fit px-[20px]  lg:px-[80px] 2xl:px-[90px] gap-12">
+        <div className="w-full flex flex-col md:flex-row justify-between items-start h-fit gap-4 md:gap-0">
+          <div className="w-full md:w-fit h-fit flex flex-row md:flex-col justify-between md:justify-start gap-6 items-center md:items-start">
+            <h1 className="font-semibold text-lg md:text-3xl">
               Grow Your Tour Business <br className="hidden md:block" /> with Us
             </h1>
             <Button variant={"main_green_button"} asChild>
@@ -41,7 +41,7 @@ export default function Section5() {
             </Button>
           </div>
           <div className="w-full md:w-[415px] h-fit">
-            <span className="font-normal text-lg md:text-[22px] text-[rgba(9,9,9,0.50)] leading-tight">
+            <span className="font-normal text-lg md:text-[16px] text-[rgba(9,9,9,0.50)] leading-tight">
               List your experiences, reach thousands of travelers daily, and
               manage your bookings with ease.{" "}
             </span>

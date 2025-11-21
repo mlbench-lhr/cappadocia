@@ -120,13 +120,13 @@ export default function Section1() {
             ))}
           </div>
         </div>
-        <div className="h-fit md:h-[160px] w-[93%] md:w-[80%] pt-3.5 pb-[21px] px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2">
+        <div className="h-fit md:h-fit w-[93%] md:w-[80%] pt-3.5 pb-[21px] px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2">
           <h2 className="font-semibold text-md md:text-lg leading-tight">
             Find your tour and activities
           </h2>
-          <h2 className="font-semibold text-sm leading-tight mt-2">
+          {/* <h2 className="font-semibold text-sm leading-tight mt-2">
             Select Date
-          </h2>
+          </h2> */}
           <div className="h-fit md:h-[55px] w-full py-2 px-3 rounded-[8px] border bg-white flex flex-col md:flex-row items-start md:items-center justify-between text-center gap-2 relative">
             <div className=" h-fit flex items-center justify-start text-center gap-2 relative w-full md:w-[30%]">
               <Search color="rgba(0, 0, 0, 0.50)" size={24} />
