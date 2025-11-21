@@ -3,6 +3,7 @@ import AddressLocationSelector, { LocationData } from "@/components/map";
 import RejectVendorDialog from "@/components/RejectVendorDialog";
 import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
+import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
@@ -183,19 +184,47 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         </div>
 
         {/* Documents Uploaded */}
-        <div className="mb-6">
+        <div className="mb-6 w-full">
           <h3 className="text-sm font-semibold mb-3">Documents Uploaded</h3>
-          {data?.documents?.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-2 border py-2 pl-2 pr-14 rounded-lg w-fit"
-            >
-              <div className="bg-red-500 text-white px-2 uppercase py-1 rounded text-xs font-semibold">
-                {item?.split(".")?.pop()} {index + 1}
+          <div className="mb-6 w-full grid grid-cols-12 gap-4">
+            {data?.documents?.map((item, index) => (
+              <div
+                key={index}
+                className="col-span-4 flex flex-col items-center gap-2 border pb-4 rounded-lg w-full"
+              >
+                {item?.includes("raw") ? (
+                  <>
+                    <iframe
+                      src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+                        item
+                      )}&embedded=true`}
+                      width="100%"
+                      height="300px"
+                    />
+                    <a
+                      href={item}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-600 hover:underline truncate flex-1"
+                    >
+                      Document {index + 1}
+                    </a>
+                  </>
+                ) : (
+                  <>
+                    <Image
+                      src={item}
+                      alt=""
+                      height={300}
+                      width={300}
+                      className="w-[100%] object-cover h-[300px]"
+                    />
+                    <span className="text-sm"> Document {index + 1}</span>
+                  </>
+                )}
               </div>
-              <span className="text-sm">{item?.split("/")?.pop()}</span>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         {/* Action Buttons */}

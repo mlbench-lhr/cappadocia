@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setPaymentInfo, setVendorField } from "@/lib/store/slices/vendorSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   SelectInputComponent,
   TextInputComponent,
@@ -33,15 +33,16 @@ const currencyOptions = ["Euro (EUR)", "US Dollar (USD)", "Turkish Lira (TRY)"];
 interface VendorSignupStep5Props {
   onNext?: () => void;
   onBack?: () => void;
+  loading?: boolean;
 }
 
 export default function VendorSignupStep5({
   onNext,
   onBack,
+  loading = false,
 }: VendorSignupStep5Props) {
   const dispatch = useAppDispatch();
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
-
   const {
     control,
     handleSubmit,
@@ -217,7 +218,12 @@ export default function VendorSignupStep5({
             </p>
           )}
 
-          <Button type="submit" className="w-full">
+          <Button
+            type="submit"
+            className="w-full"
+            loading={loading}
+            loadingText="Completing Your Registration...."
+          >
             Complete Registration
           </Button>
         </form>

@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useEffect } from "react";
 import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
 import { setVendorField } from "@/lib/store/slices/vendorSlice";
+import PhoneNumberInput from "@/components/PhoneNumberInput";
 
 const step1Schema = z
   .object({
@@ -178,13 +179,9 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
               name="contactPhoneNumber"
               control={control}
               render={({ field }) => (
-                <TextInputComponent
-                  label="Phone Number"
-                  placeholder="Enter phone number"
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={errors.contactPhoneNumber?.message}
-                  required
+                <PhoneNumberInput
+                  phoneNumber={field.value}
+                  setPhoneNumber={field.onChange}
                 />
               )}
             />

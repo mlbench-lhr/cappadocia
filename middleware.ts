@@ -12,6 +12,8 @@ export async function middleware(request: NextRequest) {
     "/admin/blogs",
     "/vendor/dashboard",
     "/vendor/tours-and-activities",
+    "/admin/tours-and-activities",
+    "/admin/vendor-applications",
   ];
 
   const authRoutes = [
