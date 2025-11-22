@@ -47,6 +47,7 @@ export interface IUser extends Document {
   updatedAt: Date;
   profileUpdated: Boolean;
   vendorDetails: VendorDetails;
+  favorites: string[];
 }
 
 const UserSchema = new Schema<IUser>(
@@ -64,6 +65,13 @@ const UserSchema = new Schema<IUser>(
         return !this.googleId;
       },
     },
+    favorites: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
     fullName: { type: String, required: false, trim: true },
     firstName: { type: String, required: false, trim: true },
     phoneNumber: { type: String, trim: true },

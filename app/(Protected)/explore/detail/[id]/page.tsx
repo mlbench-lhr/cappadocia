@@ -27,6 +27,7 @@ import axios from "axios";
 import { AlternativeOptions } from "./AlternativeOptions";
 import { AvailabilityFilter } from "./AvailabilityFilter";
 import Link from "next/link";
+import { FavoriteButton } from "@/components/SmallComponents/FavoriteButton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -78,12 +79,17 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
-            <ProfileBadge
-              size="medium"
-              title="SkyView Balloon Tours"
-              subTitle={"TÜRSAB Number: " + 324234}
-              image="/userDashboard/img2.png"
-            />
+            <div className="w-full flex justify-between items-center">
+              <ProfileBadge
+                size="medium"
+                title="SkyView Balloon Tours"
+                subTitle={"TÜRSAB Number: " + 324234}
+                image="/userDashboard/img2.png"
+              />
+              <div className="drop-shadow-lg w-fit h-fit">
+                <FavoriteButton _id={id} />
+              </div>
+            </div>
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
               Blue Tour – Hidden Cappadocia
             </h1>

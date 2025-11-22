@@ -66,6 +66,9 @@ const ExtracurricularsAndAwardsSchema = z.object({
   awards: z.array(AwardSchema).optional(),
   extracurricularActivity: z.array(ExtracurricularActivitySchema).optional(),
 });
+export const ObjectIdSchema = z
+  .string()
+  .regex(/^[a-fA-F0-9]{24}$/, "Invalid ObjectId");
 
 const UpdateProfileSchema = z.object({
   personalInfo: PersonalInfoSchema.optional(),
@@ -77,6 +80,7 @@ const UpdateProfileSchema = z.object({
   avatar: z.string().optional(),
   blogTier: z.string().optional(),
   profileUpdated: z.boolean().optional(),
+  favorites: z.array(ObjectIdSchema).optional(),
 });
 
 export const GET = withAuth(async (req) => {
@@ -156,6 +160,11 @@ export const PUT = async (req: any) => {
       });
     }
 
+    if (validatedData.favorites) {
+      updateData.favorites = validatedData.favorites;
+    }
+    console.log("updateData======-------------", updateData);
+
     // Handle direct field updates
     if (validatedData.firstName) updateData.firstName = validatedData.firstName;
     if (validatedData.lastName) updateData.lastName = validatedData.lastName;
@@ -177,7 +186,6 @@ export const PUT = async (req: any) => {
       { $set: updateData },
       { new: true, runValidators: true }
     ).select("-password -emailVerificationOTP -resetPasswordOTP");
-    console.log("updatedUser---------", updatedUser, userId);
     if (!updatedUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
