@@ -28,7 +28,7 @@ export default function ImageGallery({
           <div className="w-full grid grid-cols-10 h-[360px]  gap-1 md:gap-2 ">
             {/* First Image */}
             <div
-              className={`col-span-4 rounded-[14px] overflow-hidden h-full cursor-pointer hover:opacity-90 transition-opacity`}
+              className={`col-span-10 md:col-span-4 rounded-[14px] overflow-hidden h-full cursor-pointer hover:opacity-90 transition-opacity`}
               onClick={() => handleImageClick(0)}
             >
               <img
@@ -40,7 +40,7 @@ export default function ImageGallery({
 
             {images.length > 1 && (
               <div
-                className="col-span-2 rounded-[14px] overflow-hidden h-full cursor-pointer hover:opacity-90 transition-opacity"
+                className="col-span-10 md:col-span-2 rounded-[14px] overflow-hidden h-full cursor-pointer hover:opacity-90 transition-opacity"
                 onClick={() => handleImageClick(1)}
               >
                 <img
@@ -52,7 +52,7 @@ export default function ImageGallery({
             )}
 
             {/* Third and Fourth Images Container */}
-            <div className="col-span-4 grid grid-cols-none grid-rows-2 rounded-[14px] overflow-hidden h-full  gap-1 md:gap-2 ">
+            <div className="col-span-10 md:col-span-4 grid grid-cols-2 md:grid-cols-none md:grid-rows-2 rounded-[14px] overflow-hidden h-full  gap-1 md:gap-2 ">
               {images.length > 2 && (
                 <div
                   className="row-span-1 rounded-[14px] overflow-hidden h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
@@ -83,9 +83,9 @@ export default function ImageGallery({
 
       case 5:
         return (
-          <div className="grid grid-cols-6  gap-1 md:gap-2  h-[500px]">
+          <div className="grid grid-cols-6  gap-1 md:gap-2 ">
             {/* First two images on left */}
-            <div className="col-span-2 row-span-2">
+            <div className="col-span-3 md:col-span-2 row-span-1 md:row-span-2">
               <img
                 src={images[0].src}
                 alt={images[0].alt}
@@ -94,7 +94,7 @@ export default function ImageGallery({
               />
             </div>
             {/* Center large image */}
-            <div className="col-span-2 row-span-2">
+            <div className="col-span-3 md:col-span-2 row-span-1 md:row-span-2">
               <img
                 src={images[1].src}
                 alt={images[1].alt}
@@ -103,7 +103,7 @@ export default function ImageGallery({
               />
             </div>
             {/* Three images on right stacked */}
-            <div className="col-span-2">
+            <div className="col-span-2 md:col-span-2">
               <img
                 src={images[2].src}
                 alt={images[2].alt}
@@ -111,7 +111,7 @@ export default function ImageGallery({
                 onClick={() => handleImageClick(2)}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-2 md:col-span-1">
               <img
                 src={images[3].src}
                 alt={images[3].alt}
@@ -119,7 +119,7 @@ export default function ImageGallery({
                 onClick={() => handleImageClick(3)}
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-2 md:col-span-1">
               <img
                 src={images[4].src}
                 alt={images[4].alt}
