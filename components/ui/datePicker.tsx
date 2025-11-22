@@ -21,7 +21,7 @@ export default function DeadlinePicker({
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className={`w-full justify-start text-left font-medium text-base border-none shadow-none h-[37px] ps-0 px-0 hover:bg-transparent ${
+            className={`w-full justify-start text-left font-medium text-xs flex items-center border-none shadow-none h-[37px] ps-0 px-0 hover:bg-transparent ${
               !date && "text-muted-foreground"
             }`}
           >
