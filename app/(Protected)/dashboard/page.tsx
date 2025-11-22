@@ -151,7 +151,7 @@ export default function DashboardPage() {
   return (
     <BasicStructureWithName name="Dashboard">
       <div className="grid grid-cols-16 w-full border px-4 py-5.5 rounded-[12px] gap-3 h-fit">
-        <div className="col-span-16 xl:col-span-9 bg-red-40 h-fit flex flex-col justify-start items-start gap-4">
+        <div className="col-span-16 h-fit xl:h-full flex-1 xl:col-span-9 flex flex-col justify-start xl:justify-between items-start gap-4">
           <div className="h-[225px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
             <Image
               alt=""
@@ -176,7 +176,7 @@ export default function DashboardPage() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             {dashboardCardData.map((item, index) => (
               <div
-                className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
+                className="bg-secondary border h-[120px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
                 key={index}
               >
                 <div className="w-full flex justify-between items-center">
