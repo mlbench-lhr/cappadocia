@@ -21,13 +21,26 @@ export async function GET(req: NextRequest) {
   }
   const payload = verifyToken(token);
   const userId = payload.userId;
-  const favoriteIds = await User.findById(userId).select("favorites").lean();
+  const favoriteIds: any = await User.findById(userId)
+    .select("favorites -_id")
+    .lean();
   const query: any = {};
   console.log("favoriteIds----", favoriteIds);
 
-  if (favoriteIds?.favorites?.length) {
+  if (favoriteIds?.favorites && favoriteIds?.favorites?.length > 0) {
     query._id = { $in: favoriteIds.favorites };
+  } else {
+    return NextResponse.json({
+      data: [],
+      pagination: {
+        total: 0,
+        page,
+        limit,
+        totalPages: Math.ceil(0 / limit),
+      },
+    });
   }
+
   if (searchTerm) {
     query.title = { $regex: searchTerm, $options: "i" };
   }

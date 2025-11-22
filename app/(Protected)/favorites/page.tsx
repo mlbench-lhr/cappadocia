@@ -11,7 +11,6 @@ import { ServerPaginationProvider } from "@/components/providers/PaginationProvi
 import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
-import axios from "axios";
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 
 export type DashboardCardProps = {
