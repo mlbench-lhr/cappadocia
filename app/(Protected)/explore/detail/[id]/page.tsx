@@ -232,7 +232,9 @@ export default function BookingsPage() {
                 </div>
               </div>
             </BoxProviderWithName>
-            {checkAvailabilityToggle && <AvailabilityFilter />}
+            <div className="w-full" id="checkAvailabilityToggle">
+              {checkAvailabilityToggle && <AvailabilityFilter />}
+            </div>
             <AlternativeOptions />
             <BoxProviderWithName
               name="Reviews"

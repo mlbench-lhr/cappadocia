@@ -254,8 +254,8 @@ export default function BookingsPage() {
           >
             {(data, isLoading, refetch) => (
               <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-                {data.map((item) => (
-                  <TourAndActivityCard item={item} />
+                {data.map((item, index) => (
+                  <TourAndActivityCard key={index} item={item} />
                 ))}
               </div>
             )}

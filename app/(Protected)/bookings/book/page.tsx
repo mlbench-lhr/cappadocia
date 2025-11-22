@@ -26,7 +26,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // Validation schema
 const LatLng = z.object({
@@ -35,9 +35,7 @@ const LatLng = z.object({
 });
 export const LocationData = z.object({
   address: z.string().min(1, ""),
-  coordinates: LatLng.nullable().refine((v) => v !== null, {
-    message: "Select any location from map",
-  }),
+  coordinates: LatLng.nullable(), // nullable in the type
 });
 
 const bookingSchema = z.object({
@@ -61,14 +59,18 @@ const bookingSchema = z.object({
       })
     )
     .min(1, "At least one traveler is required"),
-  pickupLocation: LocationData.nullable().refine((v) => !v?.coordinates, {
-    message: "Select any location from map",
-  }),
+  pickupLocation: LocationData.nullable().refine(
+    (v) => v === null || v.coordinates !== null,
+    {
+      message: "Select any location from map",
+    }
+  ),
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookingsPage() {
+  const { id }: { id: string } = useParams();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 1350 });

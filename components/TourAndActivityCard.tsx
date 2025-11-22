@@ -18,8 +18,6 @@ export const TourAndActivityCard = ({
 }: {
   item: ToursAndActivityWithVendor;
 }) => {
-  console.log("item----date", item.slots?.[0].startDate);
-
   return (
     <div className="space-y-3 col-span-12 md:col-span-6 lg:col-span-3">
       <BoxProviderWithName noBorder={true} className="border md:border !px-3.5">
