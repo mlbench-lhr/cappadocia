@@ -93,7 +93,12 @@ export default function BookingsPage() {
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
               Blue Tour – Hidden Cappadocia
             </h1>
-            <ImageGallery imagesParam={data?.uploads} />
+            <ImageGallery
+              imagesParam={[
+                ...data?.uploads,
+                "https://res.cloudinary.com/sage-media/image/upload/v1763724967/avatars/tjfiano99msqb0bicefa.jpg",
+              ]}
+            />
             <BoxProviderWithName
               name="Trip Description:"
               className="text-base mt-2"
