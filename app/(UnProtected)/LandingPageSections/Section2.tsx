@@ -1,42 +1,38 @@
 "use client";
-import TourCard, {
-  TourCardProps,
-} from "@/components/landingPage/landingPageTourCard";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-const tourCardData: TourCardProps[] = [
-  {
-    image: "/landing page/image.png",
-    title: "Blue Tour – Hidden Cappadocia",
-    price: 569.0,
-    rating: 4.6,
-    days: 5,
-  },
-  {
-    image: "/landing page/image (1).png",
-    title: "Red Tour (North Cappadocia)",
-    price: 569.0,
-    rating: 4.6,
-    days: 5,
-  },
-  {
-    image: "/landing page/image (2).png",
-    title: "Private Cave Hotel Stay",
-    price: 569.0,
-    rating: 4.6,
-    days: 5,
-  },
-  {
-    image: "/landing page/image (3).png",
-    title: "Private Cave Hotel Stay",
-    price: 569.0,
-    rating: 4.6,
-    days: 5,
-  },
-];
+import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import TourCard from "@/components/landingPage/landingPageTourCard";
 
 export default function Section2() {
+  const [toursAndActivity, setToursAndActivity] =
+    useState<ToursAndActivityWithVendor[]>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/toursAndActivity/getAll?limit=4`);
+        console.log("response----", response);
+
+        if (response.data?.data) {
+          setToursAndActivity(response.data?.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  if (!toursAndActivity) {
+    return null;
+  }
+
   return (
     <div className="w-full h-fit">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] gap-12">
@@ -58,8 +54,8 @@ export default function Section2() {
           </div>
         </div>
         <div className="w-full grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-          {tourCardData.map((item) => (
-            <TourCard key={item.image} {...item} />
+          {toursAndActivity.map((item, index) => (
+            <TourCard key={index} {...item} />
           ))}
         </div>
       </div>
