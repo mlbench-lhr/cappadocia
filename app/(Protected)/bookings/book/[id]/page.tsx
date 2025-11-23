@@ -26,15 +26,17 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useParams, useRouter } from "next/navigation";
+import moment from "moment";
+import Swal from "sweetalert2";
+import axios, { AxiosError } from "axios";
 
-// Validation schema
 const LatLng = z.object({
   lat: z.number(),
   lng: z.number(),
 });
 export const LocationData = z.object({
   address: z.string().min(1, ""),
-  coordinates: LatLng.nullable(), // nullable in the type
+  coordinates: LatLng.nullable(),
 });
 
 const bookingSchema = z.object({
@@ -71,6 +73,7 @@ export default function BookingsPage() {
   const bookingState = useAppSelector((s) => s.addBooking);
   console.log("bookingState:", bookingState, id);
   const [addPickupNow, setAddPickupNow] = useState(true);
+  const userId = useAppSelector((s) => s.auth.user?.id);
   const {
     control,
     handleSubmit,
@@ -91,7 +94,6 @@ export default function BookingsPage() {
   });
 
   console.log("errors:", errors);
-  // Sync form values with Redux store
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name && !name.startsWith("travelers")) {
@@ -110,9 +112,48 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
-  const onSubmit = (data: BookingFormData) => {
-    console.log("Form submitted:", data);
-    // router.push("/bookings/payment");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (data: BookingFormData) => {
+    setIsSubmitting(true);
+    const adultsCount = data.travelers.filter(
+      (p) => moment().diff(p.dob, "years") >= 18
+    ).length;
+    const childrenCount = data.travelers.length - adultsCount;
+    try {
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+
+      const bookingPayload = {
+        activityId: id,
+        userId: userId,
+        selectDate: data.selectDate,
+        email: data.email,
+        fullName: data.fullName,
+        phoneNumber: data.phoneNumber,
+        travelers: data.travelers,
+        pickupLocation: data.pickupLocation,
+        adultsCount,
+        childrenCount,
+      };
+
+      console.log("Submitting booking:", bookingPayload);
+
+      const response = await axios.post("/api/booking/add", bookingPayload);
+      const result = response?.data;
+      console.log("result-----", result);
+      router.push(`/bookings/payment/${result?.booking?._id}`);
+    } catch (error: any) {
+      console.error("Booking submission error:", error?.response?.data?.error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error?.response?.data?.error || "Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddTraveler = () => {
@@ -392,6 +433,8 @@ export default function BookingsPage() {
               className="w-full"
               type="button"
               onClick={handleSubmit(onSubmit)}
+              loading={isSubmitting}
+              loadingText="Adding your booking..."
             >
               Next
             </Button>

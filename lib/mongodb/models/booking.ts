@@ -33,11 +33,11 @@ const TravelerSchema = new Schema<Traveler>(
 
 export interface Booking {
   bookingId: string;
+  slotId: Types.ObjectId;
   activity: Types.ObjectId;
   vendor: Types.ObjectId;
   user: Types.ObjectId;
   selectDate: string;
-  participants: string;
   email: string;
   fullName: string;
   phoneNumber: string;
@@ -50,6 +50,8 @@ export interface Booking {
     currency: string;
     status: string;
   };
+  adultsCount: number;
+  childrenCount: number;
   paymentStatus: "completed" | "pending" | "refunded";
   status: "pending" | "upcoming" | "completed" | "cancelled" | "missed";
 }
@@ -62,12 +64,17 @@ const BookingSchema = new Schema<Booking>(
   {
     bookingId: { type: String, required: true, unique: true },
 
-    activity: { type: Schema.Types.ObjectId, ref: "Activity", required: true },
+    activity: {
+      type: Schema.Types.ObjectId,
+      ref: "ToursAndActivity",
+      required: true,
+    },
+
+    slotId: { type: Schema.Types.ObjectId, required: true },
     vendor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
 
     selectDate: { type: String, required: true },
-    participants: { type: String, required: true },
 
     email: { type: String, required: true },
     fullName: { type: String, required: true },
@@ -77,16 +84,18 @@ const BookingSchema = new Schema<Booking>(
 
     pickupLocation: {
       type: LocationDataSchema,
-      required: true,
+      required: false,
       default: null,
     },
-
+    adultsCount: { type: Number, required: true },
+    childrenCount: { type: Number, required: true },
+    // Update paymentDetails to allow partial data initially
     paymentDetails: {
-      paymentIntentId: { type: String, required: true },
-      customerId: { type: String, required: true },
+      paymentIntentId: { type: String, required: false, default: "" },
+      customerId: { type: String, required: false, default: "" },
       amount: { type: Number, required: true },
-      currency: { type: String, required: true },
-      status: { type: String, required: true },
+      currency: { type: String, required: true, default: "usd" },
+      status: { type: String, required: false, default: "pending" },
     },
 
     paymentStatus: {

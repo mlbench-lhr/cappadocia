@@ -16,9 +16,10 @@ export interface ToursAndActivity {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  status: "pending Admin Approval" | "active" | "Rejected" | "upcoming";
+  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
+      _id: string;
       startDate: Date;
       endDate: Date;
       adultPrice: number;
@@ -45,9 +46,10 @@ export interface ToursAndActivityWithVendor {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  status: "pending Admin Approval" | "active" | "Rejected" | "upcoming";
+  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
+      _id: string;
       startDate: Date;
       endDate: Date;
       adultPrice: number;
@@ -78,7 +80,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     category: { type: String },
     status: {
       type: String,
-      enum: ["pending Admin Approval", "active", "Rejected", "upcoming"],
+      enum: ["pending Admin Approval", "active", "rejected", "upcoming"],
       default: "pending Admin Approval",
     },
     description: { type: String },
@@ -92,6 +94,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     duration: { type: Number, required: true },
     slots: [
       {
+        _id: { type: Schema.Types.ObjectId, auto: true },
         startDate: { type: Date, required: true },
         endDate: { type: Date, required: true },
         adultPrice: { type: Number, required: true },

@@ -2,21 +2,14 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
-import {
-  SelectInputComponent,
-  TextInputComponent,
-} from "@/components/SmallComponents/InputComponents";
-import PhoneNumberInput from "@/components/PhoneNumberInput";
-import { Label } from "@/components/ui/label";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { ClockIcon, StarIcon } from "@/public/allIcons/page";
-import Link from "next/link";
 
 export type DashboardCardProps = {
   image: string;
@@ -25,7 +18,6 @@ export type DashboardCardProps = {
 };
 
 export default function BookingsPage() {
-  const [phoneNumber, setPhoneNumber] = useState("");
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   useEffect(() => {
