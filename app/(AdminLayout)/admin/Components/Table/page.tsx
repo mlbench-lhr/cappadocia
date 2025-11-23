@@ -279,7 +279,7 @@ export function OrdersTable() {
     orderId: `ORD-${1000 + i}`,
     customer: `Customer ${i + 1}`,
     amount: `$${(Math.random() * 500 + 50).toFixed(2)}`,
-    status: ["Pending", "Shipped", "Delivered"][Math.floor(Math.random() * 3)],
+    status: ["pending", "Shipped", "Delivered"][Math.floor(Math.random() * 3)],
     date: "2024-10-07",
   }));
 

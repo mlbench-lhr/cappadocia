@@ -308,7 +308,7 @@ const InvoicePDF = () => {
 
             {/* Total */}
             <View style={styles.totalBar}>
-              <Text style={styles.totalLabel}>Total Paid</Text>
+              <Text style={styles.totalLabel}>Total paid</Text>
               <Text style={styles.totalValue}>$9,000.00</Text>
             </View>
           </View>

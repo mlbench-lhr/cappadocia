@@ -49,7 +49,7 @@ export default function BookingsPage() {
   const RightLabel = () => {
     return (
       <span className="text-[#008EFF] text-base font-normal">
-        Tour Status: Upcoming
+        Tour Status: upcoming
       </span>
     );
   };
@@ -60,7 +60,7 @@ export default function BookingsPage() {
     adultCount: 3,
     childCount: 3,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "1",
   };
   const [location1, setLocation1] = useState<LocationData>({
@@ -130,7 +130,7 @@ export default function BookingsPage() {
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Payment Method: Not Completed`}
+                      text={`Payment Method: Not completed`}
                     />
                   </div>
                 </div>
@@ -140,7 +140,7 @@ export default function BookingsPage() {
                       <span className="text-base font-normal">
                         Payment Status:
                       </span>
-                      <StatusBadge status="Pending" />
+                      <StatusBadge status="pending" />
                     </div>
                     <h3 className="text-[18px] font-semibold">QR Code</h3>
                     <div className="w-[430px] h-[350px] flex justify-center items-center">

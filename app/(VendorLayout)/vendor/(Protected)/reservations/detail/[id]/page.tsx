@@ -112,7 +112,7 @@ export default function BookingsPage() {
                     <span className="text-base font-normal">
                       Payment status:
                     </span>
-                    <StatusBadge status="Paid" />
+                    <StatusBadge status="paid" />
                   </div>
                   <div className="w-full flex justify-between items-center">
                     <span className="text-base font-medium">Base Price: </span>
@@ -121,7 +121,7 @@ export default function BookingsPage() {
                     </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
-                    <span className="text-base font-medium">Total Paid: </span>
+                    <span className="text-base font-medium">Total paid: </span>
                     <span className="text-base font-medium">€300</span>
                   </div>
                   <div className="w-full flex justify-between items-center">

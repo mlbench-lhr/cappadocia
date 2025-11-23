@@ -27,8 +27,8 @@ export type DashboardCardProps = {
 export type bookingProps = {
   bookingId: string;
   amount: number;
-  tourStatus: "Upcoming" | "Completed" | "Cancelled";
-  paymentStatus: "Paid" | "Refunded" | "Pending" | "Cancelled";
+  tourStatus: "upcoming" | "completed" | "cancelled";
+  paymentStatus: "paid" | "refunded" | "pending" | "cancelled";
   date: Date;
   _id: string;
   currency: "€" | "₺" | "$";
@@ -39,8 +39,8 @@ const bookingData: bookingProps[] = [
     bookingId: "BKG001",
     amount: 20,
     currency: "$",
-    tourStatus: "Upcoming",
-    paymentStatus: "Paid",
+    tourStatus: "upcoming",
+    paymentStatus: "paid",
     date: new Date("2025-12-01"),
     _id: "1",
   },
@@ -48,8 +48,8 @@ const bookingData: bookingProps[] = [
     bookingId: "BKG002",
     amount: 20,
     currency: "$",
-    tourStatus: "Completed",
-    paymentStatus: "Refunded",
+    tourStatus: "completed",
+    paymentStatus: "refunded",
     date: new Date("2025-10-15"),
     _id: "2",
   },
@@ -57,8 +57,8 @@ const bookingData: bookingProps[] = [
     bookingId: "BKG003",
     amount: 20,
     currency: "$",
-    tourStatus: "Cancelled",
-    paymentStatus: "Cancelled",
+    tourStatus: "cancelled",
+    paymentStatus: "cancelled",
     date: new Date("2025-11-20"),
     _id: "3",
   },
@@ -66,8 +66,8 @@ const bookingData: bookingProps[] = [
     bookingId: "BKG004",
     amount: 20,
     currency: "$",
-    tourStatus: "Upcoming",
-    paymentStatus: "Pending",
+    tourStatus: "upcoming",
+    paymentStatus: "pending",
     date: new Date("2025-12-10"),
     _id: "4",
   },

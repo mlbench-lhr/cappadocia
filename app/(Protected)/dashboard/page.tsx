@@ -34,7 +34,7 @@ export type UpComingReservationsProps = {
   adultCount: number;
   childCount: number;
   bookingId: string;
-  status: "Paid" | "Pending";
+  status: "paid" | "pending";
   _id: string;
 };
 
@@ -62,7 +62,7 @@ const dashboardCardData: DashboardCardProps[] = [
   {
     image: <TourIcon color="white" />,
     title: "4",
-    description: "Upcoming Trips",
+    description: "upcoming Trips",
   },
   {
     image: <DollarIcon color="white" />,
@@ -72,7 +72,7 @@ const dashboardCardData: DashboardCardProps[] = [
   {
     image: <PaymentIcon2 color="white" />,
     title: "$150",
-    description: "Pending Payments",
+    description: "pending Payments",
   },
 ];
 
@@ -84,7 +84,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 3,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "1",
   },
   {
@@ -94,7 +94,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "2",
   },
   {
@@ -104,7 +104,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
 ];
@@ -196,7 +196,7 @@ export default function DashboardPage() {
           <ImageSlider />
         </div>
         <div className="col-span-16 xl:col-span-7 space-y-2">
-          <BoxProviderWithName name="Upcoming Reservations">
+          <BoxProviderWithName name="upcoming Reservations">
             <div className="w-full space-y-3">
               {upComingReservationsData.map((item, index) => (
                 <BoxProviderWithName

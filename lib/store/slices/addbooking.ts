@@ -10,7 +10,7 @@ export interface LocationData {
   coordinates: LatLng | null;
 }
 
-interface Traveler {
+export interface Traveler {
   fullName: string;
   dob: string;
   nationality: string;

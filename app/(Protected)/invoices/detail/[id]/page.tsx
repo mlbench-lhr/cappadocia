@@ -36,7 +36,7 @@ export type InvoiceData = {
     transactionId: string;
     currency: string;
     amountPaid: number;
-    status: "Paid" | "Pending" | "Failed";
+    status: "paid" | "pending" | "Failed";
   };
   priceBreakdown: {
     basePrice: {
@@ -93,7 +93,7 @@ const invoiceData: InvoiceData = {
     transactionId: "TXN-568742195",
     currency: "EUR",
     amountPaid: 450.0,
-    status: "Paid",
+    status: "paid",
   },
   priceBreakdown: {
     basePrice: { adults: 2, currency: "€", perAdult: 160, total: 320 },

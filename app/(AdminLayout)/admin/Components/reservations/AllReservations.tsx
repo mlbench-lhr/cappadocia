@@ -13,7 +13,7 @@ export type ReservationData = {
   id: string;
   tourTitle: string;
   partcipants: string; // e.g 2 Adults, 1 child
-  status: string; //e.g Pending or Paid
+  status: string; //e.g pending or paid
   bookedBy: {
     name: string;
     email: string;
@@ -26,7 +26,7 @@ export const dummyReservations: ReservationData[] = [
     id: "1",
     tourTitle: "Hot Air Balloon Experience",
     partcipants: "2 Adults, 1 Child",
-    status: "Paid",
+    status: "paid",
     bookedBy: {
       name: "Ali Demir",
       email: "ali.demir@example.com",
@@ -37,7 +37,7 @@ export const dummyReservations: ReservationData[] = [
     id: "2",
     tourTitle: "Sunset Jeep Safari",
     partcipants: "3 Adults",
-    status: "Pending",
+    status: "pending",
     bookedBy: {
       name: "Mehmet Yildiz",
       email: "mehmet.yildiz@example.com",
@@ -48,7 +48,7 @@ export const dummyReservations: ReservationData[] = [
     id: "3",
     tourTitle: "Underground City Tour",
     partcipants: "1 Adult, 2 Children",
-    status: "Paid",
+    status: "paid",
     bookedBy: {
       name: "Fatma Kaya",
       email: "fatma.kaya@example.com",
@@ -59,7 +59,7 @@ export const dummyReservations: ReservationData[] = [
     id: "4",
     tourTitle: "Blue Lagoon Boat Trip",
     partcipants: "2 Adults",
-    status: "Pending",
+    status: "pending",
     bookedBy: {
       name: "Hasan Aksoy",
       email: "hasan.aksoy@example.com",
@@ -70,7 +70,7 @@ export const dummyReservations: ReservationData[] = [
     id: "5",
     tourTitle: "Istanbul Old City Walking Tour",
     partcipants: "4 Adults",
-    status: "Paid",
+    status: "paid",
     bookedBy: {
       name: "Elif Aydin",
       email: "elif.aydin@example.com",
@@ -130,7 +130,7 @@ export default function AllReservations() {
       cell: (row) => (
         <div
           className={`font-medium rounded-full w-20 px-2 py-1 text-center ${
-            row.status === "Paid"
+            row.status === "paid"
               ? "text-green-600 bg-[#E7FAE3]"
               : "text-yellow-600 bg-[#FFE7CA]"
           }`}

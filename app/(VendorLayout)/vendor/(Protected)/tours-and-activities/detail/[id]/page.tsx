@@ -57,7 +57,7 @@ export type InvoiceData = {
     transactionId: string;
     currency: string;
     amountPaid: number;
-    status: "Paid" | "Pending" | "Failed";
+    status: "paid" | "pending" | "Failed";
   };
   priceBreakdown: {
     basePrice: {

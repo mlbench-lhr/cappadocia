@@ -465,7 +465,7 @@ export default function BlogsPage() {
               <div className="flex justify-start gap-[16px] items-start col-span-1 flex-col">
                 <Label className=" block">Price Type:</Label>
                 <div className="flex gap-6 w-[100%]">
-                  {["Free", "Paid"].map((p) => (
+                  {["Free", "paid"].map((p) => (
                     <label key={p} className="w-[40%] flex items-center gap-2">
                       <Checkbox
                         checked={selectedPriceType === p}
@@ -545,7 +545,7 @@ export default function BlogsPage() {
           <div className="flex justify-start gap-[12px] items-center col-span-1">
             <Label className=" block">Price Type:</Label>
             <div className="flex gap-6">
-              {["Free", "Paid"].map((p) => (
+              {["Free", "paid"].map((p) => (
                 <label key={p} className="flex items-center gap-2">
                   <Checkbox
                     checked={selectedPriceType === p}

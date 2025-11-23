@@ -22,11 +22,11 @@ export type bookingProps = {
   bookingId: string;
   title: string;
   tourStatus:
-    | "Upcoming"
-    | "Completed"
-    | "Cancelled"
-    | "Active"
-    | "Pending Admin Approval";
+    | "upcoming"
+    | "completed"
+    | "cancelled"
+    | "active"
+    | "pending Admin Approval";
   date: Date;
   _id: string;
   price: string;
@@ -36,7 +36,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG001",
     title: "City Tour",
-    tourStatus: "Active",
+    tourStatus: "active",
     date: new Date("2025-12-01"),
     _id: "1",
     price: "€250",
@@ -44,7 +44,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG002",
     title: "Mountain Hike",
-    tourStatus: "Pending Admin Approval",
+    tourStatus: "pending Admin Approval",
     date: new Date("2025-10-15"),
     _id: "2",
     price: "€250",
@@ -52,7 +52,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG003",
     title: "Beach Trip",
-    tourStatus: "Cancelled",
+    tourStatus: "cancelled",
     date: new Date("2025-11-20"),
     _id: "3",
     price: "€250",
@@ -60,7 +60,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG004",
     title: "Museum Visit",
-    tourStatus: "Pending Admin Approval",
+    tourStatus: "pending Admin Approval",
     date: new Date("2025-12-10"),
     _id: "4",
     price: "€250",

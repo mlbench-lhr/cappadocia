@@ -96,10 +96,10 @@ export default function UpcomingEvents() {
                 className="font-[500] text-[20px] w-full md:w-[200px] rounded-md"
                 style={{ color: "transparent" }}
               >
-                Upcoming Events{" "}
+                upcoming Events{" "}
               </Skeleton>
             ) : (
-              <div className="font-[500] text-[20px]">Upcoming Events</div>
+              <div className="font-[500] text-[20px]">upcoming Events</div>
             )}
 
             <div className="w-full flex flex-col justify-start items-start gap-[0px]">

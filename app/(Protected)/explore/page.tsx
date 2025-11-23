@@ -34,7 +34,7 @@ export type UpComingReservationsProps = {
   adultCount: number;
   childCount: number;
   bookingId: string;
-  status: "Paid" | "Pending";
+  status: "paid" | "pending";
   _id: string;
 };
 

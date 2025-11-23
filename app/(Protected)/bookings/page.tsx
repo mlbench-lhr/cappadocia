@@ -27,8 +27,8 @@ export type DashboardCardProps = {
 export type bookingProps = {
   bookingId: string;
   title: string;
-  tourStatus: "Upcoming" | "Completed" | "Cancelled";
-  paymentStatus: "Paid" | "Refunded" | "Pending" | "Cancelled";
+  tourStatus: "upcoming" | "completed" | "cancelled";
+  paymentStatus: "paid" | "refunded" | "pending" | "cancelled";
   date: Date;
   _id: string;
 };
@@ -37,32 +37,32 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG001",
     title: "City Tour",
-    tourStatus: "Upcoming",
-    paymentStatus: "Paid",
+    tourStatus: "upcoming",
+    paymentStatus: "paid",
     date: new Date("2025-12-01"),
     _id: "1",
   },
   {
     bookingId: "BKG002",
     title: "Mountain Hike",
-    tourStatus: "Completed",
-    paymentStatus: "Refunded",
+    tourStatus: "completed",
+    paymentStatus: "refunded",
     date: new Date("2025-10-15"),
     _id: "2",
   },
   {
     bookingId: "BKG003",
     title: "Beach Trip",
-    tourStatus: "Cancelled",
-    paymentStatus: "Cancelled",
+    tourStatus: "cancelled",
+    paymentStatus: "cancelled",
     date: new Date("2025-11-20"),
     _id: "3",
   },
   {
     bookingId: "BKG004",
     title: "Museum Visit",
-    tourStatus: "Upcoming",
-    paymentStatus: "Pending",
+    tourStatus: "upcoming",
+    paymentStatus: "pending",
     date: new Date("2025-12-10"),
     _id: "4",
   },
@@ -166,7 +166,7 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
+          {["all", "upcoming", "Past", "cancelled"].map((filter) => {
             const isActive =
               (filter === "all" && filters.includes("all")) ||
               filters.includes(filter.toLowerCase());

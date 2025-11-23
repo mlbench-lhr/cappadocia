@@ -46,7 +46,7 @@ export type InvoiceData = {
     transactionId: string;
     currency: string;
     amountPaid: number;
-    status: "Paid" | "Pending" | "Failed";
+    status: "paid" | "pending" | "Failed";
   };
   priceBreakdown: {
     basePrice: {
@@ -134,7 +134,7 @@ export default function BookingsPage() {
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
                 <h2 className="text-2xl md:text-[37px] font-medium ">12</h2>
                 <h2 className="text-sm md:text-base font-medium ">
-                  Active Tours
+                  active Tours
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
@@ -152,7 +152,7 @@ export default function BookingsPage() {
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
                 <h2 className="text-2xl md:text-[37px] font-medium ">8</h2>
                 <h2 className="text-sm md:text-base font-medium ">
-                  Years Active
+                  Years active
                 </h2>
               </div>
             </div>

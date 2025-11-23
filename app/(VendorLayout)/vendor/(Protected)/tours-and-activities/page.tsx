@@ -28,11 +28,11 @@ export type bookingProps = {
   bookingId: string;
   title: string;
   tourStatus:
-    | "Upcoming"
-    | "Completed"
-    | "Cancelled"
-    | "Active"
-    | "Pending Admin Approval";
+    | "upcoming"
+    | "completed"
+    | "cancelled"
+    | "active"
+    | "pending Admin Approval";
   date: Date;
   _id: string;
   price: string;
@@ -42,7 +42,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG001",
     title: "City Tour",
-    tourStatus: "Active",
+    tourStatus: "active",
     date: new Date("2025-12-01"),
     _id: "1",
     price: "€250",
@@ -50,7 +50,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG002",
     title: "Mountain Hike",
-    tourStatus: "Pending Admin Approval",
+    tourStatus: "pending Admin Approval",
     date: new Date("2025-10-15"),
     _id: "2",
     price: "€250",
@@ -58,7 +58,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG003",
     title: "Beach Trip",
-    tourStatus: "Cancelled",
+    tourStatus: "cancelled",
     date: new Date("2025-11-20"),
     _id: "3",
     price: "€250",
@@ -66,7 +66,7 @@ const bookingData: bookingProps[] = [
   {
     bookingId: "BKG004",
     title: "Museum Visit",
-    tourStatus: "Pending Admin Approval",
+    tourStatus: "pending Admin Approval",
     date: new Date("2025-12-10"),
     _id: "4",
     price: "€250",
@@ -175,7 +175,7 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
+          {["all", "upcoming", "Past", "cancelled"].map((filter) => {
             const isActive =
               (filter === "all" && filters.includes("all")) ||
               filters.includes(filter.toLowerCase());

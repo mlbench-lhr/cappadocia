@@ -30,7 +30,7 @@ export type UpComingReservationsProps = {
   adultCount: number;
   childCount: number;
   bookingId: string;
-  status: "Paid" | "Pending";
+  status: "paid" | "pending";
   _id: string;
 };
 
@@ -58,7 +58,7 @@ const dashboardCardData: DashboardCardProps[] = [
   {
     image: "/Icons/db2.png",
     title: "4",
-    description: "Upcoming Trips",
+    description: "upcoming Trips",
   },
   {
     image: "/Icons/db3.png",
@@ -68,7 +68,7 @@ const dashboardCardData: DashboardCardProps[] = [
   {
     image: "/Icons/db4.png",
     title: "$150",
-    description: "Pending Payments",
+    description: "pending Payments",
   },
 ];
 
@@ -80,7 +80,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 3,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "1",
   },
   {
@@ -90,7 +90,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "2",
   },
   {
@@ -100,7 +100,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
   {
@@ -110,7 +110,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
   {
@@ -120,7 +120,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
 ];

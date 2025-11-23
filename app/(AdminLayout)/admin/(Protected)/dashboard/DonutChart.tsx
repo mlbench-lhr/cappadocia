@@ -24,8 +24,8 @@ const chartConfig = {
     label: "In Progress",
     color: "#00ACC0",
   },
-  Completed: {
-    label: "Completed",
+  completed: {
+    label: "completed",
     color: "#B32053",
   },
   "Over Due": {
@@ -46,7 +46,7 @@ export function ChartPieDonutText() {
         fill: "#00ACC0",
       },
       {
-        blog: "Completed",
+        blog: "completed",
         visitors: Number(overview.blogOverview.completed) || 0,
         fill: "#B32053",
       },
@@ -161,7 +161,7 @@ export function ChartPieDonutText() {
             className="inline-block w-3 h-3 rounded-full"
             style={{ backgroundColor: "#B32053" }}
           />
-          Completed : {Number(overview.blogOverview.completed)}%
+          completed : {Number(overview.blogOverview.completed)}%
         </div>
         <div className="flex items-center gap-1">
           <span

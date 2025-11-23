@@ -20,7 +20,7 @@ const stats = [
     trend: "up",
   },
   {
-    title: "Active Courses",
+    title: "active Courses",
     value: "156",
     description: "+8 new this week",
     icon: BookOpen,

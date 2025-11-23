@@ -1,8 +1,8 @@
 // components/UserLoginAnalytics.tsx
-import React from 'react';
-import { ChevronDown } from 'lucide-react';
-import MetricCard from './MetricCard';
-import Image from 'next/image';
+import React from "react";
+import { ChevronDown } from "lucide-react";
+import MetricCard from "./MetricCard";
+import Image from "next/image";
 
 interface MetricData {
   title: string;
@@ -19,43 +19,43 @@ const UserLoginAnalytics: React.FC = () => {
       value: "4.16%",
       icon: "👤",
       bgColor: "bg-white",
-      textColor: "text-gray-900"
+      textColor: "text-gray-900",
     },
     {
-      title: "Active Users",
+      title: "active Users",
       value: "3.48%",
       icon: "👤",
-      bgColor: "bg-white", 
-      textColor: "text-gray-900"
+      bgColor: "bg-white",
+      textColor: "text-gray-900",
     },
     {
       title: "Old Users",
       value: "8.25%",
       icon: "👤",
       bgColor: "bg-primary",
-      textColor: "text-white"
+      textColor: "text-white",
     },
     {
       title: "New Users",
       value: "8.25%",
       icon: "👤",
       bgColor: "bg-primary",
-      textColor: "text-white"
+      textColor: "text-white",
     },
     {
       title: "Login Attempts",
       value: "3.48%",
       icon: "↗️",
       bgColor: "bg-white",
-      textColor: "text-gray-900"
+      textColor: "text-gray-900",
     },
     {
       title: "Login Attempts (Successful)",
       value: "40%",
       icon: "✅",
       bgColor: "bg-white",
-      textColor: "text-gray-900"
-    }
+      textColor: "text-gray-900",
+    },
   ];
 
   return (
@@ -64,9 +64,16 @@ const UserLoginAnalytics: React.FC = () => {
       <div className="flex items-center gap-3 mb-8">
         <div className=" rounded-lg flex items-center justify-center">
           {/* <span className="text-white text-lg"></span> */}
-          <Image src="/images/admin/UserAnalytics.svg" alt="Icon" width={16} height={16} />
+          <Image
+            src="/images/admin/UserAnalytics.svg"
+            alt="Icon"
+            width={16}
+            height={16}
+          />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900">User Login Analytics</h2>
+        <h2 className="text-xl font-semibold text-gray-900">
+          User Login Analytics
+        </h2>
       </div>
 
       {/* Metrics Grid */}

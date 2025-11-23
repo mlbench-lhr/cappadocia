@@ -1,10 +1,16 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import { Calendar, Clock, FileText } from "lucide-react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
+import { Calendar, Clock, FileText } from "lucide-react";
 
 const assignments = [
   {
@@ -34,24 +40,27 @@ const assignments = [
     priority: "low",
     type: "lab",
   },
-]
+];
 
 const priorityColors = {
   high: "destructive",
   medium: "default",
   low: "secondary",
-} as const
+} as const;
 
 export function UpcomingAssignments() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Upcoming Assignments</CardTitle>
+        <CardTitle>upcoming Assignments</CardTitle>
         <CardDescription>Stay on top of your deadlines</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {assignments.map((assignment) => (
-          <div key={assignment.id} className="flex items-center space-x-4 rounded-lg border p-4">
+          <div
+            key={assignment.id}
+            className="flex items-center space-x-4 rounded-lg border p-4"
+          >
             <div className="flex-shrink-0">
               <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10">
                 <FileText className="h-5 w-5 text-accent" />
@@ -62,7 +71,9 @@ export function UpcomingAssignments() {
                 <h3 className="font-medium">{assignment.title}</h3>
                 {/* <Badge variant={priorityColors[assignment.priority]}>{assignment.priority}</Badge> */}
               </div>
-              <p className="text-sm text-muted-foreground">{assignment.course}</p>
+              <p className="text-sm text-muted-foreground">
+                {assignment.course}
+              </p>
               <div className="flex items-center space-x-4 text-sm text-muted-foreground">
                 <div className="flex items-center">
                   <Calendar className="mr-1 h-3 w-3" />
@@ -84,5 +95,5 @@ export function UpcomingAssignments() {
         </Button>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -2,12 +2,11 @@
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import {
   RadioInputComponent,
-  FormSelectInput,
   FormTextInput,
   TextInputComponent,
 } from "@/components/SmallComponents/InputComponents";
@@ -59,12 +58,7 @@ const bookingSchema = z.object({
       })
     )
     .min(1, "At least one traveler is required"),
-  pickupLocation: LocationData.nullable().refine(
-    (v) => v === null || v.coordinates !== null,
-    {
-      message: "Select any location from map",
-    }
-  ),
+  pickupLocation: LocationData.nullable(),
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
@@ -76,7 +70,7 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const bookingState = useAppSelector((s) => s.addBooking);
   console.log("bookingState:", bookingState, id);
-
+  const [addPickupNow, setAddPickupNow] = useState(true);
   const {
     control,
     handleSubmit,
@@ -158,12 +152,12 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormSelectInput
+            <FormTextInput
               control={control}
               name="selectDate"
               label="Select Date"
               placeholder="Select Date"
-              options={["Nov 2,2025", "Apr 2, 2025"]}
+              type="date"
               required
             />
             <FormTextInput
@@ -345,48 +339,53 @@ export default function BookingsPage() {
                   { value: "now", label: "Add location now" },
                   { value: "later", label: "Add later" },
                 ]}
-                value={bookingState.pickupLocation ? "now" : "later"}
+                value={addPickupNow ? "now" : "later"}
                 onChange={(value) => {
                   if (value === "later") {
+                    setAddPickupNow(false);
                     dispatch(
                       setField({ field: "pickupLocation", value: null })
                     );
                     setValue("pickupLocation", null);
+                  } else {
+                    setAddPickupNow(true);
                   }
                 }}
               />
             </div>
           </BoxProviderWithName>
-          <div className="w-full lg:w-1/2 mt-4">
-            <Controller
-              name="pickupLocation"
-              control={control}
-              render={({ field }) => (
-                <AddressLocationSelector
-                  value={
-                    field.value || {
-                      address: "",
-                      coordinates: null,
+          {addPickupNow && (
+            <div className="w-full lg:w-2/3 mt-4">
+              <Controller
+                name="pickupLocation"
+                control={control}
+                render={({ field }) => (
+                  <AddressLocationSelector
+                    value={
+                      field.value || {
+                        address: "",
+                        coordinates: null,
+                      }
                     }
-                  }
-                  onChange={(data) => {
-                    field.onChange(data);
-                    dispatch(
-                      setField({ field: "pickupLocation", value: data })
-                    );
-                  }}
-                  readOnly={false}
-                  label="Location"
-                  placeholder="Type address or click on map"
-                />
+                    onChange={(data) => {
+                      field.onChange(data);
+                      dispatch(
+                        setField({ field: "pickupLocation", value: data })
+                      );
+                    }}
+                    readOnly={false}
+                    label="Location"
+                    placeholder="Type address or click on map"
+                  />
+                )}
+              />
+              {errors.pickupLocation?.coordinates?.message && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.pickupLocation?.coordinates?.message}
+                </p>
               )}
-            />
-            {errors.pickupLocation?.coordinates?.message && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.pickupLocation?.coordinates?.message}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
           <div className="w-full md:w-[235px] mt-4">
             <Button
               variant={"main_green_button"}
