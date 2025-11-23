@@ -75,7 +75,7 @@ export default function BookingsPage() {
   const router = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const bookingState = useAppSelector((s) => s.addBooking);
-  console.log("bookingState:", bookingState);
+  console.log("bookingState:", bookingState, id);
 
   const {
     control,

@@ -155,7 +155,7 @@ export default function BookingsPage() {
                       From
                     </span>
                     <span className="text-[20px] md:text-[26px] font-semibold text-primary">
-                      $569.00
+                      ${data?.slots?.[0]?.adultPrice}
                     </span>
                     <span className="text-[12px] font-normal text-[#6E7070]">
                       /Person
