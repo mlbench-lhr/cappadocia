@@ -2,24 +2,58 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import Image from "next/image";
 import { LocationIcon, PhoneIcon, MailIcon } from "@/public/allIcons/page";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import moment from "moment";
+import { percentage } from "@/lib/helper/smallHelpers";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const { id }: { id: string } = useParams();
+  console.log("id-----", id);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+
+  const [data, setData] = useState<BookingWithPopulatedData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data-----", data);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/booking/detail/${id}`);
+        console.log("response----", response.data);
+
+        if (response.data) {
+          setData(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  if (!data) {
+    return null;
+  }
+
   return (
     <BasicStructureWithName name="Details" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full lg:w-[80%] xl:w-[70%] 2xl:w-[60%] gap-3 h-fit pb-8">
+      <div className="flex flex-col justify-start items-start w-full lg:w-[95%] xl:w-[90%] 2xl:w-[80%] gap-3 h-fit pb-8">
         <BoxProviderWithName noBorder={true}>
           <div className="grid grid-cols-10 gap-3.5">
             <div className="col-span-10">
@@ -29,43 +63,49 @@ export default function BookingsPage() {
                 leftSideComponent={
                   <div className=" text-sm md:text-base font-semibold ">
                     Booking Information /{" "}
-                    <span className="text-primary"> #1242</span>
+                    <span className="text-primary"> #{data.bookingId}</span>
                   </div>
                 }
+                rightSideLink={
+                  "/vendor/tours-and-activities/detail/" + data.activity._id
+                }
+                rightSideLabel="Activity Details"
                 textClasses=" text-[18px] font-semibold "
               >
                 <BoxProviderWithName textClasses=" text-[18px] font-semibold ">
                   <div className="w-full flex justify-start items-start flex-col">
                     <div className="w-full flex justify-between items-center gap-2">
                       <Image
-                        src={"/userDashboard/img30.png"}
+                        src={data.activity.uploads?.[0]}
                         alt=""
-                        width={80}
-                        height={80}
-                        className="rounded-[9px]"
+                        width={200}
+                        height={200}
+                        className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center rounded-2xl"
                       />
                       <div className="w-full flex justify-center items-start flex-col">
                         <h2 className="text-base font-semibold">
-                          Red Tour (North Cappadocia)
+                          {data.activity.title}
                         </h2>
                         <h3 className="text-sm font-normal">
-                          Duration: Full Day (8 hours)
+                          Duration: Full Day ({data.activity.duration} hours)
                         </h3>
                         <h4 className="text-sm font-normal">
-                          From €80 /Person
+                          {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
                         </h4>
                       </div>
                     </div>
                     <div className="w-full flex justify-between items-center mt-4">
                       <span className="text-xs font-normal">Date</span>
                       <span className="text-sm font-medium">
-                        Jan 16 - Jan 20, 2025
+                        {moment(data.selectDate).format(
+                          "MMM DD, YYYY | hh:mm A"
+                        )}{" "}
                       </span>
                     </div>
                     <div className="w-full flex justify-between items-center">
                       <span className="text-xs font-normal">Guests</span>
                       <span className="text-sm font-medium">
-                        2 Adults and 1 Child
+                        {data.adultsCount} Adults, {data.childrenCount} Children{" "}
                       </span>
                     </div>
                   </div>
@@ -80,26 +120,26 @@ export default function BookingsPage() {
                 <div className="w-full flex-col flex justify-start items-start gap-5">
                   <ProfileBadge
                     size="medium"
-                    title="Amanda Chavez"
-                    subTitle={"amnadachaved@gmail.com"}
-                    image="/userDashboard/cimg.png"
+                    title={data.user.fullName}
+                    subTitle={data.user.email}
+                    image={data.user.avatar}
                   />
                   <ProfileBadge
                     size="custom"
                     title="Phone"
-                    subTitle={"+90 384 123 4567"}
+                    subTitle={data.phoneNumber}
                     icon={<PhoneIcon color="rgba(0, 0, 0, 0.5)" />}
                   />
                   <ProfileBadge
                     size="custom"
                     title="Email"
-                    subTitle={"info@adventuretours.com"}
+                    subTitle={data.user.email}
                     icon={<MailIcon color="rgba(0, 0, 0, 0.5)" />}
                   />
                   <ProfileBadge
                     size="custom"
                     title="Location"
-                    subTitle={"Cappadocia,Turkey"}
+                    subTitle={data?.pickupLocation?.address || ""}
                     icon={<LocationIcon color="rgba(0, 0, 0, 0.5)" />}
                   />
                 </div>
@@ -112,23 +152,34 @@ export default function BookingsPage() {
                     <span className="text-base font-normal">
                       Payment status:
                     </span>
-                    <StatusBadge status="paid" />
+                    <StatusBadge status={data.paymentStatus} />
                   </div>
                   <div className="w-full flex justify-between items-center">
                     <span className="text-base font-medium">Base Price: </span>
                     <span className="text-base font-medium">
-                      €60 × 5 Guests = €300
+                      {data.paymentDetails.currency}
+                      {data.activity.slots?.[0].adultPrice} × {data.adultsCount}{" "}
+                      Adults +{data.paymentDetails.currency}
+                      {data.activity.slots?.[0].adultPrice} × {data.adultsCount}{" "}
+                      Adults = {data.paymentDetails.currency}
+                      {data.paymentDetails.amount}
                     </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
                     <span className="text-base font-medium">Total paid: </span>
-                    <span className="text-base font-medium">€300</span>
+                    <span className="text-base font-medium">
+                      {data.paymentDetails.currency}
+                      {data.paymentDetails.amount}
+                    </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
                     <span className="text-base font-medium">
                       Commission (Platform 15%):
                     </span>
-                    <span className="text-base font-medium">€200</span>
+                    <span className="text-base font-medium">
+                      {data.paymentDetails.currency}
+                      {percentage(15, data.paymentDetails.amount)}
+                    </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
                     <span className="text-base font-medium">Net Revenue: </span>

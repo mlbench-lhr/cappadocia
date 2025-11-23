@@ -10,7 +10,7 @@ import { Slot } from "@/lib/store/slices/tourAndActivitySlice";
 function generateBookingId(): string {
   const timestamp = Date.now().toString(36);
   const random = Math.random().toString(36).substring(2, 7);
-  return `BK-${timestamp}-${random}`.toUpperCase();
+  return `CP-${timestamp}-${random}`.toUpperCase();
 }
 
 export async function POST(req: NextRequest) {

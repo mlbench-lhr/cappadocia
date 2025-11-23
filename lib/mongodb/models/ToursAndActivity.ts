@@ -4,6 +4,7 @@ import mongoose, { type Document, Schema, Types } from "mongoose";
 // ----------- Interfaces -----------
 
 export interface ToursAndActivity {
+  _id: string;
   vendor: Types.ObjectId;
   title: string;
   category?: "Tour" | "Activity";

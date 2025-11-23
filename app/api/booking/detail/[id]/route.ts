@@ -7,7 +7,11 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   await connectDB();
-  const booking = await Booking.findById(params.id);
+  const booking = await Booking.findById(params.id)
+    .populate("activity")
+    .populate("vendor")
+    .populate("user")
+    .lean();
   if (!booking) return Response.json({ error: "Not found" }, { status: 404 });
 
   return Response.json(booking);

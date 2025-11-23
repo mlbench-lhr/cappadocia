@@ -8,8 +8,6 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 import Image from "next/image";
 import {
   ClockIcon,
-  BookingIcon,
-  PeopleIcon,
   LocationIcon,
   PhoneIcon,
   MailIcon,
@@ -17,26 +15,20 @@ import {
 } from "@/public/allIcons/page";
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
-import Link from "next/link";
 import {
   IconAndTextTab,
   IconAndTextTab2,
 } from "@/components/SmallComponents/IconAndTextTab";
-import {
-  Copy,
-  Forward,
-  Locate,
-  LocateIcon,
-  Mail,
-  Phone,
-  PhoneCallIcon,
-  Share,
-} from "lucide-react";
+import { Copy, Forward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { Textarea } from "@/components/ui/textarea";
 import DownloadInvoiceButton from "@/app/(Protected)/invoices/DownloadButton";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import Link from "next/link";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -46,6 +38,33 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
+
+  const [data, setData] = useState<BookingWithPopulatedData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data-----", data);
+
+  const { id }: { id: string } = useParams();
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/booking/detail/${id}`);
+        console.log("response----", response.data);
+
+        if (response.data) {
+          setData(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
   const RightLabel = () => {
     return (
       <span className="text-[#008EFF] text-base font-normal">
@@ -53,21 +72,10 @@ export default function BookingsPage() {
       </span>
     );
   };
-  const item = {
-    image: "/userDashboard/img3.png",
-    title: "Cappadocia balloons flying at sunrise",
-    date: new Date("2024-05-15T11:00:00"),
-    adultCount: 3,
-    childCount: 3,
-    bookingId: "TRX-47012",
-    status: "paid",
-    _id: "1",
-  };
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
 
+  if (!data) {
+    return null;
+  }
   return (
     <BasicStructureWithName
       name="Booking Details"
@@ -76,7 +84,7 @@ export default function BookingsPage() {
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName
-          name="Booking Information / #1242"
+          name={"Booking Information / #" + data?.bookingId}
           rightSideComponent={RightLabel}
         >
           <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
@@ -85,52 +93,48 @@ export default function BookingsPage() {
                 <div className="flex justify-start items-start gap-4 flex-col md:flex-row">
                   <Image
                     alt=""
-                    src={item.image}
+                    src={data?.activity?.uploads?.[0]}
                     width={200}
                     height={200}
-                    className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center"
+                    className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center rounded-2xl"
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
                     <h1 className="col-span-2 text-base font-semibold text-black leading-tight line-clamp-1">
-                      {item.title}
+                      {data.activity.title}
                     </h1>
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Date and Time: ${moment(item.date).format(
+                      text={`Date and Time: ${moment(data.selectDate).format(
                         "MMM DD, YYYY | hh:mm A"
                       )}`}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Participants: 2 Adults`}
+                      text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Booking ID: #CT-2025-001242`}
+                      text={`Booking ID: #${data?.bookingId}`}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Location: Cappadocia,Turkey`}
+                      text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Duration: 60 minutes`}
+                      text={`Duration: ${data?.activity?.duration} minutes`}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Meeting Point: Göreme Town Center`}
+                      text={`Meeting Point: ${data?.pickupLocation?.address}`}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Price per Person: €120`}
+                      text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
                     />
                     <IconAndTextTab
                       icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Total Price: €350`}
-                    />
-                    <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Payment Method: Not completed`}
+                      text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
                     />
                   </div>
                 </div>
@@ -140,7 +144,7 @@ export default function BookingsPage() {
                       <span className="text-base font-normal">
                         Payment Status:
                       </span>
-                      <StatusBadge status="pending" />
+                      <StatusBadge status={data.paymentStatus} />
                     </div>
                     <h3 className="text-[18px] font-semibold">QR Code</h3>
                     <div className="w-[430px] h-[350px] flex justify-center items-center">
@@ -162,7 +166,13 @@ export default function BookingsPage() {
                       <Copy />
                       <Forward />
                     </div>
-                    <Button variant={"main_green_button"}>Pay Now</Button>
+                    {data.paymentStatus === "pending" && (
+                      <Button variant={"main_green_button"} asChild>
+                        <Link href={`/bookings/payment/${data?._id}`}>
+                          Pay Now
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                   <div className="col-span-12 md:col-span-6 flex flex-col gap-2 items-start justify-start">
                     <BoxProviderWithName name="Vendor / Operator Information">
@@ -172,9 +182,12 @@ export default function BookingsPage() {
                             <div className="w-[calc(100%-100px)]">
                               <ProfileBadge
                                 size="large"
-                                title="SkyView Balloon Tours"
-                                subTitle={"TÜRSAB Number: " + 1232}
-                                image="/userDashboard/img2.png"
+                                title={data.vendor.vendorDetails.companyName}
+                                subTitle={
+                                  "TÜRSAB Number: " +
+                                  data.vendor.vendorDetails.tursabNumber
+                                }
+                                image={data.vendor.avatar}
                               />
                             </div>
                             <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">
@@ -197,12 +210,12 @@ export default function BookingsPage() {
                           </span>
                           <IconAndTextTab2
                             icon={<PhoneIcon />}
-                            text={`+90 384 123 4567`}
+                            text={data.vendor.vendorDetails.contactPhoneNumber}
                             textClasses="text-black/70"
                           />
                           <IconAndTextTab2
                             icon={<MailIcon />}
-                            text={`info@skyviewballoon.com`}
+                            text={data.vendor.vendorDetails.businessEmail}
                             textClasses="text-black/70"
                           />
                         </div>
@@ -212,19 +225,21 @@ export default function BookingsPage() {
                           </span>
                           <IconAndTextTab2
                             icon={<LocationIcon />}
-                            text={`Location: Cappadocia,Turkey`}
+                            text={`Location: ${data.vendor.vendorDetails.address.address}`}
                             textClasses="text-black/70"
                           />
-                          <AddressLocationSelector
-                            value={location1}
-                            onChange={(data) => {
-                              setLocation1(data);
-                            }}
-                            readOnly={true}
-                            label="Enter Your Business Address"
-                            className=" w-full h-[188px] rounded-xl "
-                            placeholder="Type address or click on map"
-                          />
+                          {data.pickupLocation && (
+                            <AddressLocationSelector
+                              value={data.pickupLocation as LocationData}
+                              onChange={(data) => {
+                                setLocation1(data);
+                              }}
+                              readOnly={true}
+                              label="Enter Your Business Address"
+                              className=" w-full h-[188px] rounded-xl "
+                              placeholder="Type address or click on map"
+                            />
+                          )}
                           <div className="w-full flex flex-col justify-start items-start gap-2">
                             <div className="w-full flex justify-between items-center">
                               <h3 className="text-base font-semibold">

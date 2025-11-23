@@ -1,6 +1,7 @@
 const variants: any = {
   upcoming: { text: "#008EFF" },
   completed: { text: "#4A9E35" },
+  pending: { text: "#FF862F" },
   cancelled: { text: "rgba(255, 0, 0, 0.60)" },
 };
 export const StatusText = ({ status }: { status: string }) => {

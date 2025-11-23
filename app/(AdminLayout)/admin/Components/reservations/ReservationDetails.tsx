@@ -1,270 +1,29 @@
 "use client";
 import React from "react";
-import {
-  ChevronLeft,
-  Clock,
-  CreditCard,
-  Timer,
-  Users,
-  MapPin,
-  Navigation,
-  Phone,
-  Mail,
-} from "lucide-react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-// Header Component
-const Header: React.FC = () => {
-  const router = useRouter();
-  const [openRejectionModal, setOpenRejectionModal] = React.useState(false);
-  const handleBack = () => {
-    router.back();
-  };
-  return (
-    <div className="flex items-center justify-between bg-white">
-      <div className="flex items-center pb-4">
-        <button onClick={handleBack} className="text-gray-800 mr-3 text-xl">
-          <FaArrowLeft className="w-4 h-4" /> {/* Arrow icon */}
-        </button>
-        <h2 className="text-2xl font-weight-600 text-gray-800 ">
-          Booking Details
-        </h2>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="text-gray-600">Payment Status:</span>
-        <span className="px-4 py-1 bg-orange-100 text-orange-600 rounded-full text-sm">
-          pending
-        </span>
-      </div>
-    </div>
-  );
-};
-
-// Booking Information Component
-const BookingInformation: React.FC = () => {
-  return (
-    <div className="">
-      <div className="mb-4">
-        <h2 className="text-xl font-bold inline">Booking Information / </h2>
-        <span className="text-xl font-bold text-pink-600">#1242</span>
-      </div>
-      <div className="mb-4">
-        <span className="text-blue-500 font-medium">Tour Status: upcoming</span>
-      </div>
-
-      <div className="mb-6">
-        <img
-          src="/admin-images/reservation/baloon.png"
-          alt="Cappadocia balloons"
-          className="w-full max-w-lg rounded-3xl object-cover h-80"
-        />
-      </div>
-
-      <h3 className="text-xl font-bold mb-4">
-        Cappadocia balloons flying at sunrise
-      </h3>
-
-      <div className="space-y-3 text-gray-600">
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/clock.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Date & Time: Jun 20, 2024 | 03:00 PM</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/booking.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Booking ID: #CT-2025-001242</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/duration.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Duration: 60 Minutes</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/price.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Price Per Person: €120</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/payment.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Payment Method: Not completed</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/people.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Participants: 2 Adults</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/total.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Total Price: €350</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/location.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Location: Cappadocia,Turkey</span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Image
-            src="/admin-images/reservation/meeting.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Meeting Point: Göreme Town Center</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Vendor Information Component
-const VendorInformation: React.FC = () => {
-  return (
-    <div className="bg-white p-6 rounded-lg border mb-6">
-      <h3 className="text-lg font-bold mb-4">Vendor / Operator Information</h3>
-      <div className="border p-4 rounded-lg mb-2">
-        <div className="flex items-center justify-between mb-4 ">
-          <div className="flex items-start gap-3">
-            <img
-              src="/admin-images/reservation/baloon.png"
-              alt="SkyView Balloon Tours"
-              className="w-16 h-16 rounded-full object-cover"
-            />
-            <div>
-              <h4 className="font-bold text-lg">SkyView Balloon Tours</h4>
-              <p className="text-sm text-gray-500">TÜRSAB Number: 12345</p>
-            </div>
-            <div className="flex items-center gap-1 text-pink-600 bg-[#EB00891A] px-2 py-1 rounded-full">
-              <Image
-                src="/admin-images/reservation/map.svg"
-                alt="phone"
-                width={20}
-                height={20}
-              />
-              <span className="text-sm">1.2 mi</span>
-            </div>
-          </div>
-        </div>
-
-        <button className="w-full bg-pink-600 text-white py-3 rounded-lg font-medium hover:bg-pink-700">
-          Chat
-        </button>
-      </div>
-      <ContactInformation />
-    </div>
-  );
-};
-
-// Contact Information Component
-const ContactInformation: React.FC = () => {
-  return (
-    <div className="">
-      <h3 className="text-lg font-bold mb-4">Contact Information</h3>
-
-      <div className="space-y-3">
-        <div className="flex items-center gap-3 text-gray-600">
-          <Image
-            src="/admin-images/reservation/phone.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span className="text-sm">+90 384 123 4567</span>
-        </div>
-
-        <div className="flex items-center gap-3 text-gray-600 text-sm">
-          <Image
-            src="/admin-images/reservation/mail.svg"
-            alt="phone"
-            width={20}
-            height={20}
-          />
-          <span>Info@Skyviewballoon.Com</span>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Customer Information Component
-const CustomerInformation: React.FC = () => {
-  return (
-    <div className="bg-white p-6 rounded-lg border mb-6">
-      <h3 className="text-lg font-bold mb-4">Customer Information</h3>
-
-      <div className="flex items-center gap-3 mb-3">
-        <img
-          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80"
-          alt="Amanda Chavez"
-          className="w-12 h-12 rounded-full object-cover"
-        />
-        <div>
-          <h4 className="text-sm font-bold">Amanda Chavez</h4>
-          <p className="text-sm text-gray-500">annadachavez@gmail.com</p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 text-gray-600 ml-15">
-        <Image
-          src="/admin-images/reservation/phone.svg"
-          alt="phone"
-          width={20}
-          height={20}
-        />
-        <span className="text-sm">+90 384 123 4567</span>
-      </div>
-    </div>
-  );
-};
+import { Button } from "@/components/ui/button";
+import {
+  IconAndTextTab,
+  IconAndTextTab2,
+} from "@/components/SmallComponents/IconAndTextTab";
+import {
+  ClockIcon,
+  LocationIcon,
+  MailIcon,
+  PhoneIcon,
+  StarIcon,
+} from "@/public/allIcons/page";
+import AddressLocationSelector, { LocationData } from "@/components/map";
+import { Textarea } from "@/components/ui/textarea";
+import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
+import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 
 // QR Code Component
 const QRCode: React.FC = () => {
   return (
-    <div className="bg-white p-6 rounded-lg border">
+    <div className="bg-white p-6 rounded-lg border mt-4">
       <h3 className="text-lg font-bold mb-2">QR Code</h3>
 
       <div className="flex gap-4">
@@ -291,27 +50,226 @@ const QRCode: React.FC = () => {
   );
 };
 
+import { useAppDispatch } from "@/lib/store/hooks";
+import { useMediaQuery } from "react-responsive";
+import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useParams } from "next/navigation";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import moment from "moment";
+import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
+import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
+
 // Main App Component
 const ReservationDetails: React.FC = () => {
-  return (
-    <div className="">
-      <Header />
+  const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery({ maxWidth: 1350 });
 
+  useEffect(() => {
+    if (isMobile) dispatch(closeSidebar());
+  }, []);
+
+  const [location1, setLocation1] = useState<LocationData>({
+    address: "1600 Amphitheatre Parkway, Mountain View, CA",
+    coordinates: { lat: 37.4224764, lng: -122.0842499 },
+  });
+
+  const [data, setData] = useState<BookingWithPopulatedData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data-----", data);
+
+  const { id }: { id: string } = useParams();
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/booking/detail/${id}`);
+        console.log("response----", response.data);
+
+        if (response.data) {
+          setData(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  if (!data) {
+    return null;
+  }
+
+  return (
+    <BasicStructureWithName
+      showBackOption={true}
+      name="Booking Detail"
+      rightSideComponent={
+        <div className="flex items-center gap-2">
+          <span className="text-gray-600">Payment Status:</span>
+          <StatusBadge status={data.paymentStatus} />
+        </div>
+      }
+    >
       <div className="">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div>
-            <BookingInformation />
-          </div>
+          <BoxProviderWithName
+            noBorder={true}
+            className="!p-0"
+            leftSideComponent={
+              <div className=" text-sm md:text-base font-semibold ">
+                Booking Information /{" "}
+                <span className="text-primary"> #{data.bookingId}</span>
+              </div>
+            }
+            rightSideLink={
+              "/admin/tours-and-activities/detail/" + data.activity._id
+            }
+            rightSideLabel="Activity Details"
+            textClasses=" text-[18px] font-semibold "
+          >
+            <div className="mb-4">
+              <span className="text-blue-500 font-medium">
+                Tour Status: {data.status}
+              </span>
+            </div>
 
-          <div>
-            <VendorInformation />
+            <div className="mb-6 w-full">
+              <Image
+                src={data.activity.uploads[0]}
+                alt="QR"
+                width={350}
+                height={300}
+                className="w-full  h-auto lg:h-[300px] object-cover object-center rounded-2xl"
+              />
+            </div>
 
-            <CustomerInformation />
+            <div className="grid grid-cols-1 gap-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
+              <h1 className=" text-base font-semibold text-black leading-tight line-clamp-1">
+                {data.activity.title}
+              </h1>
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Date and Time: ${moment(data.selectDate).format(
+                  "MMM DD, YYYY | hh:mm A"
+                )}`}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Booking ID: #${data?.bookingId}`}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Duration: ${data?.activity?.duration} minutes`}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Meeting Point: ${data?.pickupLocation?.address}`}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
+              />
+              <IconAndTextTab
+                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
+              />
+            </div>
+          </BoxProviderWithName>
+          <div>
+            <BoxProviderWithName name="Vendor / Operator Information">
+              <BoxProviderWithName>
+                <div className="w-full flex flex-col gap-3 justify-between items-center">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="w-[calc(100%-100px)]">
+                      <ProfileBadge
+                        size="large"
+                        title={data.vendor.vendorDetails.companyName}
+                        subTitle={
+                          "TÜRSAB Number: " +
+                          data.vendor.vendorDetails.tursabNumber
+                        }
+                        image={data.vendor.avatar}
+                      />
+                    </div>
+                    <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">
+                      <IconAndTextTab2
+                        icon={<LocationIcon />}
+                        text={`1.2 mi`}
+                      />
+                    </div>
+                  </div>
+                  <Button variant={"main_green_button"} className="w-full">
+                    Chat
+                  </Button>
+                </div>
+                <div className="flex flex-col justify-start items-start gap-2 mt-3">
+                  <span className="text-base font-semibold">
+                    Contact Information
+                  </span>
+                  <IconAndTextTab2
+                    icon={<PhoneIcon />}
+                    text={data.vendor.vendorDetails.contactPhoneNumber}
+                    textClasses="text-black/70"
+                  />
+                  <IconAndTextTab2
+                    icon={<MailIcon />}
+                    text={data.vendor.vendorDetails.businessEmail}
+                    textClasses="text-black/70"
+                  />
+                </div>
+                <div className="flex flex-col justify-start items-start gap-2 mt-3">
+                  <span className="text-base font-semibold">Location</span>
+                  <IconAndTextTab2
+                    icon={<LocationIcon />}
+                    text={`Location: ${data.vendor.vendorDetails.address.address}`}
+                    textClasses="text-black/70"
+                  />
+                  {data.pickupLocation && (
+                    <AddressLocationSelector
+                      value={data.pickupLocation as LocationData}
+                      onChange={(data) => {
+                        setLocation1(data);
+                      }}
+                      readOnly={true}
+                      label="Enter Your Business Address"
+                      className=" w-full h-[188px] rounded-xl "
+                      placeholder="Type address or click on map"
+                    />
+                  )}
+                </div>
+              </BoxProviderWithName>
+            </BoxProviderWithName>
+            <BoxProviderWithName className="mt-4">
+              <ProfileBadge
+                size="medium"
+                title={data.user.fullName}
+                subTitle={data.user.email}
+                image={data.user.avatar}
+              />
+              <div className="flex flex-col justify-start items-start gap-2 mt-3">
+                <IconAndTextTab2
+                  icon={<PhoneIcon />}
+                  text={data.user.phoneNumber}
+                  textClasses="text-black/70"
+                />
+              </div>
+            </BoxProviderWithName>
             <QRCode />
           </div>
         </div>
       </div>
-    </div>
+    </BasicStructureWithName>
   );
 };
 

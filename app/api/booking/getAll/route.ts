@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
+import Booking from "@/lib/mongodb/models/booking";
 import connectDB from "@/lib/mongodb/connection";
 
 export async function GET(req: NextRequest) {
@@ -7,28 +7,36 @@ export async function GET(req: NextRequest) {
 
   const url = new URL(req.url);
   const page = Number(url.searchParams.get("page")) || 1;
-  const limit = Number(url.searchParams.get("limit")) || 7;
+  const limit = Number(url.searchParams.get("limit")) || 10;
   const searchTerm = url.searchParams.get("search") || "";
-  const category = url.searchParams.get("category");
+  const status = url.searchParams.get("status") || "";
 
   const query: any = {};
 
   if (searchTerm) {
-    query.title = { $regex: searchTerm, $options: "i" };
+    query.$or = [
+      { bookingId: { $regex: searchTerm, $options: "i" } },
+      { fullName: { $regex: searchTerm, $options: "i" } },
+      { email: { $regex: searchTerm, $options: "i" } },
+      { phoneNumber: { $regex: searchTerm, $options: "i" } },
+    ];
   }
-  if (category) {
-    query.category = category;
+
+  if (status) {
+    query.status = status;
   }
 
   const skip = (page - 1) * limit;
 
   const [items, total] = await Promise.all([
-    ToursAndActivity.find(query)
+    Booking.find(query)
+      .populate("activity")
       .populate("vendor")
+      .populate("user")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 }),
-    ToursAndActivity.countDocuments(query),
+    Booking.countDocuments(query),
   ]);
 
   return NextResponse.json({
