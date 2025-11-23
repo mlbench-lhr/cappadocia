@@ -1,14 +1,16 @@
 // src/app/api/bookings/[id]/route.ts
 import connectDB from "@/lib/mongodb/connection";
-import Booking from "@/lib/mongodb/models/booking";
-import "@/lib/mongodb/models/ToursAndActivity";
+import Invoice from "@/lib/mongodb/models/Invoice";
 
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+  const reqParams = await params;
+  const id = reqParams.id;
   await connectDB();
-  const booking = await Booking.findById(params.id)
+  const booking = await Invoice.findById(id)
+    .populate("booking")
     .populate("activity")
     .populate("vendor")
     .populate("user")

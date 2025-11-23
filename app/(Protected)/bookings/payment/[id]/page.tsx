@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
@@ -10,6 +10,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { ClockIcon, StarIcon } from "@/public/allIcons/page";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import axios from "axios";
+import moment from "moment";
 
 export type DashboardCardProps = {
   image: string;
@@ -20,8 +27,33 @@ export type DashboardCardProps = {
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const [payNow, setPayNow] = useState(true);
+  console.log("payNow----", payNow);
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
+  }, []);
+  const router = useRouter();
+  const [data, setData] = useState<BookingWithPopulatedData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data-----", data);
+
+  const { id }: { id: string } = useParams();
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/booking/detail/${id}`);
+        console.log("response----", response.data);
+
+        if (response.data) {
+          setData(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
   }, []);
 
   const startStripeCheckout = async () => {
@@ -30,34 +62,18 @@ export default function BookingsPage() {
       const dummyPayload = {
         items: [
           {
-            id: "item_001",
-            name: "Buffet Classic",
-            quantity: 2,
-            price: 24900,
-          },
-          {
-            id: "item_002",
-            name: "Drinks Package",
+            id: data?._id,
+            name: data?.activity.title,
             quantity: 1,
-            price: 9900,
+            price: data?.paymentDetails?.amount,
           },
         ],
-        deliveryFee: 1500,
-        serviceFee: 500,
-        total: 61300,
-        deliveryDetails: {
-          deliveryDate: "2025-01-18T18:30",
-          deliveryAddress: "Test Street 12, 10115 Berlin",
-          contactName: "John Doe",
-          phoneNumber: "+491701234567",
-          emailAddress: "john.doe@test.com",
-          companyName: "TestCorp GmbH",
-          numberOfGuests: 45,
-          eventName: "Corporate Dinner",
-          specialNotes: "Please deliver through side entrance.",
-        },
-        currency: "eur",
+        bookingId: data?.bookingId,
+        customerEmail: data?.user?.email,
+        currency: data?.paymentDetails?.currency,
+        total: data?.paymentDetails?.amount,
       };
+      console.log("dummyPayload--------", dummyPayload);
 
       const res = await fetch("/api/checkout/session", {
         method: "POST",
@@ -66,14 +82,14 @@ export default function BookingsPage() {
         body: JSON.stringify(dummyPayload),
       });
 
-      const data = await res.json();
+      const response = await res.json();
 
       if (!res.ok) {
-        throw new Error(data?.error || "Failed to start checkout");
+        throw new Error(response?.error || "Failed to start checkout");
       }
 
-      if (data.url) {
-        window.location.href = data.url;
+      if (response.url) {
+        window.location.href = response.url;
       } else {
         throw new Error("Stripe checkout URL not available");
       }
@@ -81,6 +97,10 @@ export default function BookingsPage() {
       console.log("err-------", err);
     }
   };
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <BasicStructureWithName name="Payment" showBackOption>
@@ -92,7 +112,66 @@ export default function BookingsPage() {
             name="Payment Option"
             textClasses=" text-[18px] font-semibold "
           >
-            <div></div>
+            <div>
+              <RadioGroup
+                value={
+                  payNow
+                    ? "Book Now (Pay Immediately)"
+                    : "Reserve Now, Pay Later"
+                }
+                onValueChange={(e) => {
+                  setPayNow(e === "Book Now (Pay Immediately)");
+                }}
+                className="flex gap-4 flex-col justify-start items-start mt-4 flex-wrap"
+              >
+                <div className="px-3 py-2 flex items-center justify-start gap-4 border rounded-2xl">
+                  <RadioGroupItem
+                    value={"Book Now (Pay Immediately)"}
+                    id={"Book Now (Pay Immediately)"}
+                  />
+                  <div className="flex flex-col justify-center gap-1 items-start">
+                    <Label
+                      className="font-semibold"
+                      htmlFor={"Book Now (Pay Immediately)"}
+                    >
+                      {"Book Now (Pay Immediately)"}
+                    </Label>
+                    <span className="text-sm font-normal">
+                      Secure your booking instantly with online payment.
+                    </span>
+                    <Link
+                      href={"/Cancellation-Policy"}
+                      className="text-sm -mt-1 font-normal underline hover:no-underline text-primary"
+                    >
+                      Cancellation Policy
+                    </Link>
+                  </div>
+                </div>
+                <div className="px-3 py-2 flex items-center justify-start gap-4 border rounded-2xl">
+                  <RadioGroupItem
+                    value={"Reserve Now, Pay Later"}
+                    id={"Reserve Now, Pay Later"}
+                  />
+                  <div className="flex flex-col justify-center gap-1 items-start">
+                    <Label
+                      className="font-semibold"
+                      htmlFor={"Reserve Now, Pay Later"}
+                    >
+                      {"Reserve Now, Pay Later"}
+                    </Label>
+                    <span className="text-sm font-normal">
+                      Lock your spot today without immediate payment.
+                    </span>
+                    <Link
+                      href={"/Learn-More"}
+                      className="text-sm -mt-1 font-normal underline hover:no-underline text-primary"
+                    >
+                      Learn More
+                    </Link>
+                  </div>
+                </div>
+              </RadioGroup>
+            </div>
           </BoxProviderWithName>
         </div>
         <div className="col-span-1">
@@ -106,10 +185,12 @@ export default function BookingsPage() {
               <div className="w-full flex justify-start items-start flex-col">
                 <div className="w-full flex justify-between items-center">
                   <ProfileBadge
-                    size="medium"
-                    title="John D."
-                    subTitle={"Apr 10, 2024"}
-                    image="/userDashboard/img2.png"
+                    size="large"
+                    title={data.vendor.vendorDetails.companyName}
+                    subTitle={
+                      "TÜRSAB Number: " + data.vendor.vendorDetails.tursabNumber
+                    }
+                    image={data.vendor.avatar}
                   />
                   <div className="w-fit flex justify-start items-center gap-1">
                     <StarIcon />
@@ -132,24 +213,26 @@ export default function BookingsPage() {
                   />
                   <div className="w-full flex justify-center items-start flex-col">
                     <h2 className="text-base font-semibold">
-                      Red Tour (North Cappadocia)
+                      {data.activity.title}
                     </h2>
                     <h3 className="text-sm font-normal">
-                      Duration: Full Day (8 hours)
+                      Duration: Full Day ({data.activity.duration} hours)
                     </h3>
-                    <h4 className="text-sm font-normal">From €80 /Person</h4>
+                    <h4 className="text-sm font-normal">
+                      {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
+                    </h4>
                   </div>
                 </div>
                 <div className="w-full flex justify-between items-center mt-4">
                   <span className="text-xs font-normal">Date</span>
                   <span className="text-sm font-medium">
-                    Jan 16 - Jan 20, 2025
+                    {moment(data.selectDate).format("MMM DD, YYYY | hh:mm A")}{" "}
                   </span>
                 </div>
                 <div className="w-full flex justify-between items-center">
                   <span className="text-xs font-normal">Guests</span>
                   <span className="text-sm font-medium">
-                    2 Adults and 1 Child
+                    {data.adultsCount} Adults, {data.childrenCount} Children{" "}
                   </span>
                 </div>
                 <div className="w-full pt-3.5 border-t mt-3.5">
@@ -162,19 +245,35 @@ export default function BookingsPage() {
               </div>
               <div className="w-[calc(100%+28px)] flex justify-between items-center mt-4 bg-secondary -ms-3.5 -mb-3 rounded-b-2xl px-3.5 py-2">
                 <span className="text-lg font-semibold">Total</span>
-                <span className="text-lg font-semibold">$82383</span>
+                <span className="text-lg font-semibold">
+                  ${data.paymentDetails.amount}
+                </span>
               </div>
             </BoxProviderWithName>
           </BoxProviderWithName>
         </div>
         <div className="w-full md:w-[300px] mt-4">
-          <Button
-            variant={"main_green_button"}
-            className="w-full"
-            onClick={startStripeCheckout}
-          >
-            Pay Now & Confirm Booking
-          </Button>
+          {payNow ? (
+            <Button
+              variant={"main_green_button"}
+              className="w-full"
+              onClick={startStripeCheckout}
+              disabled={loading}
+            >
+              Pay Now & Confirm Booking
+            </Button>
+          ) : (
+            <Button
+              variant={"main_green_button"}
+              className="w-full"
+              onClick={() => {
+                router.push("/bookings");
+              }}
+              asChild
+            >
+              Reserve Booking
+            </Button>
+          )}
         </div>
       </div>
     </BasicStructureWithName>

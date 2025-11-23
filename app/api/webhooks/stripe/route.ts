@@ -1,8 +1,19 @@
+import connectDB from "@/lib/mongodb/connection";
+import Booking from "@/lib/mongodb/models/booking";
+import Invoice from "@/lib/mongodb/models/Invoice";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+
+// Helper function to generate unique invoice ID
+function generateInvoiceId(): string {
+  const timestamp = Date.now();
+  const random = Math.floor(Math.random() * 1000)
+    .toString()
+    .padStart(3, "0");
+  return `INV-${timestamp}-${random}`;
+}
 
 export async function POST(req: NextRequest) {
   console.log("[Stripe Webhook] Incoming request");
@@ -43,25 +54,96 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // Connect to database
+    await connectDB();
+
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
 
-        console.log("=== DEMO MODE ===");
-        console.log("Checkout completed");
+        console.log("=== Checkout Session Completed ===");
         console.log("Session ID:", session.id);
+        console.log("Payment Status:", session.payment_status);
         console.log("Customer:", session.customer_details);
         console.log("Metadata:", session.metadata);
 
-        // Fetch line items for demo purposes
-        try {
-          const lineItems = await stripe.checkout.sessions.listLineItems(
-            session.id,
-            { limit: 50 }
+        // Only proceed if payment was successful
+        if (session.payment_status === "paid") {
+          // Get the booking ID from metadata
+          const bookingId = session.metadata?.bookingId;
+
+          if (!bookingId) {
+            console.error("No bookingId found in session metadata");
+            break;
+          }
+
+          // Retrieve the PaymentIntent to get full payment details
+          const paymentIntentId = session.payment_intent as string;
+          const paymentIntent = await stripe.paymentIntents.retrieve(
+            paymentIntentId
           );
-          console.log("Line items:", lineItems.data);
-        } catch (err) {
-          console.log("Line item lookup failed (demo safe).");
+
+          // Find the booking first
+          const booking = await Booking.findOne({ bookingId });
+
+          if (!booking) {
+            console.error("❌ Booking not found:", bookingId);
+            break;
+          }
+
+          // Update the booking with payment details
+          const updatedBooking = await Booking.findOneAndUpdate(
+            { bookingId },
+            {
+              $set: {
+                "paymentDetails.paymentIntentId": paymentIntent.id,
+                "paymentDetails.customerId": (session.customer as string) || "",
+                "paymentDetails.amount": paymentIntent.amount / 100, // Convert from cents
+                "paymentDetails.currency": paymentIntent.currency,
+                "paymentDetails.status": paymentIntent.status,
+                paymentStatus: "paid",
+                status: "upcoming",
+              },
+            },
+            { new: true }
+          );
+
+          if (updatedBooking) {
+            console.log("✅ Booking updated successfully:", bookingId);
+            console.log("Payment Details:", updatedBooking.paymentDetails);
+            console.log("Payment Status:", updatedBooking.paymentStatus);
+            console.log("Booking Status:", updatedBooking.status);
+
+            // Check if invoice already exists for this booking
+            const existingInvoice = await Invoice.findOne({
+              booking: updatedBooking._id,
+            });
+
+            if (!existingInvoice) {
+              // Create new invoice
+              const newInvoice = await Invoice.create({
+                booking: updatedBooking._id,
+                activity: updatedBooking.activity,
+                vendor: updatedBooking.vendor,
+                user: updatedBooking.user,
+                invoicesId: generateInvoiceId(),
+              });
+
+              console.log(
+                "✅ Invoice created successfully:",
+                newInvoice.invoicesId
+              );
+              console.log("Invoice ID:", newInvoice._id);
+              console.log("Booking Reference:", newInvoice.booking);
+            } else {
+              console.log(
+                "ℹ️ Invoice already exists for this booking:",
+                existingInvoice.invoicesId
+              );
+            }
+          } else {
+            console.error("❌ Failed to update booking:", bookingId);
+          }
         }
 
         break;
@@ -70,10 +152,69 @@ export async function POST(req: NextRequest) {
       case "payment_intent.succeeded": {
         const pi = event.data.object as Stripe.PaymentIntent;
 
-        console.log("=== DEMO MODE ===");
-        console.log("Payment Intent succeeded");
+        console.log("=== Payment Intent Succeeded ===");
         console.log("PI ID:", pi.id);
         console.log("Amount received:", pi.amount_received);
+        console.log("Status:", pi.status);
+
+        // Optional: Update booking by PaymentIntent ID if needed
+        // This is a backup in case checkout.session.completed didn't fire
+        const booking = await Booking.findOne({
+          "paymentDetails.paymentIntentId": pi.id,
+        });
+
+        if (booking && booking.paymentStatus !== "paid") {
+          booking.paymentDetails.status = pi.status;
+          booking.paymentDetails.amount = pi.amount_received / 100;
+          booking.paymentStatus = "paid";
+          booking.status = "upcoming";
+          await booking.save();
+
+          console.log("✅ Booking updated via payment_intent.succeeded");
+
+          // Check if invoice exists, create if not
+          const existingInvoice = await Invoice.findOne({
+            booking: booking._id,
+          });
+
+          if (!existingInvoice) {
+            const newInvoice = await Invoice.create({
+              booking: booking._id,
+              activity: booking.activity,
+              vendor: booking.vendor,
+              user: booking.user,
+              invoicesId: generateInvoiceId(),
+            });
+
+            console.log(
+              "✅ Invoice created via payment_intent.succeeded:",
+              newInvoice.invoicesId
+            );
+          }
+        }
+
+        break;
+      }
+
+      case "payment_intent.payment_failed": {
+        const pi = event.data.object as Stripe.PaymentIntent;
+
+        console.log("=== Payment Intent Failed ===");
+        console.log("PI ID:", pi.id);
+
+        // Update booking to reflect failed payment
+        const booking = await Booking.findOne({
+          "paymentDetails.paymentIntentId": pi.id,
+        });
+
+        if (booking) {
+          booking.paymentDetails.status = "failed";
+          // Keep paymentStatus as "pending" for failed payments
+          // Don't create invoice for failed payments
+          await booking.save();
+          console.log("❌ Booking payment marked as failed");
+        }
+
         break;
       }
 
@@ -84,6 +225,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ received: true });
   } catch (err: any) {
     console.error("Processing error:", err.message);
+    console.error("Stack trace:", err.stack);
     return NextResponse.json(
       { error: err.message || "Processing error" },
       { status: 500 }

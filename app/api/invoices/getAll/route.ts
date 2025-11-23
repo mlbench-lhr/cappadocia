@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Booking from "@/lib/mongodb/models/booking";
 import connectDB from "@/lib/mongodb/connection";
 import "@/lib/mongodb/models/ToursAndActivity";
+import "@/lib/mongodb/models/booking";
+import "@/lib/mongodb/models/User";
+import Invoice from "@/lib/mongodb/models/Invoice";
 
 export async function GET(req: NextRequest) {
   await connectDB();
@@ -30,14 +32,15 @@ export async function GET(req: NextRequest) {
   const skip = (page - 1) * limit;
 
   const [items, total] = await Promise.all([
-    Booking.find(query)
+    Invoice.find(query)
+      .populate("booking")
       .populate("activity")
       .populate("vendor")
       .populate("user")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 }),
-    Booking.countDocuments(query),
+    Invoice.countDocuments(query),
   ]);
 
   return NextResponse.json({

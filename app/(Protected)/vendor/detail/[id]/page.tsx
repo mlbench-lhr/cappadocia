@@ -18,64 +18,6 @@ import AddressLocationSelector, { LocationData } from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
 
-export type InvoiceData = {
-  invoice: {
-    invoiceNumber: string;
-    invoiceDate: string; // ISO date string (YYYY-MM-DD)
-    bookingId: string;
-  };
-  tourDetails: {
-    title: string;
-    dateTime: string; // ISO date-time string
-    participants: {
-      adults: number;
-      children: number;
-    };
-    durationHours: number;
-    meetingPoint: string;
-  };
-  travelerInformation: {
-    fullName: string;
-    passportNumber: string;
-    nationality: string;
-    contact: string;
-    email: string;
-  };
-  paymentDetails: {
-    method: string;
-    transactionId: string;
-    currency: string;
-    amountPaid: number;
-    status: "paid" | "pending" | "Failed";
-  };
-  priceBreakdown: {
-    basePrice: {
-      adults: number;
-      currency: string;
-      perAdult: number;
-      total: number;
-    };
-    childPrice: {
-      children: number;
-      currency: string;
-      perChild: number;
-      total: number;
-    };
-    participants?: {
-      adults: number;
-      children?: number;
-    };
-    serviceFee: number;
-    totalPaid: number;
-  };
-  vendorInformation: {
-    operator: string;
-    tursabNumber: string;
-    contact: string;
-    email: string;
-  };
-};
-
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
