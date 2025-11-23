@@ -11,20 +11,39 @@ export async function GET(req: NextRequest) {
   const limit = Number(url.searchParams.get("limit")) || 10;
   const searchTerm = url.searchParams.get("search") || "";
   const status = url.searchParams.get("status") || "";
+  const filters = url.searchParams.get("filters") || "";
 
   const query: any = {};
 
   if (searchTerm) {
     query.$or = [
       { bookingId: { $regex: searchTerm, $options: "i" } },
-      { fullName: { $regex: searchTerm, $options: "i" } },
-      { email: { $regex: searchTerm, $options: "i" } },
-      { phoneNumber: { $regex: searchTerm, $options: "i" } },
+      { "activity.title": { $regex: searchTerm, $options: "i" } },
     ];
   }
 
   if (status) {
     query.status = status;
+  }
+  if (filters) {
+    const filterArray = filters
+      .split(",")
+      .map((f) => f.trim())
+      .filter(Boolean);
+
+    if (filterArray.length > 0) {
+      const validStatuses = [
+        "pending",
+        "upcoming",
+        "completed",
+        "cancelled",
+        "missed",
+      ];
+      const validFilters = filterArray.filter((f) => validStatuses.includes(f));
+      if (validFilters.length > 0) {
+        query.status = { $in: validFilters };
+      }
+    }
   }
 
   const skip = (page - 1) * limit;

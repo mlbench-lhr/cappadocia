@@ -17,12 +17,7 @@ export async function GET(req: NextRequest) {
   const query: any = {};
 
   if (searchTerm) {
-    query.$or = [
-      { bookingId: { $regex: searchTerm, $options: "i" } },
-      { fullName: { $regex: searchTerm, $options: "i" } },
-      { email: { $regex: searchTerm, $options: "i" } },
-      { phoneNumber: { $regex: searchTerm, $options: "i" } },
-    ];
+    query.$or = [{ invoicesId: { $regex: searchTerm, $options: "i" } }];
   }
 
   if (status) {

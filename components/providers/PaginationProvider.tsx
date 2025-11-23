@@ -71,6 +71,7 @@ export function ServerPaginationProvider<T = any>({
             return acc;
           }, {} as Record<string, string>),
         });
+        console.log("params---", params);
 
         const response = await fetch(`${apiEndpoint}?${params.toString()}`);
 
@@ -88,7 +89,6 @@ export function ServerPaginationProvider<T = any>({
         const fetchedData = Array.isArray(responseData) ? responseData : [];
         const total = pagination.totalPages;
         const totalCount = pagination.total;
-        console.log("presentData---", presentData);
         if (!presentData) {
           console.log("responseData---", responseData);
           setData(fetchedData);
@@ -125,7 +125,7 @@ export function ServerPaginationProvider<T = any>({
 
   useEffect(() => {
     fetchData(currentPage);
-  }, [currentPage]);
+  }, [currentPage, queryParams]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {

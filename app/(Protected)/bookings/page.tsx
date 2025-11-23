@@ -134,7 +134,14 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "upcoming", "Past", "cancelled"].map((filter) => {
+          {[
+            "all",
+            "pending",
+            "upcoming",
+            "completed",
+            "cancelled",
+            "missed",
+          ].map((filter) => {
             const isActive =
               (filter === "all" && filters.includes("all")) ||
               filters.includes(filter.toLowerCase());

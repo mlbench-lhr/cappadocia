@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
   const limit = Number(url.searchParams.get("limit")) || 7;
   const searchTerm = url.searchParams.get("search") || "";
   const category = url.searchParams.get("category");
+  const filters = url.searchParams.get("filters") || "";
+
   let token = req.cookies.get("auth_token")?.value;
   if (!token) {
     return NextResponse.json(
@@ -25,6 +27,24 @@ export async function GET(req: NextRequest) {
     .select("favorites -_id")
     .lean();
   const query: any = {};
+  if (filters) {
+    const filterArray = filters
+      .replace("tour", "Tour")
+      .replace("activity", "Activity")
+      .split(",")
+      .map((f) => f.trim())
+      .filter(Boolean);
+    console.log("filterArray--", filterArray);
+
+    if (filterArray.length > 0) {
+      const validStatuses = ["Tour", "Activity"];
+      const validFilters = filterArray.filter((f) => validStatuses.includes(f));
+      if (validFilters.length > 0) {
+        query.category = { $in: validFilters };
+      }
+    }
+  }
+
   console.log("favoriteIds----", favoriteIds);
 
   if (favoriteIds?.favorites && favoriteIds?.favorites?.length > 0) {
