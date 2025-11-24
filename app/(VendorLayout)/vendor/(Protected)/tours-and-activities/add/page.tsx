@@ -28,6 +28,7 @@ import { uploadMultipleFiles } from "@/lib/utils/upload";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Image from "next/image";
 
 const tourFormSchema = z.object({
   title: z.string().min(1, "Tour title is required"),
@@ -46,8 +47,8 @@ const tourFormSchema = z.object({
     .min(1, "At least one itinerary stop is required"),
   uploads: z
     .array(z.string())
-    .min(1, "At least one image is required")
-    .max(4, "Maximum 4 images allowed"),
+    .min(4, "At least 4 images are required")
+    .max(10, "Maximum 10 images allowed"),
 });
 
 type TourFormData = z.infer<typeof tourFormSchema>;
@@ -156,8 +157,8 @@ export default function BookingsPage() {
     const files = e.target.files;
     if (!files) return;
 
-    if (toursState.uploads.length + files.length > 4) {
-      setUploadError("Maximum 4 images allowed");
+    if (toursState.uploads.length + files.length > 10) {
+      setUploadError("Maximum 10 images allowed");
       return;
     }
 
@@ -325,36 +326,22 @@ export default function BookingsPage() {
                 <p className="text-sm text-red-500">{uploadError}</p>
               )}
 
-              <div className="space-y-2 mt-4">
-                {toursState.uploads.length > 0 && (
-                  <>
-                    <p className="text-sm font-medium text-gray-700">
-                      Uploaded Images:
-                    </p>
-                    {toursState.uploads.map((url, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                      >
-                        <a
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline truncate flex-1"
-                        >
-                          Image {index + 1}
-                        </a>
-                        <button
-                          type="button"
-                          onClick={() => handleFileRemove(index)}
-                          className="ml-2 text-red-500 hover:text-red-700"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </>
-                )}
+              <div className="flex justify-start items-center gap-2">
+                {toursState.uploads.map((url, index) => (
+                  <div
+                    key={index}
+                    className="flex relative w-fit items-center justify-between"
+                  >
+                    <Image src={url} alt="" width={100} height={100} />
+                    <button
+                      type="button"
+                      onClick={() => handleFileRemove(index)}
+                      className=" ml-2 absolute top-1 right-1 p-1 rounded-full bg-white text-black hover:text-red-500"
+                    >
+                      <X size={10} />
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
