@@ -1,6 +1,8 @@
 import { Invoice } from "@/lib/types/invoices";
 import mongoose, { Schema, Document } from "mongoose";
 import "@/lib/mongodb/models/booking";
+import "@/lib/mongodb/models/ToursAndActivity";
+import "@/lib/mongodb/models/User";
 
 export interface BookingDocument extends Invoice, Document {
   _id: string;
