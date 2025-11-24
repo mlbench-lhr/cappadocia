@@ -1,15 +1,18 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TourCard from "@/components/landingPage/landingPageTourCard";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { setDisplayExploreItems } from "@/lib/store/slices/generalSlice";
 
 export default function Section2() {
-  const [toursAndActivity, setToursAndActivity] =
-    useState<ToursAndActivityWithVendor[]>();
   const [loading, setLoading] = useState<boolean>(true);
+  const displayExploreItems = useAppSelector(
+    (s) => s.general.displayExploreItems
+  );
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getData = async () => {
@@ -19,7 +22,7 @@ export default function Section2() {
         console.log("response----", response);
 
         if (response.data?.data) {
-          setToursAndActivity(response.data?.data);
+          dispatch(setDisplayExploreItems(response.data?.data));
         }
         setLoading(false);
       } catch (error) {
@@ -29,7 +32,8 @@ export default function Section2() {
     getData();
   }, []);
 
-  if (!toursAndActivity) {
+  console.log("toursAndActivity---", displayExploreItems);
+  if (!displayExploreItems) {
     return null;
   }
 
@@ -54,7 +58,7 @@ export default function Section2() {
           </div>
         </div>
         <div className="w-full grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-          {toursAndActivity.map((item, index) => (
+          {displayExploreItems?.map((item, index) => (
             <TourCard key={index} {...item} />
           ))}
         </div>
