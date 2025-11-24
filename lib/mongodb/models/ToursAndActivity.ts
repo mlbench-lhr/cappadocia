@@ -1,5 +1,6 @@
 import { VendorDetails } from "@/lib/store/slices/vendorSlice";
 import mongoose, { type Document, Schema, Types } from "mongoose";
+import "@/lib/mongodb/models/User";
 
 // ----------- Interfaces -----------
 

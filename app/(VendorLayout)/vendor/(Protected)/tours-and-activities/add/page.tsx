@@ -288,7 +288,7 @@ export default function BookingsPage() {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mt-2">
             <div className="space-y-2">
               <Label className="text-[14px] font-semibold">
-                Upload Images (max. 4)
+                Upload Images (min 4, max 10)
                 <span className="text-red-500 ml-1">*</span>
               </Label>
 

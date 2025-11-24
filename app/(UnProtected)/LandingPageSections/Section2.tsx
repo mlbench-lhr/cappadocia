@@ -6,9 +6,11 @@ import axios from "axios";
 import TourCard from "@/components/landingPage/landingPageTourCard";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setDisplayExploreItems } from "@/lib/store/slices/generalSlice";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Section2() {
   const [loading, setLoading] = useState<boolean>(true);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
   const displayExploreItems = useAppSelector(
     (s) => s.general.displayExploreItems
   );
@@ -31,6 +33,16 @@ export default function Section2() {
     };
     getData();
   }, []);
+  const handleNext = () => {
+    if (displayExploreItems && currentSlide < displayExploreItems.length - 1) {
+      setCurrentSlide(currentSlide + 1);
+    }
+  };
+  const handlePrev = () => {
+    if (currentSlide > 0) {
+      setCurrentSlide(currentSlide - 1);
+    }
+  };
 
   console.log("toursAndActivity---", displayExploreItems);
   if (!displayExploreItems) {
@@ -57,7 +69,51 @@ export default function Section2() {
             </span>
           </div>
         </div>
-        <div className="w-full grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+        <div className="w-full md:hidden">
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {displayExploreItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <button
+              onClick={handlePrev}
+              disabled={currentSlide === 0}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+              aria-label="Previous slide"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-700" />
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={currentSlide === displayExploreItems.length - 1}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+              aria-label="Next slide"
+            >
+              <ChevronRight className="w-5 h-5 text-gray-700" />
+            </button>
+            <div className="flex justify-center gap-2 mt-4">
+              {displayExploreItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentSlide ? "bg-gray-300 w-6" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="hidden md:grid w-full grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
           {displayExploreItems?.map((item, index) => (
             <TourCard key={index} {...item} />
           ))}
