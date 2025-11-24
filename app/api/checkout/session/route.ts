@@ -20,25 +20,34 @@ export async function POST(req: NextRequest) {
       serviceFee = 0,
       total = 0,
       currency = "eur",
+      bookingId, // ⭐ Add bookingId to the request body
+      customerEmail, // Optional: pre-fill customer email
     } = body;
 
-    // DEMO safeguard
+    // Validation
     if (!items.length) {
+      return NextResponse.json({ error: "No items provided" }, { status: 400 });
+    }
+
+    if (!bookingId) {
       return NextResponse.json(
-        { error: "No items provided (demo mode)" },
+        { error: "bookingId is required" },
         { status: 400 }
       );
     }
 
     const origin = req.nextUrl.origin;
-    const orderNumber = `DEMO-${Date.now()}`;
+    const orderNumber = `ORDER-${Date.now()}`;
 
-    // Build DEMO line items
+    // Build line items
     const line_items: Stripe.Checkout.SessionCreateParams.LineItem[] =
       items.map((item: any) => ({
         price_data: {
           currency,
-          product_data: { name: item.title || "Demo Item" },
+          product_data: {
+            name: item.title || "Item",
+            description: item.description || undefined,
+          },
           unit_amount: Math.round(Number(item.price || 1) * 100),
         },
         quantity: item.quantity || 1,
@@ -66,8 +75,9 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const successUrl = `${origin}/demo-success?session_id={CHECKOUT_SESSION_ID}`;
-    const cancelUrl = `${origin}/demo-cancel`;
+    // Success and cancel URLs
+    const successUrl = `${origin}/bookings`;
+    const cancelUrl = `${origin}/bookings`;
 
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
@@ -75,8 +85,9 @@ export async function POST(req: NextRequest) {
       line_items,
       success_url: successUrl,
       cancel_url: cancelUrl,
+      customer_email: customerEmail || undefined,
       metadata: {
-        demo: "true",
+        bookingId, // ⭐ Critical: Pass bookingId in metadata
         orderNumber,
         total: String(total || 0),
       },
@@ -85,12 +96,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       id: session.id,
       url: session.url,
-      demo: true,
+      bookingId,
     });
   } catch (error: any) {
-    console.error("Stripe error (demo):", error);
+    console.error("Stripe checkout error:", error);
     return NextResponse.json(
-      { error: error?.message || "Failed to start checkout" },
+      { error: error?.message || "Failed to create checkout session" },
       { status: 500 }
     );
   }

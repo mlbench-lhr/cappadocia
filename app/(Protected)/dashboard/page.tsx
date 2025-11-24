@@ -22,7 +22,7 @@ import ImageSlider from "./ImageSlider";
 import { ExploreCappadocia } from "./ExploreCappadocia";
 
 export type DashboardCardProps = {
-  image: any;
+  image: React.ReactNode;
   title: string;
   description: string;
 };
@@ -34,7 +34,7 @@ export type UpComingReservationsProps = {
   adultCount: number;
   childCount: number;
   bookingId: string;
-  status: "Paid" | "Pending";
+  status: "paid" | "pending";
   _id: string;
 };
 
@@ -62,7 +62,7 @@ const dashboardCardData: DashboardCardProps[] = [
   {
     image: <TourIcon color="white" />,
     title: "4",
-    description: "Upcoming Trips",
+    description: "upcoming Trips",
   },
   {
     image: <DollarIcon color="white" />,
@@ -72,7 +72,7 @@ const dashboardCardData: DashboardCardProps[] = [
   {
     image: <PaymentIcon2 color="white" />,
     title: "$150",
-    description: "Pending Payments",
+    description: "pending Payments",
   },
 ];
 
@@ -84,7 +84,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 3,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "1",
   },
   {
@@ -94,7 +94,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "2",
   },
   {
@@ -104,39 +104,8 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
-  },
-];
-
-const exploreData: exploreProps[] = [
-  {
-    image: "/userDashboard/img8.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img9.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
   },
 ];
 
@@ -151,7 +120,7 @@ export default function DashboardPage() {
   return (
     <BasicStructureWithName name="Dashboard">
       <div className="grid grid-cols-16 w-full border px-4 py-5.5 rounded-[12px] gap-3 h-fit">
-        <div className="col-span-16 xl:col-span-9 bg-red-40 h-fit flex flex-col justify-start items-start gap-4">
+        <div className="col-span-16 h-fit xl:h-full flex-1 xl:col-span-9 flex flex-col justify-start xl:justify-between items-start gap-4">
           <div className="h-[225px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
             <Image
               alt=""
@@ -176,7 +145,7 @@ export default function DashboardPage() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
             {dashboardCardData.map((item, index) => (
               <div
-                className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
+                className="bg-secondary border h-[120px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
                 key={index}
               >
                 <div className="w-full flex justify-between items-center">
@@ -196,7 +165,7 @@ export default function DashboardPage() {
           <ImageSlider />
         </div>
         <div className="col-span-16 xl:col-span-7 space-y-2">
-          <BoxProviderWithName name="Upcoming Reservations">
+          <BoxProviderWithName name="upcoming Reservations">
             <div className="w-full space-y-3">
               {upComingReservationsData.map((item, index) => (
                 <BoxProviderWithName

@@ -8,7 +8,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import { StarIcon } from "@/public/allIcons/page";
+import {
+  BookingIcon,
+  DollarIcon,
+  PaymentIcon2,
+  StarIcon,
+  TourIcon,
+} from "@/public/allIcons/page";
 import {
   Select,
   SelectContent,
@@ -16,9 +22,10 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { ChartAreaGradient } from "./Graph";
+import Link from "next/link";
 
 export type DashboardCardProps = {
-  image: string;
+  image: React.ReactNode;
   title: string;
   description: string;
 };
@@ -30,7 +37,7 @@ export type UpComingReservationsProps = {
   adultCount: number;
   childCount: number;
   bookingId: string;
-  status: "Paid" | "Pending";
+  status: "paid" | "pending";
   _id: string;
 };
 
@@ -51,24 +58,24 @@ export type exploreProps = {
 
 const dashboardCardData: DashboardCardProps[] = [
   {
-    image: "/Icons/db1.png",
+    image: <BookingIcon color="white" />,
     title: "5",
     description: "Total Bookings",
   },
   {
-    image: "/Icons/db2.png",
+    image: <TourIcon color="white" />,
     title: "4",
-    description: "Upcoming Trips",
+    description: "upcoming Trips",
   },
   {
-    image: "/Icons/db3.png",
+    image: <DollarIcon color="white" />,
     title: "$1,250",
     description: "Payments Done",
   },
   {
-    image: "/Icons/db4.png",
+    image: <PaymentIcon2 color="white" />,
     title: "$150",
-    description: "Pending Payments",
+    description: "pending Payments",
   },
 ];
 
@@ -80,7 +87,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 3,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "1",
   },
   {
@@ -90,7 +97,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 3,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Paid",
+    status: "paid",
     _id: "2",
   },
   {
@@ -100,7 +107,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
   {
@@ -110,7 +117,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
   {
@@ -120,7 +127,7 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     adultCount: 1,
     childCount: 0,
     bookingId: "TRX-47012",
-    status: "Pending",
+    status: "pending",
     _id: "3",
   },
 ];
@@ -179,7 +186,7 @@ export default function DashboardPage() {
                     {item.title}
                   </h1>
                   <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                    <Image alt="" src={item.image} width={20} height={20} />
+                    {item.image}
                   </div>
                 </div>
                 <span className="text-base font-medium">
@@ -235,10 +242,16 @@ export default function DashboardPage() {
                   noBorder={true}
                   className="!border !px-3.5"
                 >
-                  <span className="text-sm font-normal leading-tight text-black/70">
+                  <Link
+                    href={`/admin/tours-and-activities/detail/${"69204f6ba4bb81f02d007a64"}`}
+                    className="text-xs font-semibold -mt-2 text-black hover:underline"
+                  >
+                    Hot Air Balloon
+                  </Link>
+                  <div className="text-xs font-normal leading-tight text-black/70">
                     Absolutely breathtaking! The sunrise over the valleys was
                     magical. Highly recommend!
-                  </span>
+                  </div>
                 </BoxProviderWithName>
               ))}
             </div>

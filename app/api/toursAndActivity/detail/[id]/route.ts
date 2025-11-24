@@ -7,8 +7,14 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   await connectDB();
+  const awaitedParam = await params;
+  const id = awaitedParam.id;
 
-  const item = await ToursAndActivity.findById(params.id).populate("vendor");
+  console.log("id-----------", id);
+
+  const item = await ToursAndActivity.findOne({ _id: id }).populate("vendor");
+  console.log("item--------", item);
+
   if (!item)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
 

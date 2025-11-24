@@ -49,8 +49,8 @@ export const AlternativeOptions = () => {
       rightSideLabel="See All"
     >
       <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-        {activity.map((item) => (
-          <TourAndActivityCard item={item} />
+        {activity.map((item, index) => (
+          <TourAndActivityCard key={index} item={item} />
         ))}
       </div>
     </BoxProviderWithName>

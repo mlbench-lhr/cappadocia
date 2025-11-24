@@ -1,12 +1,17 @@
 import { Button } from "@/components/ui/button";
 import InvoicePDF from "./print/page";
 import { Download } from "lucide-react";
+import { InvoicePopulated } from "@/lib/types/invoices";
 
-export default function DownloadInvoiceButton() {
+export default function DownloadInvoiceButton({
+  data,
+}: {
+  data?: InvoicePopulated;
+}) {
   const handleDownload = async () => {
     const { pdf } = await import("@react-pdf/renderer");
     try {
-      const blob = await pdf(<InvoicePDF />).toBlob();
+      const blob = await pdf(<InvoicePDF data={data} />).toBlob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;

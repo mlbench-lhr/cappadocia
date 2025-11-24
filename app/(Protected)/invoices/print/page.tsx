@@ -7,6 +7,9 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import moment from "moment";
+import { InvoicePopulated } from "@/lib/types/invoices";
+import { multiply } from "@/lib/helper/smallHelpers";
 
 const styles = StyleSheet.create({
   page: {
@@ -62,6 +65,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "flex-start",
     color: "black",
+  },
+  smallValue: {
+    fontSize: 8,
+    fontWeight: 400,
+    color: "#5E6470",
+    paddingRight: 2,
   },
   label: {
     fontSize: 10,
@@ -168,7 +177,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const InvoicePDF = () => {
+const InvoicePDF = ({ data }: { data?: InvoicePopulated }) => {
   return (
     <Document>
       <Page size={{ width: 612, height: 792 }} style={styles.page}>
@@ -185,15 +194,19 @@ const InvoicePDF = () => {
             <View style={styles.leftColumnInner}>
               <View style={styles.infoBlock}>
                 <Text style={styles.label}>Invoice #</Text>
-                <Text style={styles.value}>INV-001245</Text>
+                <Text style={styles.smallValue}>{data?.invoicesId}</Text>
               </View>
               <View style={styles.infoBlock}>
                 <Text style={styles.label}>Invoice Date</Text>
-                <Text style={styles.value}>12 Oct 2025</Text>
+                <Text style={styles.smallValue}>
+                  {moment(data?.createdAt).format("MMM DD, YYYY")}
+                </Text>
               </View>
               <View style={styles.infoBlock}>
                 <Text style={styles.label}>Booking ID</Text>
-                <Text style={styles.value}>BK-000789</Text>
+                <Text style={styles.smallValue}>
+                  {data?.booking?.bookingId}
+                </Text>
               </View>
             </View>
           </View>
@@ -206,15 +219,20 @@ const InvoicePDF = () => {
               <View style={styles.sectionContent}>
                 <View style={styles.field33}>
                   <Text style={styles.label}>Tour Title</Text>
-                  <Text style={styles.value}>Hot Air Balloon Sunrise Ride</Text>
+                  <Text style={styles.value}>{data?.activity.title}</Text>
                 </View>
                 <View style={styles.fieldAuto}>
                   <Text style={styles.label}>Date & Time</Text>
-                  <Text style={styles.value}>14 Oct 2025|05:15 AM</Text>
+                  <Text style={styles.value}>
+                    {moment(data?.booking.selectDate).format("MMM DD, YYYY")}
+                  </Text>
                 </View>
                 <View style={styles.fieldAuto}>
                   <Text style={styles.label}>Participants</Text>
-                  <Text style={styles.value}>2 Adults, 1 Child</Text>
+                  <Text style={styles.value}>
+                    {data?.booking.adultsCount} Adults,
+                    {data?.booking.childrenCount} Child
+                  </Text>
                 </View>
               </View>
             </View>
@@ -225,19 +243,23 @@ const InvoicePDF = () => {
               <View style={styles.sectionContent}>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Full Name</Text>
-                  <Text style={styles.value}>Sarah Mitchell</Text>
+                  <Text style={styles.value}>
+                    {data?.booking.travelers[0].fullName}
+                  </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Nationality</Text>
-                  <Text style={styles.value}>United Kingdom</Text>
+                  <Text style={styles.value}>
+                    {data?.booking.travelers[0].nationality}
+                  </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Contact</Text>
-                  <Text style={styles.value}>+90 384 555 9876</Text>
+                  <Text style={styles.value}>{data?.user?.phoneNumber}</Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Email</Text>
-                  <Text style={styles.value}>info@skyadventures.com</Text>
+                  <Text style={styles.value}>{data?.user.email}</Text>
                 </View>
               </View>
             </View>
@@ -249,20 +271,26 @@ const InvoicePDF = () => {
                 <View style={styles.field25}>
                   <Text style={styles.label}>Operator</Text>
                   <Text style={styles.value}>
-                    Cappadocia Sky Adventures Cappadocia Sky Adventures
+                    {data?.vendor?.vendorDetails?.contactPersonName}
                   </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>TÜRSAB Number</Text>
-                  <Text style={styles.value}>43455</Text>
+                  <Text style={styles.value}>
+                    {data?.vendor?.vendorDetails?.tursabNumber}
+                  </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Contact</Text>
-                  <Text style={styles.value}>+90 384 555 9876</Text>
+                  <Text style={styles.value}>
+                    {data?.vendor?.vendorDetails?.contactPhoneNumber}
+                  </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Email</Text>
-                  <Text style={styles.value}>info@skyadventures.com</Text>
+                  <Text style={styles.value}>
+                    {data?.vendor?.vendorDetails?.businessEmail}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -277,11 +305,15 @@ const InvoicePDF = () => {
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Transaction ID</Text>
-                  <Text style={styles.value}>TXN-568742195</Text>
+                  <Text style={styles.value}>
+                    {data?.booking.paymentDetails.paymentIntentId}
+                  </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Currency</Text>
-                  <Text style={styles.value}>€ (Euro)</Text>
+                  <Text style={styles.value}>
+                    {data?.booking.paymentDetails.currency}
+                  </Text>
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Email</Text>
@@ -293,23 +325,49 @@ const InvoicePDF = () => {
             {/* Price Breakdown */}
             <View style={styles.priceSection}>
               <View style={styles.priceRow}>
-                <Text style={styles.label}>Base Price (2 Adults × €160)</Text>
-                <Text style={styles.value}>$9,000.00</Text>
+                <Text style={styles.label}>
+                  Base Price ({data?.booking.adultsCount} Adults ×
+                  {data?.booking.paymentDetails.currency}
+                  {data?.activity.slots[0].adultPrice})
+                </Text>
+                <Text style={styles.value}>
+                  {data?.booking.paymentDetails.currency}
+                  {multiply(
+                    data?.booking.adultsCount || 0,
+                    data?.activity.slots[0].adultPrice || 0
+                  )}
+                </Text>
               </View>
               <View style={styles.priceRow}>
-                <Text style={styles.label}>Child Price (1 × €100)</Text>
-                <Text style={styles.value}>$9,000.00</Text>
+                <Text style={styles.label}>
+                  Child Price ({data?.booking.childrenCount} Adults ×
+                  {data?.booking.paymentDetails.currency}
+                  {data?.activity.slots[0].childPrice})
+                </Text>
+                <Text style={styles.value}>
+                  {data?.booking.paymentDetails.currency}
+                  {multiply(
+                    data?.booking.childrenCount || 0,
+                    data?.activity.slots[0].childPrice || 0
+                  )}
+                </Text>
               </View>
               <View style={styles.priceRow}>
                 <Text style={styles.label}>Service Fee</Text>
-                <Text style={styles.value}>$9,000.00</Text>
+                <Text style={styles.value}>
+                  {data?.booking.paymentDetails.currency}
+                  {data?.booking.paymentDetails.amount}
+                </Text>
               </View>
             </View>
 
             {/* Total */}
             <View style={styles.totalBar}>
-              <Text style={styles.totalLabel}>Total Paid</Text>
-              <Text style={styles.totalValue}>$9,000.00</Text>
+              <Text style={styles.totalLabel}>Total paid</Text>
+              <Text style={styles.totalValue}>
+                {data?.booking.paymentDetails.currency}
+                {data?.booking.paymentDetails.amount}
+              </Text>
             </View>
           </View>
         </View>

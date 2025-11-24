@@ -101,7 +101,7 @@ export const ExploreCappadocia = () => {
                     className="w-[92px] flex font-[500]"
                     style={{ height: "26px", fontSize: "10px" }}
                   >
-                    <Link href={"/explore/detail/1"}>Book now</Link>
+                    <Link href={`/explore/detail/${item._id}`}>Book now</Link>
                   </Button>
                 </div>
               </div>

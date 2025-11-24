@@ -2,12 +2,11 @@
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import {
   RadioInputComponent,
-  FormSelectInput,
   FormTextInput,
   TextInputComponent,
 } from "@/components/SmallComponents/InputComponents";
@@ -26,18 +25,18 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import moment from "moment";
+import Swal from "sweetalert2";
+import axios, { AxiosError } from "axios";
 
-// Validation schema
 const LatLng = z.object({
   lat: z.number(),
   lng: z.number(),
 });
 export const LocationData = z.object({
   address: z.string().min(1, ""),
-  coordinates: LatLng.nullable().refine((v) => v !== null, {
-    message: "Select any location from map",
-  }),
+  coordinates: LatLng.nullable(),
 });
 
 const bookingSchema = z.object({
@@ -61,20 +60,20 @@ const bookingSchema = z.object({
       })
     )
     .min(1, "At least one traveler is required"),
-  pickupLocation: LocationData.nullable().refine((v) => !v?.coordinates, {
-    message: "Select any location from map",
-  }),
+  pickupLocation: LocationData.nullable(),
 });
 
 type BookingFormData = z.infer<typeof bookingSchema>;
 
 export default function BookingsPage() {
+  const { id }: { id: string } = useParams();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const bookingState = useAppSelector((s) => s.addBooking);
-  console.log("bookingState:", bookingState);
-
+  console.log("bookingState:", bookingState, id);
+  const [addPickupNow, setAddPickupNow] = useState(true);
+  const userId = useAppSelector((s) => s.auth.user?.id);
   const {
     control,
     handleSubmit,
@@ -95,7 +94,6 @@ export default function BookingsPage() {
   });
 
   console.log("errors:", errors);
-  // Sync form values with Redux store
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name && !name.startsWith("travelers")) {
@@ -114,9 +112,48 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
-  const onSubmit = (data: BookingFormData) => {
-    console.log("Form submitted:", data);
-    // router.push("/bookings/payment");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onSubmit = async (data: BookingFormData) => {
+    setIsSubmitting(true);
+    const adultsCount = data.travelers.filter(
+      (p) => moment().diff(p.dob, "years") >= 18
+    ).length;
+    const childrenCount = data.travelers.length - adultsCount;
+    try {
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+
+      const bookingPayload = {
+        activityId: id,
+        userId: userId,
+        selectDate: data.selectDate,
+        email: data.email,
+        fullName: data.fullName,
+        phoneNumber: data.phoneNumber,
+        travelers: data.travelers,
+        pickupLocation: data.pickupLocation,
+        adultsCount,
+        childrenCount,
+      };
+
+      console.log("Submitting booking:", bookingPayload);
+
+      const response = await axios.post("/api/booking/add", bookingPayload);
+      const result = response?.data;
+      console.log("result-----", result);
+      router.push(`/bookings/payment/${result?.booking?._id}`);
+    } catch (error: any) {
+      console.error("Booking submission error:", error?.response?.data?.error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error?.response?.data?.error || "Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddTraveler = () => {
@@ -156,12 +193,12 @@ export default function BookingsPage() {
           textClasses=" text-[18px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormSelectInput
+            <FormTextInput
               control={control}
               name="selectDate"
               label="Select Date"
               placeholder="Select Date"
-              options={["Nov 2,2025", "Apr 2, 2025"]}
+              type="date"
               required
             />
             <FormTextInput
@@ -343,54 +380,61 @@ export default function BookingsPage() {
                   { value: "now", label: "Add location now" },
                   { value: "later", label: "Add later" },
                 ]}
-                value={bookingState.pickupLocation ? "now" : "later"}
+                value={addPickupNow ? "now" : "later"}
                 onChange={(value) => {
                   if (value === "later") {
+                    setAddPickupNow(false);
                     dispatch(
                       setField({ field: "pickupLocation", value: null })
                     );
                     setValue("pickupLocation", null);
+                  } else {
+                    setAddPickupNow(true);
                   }
                 }}
               />
             </div>
           </BoxProviderWithName>
-          <div className="w-full lg:w-1/2 mt-4">
-            <Controller
-              name="pickupLocation"
-              control={control}
-              render={({ field }) => (
-                <AddressLocationSelector
-                  value={
-                    field.value || {
-                      address: "",
-                      coordinates: null,
+          {addPickupNow && (
+            <div className="w-full lg:w-2/3 mt-4">
+              <Controller
+                name="pickupLocation"
+                control={control}
+                render={({ field }) => (
+                  <AddressLocationSelector
+                    value={
+                      field.value || {
+                        address: "",
+                        coordinates: null,
+                      }
                     }
-                  }
-                  onChange={(data) => {
-                    field.onChange(data);
-                    dispatch(
-                      setField({ field: "pickupLocation", value: data })
-                    );
-                  }}
-                  readOnly={false}
-                  label="Location"
-                  placeholder="Type address or click on map"
-                />
+                    onChange={(data) => {
+                      field.onChange(data);
+                      dispatch(
+                        setField({ field: "pickupLocation", value: data })
+                      );
+                    }}
+                    readOnly={false}
+                    label="Location"
+                    placeholder="Type address or click on map"
+                  />
+                )}
+              />
+              {errors.pickupLocation?.coordinates?.message && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.pickupLocation?.coordinates?.message}
+                </p>
               )}
-            />
-            {errors.pickupLocation?.coordinates?.message && (
-              <p className="text-sm text-red-500 mt-1">
-                {errors.pickupLocation?.coordinates?.message}
-              </p>
-            )}
-          </div>
+            </div>
+          )}
           <div className="w-full md:w-[235px] mt-4">
             <Button
               variant={"main_green_button"}
               className="w-full"
               type="button"
               onClick={handleSubmit(onSubmit)}
+              loading={isSubmitting}
+              loadingText="Adding your booking..."
             >
               Next
             </Button>

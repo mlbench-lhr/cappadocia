@@ -12,60 +12,12 @@ import {
 } from "@/app/(AdminLayout)/admin/Components/Table/page";
 import moment from "moment";
 import Link from "next/link";
-import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
 import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
 
-export type bookingProps = {
-  bookingId: string;
-  title: string;
-  tourStatus:
-    | "Upcoming"
-    | "Completed"
-    | "Cancelled"
-    | "Active"
-    | "Pending Admin Approval";
-  date: Date;
-  _id: string;
-  price: string;
-};
-
-const bookingData: bookingProps[] = [
-  {
-    bookingId: "BKG001",
-    title: "City Tour",
-    tourStatus: "Active",
-    date: new Date("2025-12-01"),
-    _id: "1",
-    price: "€250",
-  },
-  {
-    bookingId: "BKG002",
-    title: "Mountain Hike",
-    tourStatus: "Pending Admin Approval",
-    date: new Date("2025-10-15"),
-    _id: "2",
-    price: "€250",
-  },
-  {
-    bookingId: "BKG003",
-    title: "Beach Trip",
-    tourStatus: "Cancelled",
-    date: new Date("2025-11-20"),
-    _id: "3",
-    price: "€250",
-  },
-  {
-    bookingId: "BKG004",
-    title: "Museum Visit",
-    tourStatus: "Pending Admin Approval",
-    date: new Date("2025-12-10"),
-    _id: "4",
-    price: "€250",
-  },
-];
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
@@ -90,7 +42,6 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<string[]>(["all"]);
-  const [bookings, setBookings] = useState<bookingProps[]>(bookingData);
   const [totalItems, setTotalItems] = useState<number>(0);
 
   useEffect(() => {
@@ -168,9 +119,8 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
-          <ServerPaginationProvider<bookingProps>
+          <ServerPaginationProvider<BookingWithPopulatedData>
             apiEndpoint="/api/toursAndActivity/getAll" // Your API endpoint
-            setState={setBookings} // Optional: if you need bookings in state
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}

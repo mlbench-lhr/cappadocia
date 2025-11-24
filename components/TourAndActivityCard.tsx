@@ -2,7 +2,6 @@ import Image from "next/image";
 import { BoxProviderWithName } from "./providers/BoxProviderWithName";
 import {
   ClockIcon,
-  HeartIcon,
   PeopleIcon,
   StarIcon,
   VehicleIcon,
@@ -12,14 +11,12 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import moment from "moment";
-
+import { FavoriteButton } from "./SmallComponents/FavoriteButton";
 export const TourAndActivityCard = ({
   item,
 }: {
   item: ToursAndActivityWithVendor;
 }) => {
-  console.log("item----date", item.slots?.[0].startDate);
-
   return (
     <div className="space-y-3 col-span-12 md:col-span-6 lg:col-span-3">
       <BoxProviderWithName noBorder={true} className="border md:border !px-3.5">
@@ -31,8 +28,8 @@ export const TourAndActivityCard = ({
             height={120}
             className="w-full h-[120px] object-cover object-center"
           />
-          <div className="bg-white h-[26px] w-[26px] rounded-[6px] absolute top-3 right-3 flex justify-center items-center">
-            <HeartIcon color="#B32053" />
+          <div className=" absolute top-3 right-3 ">
+            <FavoriteButton _id={item._id} />
           </div>
           <div className="w-full h-[25px] flex text-white bg-primary justify-between items-center mb-2 px-1.5">
             <div className="flex justify-start items-center gap-1">

@@ -7,10 +7,9 @@ import logo from "@/public/logo.png";
 import bell from "@/public/bell.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
-import pencil from "@/public/pencil.svg";
 import { closeSidebar, toggleCollapse } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
-import { LayoutDashboard, Lock, X } from "lucide-react";
+import { Lock, X } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,6 +23,7 @@ import {
   MessageIcon,
   ReviewsIcon,
   SettingsIcon,
+  TourIcon,
 } from "@/public/allIcons/page";
 
 const IconClose = ({ className = "" }: { className?: string }) => (
@@ -48,6 +48,11 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     name: "My Bookings",
     link: "/bookings",
     icon: BookingIcon,
+  },
+  {
+    name: "Explore",
+    link: "/explore",
+    icon: TourIcon,
   },
   {
     name: "Invoices",

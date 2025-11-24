@@ -2,14 +2,92 @@
 import { Button } from "@/components/ui/button";
 import DeadlinePicker from "@/components/ui/datePicker";
 import { Input } from "@/components/ui/input";
+import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import {
+  setActivityFilterDate,
+  setActivitySearch,
+  setDisplayExploreItems,
+} from "@/lib/store/slices/generalSlice";
+import axios from "axios";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function Section1() {
-  const [date, setDate] = useState();
+  const [loading, setLoading] = useState<boolean>(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [searchSuggestions, setSearchSuggestions] = useState<
+    ToursAndActivityWithVendor[] | null
+  >(null);
+  const activitySearch = useAppSelector((s) => s.general.activitySearch);
+  const activityFilterDate = useAppSelector(
+    (s) => s.general.activityFilterDate
+  );
+  const dispatch = useAppDispatch();
+  const handleSearch = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (activitySearch) {
+        params.append("search", activitySearch);
+      }
+      if (activityFilterDate) {
+        params.append("date", activityFilterDate.toString());
+      }
+      const queryString = params.toString();
+      const url = `/api/toursAndActivity/getWithFilters${
+        queryString ? `?${queryString}` : ""
+      }`;
+      let response = await axios.get(url);
+      if (response.data?.data) {
+        dispatch(setDisplayExploreItems(response.data?.data));
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log("err---", error);
+      setLoading(false);
+    }
+  };
+  const handleSuggestionSearch = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (activitySearch) {
+        params.append("search", activitySearch);
+      }
+      if (activityFilterDate) {
+        params.append("date", activityFilterDate.toString());
+      }
+      const queryString = params.toString();
+      const url = `/api/toursAndActivity/getWithFilters${
+        queryString ? `?${queryString}` : ""
+      }`;
+      let response = await axios.get(url);
+      if (response.data?.data) {
+        setSearchSuggestions(response.data?.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log("err---", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activitySearch) {
+      handleSuggestionSearch();
+    }
+  }, [activitySearch]);
+
+  const handleSetDate = (e: Date) => {
+    dispatch(setActivityFilterDate(e));
+  };
+
+  const handleRemove = () => {
+    dispatch(setActivityFilterDate(undefined));
+  };
 
   // Array of slider images - add your images here
   const slides = [
@@ -84,7 +162,7 @@ export default function Section1() {
               {slides[currentSlide].subtitle}
             </h2>
             <Button asChild variant={"main_green_button"} className="mt-2">
-              <Link href="/dashboard">Get Started</Link>
+              <Link href="/explore">Get Started</Link>
             </Button>
           </div>
 
@@ -120,19 +198,60 @@ export default function Section1() {
             ))}
           </div>
         </div>
-        <div className="h-fit md:h-fit w-[93%] md:w-[80%] pt-3 pb-3 px-3 md:pt-3.5 md:pb-[21px] md:px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2">
+        <div
+          className="h-fit md:h-fit w-[93%] md:w-[80%] pt-3 pb-3 px-3 md:pt-3.5 md:pb-[21px] md:px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2"
+          style={{ zIndex: 0 }}
+        >
+          {searchSuggestions &&
+            activitySearch &&
+            searchSuggestions?.length > 0 && (
+              <div className="w-full h-[300px] overflow-auto absolute top-[100%] mt-1 left-0">
+                <div
+                  className="w-full h-fit border bg-white rounded-[14px] py-2 px-3 flex flex-col justify-start items-start gap-2"
+                  style={{ zIndex: 2220 }}
+                >
+                  {searchSuggestions.map((item) => (
+                    <Link
+                      href={`/explore/detail/${item._id}`}
+                      className="w-full h-fit flex justify-start items-start gap-3 hover:bg-black/10 px-3 py-2 rounded-[14px]"
+                    >
+                      <Image
+                        src={item?.uploads?.[0]}
+                        alt=""
+                        width={50}
+                        height={50}
+                        className="rounded-full object-cover w-[50px] h-[50px]"
+                      />
+                      <div className="flex flex-col justify-start items-start">
+                        <h1 className="text-lg font-semibold">{item.title}</h1>
+                        <div className="flex justify-start items-center gap-1">
+                          <span className="text-sm font-normal text-black">
+                            ${item.slots?.[0]?.adultPrice}/Person
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           <h2 className="font-semibold text-md md:text-lg leading-tight">
             Find your tour and activities
           </h2>
+
           {/* <h2 className="font-semibold text-sm leading-tight mt-2">
             Select Date
           </h2> */}
           <div className="h-fit md:h-[55px] w-full py-2 px-3 rounded-[8px] border bg-white flex flex-col md:flex-row items-start md:items-center justify-between text-center gap-2 relative">
-            <div className=" h-fit flex items-center justify-start text-center gap-2 relative w-full md:w-[30%]">
-              <Search color="rgba(0, 0, 0, 0.50)" size={24} />
+            <div className=" h-fit flex items-center justify-start text-center relative w-full md:w-[30%]">
+              <Search color="rgba(0, 0, 0, 0.50)" size={20} />
               <Input
                 placeholder="Search..."
-                className="font-medium text-base border-none shadow-none"
+                className="font-medium text-base border-none shadow-none focus-visible:ring-0"
+                onChange={(e) => {
+                  dispatch(setActivitySearch(e.target.value));
+                }}
+                value={activitySearch}
               />
             </div>
             <div className="h-fit ps-0 md:ps-2 w-full md:w-[30%] flex items-center justify-start text-center gap-6 md:gap-2 relative">
@@ -156,11 +275,16 @@ export default function Section1() {
                   fillOpacity="0.5"
                 />
               </svg>
-              <DeadlinePicker date={date} setDate={setDate} />
+              <DeadlinePicker
+                date={activityFilterDate || undefined}
+                setDate={handleSetDate}
+                onRemove={handleRemove}
+              />
             </div>
             <Button
               variant={"main_green_button"}
               className="w-full md:w-[130px] h-[37px] text-lg rounded-[10px]"
+              onClick={handleSearch}
             >
               Search
             </Button>

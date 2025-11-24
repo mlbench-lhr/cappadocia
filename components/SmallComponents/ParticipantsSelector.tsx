@@ -2,12 +2,20 @@ import React, { useState } from "react";
 import { Users, ChevronDown, Minus, Plus } from "lucide-react";
 import { Label } from "../ui/label";
 
-export default function ParticipantsSelector() {
+export default function ParticipantsSelector({
+  participants,
+  setParticipants,
+}: {
+  participants: {
+    adult: number;
+    child: number;
+  };
+  setParticipants: React.Dispatch<{
+    adult: number;
+    child: number;
+  }>;
+}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [participants, setParticipants] = useState({
-    adult: 1,
-    child: 4,
-  });
 
   const handleChange = (type: any, value: any) => {
     const newParticipants = {

@@ -1,247 +1,209 @@
 "use client";
-
-import GenericDataTable, { Column } from "../GenericDataTable";
-import Image from "next/image";
-import { redirect, usePathname, useRouter } from "next/navigation";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "react-toastify";
-// import { useAuth } from "@/admin/context/AuthContext";
-import { useParams, useSearchParams } from "next/navigation";
-import ActionButton from "../ActionButton";
-
-export type ReservationData = {
-  id: string;
-  tourTitle: string;
-  partcipants: string; // e.g 2 Adults, 1 child
-  status: string; //e.g Pending or Paid
-  bookedBy: {
-    name: string;
-    email: string;
-    profile_image: string;
-  };
+import { useAppDispatch } from "@/lib/store/hooks";
+import { useMediaQuery } from "react-responsive";
+import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
+import { useEffect, useState } from "react";
+import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
+import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
+import { SearchComponent } from "@/components/SmallComponents/SearchComponent";
+import Link from "next/link";
+import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
+import { Button } from "@/components/ui/button";
+import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import moment from "moment";
+export type DashboardCardProps = {
+  image: string;
+  title: string;
+  description: string;
 };
 
-export const dummyReservations: ReservationData[] = [
-  {
-    id: "1",
-    tourTitle: "Hot Air Balloon Experience",
-    partcipants: "2 Adults, 1 Child",
-    status: "Paid",
-    bookedBy: {
-      name: "Ali Demir",
-      email: "ali.demir@example.com",
-      profile_image: "/admin-images/user.svg",
-    },
-  },
-  {
-    id: "2",
-    tourTitle: "Sunset Jeep Safari",
-    partcipants: "3 Adults",
-    status: "Pending",
-    bookedBy: {
-      name: "Mehmet Yildiz",
-      email: "mehmet.yildiz@example.com",
-      profile_image: "/admin-images/user.svg",
-    },
-  },
-  {
-    id: "3",
-    tourTitle: "Underground City Tour",
-    partcipants: "1 Adult, 2 Children",
-    status: "Paid",
-    bookedBy: {
-      name: "Fatma Kaya",
-      email: "fatma.kaya@example.com",
-      profile_image: "/admin-images/user.svg",
-    },
-  },
-  {
-    id: "4",
-    tourTitle: "Blue Lagoon Boat Trip",
-    partcipants: "2 Adults",
-    status: "Pending",
-    bookedBy: {
-      name: "Hasan Aksoy",
-      email: "hasan.aksoy@example.com",
-      profile_image: "/admin-images/user.svg",
-    },
-  },
-  {
-    id: "5",
-    tourTitle: "Istanbul Old City Walking Tour",
-    partcipants: "4 Adults",
-    status: "Paid",
-    bookedBy: {
-      name: "Elif Aydin",
-      email: "elif.aydin@example.com",
-      profile_image: "/admin-images/user.svg",
-    },
-  },
-];
+export type bookingProps = {
+  bookingId: string;
+  title: string;
+  tourStatus:
+    | "upcoming"
+    | "completed"
+    | "cancelled"
+    | "active"
+    | "pending Admin Approval";
+  date: Date;
+  _id: string;
+  price: string;
+};
 
-export default function AllReservations() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [tableData, setTableData] = useState<ReservationData[]>([]);
-  const [totaluser, setTotaluser] = useState(5);
-  const currentPage = parseInt(searchParams.get("user_page") || "1", 10);
-  const [loading, setLoading] = useState(false);
-  // const { user, token } = useAuth();
-  const [search, setSearch] = useState("");
-  const limit = 5;
-  const pageTabs = useMemo(() => {
-    const totalPages = Math.ceil(totaluser / limit);
-    return Array.from({ length: totalPages }, (_, i) => (i + 1).toString());
-  }, [totaluser, limit]);
+// Loading skeleton component
+const BookingsLoadingSkeleton = () => (
+  <div className="w-full space-y-4 animate-pulse">
+    {[...Array(7)].map((_, i) => (
+      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+    ))}
+  </div>
+);
 
-  //   if (!sessionId) {
-  //     redirect("/signin");
-  //   }
+// No data component
+const NoBookingsFound = () => (
+  <NoDataComponent
+    text="You don’t have any bookings yet."
+    actionComponent={
+      <Button variant={"main_green_button"}>Start Exploring Now</Button>
+    }
+  />
+);
+
+export default function BookingsPage() {
+  const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState<string[]>(["all"]);
 
   useEffect(() => {
-    if (search) {
-      console.log("search");
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("user_page", "1");
-      router.push(`${pathname}?${params.toString()}`);
-    }
-  }, [search]);
+    if (isMobile) dispatch(closeSidebar());
+  }, []);
 
-  const columns: Column<ReservationData>[] = [
-    {
-      header: "Booking ID",
-      accessor: "id",
-      cell: (row) => <div className="opacity-60">#{row.id}</div>,
-    },
-    {
-      header: "Tour Title",
-      accessor: "tourTitle",
-      cell: (row) => <div className="opacity-60">{row.tourTitle}</div>,
-    },
-    {
-      header: "Participants",
-      accessor: "partcipants",
-      cell: (row) => <div className="opacity-60">{row.partcipants}</div>,
-    },
-    {
-      header: <div className="text-center w-20">Status</div>,
-      accessor: "status",
-      cell: (row) => (
-        <div
-          className={`font-medium rounded-full w-20 px-2 py-1 text-center ${
-            row.status === "Paid"
-              ? "text-green-600 bg-[#E7FAE3]"
-              : "text-yellow-600 bg-[#FFE7CA]"
-          }`}
-        >
-          {row.status}
-        </div>
-      ),
-    },
-    {
-      header: "Booked By",
-      accessor: "bookedBy",
-      cell: (row) => (
-        <div className="flex items-center gap-2">
-          <Image
-            src={row.bookedBy.profile_image || "/images/avatar.png"}
-            alt={row.bookedBy.name}
-            width={32}
-            height={32}
-            className="rounded-full h-8 w-8 object-cover bg-gray-100"
-          />
-          <div>
-            <div className="font-medium">{row.bookedBy.name}</div>
-            <div className="text-sm opacity-60">{row.bookedBy.email}</div>
-          </div>
-        </div>
-      ),
-    },
-    {
-      header: "Action",
-      accessor: "action",
-      cell: (row) => (
-        <ActionButton
-          link={`/admin/reservations/details/${row.id}?reservation_page=${currentPage}`}
-        />
-      ),
-    },
-  ];
-
-  // useEffect(() => {
-  //     const timeout = setTimeout(() => {
-  //         if (user?.email && token) {
-
-  //             fetchData();
-  //         }
-  //     }, 1000); // slight delay to prevent double run
-
-  //     return () => clearTimeout(timeout);
-  // }, [user, currentPage, search]);
-  // const fetchData = async () => {
-  //     try {
-  //         // ?search=john&page=1&limit=5
-  //         setLoading(true)
-  //         const response = await fetch(`/api/admin/user/get_users?search=${search}&page=${currentPage}&limit=${limit}`, {
-  //             headers: {
-  //                 Authorization: `Bearer ${token}`,
-  //             },
-  //         });
-
-  //         const result = await response.json();
-
-  //         if (!response.ok || result.data.status === false) {
-  //             throw new Error(result.data?.message || result.error)
-  //         }
-
-  //         console.log(result);
-  //         setTotaluser(result.total);
-  //         setTableData(result.data);
-  //     } catch (err: unknown) {
-  //         const errorMessage = err instanceof Error ? err.message : String(err);
-  //         toast.error(errorMessage);
-  //         console.log("error", err);
-  //         setTotaluser(0);
-  //         setTableData([]);
-  //     } finally {
-  //         setLoading(false)
-  //     }
-  // };
-
-  const handleAddUser = (newUserData: ReservationData) => {
-    // Optimistically add to the beginning of the list
-    setTableData((prev) => [newUserData, ...prev]);
-    setTotaluser((prev) => prev + 1);
-
-    // Optionally: if you're on a page other than 1, navigate to page 1
-    if (currentPage !== 1) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("user_page", "1");
-      router.push(`${pathname}?${params.toString()}`);
-    }
+  // Prepare query params for the API
+  const queryParams = {
+    search: searchQuery,
+    filters: filters.includes("all") ? [] : filters,
+    // You can add more params like sortBy, sortOrder, etc.
   };
 
   return (
-    <div className="">
-      <GenericDataTable
-        title="Reservations"
-        data={dummyReservations}
-        tabs={pageTabs}
-        columns={columns}
-        pageSize={limit}
-        currentPage={currentPage}
-        loading={loading}
-        setLoading={setLoading}
-        querykey="user_page"
-        search={search}
-        setSearch={setSearch}
-        onAddUser={handleAddUser}
-        emptyStateImages={{
-          Reservations: "/images/admin/users/no_user.svg",
-        }}
-        size={`Total Reservations: 4`}
-      />
-    </div>
+    <BasicStructureWithName
+      name="Reservations"
+      rightSideComponent={
+        <SearchComponent
+          searchQuery={searchQuery}
+          onChangeFunc={setSearchQuery}
+        />
+      }
+    >
+      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+        <BoxProviderWithName noBorder={true}>
+          {/* Server Pagination Provider wraps the table */}
+          <ServerPaginationProvider<BookingWithPopulatedData>
+            apiEndpoint="/api/booking/getAll"
+            queryParams={queryParams}
+            LoadingComponent={BookingsLoadingSkeleton}
+            NoDataComponent={NoBookingsFound}
+            itemsPerPage={7}
+          >
+            {(data, isLoading, refetch) => (
+              <>
+                {data.map((item) => (
+                  <div className="w-full space-y-2">
+                    <BoxProviderWithName>
+                      <div className="w-full">
+                        <BoxProviderWithName
+                          leftSideComponent={
+                            <ProfileBadge
+                              title={item.user.fullName}
+                              subTitle={item.user.email}
+                              image={item.user.avatar}
+                              size="medium"
+                            />
+                          }
+                          noBorder={true}
+                          className="!p-0"
+                        >
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mt-2 gap-y-2 items-center">
+                            <div className="flex flex-col justify-start items-start">
+                              <span className="text-xs font-normal text-black/70">
+                                Tour Title
+                              </span>
+                              <span className="text-xs font-semibold">
+                                {item.activity.title}
+                              </span>
+                            </div>
+                            <div className="flex flex-col justify-start items-start">
+                              <span className="text-xs font-normal text-black/70">
+                                Booking ID:
+                              </span>
+                              <span className="text-xs font-semibold">
+                                #{item.bookingId}
+                              </span>
+                            </div>
+                            <div className="flex flex-col justify-start items-start">
+                              <span className="text-xs font-normal text-black/70">
+                                Reservation Date
+                              </span>
+                              <span className="text-xs font-semibold">
+                                {moment(item.selectDate).format("MMM DD, YYYY")}
+                              </span>
+                            </div>
+                            {/* <div className="flex flex-col justify-start items-start">
+                              <span className="text-xs font-normal text-black/70">
+                                Activity Date
+                              </span>
+                              <span className="text-xs font-semibold">
+                                26 July, 2025
+                              </span>
+                            </div> */}
+                            <div className="flex flex-col justify-start items-start col-span-2">
+                              <span className="text-xs font-normal text-black/70">
+                                Pickup Location
+                              </span>
+                              {item.pickupLocation ? (
+                                <span className="text-xs font-semibold">
+                                  {item.pickupLocation.address}
+                                </span>
+                              ) : (
+                                <>
+                                  <span className="text-xs font-semibold">
+                                    Not Added
+                                  </span>
+                                  <span className="text-xs font-normal text-primary hover:no-underline underline">
+                                    Ask for pickup location
+                                  </span>
+                                </>
+                              )}
+                            </div>
+                            <div className="flex flex-col justify-start items-start">
+                              <span className="text-xs font-normal text-black/70">
+                                Participants
+                              </span>
+                              <span className="text-xs font-semibold">
+                                {item.adultsCount} Adults, {item.childrenCount}{" "}
+                                Children
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex gap-2 justify-between items-center mt-4 w-full border-t pt-4">
+                            <div className="md:xl md:text-[26px] font-semibold text-primary">
+                              ${item.paymentDetails.amount}
+                            </div>
+                            <div className="flex gap-2 justify-start items-start">
+                              <Button
+                                size={"lg"}
+                                variant={"green_secondary_button"}
+                              >
+                                Contact Traveler
+                              </Button>
+                              <Button
+                                size={"lg"}
+                                variant={"green_secondary_button"}
+                              >
+                                <Link
+                                  href={
+                                    "/admin/reservations/details/" + item._id
+                                  }
+                                >
+                                  View Details
+                                </Link>
+                              </Button>
+                            </div>
+                          </div>
+                        </BoxProviderWithName>
+                      </div>
+                    </BoxProviderWithName>
+                  </div>
+                ))}
+              </>
+            )}
+          </ServerPaginationProvider>
+        </BoxProviderWithName>
+      </div>
+    </BasicStructureWithName>
   );
 }

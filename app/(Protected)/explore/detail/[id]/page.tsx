@@ -19,21 +19,15 @@ import {
   PaymentIcon,
 } from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
-import Link from "next/link";
 import AddressLocationSelector, { LocationData } from "@/components/map";
-import ParticipantsSelector from "@/components/SmallComponents/ParticipantsSelector";
 import ImageGallery from "./ImageGallery";
 import { useParams } from "next/navigation";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import axios from "axios";
 import { AlternativeOptions } from "./AlternativeOptions";
+import { AvailabilityFilter } from "./AvailabilityFilter";
+import Link from "next/link";
+import { FavoriteButton } from "@/components/SmallComponents/FavoriteButton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -55,7 +49,8 @@ export default function BookingsPage() {
   });
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [checkAvailabilityToggle, setCheckAvailabilityToggle] =
+    useState<boolean>(false);
   console.log("data?.vendor?.vendorDetails?.address-----", data);
 
   const { id }: { id: string } = useParams();
@@ -84,12 +79,17 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
-            <ProfileBadge
-              size="medium"
-              title="SkyView Balloon Tours"
-              subTitle={"TÜRSAB Number: " + 324234}
-              image="/userDashboard/img2.png"
-            />
+            <div className="w-full flex justify-between items-center">
+              <ProfileBadge
+                size="medium"
+                title="SkyView Balloon Tours"
+                subTitle={"TÜRSAB Number: " + 324234}
+                image="/userDashboard/img2.png"
+              />
+              <div className="drop-shadow-lg w-fit h-fit">
+                <FavoriteButton _id={id} />
+              </div>
+            </div>
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
               Blue Tour – Hidden Cappadocia
             </h1>
@@ -155,13 +155,22 @@ export default function BookingsPage() {
                       From
                     </span>
                     <span className="text-[20px] md:text-[26px] font-semibold text-primary">
-                      $569.00
+                      ${data?.slots?.[0]?.adultPrice}
                     </span>
                     <span className="text-[12px] font-normal text-[#6E7070]">
                       /Person
                     </span>
-                    <Button variant={"main_green_button"} className="mt-4">
-                      Check availability
+                    <Button
+                      variant={"main_green_button"}
+                      className="mt-4"
+                      onClick={() => {
+                        setCheckAvailabilityToggle(true);
+                      }}
+                      asChild
+                    >
+                      <Link href={"#checkAvailabilityToggle"}>
+                        Check availability
+                      </Link>
                     </Button>
                   </div>
                 </BoxProviderWithName>
@@ -229,49 +238,9 @@ export default function BookingsPage() {
                 </div>
               </div>
             </BoxProviderWithName>
-            <BoxProviderWithName
-              name="Select your travel date and number of guests to see if this tour is available."
-              className="mt-4"
-            >
-              <div className="w-full grid grid-cols-3 md:grid-cols-9 gap-3">
-                <div className="space-y-1 col-span-3">
-                  <Label className="text-[14px] font-semibold">
-                    Select Date
-                  </Label>
-                  <Select>
-                    <SelectTrigger className="w-full">
-                      Nov 2, 2025
-                    </SelectTrigger>
-                    <SelectContent className="w-full">
-                      <SelectItem value="Nov 2,2025">Nov 2,2025</SelectItem>
-                      <SelectItem value="Apr 2, 2025">Apr 2, 2025</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1 col-span-3">
-                  <Label className="text-[14px] font-semibold">Language</Label>
-                  <Select>
-                    <SelectTrigger className="w-full">English</SelectTrigger>
-                    <SelectContent className="w-full">
-                      <SelectItem value="English">English</SelectItem>
-                      <SelectItem value="Turkish">Turkish</SelectItem>
-                      <SelectItem value="Chinese">Chinese</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1 col-span-3">
-                  <ParticipantsSelector />{" "}
-                </div>
-              </div>
-              <div className="flex justify-start items-start md:items-center flex-col md:flex-row gap-2 md:gap-5 mt-4">
-                <span className="text-primary text-[18px] font-semibold">
-                  Available — €120 per person
-                </span>
-                <Button variant={"main_green_button"} size={"sm"}>
-                  <Link href={"/explore/detail/1"}>Book now</Link>
-                </Button>
-              </div>
-            </BoxProviderWithName>
+            <div className="w-full" id="checkAvailabilityToggle">
+              {checkAvailabilityToggle && <AvailabilityFilter />}
+            </div>
             <AlternativeOptions />
             <BoxProviderWithName
               name="Reviews"

@@ -1,10 +1,11 @@
 const variants: any = {
-  Paid: { bg: "#E7FAE3", text: "#4A9E35" },
-  Active: { bg: "#E7FAE3", text: "#4A9E35" },
-  Pending: { bg: "#F8E6D4", text: "#FF862F" },
+  paid: { bg: "#E7FAE3", text: "#4A9E35" },
+  active: { bg: "#E7FAE3", text: "#4A9E35" },
+  pending: { bg: "#F8E6D4", text: "#FF862F" },
+  "pending Admin Approval": { bg: "#F8E6D4", text: "#FF862F" },
   "Pending Admin Approval": { bg: "#F8E6D4", text: "#FF862F" },
-  Cancelled: { bg: "#FAE3E3", text: "#DE191D" },
-  Refunded: { bg: "#E3F7FA", text: "#2B8B94" },
+  cancelled: { bg: "#FAE3E3", text: "#DE191D" },
+  refunded: { bg: "#E3F7FA", text: "#2B8B94" },
 };
 export const StatusBadge = ({
   status,

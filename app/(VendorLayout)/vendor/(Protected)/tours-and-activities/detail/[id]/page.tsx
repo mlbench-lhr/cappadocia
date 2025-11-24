@@ -19,73 +19,10 @@ import {
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import AddressLocationSelector, { LocationData } from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
-import RejectVendorDialog from "@/components/RejectVendorDialog";
 import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
-import Swal from "sweetalert2";
-import {
-  ToursAndActivity,
-  ToursAndActivityWithVendor,
-} from "@/lib/mongodb/models/ToursAndActivity";
-
-export type InvoiceData = {
-  invoice: {
-    invoiceNumber: string;
-    invoiceDate: string; // ISO date string (YYYY-MM-DD)
-    bookingId: string;
-  };
-  tourDetails: {
-    title: string;
-    dateTime: string; // ISO date-time string
-    participants: {
-      adults: number;
-      children: number;
-    };
-    durationHours: number;
-    meetingPoint: string;
-  };
-  travelerInformation: {
-    fullName: string;
-    passportNumber: string;
-    nationality: string;
-    contact: string;
-    email: string;
-  };
-  paymentDetails: {
-    method: string;
-    transactionId: string;
-    currency: string;
-    amountPaid: number;
-    status: "Paid" | "Pending" | "Failed";
-  };
-  priceBreakdown: {
-    basePrice: {
-      adults: number;
-      currency: string;
-      perAdult: number;
-      total: number;
-    };
-    childPrice: {
-      children: number;
-      currency: string;
-      perChild: number;
-      total: number;
-    };
-    participants?: {
-      adults: number;
-      children?: number;
-    };
-    serviceFee: number;
-    totalPaid: number;
-  };
-  vendorInformation: {
-    operator: string;
-    tursabNumber: string;
-    contact: string;
-    email: string;
-  };
-};
+import { useParams } from "next/navigation";
+import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 
 export interface UserResponse {
   id: string;

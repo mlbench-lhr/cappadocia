@@ -13,67 +13,507 @@ export default function ImageGallery({
     return { src: item, alt: "Image" + index };
   });
 
-  const handleImageClick = (index: any) => {
+  const handleImageClick = (index: number) => {
     setPhotoIndex(index);
     setOpen(true);
   };
 
-  return (
-    <div className="w-full">
-      <div className="w-full grid grid-cols-10 h-fit lg:h-[360px] gap-2 lg:gap-3.5">
-        {/* First Image */}
-        <div
-          className={`col-span-5 lg:col-span-4 rounded-[14px] overflow-hidden h-[200px] lg:h-full cursor-pointer hover:opacity-90 transition-opacity`}
-          onClick={() => handleImageClick(0)}
-        >
-          <img
-            src={images[0]?.src}
-            alt={images[0]?.alt}
-            className="w-full h-full object-cover object-center"
-          />
-        </div>
+  const count = images.length;
 
-        {images.length > 1 && (
-          <div
-            className="col-span-5 lg:col-span-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full cursor-pointer hover:opacity-90 transition-opacity"
-            onClick={() => handleImageClick(1)}
-          >
-            <img
-              src={images[1]?.src}
-              alt={images[1]?.alt}
-              className="w-full h-full object-cover object-center"
-            />
+  // Layout renderer based on image count
+  const renderLayout = () => {
+    switch (count) {
+      case 4:
+        return (
+          <div className="w-full grid grid-cols-10 h-[360px]  gap-1 md:gap-2 ">
+            {/* First Image */}
+            <div
+              className={`col-span-10 md:col-span-4 rounded-[14px] overflow-hidden h-full cursor-pointer hover:opacity-90 transition-opacity`}
+              onClick={() => handleImageClick(0)}
+            >
+              <img
+                src={images[0]?.src}
+                alt={images[0]?.alt}
+                className="w-full h-full object-cover object-center"
+              />
+            </div>
+
+            {images.length > 1 && (
+              <div
+                className="col-span-10 md:col-span-2 rounded-[14px] overflow-hidden h-full cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
+              >
+                <img
+                  src={images[1]?.src}
+                  alt={images[1]?.alt}
+                  className="w-full h-full object-cover object-center"
+                />
+              </div>
+            )}
+
+            {/* Third and Fourth Images Container */}
+            <div className="col-span-10 md:col-span-4 grid grid-cols-2 md:grid-cols-none md:grid-rows-2 rounded-[14px] overflow-hidden h-full  gap-1 md:gap-2 ">
+              {images.length > 2 && (
+                <div
+                  className="row-span-1 rounded-[14px] overflow-hidden h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => handleImageClick(2)}
+                >
+                  <img
+                    src={images[2]?.src}
+                    alt={images[2]?.alt}
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              )}
+              {images.length > 3 && (
+                <div
+                  className="row-span-1 rounded-[14px] overflow-hidden h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => handleImageClick(3)}
+                >
+                  <img
+                    src={images[3]?.src}
+                    alt={images[3]?.alt}
+                    className="w-full h-full object-cover object-center"
+                  />
+                </div>
+              )}
+            </div>
           </div>
-        )}
+        );
 
-        {/* Third and Fourth Images Container */}
-        <div className="col-span-10 lg:col-span-4 grid lg:grid-cols-none grid-cols-2 grid-rows-none lg:grid-rows-2 rounded-[14px] overflow-hidden h-[200px] lg:h-full gap-x-2 lg:gap-x-0 gap-y-0 lg:gap-y-3.5">
-          {images.length > 2 && (
-            <div
-              className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => handleImageClick(2)}
-            >
+      case 5:
+        return (
+          <div className="grid grid-cols-6  gap-1 md:gap-2 ">
+            {/* First two images on left */}
+            <div className="col-span-3 md:col-span-2 row-span-1 md:row-span-2">
               <img
-                src={images[2]?.src}
-                alt={images[2]?.alt}
-                className="w-full h-full object-cover object-center"
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(0)}
               />
             </div>
-          )}
-          {images.length > 3 && (
-            <div
-              className="row-span-2 lg:row-span-1 rounded-[14px] overflow-hidden h-[200px] lg:h-full col-span-1 cursor-pointer hover:opacity-90 transition-opacity"
-              onClick={() => handleImageClick(3)}
-            >
+            {/* Center large image */}
+            <div className="col-span-3 md:col-span-2 row-span-1 md:row-span-2">
               <img
-                src={images[3]?.src}
-                alt={images[3]?.alt}
-                className="w-full h-full object-cover object-center"
+                src={images[1].src}
+                alt={images[1].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
               />
             </div>
-          )}
-        </div>
-      </div>
+            {/* Three images on right stacked */}
+            <div className="col-span-2 md:col-span-2">
+              <img
+                src={images[2].src}
+                alt={images[2].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(2)}
+              />
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <img
+                src={images[3].src}
+                alt={images[3].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(3)}
+              />
+            </div>
+            <div className="col-span-2 md:col-span-1">
+              <img
+                src={images[4].src}
+                alt={images[4].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(4)}
+              />
+            </div>
+          </div>
+        );
+
+      case 6:
+        return (
+          <div className="grid grid-cols-4  gap-1 md:gap-2  h-fit">
+            {/* Large image top left */}
+            <div className="col-span-2 row-span-1">
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(0)}
+              />
+            </div>
+            <div className="col-span-1 row-span-1">
+              <img
+                src={images[1].src}
+                alt={images[1].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
+              />
+            </div>
+            <div className="col-span-1 row-span-1">
+              <img
+                src={images[2].src}
+                alt={images[2].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(2)}
+              />
+            </div>
+            {/* Bottom row */}
+            <div className="col-span-1">
+              <img
+                src={images[3].src}
+                alt={images[3].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(3)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[4].src}
+                alt={images[4].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(4)}
+              />
+            </div>
+            <div className="col-span-2 row-span-1">
+              <img
+                src={images[5].src}
+                alt={images[5].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(5)}
+              />
+            </div>
+          </div>
+        );
+
+      case 7:
+        return (
+          <div className="grid grid-cols-6  gap-1 md:gap-2  h-fit">
+            {/* Top row - 3 images */}
+            <div className="col-span-2">
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(0)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[1].src}
+                alt={images[1].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[2].src}
+                alt={images[2].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(2)}
+              />
+            </div>
+            {/* Bottom row - 4 images */}
+            <div className="col-span-2">
+              <img
+                src={images[3].src}
+                alt={images[3].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(3)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[4].src}
+                alt={images[4].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(4)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[5].src}
+                alt={images[5].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(5)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[6].src}
+                alt={images[6].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(6)}
+              />
+            </div>
+          </div>
+        );
+
+      case 8:
+        return (
+          <div className="grid grid-cols-6  gap-1 md:gap-2  h-fit">
+            {/* Top row - large + 2 small */}
+            <div className="col-span-3 row-span-1">
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(0)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[1].src}
+                alt={images[1].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[2].src}
+                alt={images[2].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(2)}
+              />
+            </div>
+            {/* Bottom row - 5 images */}
+            <div className="col-span-1">
+              <img
+                src={images[3].src}
+                alt={images[3].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(3)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[4].src}
+                alt={images[4].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(4)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[5].src}
+                alt={images[5].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(5)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[6].src}
+                alt={images[6].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(6)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[7].src}
+                alt={images[7].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(7)}
+              />
+            </div>
+          </div>
+        );
+
+      case 9:
+        return (
+          <div className="grid grid-cols-8  gap-1 md:gap-2  h-fit">
+            {/* Top row - large + 3 small */}
+            <div className="col-span-4 row-span-2">
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(0)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[1].src}
+                alt={images[1].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[2].src}
+                alt={images[2].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(2)}
+              />
+            </div>
+            {/* Second row right side */}
+            <div className="col-span-2">
+              <img
+                src={images[3].src}
+                alt={images[3].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(3)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[4].src}
+                alt={images[4].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(4)}
+              />
+            </div>
+            {/* Bottom row - 5 images */}
+            <div className="col-span-2">
+              <img
+                src={images[5].src}
+                alt={images[5].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(5)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[6].src}
+                alt={images[6].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(6)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[7].src}
+                alt={images[7].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(7)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[8].src}
+                alt={images[8].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(8)}
+              />
+            </div>
+          </div>
+        );
+
+      case 10:
+        return (
+          <div className="grid grid-cols-8  gap-1 md:gap-2  h-fit">
+            {/* Top row - large + 3 small */}
+            <div className="col-span-4 row-span-2">
+              <img
+                src={images[0].src}
+                alt={images[0].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(0)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[1].src}
+                alt={images[1].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(1)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[2].src}
+                alt={images[2].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(2)}
+              />
+            </div>
+            {/* Second row right side */}
+            <div className="col-span-2">
+              <img
+                src={images[3].src}
+                alt={images[3].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(3)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[4].src}
+                alt={images[4].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(4)}
+              />
+            </div>
+            {/* Bottom row - 5 images */}
+            <div className="col-span-2">
+              <img
+                src={images[5].src}
+                alt={images[5].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(5)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[6].src}
+                alt={images[6].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(6)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[7].src}
+                alt={images[7].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(7)}
+              />
+            </div>
+            <div className="col-span-1">
+              <img
+                src={images[8].src}
+                alt={images[8].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(8)}
+              />
+            </div>
+            <div className="col-span-2">
+              <img
+                src={images[9].src}
+                alt={images[9].alt}
+                className="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => handleImageClick(9)}
+              />
+            </div>
+          </div>
+        );
+
+      default:
+        // Fallback for any other count
+        return (
+          <div className="grid grid-cols-3  gap-1 md:gap-2 ">
+            {images.map((image, index) => (
+              <div key={index}>
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-64 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                  onClick={() => handleImageClick(index)}
+                />
+              </div>
+            ))}
+          </div>
+        );
+    }
+  };
+
+  return (
+    <div className="w-full h-fit">
+      {renderLayout()}
 
       {/* Lightbox Component */}
       <Lightbox
@@ -81,13 +521,9 @@ export default function ImageGallery({
         close={() => setOpen(false)}
         index={photoIndex}
         slides={images}
-        // Optional: Add plugins
-        // plugins={[Zoom]}
-        // Optional: Customize styling
         styles={{
           container: { backgroundColor: "rgba(0, 0, 0, .9)" },
         }}
-        // Optional: Add animation settings
         animation={{ fade: 250 }}
         controller={{ closeOnBackdropClick: true }}
       />

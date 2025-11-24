@@ -1,31 +1,33 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AuthCallbackPage() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    const token = searchParams.get("token")
-    const error = searchParams.get("error")
+    const token = searchParams.get("token");
+    const error = searchParams.get("error");
 
     if (error) {
       // Handle OAuth errors
-      router.push(`/auth/login?error=${error}`)
-      return
+      router.push(`/auth/login?error=${error}`);
+      return;
     }
 
     if (token) {
-      document.cookie = `auth_token=${token}; path=/; max-age=${7 * 24 * 60 * 60}; secure; samesite=strict`
-      router.push("/dashboard")
+      document.cookie = `auth_token=${token}; path=/; max-age=${
+        7 * 24 * 60 * 60
+      }; secure; samesite=strict`;
+      router.push("/explore");
     } else {
       // No token, redirect to login
-      router.push("/auth/login")
+      router.push("/auth/login");
     }
-  }, [searchParams, router])
+  }, [searchParams, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -38,5 +40,5 @@ export default function AuthCallbackPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

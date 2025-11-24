@@ -37,7 +37,7 @@ export function CTASection() {
                 size="lg"
                 className="primary-button"
               >
-                <Link href="/dashboard">Get Started </Link>
+                <Link href="/explore">Get Started </Link>
               </Button>
             </div>
           </div>

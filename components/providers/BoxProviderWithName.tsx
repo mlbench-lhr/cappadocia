@@ -36,14 +36,7 @@ export const BoxProviderWithName = ({
       {(name || rightSideLink || leftSideComponent || rightSideComponent) && (
         <div className="flex justify-between w-full items-start">
           {name && <h1 className={`${textClasses} leading-tight `}>{name}</h1>}
-          {rightSideLink && (
-            <Link
-              href={rightSideLink}
-              className="text-xs font-medium leading-tight text-primary underline mt-1 hover:no-underline text-end"
-            >
-              <h1>{rightSideLabel}</h1>
-            </Link>
-          )}
+
           {LeftSideComponent &&
             (typeof LeftSideComponent === "function" ? (
               <LeftSideComponent />
@@ -56,6 +49,14 @@ export const BoxProviderWithName = ({
             ) : (
               RightSideComponent
             ))}
+          {rightSideLink && (
+            <Link
+              href={rightSideLink}
+              className="text-xs font-medium leading-tight text-primary underline mt-1 hover:no-underline text-end"
+            >
+              <h1>{rightSideLabel}</h1>
+            </Link>
+          )}
         </div>
       )}
       <div className={`w-full ${hFull && "h-full"}`}>{children}</div>

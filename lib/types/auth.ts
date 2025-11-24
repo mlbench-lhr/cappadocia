@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { VendorDetails } from "../mongodb/models/User";
 
 export interface User {
@@ -16,6 +17,7 @@ export interface User {
   profileUpdated: boolean;
   dataUpdated: boolean;
   vendorDetails: VendorDetails;
+  favorites: string[];
 }
 export interface PersonalInfo {
   firstName?: string;

@@ -239,7 +239,7 @@ export default function UserDetail() {
                     statusFilter === "done" ? "font-bold underline" : ""
                   }`}
                 >
-                  Completed
+                  completed
                 </button>
                 <button
                   onClick={() => handleFilterChange("skipped")}

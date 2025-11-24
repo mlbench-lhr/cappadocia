@@ -18,64 +18,6 @@ import AddressLocationSelector, { LocationData } from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
 
-export type InvoiceData = {
-  invoice: {
-    invoiceNumber: string;
-    invoiceDate: string; // ISO date string (YYYY-MM-DD)
-    bookingId: string;
-  };
-  tourDetails: {
-    title: string;
-    dateTime: string; // ISO date-time string
-    participants: {
-      adults: number;
-      children: number;
-    };
-    durationHours: number;
-    meetingPoint: string;
-  };
-  travelerInformation: {
-    fullName: string;
-    passportNumber: string;
-    nationality: string;
-    contact: string;
-    email: string;
-  };
-  paymentDetails: {
-    method: string;
-    transactionId: string;
-    currency: string;
-    amountPaid: number;
-    status: "Paid" | "Pending" | "Failed";
-  };
-  priceBreakdown: {
-    basePrice: {
-      adults: number;
-      currency: string;
-      perAdult: number;
-      total: number;
-    };
-    childPrice: {
-      children: number;
-      currency: string;
-      perChild: number;
-      total: number;
-    };
-    participants?: {
-      adults: number;
-      children?: number;
-    };
-    serviceFee: number;
-    totalPaid: number;
-  };
-  vendorInformation: {
-    operator: string;
-    tursabNumber: string;
-    contact: string;
-    email: string;
-  };
-};
-
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
@@ -134,7 +76,7 @@ export default function BookingsPage() {
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
                 <h2 className="text-2xl md:text-[37px] font-medium ">12</h2>
                 <h2 className="text-sm md:text-base font-medium ">
-                  Active Tours
+                  active Tours
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
@@ -152,7 +94,7 @@ export default function BookingsPage() {
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
                 <h2 className="text-2xl md:text-[37px] font-medium ">8</h2>
                 <h2 className="text-sm md:text-base font-medium ">
-                  Years Active
+                  Years active
                 </h2>
               </div>
             </div>

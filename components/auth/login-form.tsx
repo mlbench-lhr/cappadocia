@@ -126,7 +126,7 @@ export function LoginForm({
         router.push("/vendor/dashboard");
         router.refresh();
       } else {
-        router.push("/dashboard");
+        router.push("/explore");
         router.refresh();
       }
     } catch (err) {

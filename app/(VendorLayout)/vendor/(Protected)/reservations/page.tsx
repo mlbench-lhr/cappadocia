@@ -6,20 +6,13 @@ import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { SearchComponent } from "@/components/SmallComponents/SearchComponent";
-import { Column } from "@/app/(AdminLayout)/admin/Components/Table/page";
-import moment from "moment";
 import Link from "next/link";
-import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
 import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import moment from "moment";
 export type DashboardCardProps = {
   image: string;
   title: string;
@@ -30,50 +23,16 @@ export type bookingProps = {
   bookingId: string;
   title: string;
   tourStatus:
-    | "Upcoming"
-    | "Completed"
-    | "Cancelled"
-    | "Active"
-    | "Pending Admin Approval";
+    | "upcoming"
+    | "completed"
+    | "cancelled"
+    | "active"
+    | "pending Admin Approval";
   date: Date;
   _id: string;
   price: string;
 };
 
-const bookingData: bookingProps[] = [
-  {
-    bookingId: "BKG001",
-    title: "City Tour",
-    tourStatus: "Active",
-    date: new Date("2025-12-01"),
-    _id: "1",
-    price: "€250",
-  },
-  {
-    bookingId: "BKG002",
-    title: "Mountain Hike",
-    tourStatus: "Pending Admin Approval",
-    date: new Date("2025-10-15"),
-    _id: "2",
-    price: "€250",
-  },
-  {
-    bookingId: "BKG003",
-    title: "Beach Trip",
-    tourStatus: "Cancelled",
-    date: new Date("2025-11-20"),
-    _id: "3",
-    price: "€250",
-  },
-  {
-    bookingId: "BKG004",
-    title: "Museum Visit",
-    tourStatus: "Pending Admin Approval",
-    date: new Date("2025-12-10"),
-    _id: "4",
-    price: "€250",
-  },
-];
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
@@ -98,7 +57,6 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<string[]>(["all"]);
-  const [bookings, setBookings] = useState<bookingProps[]>(bookingData);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -124,10 +82,8 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
-          <ServerPaginationProvider<bookingProps>
-            apiEndpoint="/api/bookings" // Your API endpoint
-            setState={setBookings} // Optional: if you need bookings in state
-            presentData={bookings} // Optional: if you need bookings in state
+          <ServerPaginationProvider<BookingWithPopulatedData>
+            apiEndpoint="/api/booking/getAll"
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}
@@ -142,9 +98,9 @@ export default function BookingsPage() {
                         <BoxProviderWithName
                           leftSideComponent={
                             <ProfileBadge
-                              title="John D."
-                              subTitle="Apr 10, 2024"
-                              image="/userDashboard/cimg.png"
+                              title={item.user.fullName}
+                              subTitle={item.user.email}
+                              image={item.user.avatar}
                               size="medium"
                             />
                           }
@@ -157,7 +113,7 @@ export default function BookingsPage() {
                                 Tour Title
                               </span>
                               <span className="text-xs font-semibold">
-                                Sunset ATV Safari Tour
+                                {item.activity.title}
                               </span>
                             </div>
                             <div className="flex flex-col justify-start items-start">
@@ -165,7 +121,7 @@ export default function BookingsPage() {
                                 Booking ID:
                               </span>
                               <span className="text-xs font-semibold">
-                                #CT-98213{" "}
+                                #{item.bookingId}
                               </span>
                             </div>
                             <div className="flex flex-col justify-start items-start">
@@ -173,40 +129,49 @@ export default function BookingsPage() {
                                 Reservation Date
                               </span>
                               <span className="text-xs font-semibold">
-                                26 July, 2025
+                                {moment(item.selectDate).format("MMM DD, YYYY")}
                               </span>
                             </div>
-                            <div className="flex flex-col justify-start items-start">
+                            {/* <div className="flex flex-col justify-start items-start">
                               <span className="text-xs font-normal text-black/70">
                                 Activity Date
                               </span>
                               <span className="text-xs font-semibold">
                                 26 July, 2025
                               </span>
-                            </div>
-                            <div className="flex flex-col justify-start items-start">
+                            </div> */}
+                            <div className="flex flex-col justify-start items-start col-span-2">
                               <span className="text-xs font-normal text-black/70">
                                 Pickup Location
                               </span>
-                              <span className="text-xs font-semibold">
-                                Not Added
-                              </span>
-                              <span className="text-xs font-normal text-primary hover:no-underline underline">
-                                Ask for pickup location
-                              </span>
+                              {item.pickupLocation ? (
+                                <span className="text-xs font-semibold">
+                                  {item.pickupLocation.address}
+                                </span>
+                              ) : (
+                                <>
+                                  <span className="text-xs font-semibold">
+                                    Not Added
+                                  </span>
+                                  <span className="text-xs font-normal text-primary hover:no-underline underline">
+                                    Ask for pickup location
+                                  </span>
+                                </>
+                              )}
                             </div>
                             <div className="flex flex-col justify-start items-start">
                               <span className="text-xs font-normal text-black/70">
                                 Participants
                               </span>
                               <span className="text-xs font-semibold">
-                                1 Child, 2 Adults
+                                {item.adultsCount} Adults, {item.childrenCount}{" "}
+                                Children
                               </span>
                             </div>
                           </div>
                           <div className="flex gap-2 justify-between items-center mt-4 w-full border-t pt-4">
                             <div className="md:xl md:text-[26px] font-semibold text-primary">
-                              $569.00
+                              ${item.paymentDetails.amount}
                             </div>
                             <div className="flex gap-2 justify-start items-start">
                               <Button
@@ -219,7 +184,11 @@ export default function BookingsPage() {
                                 size={"lg"}
                                 variant={"green_secondary_button"}
                               >
-                                <Link href={"/vendor/reservations/detail/1"}>
+                                <Link
+                                  href={
+                                    "/vendor/reservations/detail/" + item._id
+                                  }
+                                >
                                   View Details
                                 </Link>
                               </Button>

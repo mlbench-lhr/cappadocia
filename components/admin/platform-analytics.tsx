@@ -1,8 +1,14 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { TrendingUp, TrendingDown } from "lucide-react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { TrendingUp, TrendingDown } from "lucide-react";
 
 const analyticsData = [
   {
@@ -22,7 +28,7 @@ const analyticsData = [
     progress: 78,
   },
   {
-    title: "Active Sessions",
+    title: "active Sessions",
     value: "1,234",
     change: "-2.1%",
     trend: "down",
@@ -37,7 +43,7 @@ const analyticsData = [
     description: "Weekly active teachers",
     progress: 90,
   },
-]
+];
 
 export function PlatformAnalytics() {
   return (
@@ -52,7 +58,9 @@ export function PlatformAnalytics() {
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <p className="text-sm font-medium">{item.title}</p>
-                <p className="text-xs text-muted-foreground">{item.description}</p>
+                <p className="text-xs text-muted-foreground">
+                  {item.description}
+                </p>
               </div>
               <div className="text-right space-y-1">
                 <p className="text-2xl font-bold">{item.value}</p>
@@ -62,7 +70,11 @@ export function PlatformAnalytics() {
                   ) : (
                     <TrendingDown className="h-3 w-3 text-red-600" />
                   )}
-                  <span className={`text-xs ${item.trend === "up" ? "text-green-600" : "text-red-600"}`}>
+                  <span
+                    className={`text-xs ${
+                      item.trend === "up" ? "text-green-600" : "text-red-600"
+                    }`}
+                  >
                     {item.change}
                   </span>
                 </div>
@@ -73,5 +85,5 @@ export function PlatformAnalytics() {
         ))}
       </CardContent>
     </Card>
-  )
+  );
 }

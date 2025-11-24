@@ -17,6 +17,7 @@ import { StatusText } from "@/components/SmallComponents/StatusText";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
 import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
+import { Booking } from "@/lib/mongodb/models/booking";
 
 export type DashboardCardProps = {
   image: string;
@@ -27,46 +28,12 @@ export type DashboardCardProps = {
 export type bookingProps = {
   bookingId: string;
   title: string;
-  tourStatus: "Upcoming" | "Completed" | "Cancelled";
-  paymentStatus: "Paid" | "Refunded" | "Pending" | "Cancelled";
+  tourStatus: "upcoming" | "completed" | "cancelled";
+  paymentStatus: "paid" | "refunded" | "pending" | "cancelled";
   date: Date;
   _id: string;
 };
 
-const bookingData: bookingProps[] = [
-  {
-    bookingId: "BKG001",
-    title: "City Tour",
-    tourStatus: "Upcoming",
-    paymentStatus: "Paid",
-    date: new Date("2025-12-01"),
-    _id: "1",
-  },
-  {
-    bookingId: "BKG002",
-    title: "Mountain Hike",
-    tourStatus: "Completed",
-    paymentStatus: "Refunded",
-    date: new Date("2025-10-15"),
-    _id: "2",
-  },
-  {
-    bookingId: "BKG003",
-    title: "Beach Trip",
-    tourStatus: "Cancelled",
-    paymentStatus: "Cancelled",
-    date: new Date("2025-11-20"),
-    _id: "3",
-  },
-  {
-    bookingId: "BKG004",
-    title: "Museum Visit",
-    tourStatus: "Upcoming",
-    paymentStatus: "Pending",
-    date: new Date("2025-12-10"),
-    _id: "4",
-  },
-];
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
@@ -91,7 +58,6 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<string[]>(["all"]);
-  const [bookings, setBookings] = useState<bookingProps[]>(bookingData);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -101,16 +67,16 @@ export default function BookingsPage() {
     {
       header: "Booking ID",
       accessor: "bookingId",
-      render: (item) => <span>#{item?._id?.replace(/\D/g, "").slice(-5)}</span>,
+      render: (item) => <span>#{item?.bookingId}</span>,
     },
     {
       header: "Tour Title",
-      accessor: "title",
+      accessor: "activity.title",
     },
     {
       header: "Tour Status",
-      accessor: "tourStatus",
-      render: (item) => <StatusText status={item.tourStatus} />,
+      accessor: "status",
+      render: (item) => <StatusText status={item.status} />,
     },
     {
       header: "Status",
@@ -128,7 +94,9 @@ export default function BookingsPage() {
       accessor: "date",
       render: (item) => {
         return (
-          <span>{moment(item.date).format("MMM DD, YYYY | hh:mm A")}</span>
+          <span>
+            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+          </span>
         );
       },
     },
@@ -166,7 +134,14 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
-          {["all", "Upcoming", "Past", "Cancelled"].map((filter) => {
+          {[
+            "all",
+            "pending",
+            "upcoming",
+            "completed",
+            "cancelled",
+            "missed",
+          ].map((filter) => {
             const isActive =
               (filter === "all" && filters.includes("all")) ||
               filters.includes(filter.toLowerCase());
@@ -205,10 +180,8 @@ export default function BookingsPage() {
 
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
-          <ServerPaginationProvider<bookingProps>
-            apiEndpoint="/api/bookings" // Your API endpoint
-            setState={setBookings} // Optional: if you need bookings in state
-            presentData={bookings} // Optional: if you need bookings in state
+          <ServerPaginationProvider<Booking>
+            apiEndpoint="/api/booking/getAll" // Your API endpoint
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}

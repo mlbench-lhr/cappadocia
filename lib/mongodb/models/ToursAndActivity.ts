@@ -4,6 +4,7 @@ import mongoose, { type Document, Schema, Types } from "mongoose";
 // ----------- Interfaces -----------
 
 export interface ToursAndActivity {
+  _id: string;
   vendor: Types.ObjectId;
   title: string;
   category?: "Tour" | "Activity";
@@ -16,9 +17,10 @@ export interface ToursAndActivity {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  status: "Pending Admin Approval" | "Active" | "Rejected" | "Upcoming";
+  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
+      _id: string;
       startDate: Date;
       endDate: Date;
       adultPrice: number;
@@ -45,9 +47,10 @@ export interface ToursAndActivityWithVendor {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  status: "Pending Admin Approval" | "Active" | "Rejected" | "Upcoming";
+  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
+      _id: string;
       startDate: Date;
       endDate: Date;
       adultPrice: number;
@@ -78,8 +81,8 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     category: { type: String },
     status: {
       type: String,
-      enum: ["Pending Admin Approval", "Active", "Rejected", "Upcoming"],
-      default: "Pending Admin Approval",
+      enum: ["pending Admin Approval", "active", "rejected", "upcoming"],
+      default: "pending Admin Approval",
     },
     description: { type: String },
     uploads: { type: [String], default: [] },
@@ -92,6 +95,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     duration: { type: Number, required: true },
     slots: [
       {
+        _id: { type: Schema.Types.ObjectId, auto: true },
         startDate: { type: Date, required: true },
         endDate: { type: Date, required: true },
         adultPrice: { type: Number, required: true },

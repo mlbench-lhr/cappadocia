@@ -34,7 +34,7 @@ export default function ImageSlider() {
   };
 
   return (
-    <div className="h-[360px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
+    <div className="h-[380px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
       {/* Slider Images */}
       {slides.map((slide, index) => (
         <Image
@@ -43,7 +43,7 @@ export default function ImageSlider() {
           src={slide}
           width={0}
           height={360}
-          className={`w-full h-[360px] absolute top-0 left-0 object-cover object-bottom transition-opacity duration-700 ${
+          className={`w-full h-[380px] absolute top-0 left-0 object-cover object-bottom transition-opacity duration-700 ${
             index === currentSlide ? "opacity-100" : "opacity-0"
           }`}
         />
