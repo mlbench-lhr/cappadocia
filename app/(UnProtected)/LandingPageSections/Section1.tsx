@@ -162,7 +162,7 @@ export default function Section1() {
               {slides[currentSlide].subtitle}
             </h2>
             <Button asChild variant={"main_green_button"} className="mt-2">
-              <Link href="/dashboard">Get Started</Link>
+              <Link href="/explore">Get Started</Link>
             </Button>
           </div>
 

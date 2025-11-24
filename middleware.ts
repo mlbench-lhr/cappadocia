@@ -71,7 +71,7 @@ export async function middleware(request: NextRequest) {
           ? "/admin/dashboard"
           : user.role === "vendor"
           ? "/vendor/dashboard"
-          : "/dashboard",
+          : "/explore",
         request.url
       )
     );
@@ -95,7 +95,7 @@ export async function middleware(request: NextRequest) {
   if (user) {
     // user trying to access admin or vendor
     if (user.role === "user" && (isAdmin || isVendor)) {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/explore", request.url));
     }
 
     // vendor trying to access admin

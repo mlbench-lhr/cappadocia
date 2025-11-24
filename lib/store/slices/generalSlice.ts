@@ -45,10 +45,7 @@ const generalSlice = createSlice({
     ) => {
       state.activitySearch = action.payload;
     },
-    setActivityFilterDate: (
-      state,
-      action: PayloadAction<NonNullable<GeneralState["activityFilterDate"]>>
-    ) => {
+    setActivityFilterDate: (state, action: PayloadAction<Date | undefined>) => {
       state.activityFilterDate = action.payload;
     },
     updateProfileStepNext: (state) => {

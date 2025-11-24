@@ -22,7 +22,7 @@ import ImageSlider from "./ImageSlider";
 import { ExploreCappadocia } from "./ExploreCappadocia";
 
 export type DashboardCardProps = {
-  image: any;
+  image: React.ReactNode;
   title: string;
   description: string;
 };
@@ -106,37 +106,6 @@ const upComingReservationsData: UpComingReservationsProps[] = [
     bookingId: "TRX-47012",
     status: "pending",
     _id: "3",
-  },
-];
-
-const exploreData: exploreProps[] = [
-  {
-    image: "/userDashboard/img8.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img9.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
   },
 ];
 
