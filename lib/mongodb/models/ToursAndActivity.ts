@@ -65,6 +65,7 @@ export interface ToursAndActivityWithVendor {
     reason?: string;
   };
   vendor: {
+    _id: string;
     avatar: string;
     vendorDetails: VendorDetails;
   };

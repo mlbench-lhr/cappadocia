@@ -80,12 +80,18 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full flex justify-between items-center">
-              <ProfileBadge
-                size="medium"
-                title="SkyView Balloon Tours"
-                subTitle={"TÜRSAB Number: " + 324234}
-                image="/userDashboard/img2.png"
-              />
+              <Link href={`/explore/vendor/detail/${data.vendor._id}`}>
+                <ProfileBadge
+                  isTitleLink={true}
+                  size="medium"
+                  title={data?.vendor?.vendorDetails?.companyName}
+                  subTitle={
+                    "TÜRSAB Number: " +
+                    data?.vendor?.vendorDetails?.tursabNumber
+                  }
+                  image={data?.vendor?.avatar || "/placeholderDp.png"}
+                />
+              </Link>
               <div className="drop-shadow-lg w-fit h-fit">
                 <FavoriteButton _id={id} />
               </div>
@@ -112,7 +118,7 @@ export default function BookingsPage() {
                   <div className="w-full flex-col flex justify-start items-start gap-5">
                     <ProfileBadge
                       size="custom"
-                      title="SkyView Balloon Tours"
+                      title={data?.vendor?.vendorDetails?.companyName || ""}
                       subTitle={
                         "TÜRSAB Number: " +
                         data?.vendor?.vendorDetails?.tursabNumber

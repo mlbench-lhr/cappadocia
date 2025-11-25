@@ -80,7 +80,16 @@ export default function BookingsPage() {
     <BasicStructureWithName
       name="Booking Details"
       showBackOption
-      rightSideComponent={<DownloadInvoiceButton />}
+      rightSideComponent={
+        <div className="flex justify-start items-center gap-2">
+          <Button size={"lg"} variant={"green_secondary_button"}>
+            <Link href={"/explore/detail/" + data.activity._id}>
+              View Tour Details
+            </Link>
+          </Button>
+          <DownloadInvoiceButton />
+        </div>
+      }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName
@@ -187,7 +196,9 @@ export default function BookingsPage() {
                                   "TÜRSAB Number: " +
                                   data.vendor.vendorDetails.tursabNumber
                                 }
-                                image={data.vendor.avatar}
+                                image={
+                                  data.vendor.avatar || "/placeholderDp.png"
+                                }
                               />
                             </div>
                             <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">

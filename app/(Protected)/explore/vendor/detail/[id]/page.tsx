@@ -17,6 +17,11 @@ import {
 import AddressLocationSelector, { LocationData } from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
+import { User } from "@/lib/types/auth";
+import { useParams } from "next/navigation";
+import axios from "axios";
+import { VendorDetailsType } from "@/lib/types/vendor";
+import { timeSince } from "@/lib/helper/timeFunctions";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -25,11 +30,36 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
   const [location1, setLocation1] = useState<LocationData>({
     address: "1600 Amphitheatre Parkway, Mountain View, CA",
     coordinates: { lat: 37.4224764, lng: -122.0842499 },
   });
+  const [data, setData] = useState<VendorDetailsType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data?.vendor?.vendorDetails?.address-----", data);
+
+  const { id }: { id: string } = useParams();
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/vendors/detail/${id}`);
+        console.log("response----", response);
+
+        if (response.data?.user) {
+          setData(response.data?.user);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+
+  if (!data) {
+    return null;
+  }
 
   return (
     <BasicStructureWithName name="Vendor Profile" showBackOption>
@@ -37,18 +67,18 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full overflow-hidden h-[320px] relative">
-              <LightboxProvider images={["/userDashboard/vcimg.png"]}>
+              <LightboxProvider images={["/coverPicPlaceholder.png"]}>
                 <Image
-                  src={"/userDashboard/vcimg.png"}
+                  src={"/coverPicPlaceholder.png"}
                   alt=""
                   width={100}
                   height={100}
                   className="w-full h-[280px] object-cover object-center rounded-[10px]"
                 />
               </LightboxProvider>
-              <LightboxProvider images={["/userDashboard/img2.png"]}>
+              <LightboxProvider images={[data.avatar || "/placeholderDp.png"]}>
                 <Image
-                  src={"/userDashboard/img2.png"}
+                  src={data.avatar || "/placeholderDp.png"}
                   alt=""
                   width={100}
                   height={100}
@@ -59,10 +89,10 @@ export default function BookingsPage() {
             <div className="w-full flex flex-col md:flex-row justify-between items-start -mt-10 sm:-mt-8 md:mt-3 lg:-mt-8 pb-4 gap-3 md:gap-0">
               <div className="flex flex-col justify-center items-start ps-[110px] sm:ps-[140px] w-full md:ps-0 lg:ps-[230px]">
                 <h2 className="text-lg sm:text-xl md:text-[26px] font-medium ">
-                  Adventure Tours Co.
+                  {data.vendorDetails.companyName}
                 </h2>
                 <h2 className="text-xs sm:text-sm md:text-base font-medium text-black/70">
-                  TÜRSAB Number: 12345
+                  TÜRSAB Number: {data.vendorDetails.tursabNumber}
                 </h2>
               </div>
               <Button
@@ -74,13 +104,17 @@ export default function BookingsPage() {
             </div>
             <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3.5">
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">12</h2>
+                <h2 className="text-2xl md:text-[37px] font-medium ">
+                  {data.activeTours}
+                </h2>
                 <h2 className="text-sm md:text-base font-medium ">
                   active Tours
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">412</h2>
+                <h2 className="text-2xl md:text-[37px] font-medium ">
+                  {data.totalBookings}
+                </h2>
                 <h2 className="text-sm md:text-base font-medium ">
                   Total Bookings
                 </h2>
@@ -92,9 +126,11 @@ export default function BookingsPage() {
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">8</h2>
+                <h2 className="text-2xl md:text-[37px] font-medium ">
+                  {timeSince(data.createdAt).value}
+                </h2>
                 <h2 className="text-sm md:text-base font-medium ">
-                  Years active
+                  {timeSince(data.createdAt).unit} active
                 </h2>
               </div>
             </div>
@@ -102,16 +138,7 @@ export default function BookingsPage() {
               <div className="col-span-1 md:col-span-3 flex flex-col justify-start items-start gap-3.5">
                 <BoxProviderWithName name="About Us" className="text-base ">
                   <div className="text-sm md:text-base text-black/50 font-normal w-full">
-                    Our mission is to provide safe, enjoyable, and memorable
-                    travel experiences. With over 15 years of experience, we
-                    have served more than 10,000 happy travelers.We are a
-                    licensed and registered business with years of experience in
-                    the travel and tourism industry. Our services are designed
-                    for travelers who value professionalism, transparency, and
-                    reliability.we focus on delivering the best customer
-                    satisfaction. From the moment you book with us until the end
-                    of your journey, we ensure a smooth and enjoyable
-                    experience.
+                    {data.vendorDetails.aboutUs}
                   </div>
                 </BoxProviderWithName>
                 <BoxProviderWithName
@@ -119,9 +146,9 @@ export default function BookingsPage() {
                   className="text-base flex-1 "
                 >
                   <div className="text-sm md:text-base text-black/50 font-normal w-full flex-col flex justify-start items-start gap-3.5">
-                    <span>English</span>
-                    <span>Chinese</span>
-                    <span>Turkish</span>
+                    {data.vendorDetails.languages.map((item, index) => (
+                      <span key={index}>{item}</span>
+                    ))}
                   </div>
                 </BoxProviderWithName>
               </div>
@@ -134,23 +161,23 @@ export default function BookingsPage() {
                     <ProfileBadge
                       size="custom"
                       title="Phone"
-                      subTitle={"+90 384 123 4567"}
+                      subTitle={data.phoneNumber}
                       icon={<PhoneIcon color="rgba(0, 0, 0, 0.5)" />}
                     />
                     <ProfileBadge
                       size="custom"
                       title="Email"
-                      subTitle={"info@adventuretours.com"}
+                      subTitle={data.email}
                       icon={<MailIcon color="rgba(0, 0, 0, 0.5)" />}
                     />
                     <ProfileBadge
                       size="custom"
                       title="Location"
-                      subTitle={"Cappadocia,Turkey"}
+                      subTitle={data.vendorDetails.address.address}
                       icon={<LocationIcon color="rgba(0, 0, 0, 0.5)" />}
                     />
                     <AddressLocationSelector
-                      value={location1}
+                      value={data.vendorDetails.address}
                       onChange={(data) => {
                         setLocation1(data);
                       }}
@@ -164,7 +191,7 @@ export default function BookingsPage() {
               </div>
             </div>
             <BoxProviderWithName name="Gallery" className=" mt-4">
-              <ImageGallery imagesParam={["/landing page/img 7.png"]} />
+              <ImageGallery imagesParam={data.latestUploads} />
             </BoxProviderWithName>
             <BoxProviderWithName
               name="Reviews"

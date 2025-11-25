@@ -16,7 +16,7 @@ export default function DeadlinePicker({
 }: {
   date: Date | undefined;
   setDate: any;
-  onRemove: any;
+  onRemove?: any;
 }) {
   return (
     <div className="flex flex-col gap-[10px] w-full relative">

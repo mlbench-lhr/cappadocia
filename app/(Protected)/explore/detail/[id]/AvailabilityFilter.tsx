@@ -113,7 +113,7 @@ export const AvailabilityFilter = () => {
             loading={loading}
             loadingText="Checking..."
             disabled={!selectedDate || !selectedLanguage || loading}
-            className="h-[37px]"
+            className="h-[37px] w-full"
           >
             Check Availability
           </Button>

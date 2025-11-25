@@ -64,7 +64,7 @@ export const ExploreCappadocia = () => {
                     "TÜRSAB Number: " +
                     item?.vendor?.vendorDetails?.tursabNumber
                   }
-                  image={item?.vendor?.avatar || "/userDashboard/img2.png"}
+                  image={item?.vendor?.avatar || "/placeholderDp.png"}
                 />
                 <span className="text-base font-semibold text-black line-clamp-1">
                   {item.title}

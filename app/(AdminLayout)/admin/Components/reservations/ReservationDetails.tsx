@@ -199,7 +199,7 @@ const ReservationDetails: React.FC = () => {
                           "TÜRSAB Number: " +
                           data.vendor.vendorDetails.tursabNumber
                         }
-                        image={data.vendor.avatar}
+                        image={data.vendor.avatar || "/placeholderDp.png"}
                       />
                     </div>
                     <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">

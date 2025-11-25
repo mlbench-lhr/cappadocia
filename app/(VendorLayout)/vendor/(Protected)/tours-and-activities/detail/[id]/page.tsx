@@ -132,7 +132,7 @@ export default function BookingsPage() {
                   <div className="w-full flex-col flex justify-start items-start gap-5">
                     <ProfileBadge
                       size="custom"
-                      title="SkyView Balloon Tours"
+                      title={data?.vendor?.vendorDetails?.companyName || ""}
                       subTitle={
                         "TÜRSAB Number: " +
                         data?.vendor?.vendorDetails?.tursabNumber

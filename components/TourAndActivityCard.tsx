@@ -49,7 +49,7 @@ export const TourAndActivityCard = ({
               subTitle={
                 "TÜRSAB Number: " + item?.vendor?.vendorDetails?.tursabNumber
               }
-              image={item?.vendor?.avatar || "/userDashboard/img2.png"}
+              image={item?.vendor?.avatar || "/placeholderDp.png"}
             />
             <Link
               href={`/explore/detail/${item._id}`}

@@ -190,7 +190,7 @@ export default function BookingsPage() {
                     subTitle={
                       "TÜRSAB Number: " + data.vendor.vendorDetails.tursabNumber
                     }
-                    image={data.vendor.avatar}
+                    image={data.vendor.avatar || "/placeholderDp.png"}
                   />
                   <div className="w-fit flex justify-start items-center gap-1">
                     <StarIcon />
