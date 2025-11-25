@@ -1,5 +1,7 @@
 import connectDB from "@/lib/mongodb/connection";
 import Blog from "@/lib/mongodb/models/Blog";
+import Booking from "@/lib/mongodb/models/booking";
+import User from "@/lib/mongodb/models/User";
 import Visits from "@/lib/mongodb/models/Visits";
 
 export async function GET() {
@@ -97,6 +99,67 @@ export async function GET() {
       total: currentBlogsCount,
       percentageChange: Math.abs(Number(blogsChange.toFixed(2))),
       incremented: currentBlogsCount >= lastBlogsCount,
+    };
+    // ----------- USERS STATS -----------
+    const currentMonthUsers = await User.countDocuments({
+      createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
+    });
+
+    const lastMonthUsers = await User.countDocuments({
+      createdAt: { $gte: startOfLastMonth, $lt: startOfCurrentMonth },
+    });
+
+    const usersChange =
+      lastMonthUsers === 0
+        ? 100
+        : ((currentMonthUsers - lastMonthUsers) / lastMonthUsers) * 100;
+
+    summary["users"] = {
+      total: currentMonthUsers,
+      percentageChange: Math.abs(Number(usersChange.toFixed(2))),
+      incremented: currentMonthUsers >= lastMonthUsers,
+    };
+    // ----------- VENDORS STATS -----------
+    const currentMonthVendors = await User.countDocuments({
+      role: "vendor",
+      createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
+    });
+
+    const lastMonthVendors = await User.countDocuments({
+      role: "vendor",
+      createdAt: { $gte: startOfLastMonth, $lt: startOfCurrentMonth },
+    });
+
+    const vendorsChange =
+      lastMonthVendors === 0
+        ? 100
+        : ((currentMonthVendors - lastMonthVendors) / lastMonthVendors) * 100;
+
+    summary["vendors"] = {
+      total: currentMonthVendors,
+      percentageChange: Math.abs(Number(vendorsChange.toFixed(2))),
+      incremented: currentMonthVendors >= lastMonthVendors,
+    };
+
+    // ----------- BOOKINGS STATS -----------
+    const currentMonthBookings = await Booking.countDocuments({
+      createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
+    });
+
+    const lastMonthBookings = await Booking.countDocuments({
+      createdAt: { $gte: startOfLastMonth, $lt: startOfCurrentMonth },
+    });
+
+    const bookingsChange =
+      lastMonthBookings === 0
+        ? 100
+        : ((currentMonthBookings - lastMonthBookings) / lastMonthBookings) *
+          100;
+
+    summary["bookings"] = {
+      total: currentMonthBookings,
+      percentageChange: Math.abs(Number(bookingsChange.toFixed(2))),
+      incremented: currentMonthBookings >= lastMonthBookings,
     };
 
     // ----------- RETURN RESPONSE -----------

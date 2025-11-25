@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import moment from "moment";
+import ReservationsListSkeleton from "@/components/Skeletons/ReservationsListSkeleton";
 export type DashboardCardProps = {
   image: string;
   title: string;
@@ -36,8 +37,8 @@ export type bookingProps = {
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
-    {[...Array(7)].map((_, i) => (
-      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+    {[...Array(4)].map((_, i) => (
+      <ReservationsListSkeleton />
     ))}
   </div>
 );
@@ -132,14 +133,6 @@ export default function BookingsPage() {
                                 {moment(item.selectDate).format("MMM DD, YYYY")}
                               </span>
                             </div>
-                            {/* <div className="flex flex-col justify-start items-start">
-                              <span className="text-xs font-normal text-black/70">
-                                Activity Date
-                              </span>
-                              <span className="text-xs font-semibold">
-                                26 July, 2025
-                              </span>
-                            </div> */}
                             <div className="flex flex-col justify-start items-start col-span-2">
                               <span className="text-xs font-normal text-black/70">
                                 Pickup Location

@@ -34,7 +34,7 @@ export const UpcomingReservations = () => {
   }, []);
 
   return (
-    <BoxProviderWithName name="upcoming Reservations">
+    <BoxProviderWithName name="Upcoming Reservations">
       <div className="w-full space-y-3">
         {loading
           ? [...Array(2)].map((item, index) => (
