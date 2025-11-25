@@ -17,6 +17,7 @@ import { useParams, useRouter } from "next/navigation";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import axios from "axios";
 import moment from "moment";
+import BookingPaymentPageSkeleton from "@/components/Skeletons/BookingPaymentPageSkeleton";
 
 export type DashboardCardProps = {
   image: string;
@@ -98,8 +99,8 @@ export default function BookingsPage() {
     }
   };
 
-  if (!data) {
-    return null;
+  if (!data || loading) {
+    return <BookingPaymentPageSkeleton />;
   }
 
   return (
@@ -271,9 +272,8 @@ export default function BookingsPage() {
               variant={"main_green_button"}
               className="w-full"
               onClick={() => {
-                router.push("/bookings");
+                router.push("/bookings/bookingConfirmation/" + id);
               }}
-              asChild
             >
               Reserve Booking
             </Button>

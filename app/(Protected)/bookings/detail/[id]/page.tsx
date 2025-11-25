@@ -76,7 +76,7 @@ export default function BookingsPage() {
               View Tour Details
             </Link>
           </Button>
-          <DownloadInvoiceButton />
+          <DownloadInvoiceButton bookingId={data?._id} />
         </div>
       }
     >

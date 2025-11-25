@@ -317,7 +317,7 @@ const InvoicePDF = ({ data }: { data?: InvoicePopulated }) => {
                 </View>
                 <View style={styles.field25}>
                   <Text style={styles.label}>Email</Text>
-                  <Text style={styles.value}>info@skyadventures.com</Text>
+                  <Text style={styles.value}>{data?.booking.email}</Text>
                 </View>
               </View>
             </View>

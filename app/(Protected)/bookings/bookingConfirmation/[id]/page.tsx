@@ -2,7 +2,7 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import Image from "next/image";
@@ -20,15 +20,43 @@ import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import DownloadInvoiceButton from "@/app/(Protected)/invoices/DownloadButton";
 import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
+import { useParams } from "next/navigation";
+import axios from "axios";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import BookingConfirmPageSkeleton from "@/components/Skeletons/BookingConfirmPageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
-
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+  const [data, setData] = useState<BookingWithPopulatedData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data-----", data);
 
+  const { id }: { id: string } = useParams();
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/booking/detail/${id}`);
+        console.log("response----", response.data);
+
+        if (response.data) {
+          setData(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+  if (loading) {
+    return <BookingConfirmPageSkeleton />;
+  }
   return (
     <BasicStructureWithName
       name="Booking Details"
@@ -44,14 +72,14 @@ export default function BookingsPage() {
                   <div className="w-full md:w-[360px]">
                     <TextInputComponent
                       label="Booking ID:"
-                      placeholder="434124"
+                      placeholder={data?.bookingId}
                     />
                   </div>
                   <div className="flex gap-2 items-center justify-start">
                     <span className="text-base font-normal">
                       Payment Status:
                     </span>
-                    <StatusBadge status="paid" />
+                    <StatusBadge status={data?.paymentStatus || ""} />
                   </div>
                   <h3 className="text-[18px] font-semibold">QR Code</h3>
                   <div className="w-[430px] h-[350px] flex justify-center items-center">
@@ -67,7 +95,7 @@ export default function BookingsPage() {
                     Show this QR code at the tour start point for check-in.
                   </span>
                   <span className="text-[14px] font-medium text-primary">
-                    12tsNYRjzZ3LcLyEvn4XJCB4FV12GbWU
+                    {data?._id}
                   </span>
                   <div className="flex justify-start items-center gap-2">
                     <Copy />
@@ -81,14 +109,22 @@ export default function BookingsPage() {
                       <div className="w-full flex flex-col gap-3 justify-between items-center">
                         <div className="w-full flex justify-between items-center">
                           <Link
-                            href={`/vendor/detail/1`}
+                            href={`/vendor/detail/${data?.vendor._id}`}
                             className="w-[calc(100%-100px)]"
                           >
                             <ProfileBadge
                               size="custom"
-                              title="SkyView Balloon Tours"
-                              subTitle={"TÜRSAB Number: " + 1232}
-                              image="/userDashboard/img2.png"
+                              isTitleLink={true}
+                              title={
+                                data?.vendor?.vendorDetails?.companyName || ""
+                              }
+                              subTitle={
+                                "TÜRSAB Number: " +
+                                data?.vendor?.vendorDetails?.tursabNumber
+                              }
+                              image={
+                                data?.vendor?.avatar || "/placeholderDp.png"
+                              }
                               extraComponent={
                                 <div className="w-fit flex justify-start items-center gap-1">
                                   <StarIcon />
@@ -123,12 +159,14 @@ export default function BookingsPage() {
                         </span>
                         <IconAndTextTab2
                           icon={<PhoneIcon />}
-                          text={`+90 384 123 4567`}
+                          text={
+                            data?.vendor.vendorDetails.contactPhoneNumber || ""
+                          }
                           textClasses="text-black/70"
                         />
                         <IconAndTextTab2
                           icon={<MailIcon />}
-                          text={`info@skyviewballoon.com`}
+                          text={data?.vendor.vendorDetails.businessEmail || ""}
                           textClasses="text-black/70"
                         />
                       </div>
