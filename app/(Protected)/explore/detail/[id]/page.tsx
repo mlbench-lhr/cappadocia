@@ -44,10 +44,6 @@ export default function BookingsPage() {
       </div>
     );
   };
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [checkAvailabilityToggle, setCheckAvailabilityToggle] =
@@ -236,9 +232,6 @@ export default function BookingsPage() {
                 <div className="w-full col-span-1">
                   <AddressLocationSelector
                     value={data?.vendor?.vendorDetails?.address}
-                    onChange={(data) => {
-                      setLocation1(data);
-                    }}
                     readOnly={true}
                     label="Enter Your Business Address"
                     placeholder="Type address or click on map"

@@ -67,11 +67,6 @@ const ReservationDetails: React.FC = () => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
-
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   console.log("data-----", data);
@@ -235,9 +230,6 @@ const ReservationDetails: React.FC = () => {
                   {data.pickupLocation && (
                     <AddressLocationSelector
                       value={data.pickupLocation as LocationData}
-                      onChange={(data) => {
-                        setLocation1(data);
-                      }}
                       readOnly={true}
                       label="Enter Your Business Address"
                       className=" w-full h-[188px] rounded-xl "

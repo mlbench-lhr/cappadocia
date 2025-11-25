@@ -184,14 +184,18 @@ export default function BookingsPage() {
             <BoxProviderWithName textClasses=" text-[18px] font-semibold ">
               <div className="w-full flex justify-start items-start flex-col">
                 <div className="w-full flex justify-between items-center">
-                  <ProfileBadge
-                    size="large"
-                    title={data.vendor.vendorDetails.companyName}
-                    subTitle={
-                      "TÜRSAB Number: " + data.vendor.vendorDetails.tursabNumber
-                    }
-                    image={data.vendor.avatar || "/placeholderDp.png"}
-                  />
+                  <Link href={`/explore/vendor/detail/${data.vendor._id}`}>
+                    <ProfileBadge
+                      isTitleLink={true}
+                      size="large"
+                      title={data?.vendor?.vendorDetails?.companyName}
+                      subTitle={
+                        "TÜRSAB Number: " +
+                        data?.vendor?.vendorDetails?.tursabNumber
+                      }
+                      image={data?.vendor?.avatar || "/placeholderDp.png"}
+                    />
+                  </Link>
                   <div className="w-fit flex justify-start items-center gap-1">
                     <StarIcon />
                     <StarIcon />

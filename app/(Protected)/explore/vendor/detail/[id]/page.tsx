@@ -14,14 +14,14 @@ import {
   PhoneIcon,
   MailIcon,
 } from "@/public/allIcons/page";
-import AddressLocationSelector, { LocationData } from "@/components/map";
+import AddressLocationSelector from "@/components/map";
 import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
-import { User } from "@/lib/types/auth";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { VendorDetailsType } from "@/lib/types/vendor";
 import { timeSince } from "@/lib/helper/timeFunctions";
+import VendorProfileSkeleton from "@/components/Skeletons/VendorProfileSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -30,10 +30,7 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
+
   const [data, setData] = useState<VendorDetailsType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   console.log("data?.vendor?.vendorDetails?.address-----", data);
@@ -57,8 +54,8 @@ export default function BookingsPage() {
     getData();
   }, []);
 
-  if (!data) {
-    return null;
+  if (!data || loading) {
+    return <VendorProfileSkeleton />;
   }
 
   return (
@@ -178,9 +175,6 @@ export default function BookingsPage() {
                     />
                     <AddressLocationSelector
                       value={data.vendorDetails.address}
-                      onChange={(data) => {
-                        setLocation1(data);
-                      }}
                       readOnly={true}
                       label="Enter Your Business Address"
                       className=" w-full h-[188px] rounded-xl "

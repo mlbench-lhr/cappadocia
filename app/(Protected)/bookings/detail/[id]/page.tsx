@@ -39,11 +39,6 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
-
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   console.log("data-----", data);
@@ -66,13 +61,6 @@ export default function BookingsPage() {
     };
     getData();
   }, []);
-  const RightLabel = () => {
-    return (
-      <span className="text-[#008EFF] text-base font-normal">
-        Tour Status: upcoming
-      </span>
-    );
-  };
 
   if (!data || loading) {
     return <BookingPageSkeleton />;
@@ -95,7 +83,11 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName
           name={"Booking Information / #" + data?.bookingId}
-          rightSideComponent={RightLabel}
+          rightSideComponent={
+            <span className="text-[#008EFF] text-base font-normal capitalize">
+              Tour Status: {data.status}
+            </span>
+          }
         >
           <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
             <BoxProviderWithName noBorder={true} className="!border !px-3.5">
@@ -170,7 +162,7 @@ export default function BookingsPage() {
                       Show this QR code at the tour start point for check-in.
                     </span>
                     <span className="text-[14px] font-medium text-primary">
-                      12tsNYRjzZ3LcLyEvn4XJCB4FV12GbWU
+                      {data._id}
                     </span>
                     <div className="flex justify-start items-center gap-2">
                       <Copy />
@@ -190,17 +182,24 @@ export default function BookingsPage() {
                         <div className="w-full flex flex-col gap-3 justify-between items-center">
                           <div className="w-full flex justify-between items-center">
                             <div className="w-[calc(100%-100px)]">
-                              <ProfileBadge
-                                size="large"
-                                title={data.vendor.vendorDetails.companyName}
-                                subTitle={
-                                  "TÜRSAB Number: " +
-                                  data.vendor.vendorDetails.tursabNumber
-                                }
-                                image={
-                                  data.vendor.avatar || "/placeholderDp.png"
-                                }
-                              />
+                              <Link
+                                href={`/explore/vendor/detail/${data.vendor._id}`}
+                              >
+                                <ProfileBadge
+                                  isTitleLink={true}
+                                  size="large"
+                                  title={
+                                    data?.vendor?.vendorDetails?.companyName
+                                  }
+                                  subTitle={
+                                    "TÜRSAB Number: " +
+                                    data?.vendor?.vendorDetails?.tursabNumber
+                                  }
+                                  image={
+                                    data?.vendor?.avatar || "/placeholderDp.png"
+                                  }
+                                />
+                              </Link>
                             </div>
                             <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">
                               <IconAndTextTab2
@@ -243,9 +242,6 @@ export default function BookingsPage() {
                           {data.pickupLocation && (
                             <AddressLocationSelector
                               value={data.pickupLocation as LocationData}
-                              onChange={(data) => {
-                                setLocation1(data);
-                              }}
                               readOnly={true}
                               label="Enter Your Business Address"
                               className=" w-full h-[188px] rounded-xl "

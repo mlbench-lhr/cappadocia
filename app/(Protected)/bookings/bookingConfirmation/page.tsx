@@ -7,36 +7,18 @@ import { BasicStructureWithName } from "@/components/providers/BasicStructureWit
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import Image from "next/image";
 import {
-  ClockIcon,
-  BookingIcon,
-  PeopleIcon,
   LocationIcon,
   PhoneIcon,
   MailIcon,
   StarIcon,
 } from "@/public/allIcons/page";
-import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import Link from "next/link";
-import {
-  IconAndTextTab,
-  IconAndTextTab2,
-} from "@/components/SmallComponents/IconAndTextTab";
-import {
-  Copy,
-  Forward,
-  Locate,
-  LocateIcon,
-  Mail,
-  Phone,
-  PhoneCallIcon,
-  Share,
-} from "lucide-react";
+import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
+import { Copy, Forward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import { Textarea } from "@/components/ui/textarea";
 import DownloadInvoiceButton from "@/app/(Protected)/invoices/DownloadButton";
-import InputComponent from "@/components/InputComponent";
 import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
 
 export default function BookingsPage() {
@@ -46,24 +28,6 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
-  const RightLabel = () => {
-    return (
-      <span className="text-[#008EFF] text-base font-normal">
-        Tour Status: upcoming
-      </span>
-    );
-  };
-  const item = {
-    image: "/userDashboard/img3.png",
-    title: "Cappadocia balloons flying at sunrise",
-    date: new Date("2024-05-15T11:00:00"),
-    adultCount: 3,
-    childCount: 3,
-    bookingId: "TRX-47012",
-    status: "paid",
-    _id: "1",
-  };
 
   return (
     <BasicStructureWithName
