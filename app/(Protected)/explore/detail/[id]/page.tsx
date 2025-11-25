@@ -95,7 +95,7 @@ export default function BookingsPage() {
               </div>
             </div>
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
-              Blue Tour – Hidden Cappadocia
+              {data.title}
             </h1>
             <ImageGallery imagesParam={data?.uploads} />
             <BoxProviderWithName

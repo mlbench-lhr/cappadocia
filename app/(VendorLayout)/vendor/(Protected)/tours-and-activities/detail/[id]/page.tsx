@@ -108,7 +108,7 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
-              Blue Tour – Hidden Cappadocia
+              {data?.title}
             </h1>
             <ImageGallery imagesParam={data?.uploads || []} />
             <BoxProviderWithName

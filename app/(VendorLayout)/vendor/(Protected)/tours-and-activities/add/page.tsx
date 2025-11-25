@@ -298,7 +298,7 @@ export default function BookingsPage() {
                   type="file"
                   accept=".jpg,.jpeg,.png,.svg"
                   onChange={handleFileSelect}
-                  disabled={isUploading || toursState.uploads.length >= 4}
+                  disabled={isUploading || toursState.uploads.length >= 10}
                   className="hidden"
                   id="document-upload"
                   multiple
