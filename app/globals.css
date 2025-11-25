@@ -157,7 +157,6 @@ html {
 
 .green-secondary-button {
   display: flex;
-  height: 46px;
   padding: var(--Components-Button-Spacing-Y, 14px)
     var(--Components-Button-Spacing-X, 16px);
   justify-content: center;
@@ -168,7 +167,6 @@ html {
   border: 1px solid var(--Schemes-Primary-Container, #b32053);
   color: var(--Schemes-Primary-Container, #b32053);
   text-align: center;
-  font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: 24px; /* 150% */

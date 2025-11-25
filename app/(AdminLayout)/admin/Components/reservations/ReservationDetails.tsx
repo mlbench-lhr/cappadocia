@@ -11,6 +11,12 @@ import {
   LocationIcon,
   MailIcon,
   PhoneIcon,
+  PeopleIcon,
+  BookingIcon,
+  ClockIcon2,
+  LocationIcon2,
+  PricePerPerson,
+  TotalPrice,
 } from "@/public/allIcons/page";
 import AddressLocationSelector, { LocationData } from "@/components/map";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
@@ -149,31 +155,31 @@ const ReservationDetails: React.FC = () => {
                 )}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
                 text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<BookingIcon size="14" color="rgba(0, 0, 0, 0.5)" />}
                 text={`Booking ID: #${data?.bookingId}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<LocationIcon size="14" color="rgba(0, 0, 0, 0.5)" />}
                 text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<ClockIcon2 color="rgba(0, 0, 0, 0.5)" />}
                 text={`Duration: ${data?.activity?.duration} minutes`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<LocationIcon2 color="rgba(0, 0, 0, 0.5)" />}
                 text={`Meeting Point: ${data?.pickupLocation?.address}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<PricePerPerson color="rgba(0, 0, 0, 0.5)" />}
                 text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<TotalPrice color="rgba(0, 0, 0, 0.5)" />}
                 text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
               />
             </div>
