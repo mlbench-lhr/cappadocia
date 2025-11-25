@@ -7,8 +7,14 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import axios from "axios";
+import LandingTourCardSkeleton from "@/components/Skeletons/LandingTourCardSkeleton";
+import { TourAndActivityCardSkeleton } from "@/components/Skeletons/TourAndActivityCardSkeleton";
 
-export default function ExploreTours() {
+export default function ExploreTours({
+  type = "both",
+}: {
+  type: "both" | "Tour" | "Activity";
+}) {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   useEffect(() => {
@@ -38,22 +44,22 @@ export default function ExploreTours() {
     getData();
   }, []);
 
-  if (!tours) {
-    return null;
-  }
-
   return (
     <BoxProviderWithName
       className="!py-0"
       noBorder={true}
       name="Popular Tours"
-      rightSideLink={"/explore/tours"}
+      rightSideLink={type === "both" ? "/explore/tours" : undefined}
       rightSideLabel="View All Tours"
     >
       <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-        {tours.map((item, index) => (
-          <TourAndActivityCard item={item} key={index} />
-        ))}
+        {loading
+          ? [0, 1, 2, 3]?.map((item) => (
+              <TourAndActivityCardSkeleton key={item} />
+            ))
+          : tours?.map((item, index) => (
+              <TourAndActivityCard item={item} key={index} />
+            ))}
       </div>
     </BoxProviderWithName>
   );

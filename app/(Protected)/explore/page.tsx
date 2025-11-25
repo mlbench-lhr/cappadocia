@@ -371,8 +371,12 @@ export default function ExplorePage({
         </div>
         <BoxProviderWithName className="">
           <div className="w-full space-y-0">
-            {(type === "both" || type === "Tour") && <ExploreTours />}
-            {(type === "both" || type === "Activity") && <ExploreActivities />}
+            {(type === "both" || type === "Tour") && (
+              <ExploreTours type={type} />
+            )}
+            {(type === "both" || type === "Activity") && (
+              <ExploreActivities type={type} />
+            )}
           </div>
         </BoxProviderWithName>
       </div>

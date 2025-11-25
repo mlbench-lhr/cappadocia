@@ -23,6 +23,7 @@ import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
 
 export interface UserResponse {
   id: string;
@@ -102,7 +103,7 @@ export default function BookingsPage() {
   }, []);
 
   if (loading) {
-    return <BasicStructureWithName name="">Loading....</BasicStructureWithName>;
+    return <BookingPageSkeleton />;
   }
 
   return (

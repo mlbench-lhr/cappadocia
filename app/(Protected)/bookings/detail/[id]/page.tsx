@@ -29,6 +29,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import Link from "next/link";
+import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -73,8 +74,8 @@ export default function BookingsPage() {
     );
   };
 
-  if (!data) {
-    return null;
+  if (!data || loading) {
+    return <BookingPageSkeleton />;
   }
   return (
     <BasicStructureWithName

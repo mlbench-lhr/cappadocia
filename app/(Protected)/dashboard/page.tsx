@@ -20,6 +20,7 @@ import {
 } from "@/public/allIcons/page";
 import ImageSlider from "./ImageSlider";
 import { ExploreCappadocia } from "./ExploreCappadocia";
+import { UpcomingReservations } from "./UpcomingReservations";
 
 export type DashboardCardProps = {
   image: React.ReactNode;
@@ -165,70 +166,7 @@ export default function DashboardPage() {
           <ImageSlider />
         </div>
         <div className="col-span-16 xl:col-span-7 space-y-2">
-          <BoxProviderWithName name="upcoming Reservations">
-            <div className="w-full space-y-3">
-              {upComingReservationsData.map((item, index) => (
-                <BoxProviderWithName
-                  key={index}
-                  noBorder={true}
-                  className="!border !px-3.5"
-                >
-                  <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
-                    <Image
-                      alt=""
-                      src={item.image}
-                      width={120}
-                      height={120}
-                      className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center"
-                    />
-                    <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
-                      <h1 className="text-base font-semibold text-black leading-tight line-clamp-1">
-                        {item.title}
-                      </h1>
-                      <div className="flex justify-start items-center gap-1">
-                        <ClockIcon color="rgba(0, 0, 0, 0.5)" />
-                        <span className="">
-                          {moment(item.date).format("MMM DD, YYYY | hh:mm A")}
-                        </span>
-                      </div>
-                      <div className="flex justify-start items-center gap-1">
-                        <PeopleIcon color="rgba(0, 0, 0, 0.5)" />
-                        <span className="">
-                          Participants:{" "}
-                          {item.adultCount && (
-                            <>
-                              {item.adultCount}{" "}
-                              {item.adultCount > 1 ? "Adults" : "Adult"}
-                            </>
-                          )}
-                          {item.adultCount && item.childCount && ", "}
-                          {item.childCount && (
-                            <>
-                              {item.childCount}{" "}
-                              {item.childCount > 1 ? "Children" : "Child"}
-                            </>
-                          )}
-                        </span>
-                      </div>
-                      <div className="flex justify-start items-center gap-1">
-                        <BookingIcon color="rgba(0, 0, 0, 0.5)" size="15" />
-                        <span className="">Booking ID: #{item.bookingId} </span>
-                      </div>
-                      <div className="w-full flex justify-between items-center mt-2">
-                        <StatusBadge status={item.status} />
-                        <Link
-                          href={`/explore/detail/${item._id}`}
-                          className="text-primary underline hover:no-underline text-xs font-normal"
-                        >
-                          View Details
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </BoxProviderWithName>
-              ))}
-            </div>
-          </BoxProviderWithName>
+          <UpcomingReservations />
           <ExploreCappadocia />
         </div>
       </div>

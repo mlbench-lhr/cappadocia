@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Toaster } from "sonner";
 import { ReduxProvider } from "@/components/providers/redux-provider";
+import LoadingScreen from "@/components/Skeletons/LoadingScreen";
 
 export const metadata: Metadata = {
   title: "Cappadocia",
@@ -27,7 +28,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense
+          fallback={
+            <div>
+              <LoadingScreen />
+            </div>
+          }
+        >
           <ReduxProvider>
             <AuthProvider>
               {children}

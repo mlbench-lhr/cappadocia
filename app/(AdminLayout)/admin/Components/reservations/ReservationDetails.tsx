@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,10 +11,8 @@ import {
   LocationIcon,
   MailIcon,
   PhoneIcon,
-  StarIcon,
 } from "@/public/allIcons/page";
 import AddressLocationSelector, { LocationData } from "@/components/map";
-import { Textarea } from "@/components/ui/textarea";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 
@@ -60,6 +56,7 @@ import { BookingWithPopulatedData } from "@/lib/types/booking";
 import moment from "moment";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
+import AdminReservationPageSkeleton from "@/components/Skeletons/AdminReservationPageSkeleton";
 
 // Main App Component
 const ReservationDetails: React.FC = () => {
@@ -98,8 +95,8 @@ const ReservationDetails: React.FC = () => {
     getData();
   }, []);
 
-  if (!data) {
-    return null;
+  if (!data || loading) {
+    return <AdminReservationPageSkeleton />;
   }
 
   return (

@@ -28,6 +28,7 @@ import { AlternativeOptions } from "./AlternativeOptions";
 import { AvailabilityFilter } from "./AvailabilityFilter";
 import Link from "next/link";
 import { FavoriteButton } from "@/components/SmallComponents/FavoriteButton";
+import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -71,8 +72,9 @@ export default function BookingsPage() {
     };
     getData();
   }, []);
-  if (!data) {
-    return null;
+
+  if (!data || loading) {
+    return <ExplorePageSkeleton />;
   }
   return (
     <BasicStructureWithName name="Details" showBackOption>

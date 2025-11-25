@@ -1,6 +1,7 @@
 "use client";
 import AddressLocationSelector, { LocationData } from "@/components/map";
 import RejectVendorDialog from "@/components/RejectVendorDialog";
+import VendorDetailsSkeleton from "@/components/Skeletons/VendorDetailsSkeleton";
 import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
 import Image from "next/image";
@@ -58,8 +59,8 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
     router.back();
   };
 
-  if (loading) {
-    return <div>Loading....</div>;
+  if (!data || loading) {
+    return <VendorDetailsSkeleton />;
   }
 
   return (

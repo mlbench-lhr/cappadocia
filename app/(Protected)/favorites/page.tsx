@@ -12,6 +12,7 @@ import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
+import { TourAndActivityCardSkeleton } from "@/components/Skeletons/TourAndActivityCardSkeleton";
 
 export type DashboardCardProps = {
   image: string;
@@ -21,9 +22,9 @@ export type DashboardCardProps = {
 
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
-  <div className="w-full space-y-4 animate-pulse">
-    {[...Array(7)].map((_, i) => (
-      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+  <div className="w-full space-y-3 grid grid-cols-12 gap-3">
+    {[...Array(4)].map((_, i) => (
+      <TourAndActivityCardSkeleton key={i} />
     ))}
   </div>
 );

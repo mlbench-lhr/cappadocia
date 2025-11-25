@@ -24,6 +24,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -90,7 +91,7 @@ export default function BookingsPage() {
   };
 
   if (loading) {
-    return <BasicStructureWithName name="">Loading....</BasicStructureWithName>;
+    return <ExplorePageSkeleton />;
   }
 
   return (
