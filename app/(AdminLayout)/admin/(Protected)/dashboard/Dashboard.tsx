@@ -377,10 +377,10 @@ const Dashboard: React.FC = () => {
           <StatCard
             icon={<Users color="#B32053" />}
             title="Total Users"
-            value={overview?.blogs?.total}
-            trend={overview?.blogs?.percentageChange}
-            trendColorVar={overview?.blogs?.incremented ? "#B32053" : "#BA1A1A"}
-            lineColorVar={overview?.blogs?.incremented ? "#B32053" : "#BA1A1A"}
+            value={overview?.users?.total}
+            trend={overview?.users?.percentageChange}
+            trendColorVar={overview?.users?.incremented ? "#B32053" : "#BA1A1A"}
+            lineColorVar={overview?.users?.incremented ? "#B32053" : "#BA1A1A"}
             points={[3]}
             isLoading={loading}
           />
@@ -402,20 +402,28 @@ const Dashboard: React.FC = () => {
               </svg>
             }
             title="Total Booking"
-            value={overview?.blog?.total}
-            trend={overview?.blog?.percentageChange}
-            trendColorVar={overview?.blog?.incremented ? "#B32053" : "#BA1A1A"}
-            lineColorVar={overview?.blog?.incremented ? "#B32053" : "#BA1A1A"}
+            value={overview?.bookings?.total}
+            trend={overview?.bookings?.percentageChange}
+            trendColorVar={
+              overview?.bookings?.incremented ? "#B32053" : "#BA1A1A"
+            }
+            lineColorVar={
+              overview?.bookings?.incremented ? "#B32053" : "#BA1A1A"
+            }
             points={[3]}
             isLoading={loading}
           />
           <StatCard
             icon={<UserCog color="#B32053" />}
             title="Total Vendors"
-            value={overview?.app?.total}
-            trend={overview?.app?.percentageChange}
-            trendColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}
-            lineColorVar={overview?.app?.incremented ? "#B32053" : "#BA1A1A"}
+            value={overview?.vendors?.total}
+            trend={overview?.vendors?.percentageChange}
+            trendColorVar={
+              overview?.vendors?.incremented ? "#B32053" : "#BA1A1A"
+            }
+            lineColorVar={
+              overview?.vendors?.incremented ? "#B32053" : "#BA1A1A"
+            }
             points={[3]}
             isLoading={loading}
           />

@@ -14,6 +14,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import moment from "moment";
 import { percentage } from "@/lib/helper/smallHelpers";
+import ReservationPageSkeleton from "@/components/Skeletons/ReservationPageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -48,7 +49,7 @@ export default function BookingsPage() {
   }, []);
 
   if (!data) {
-    return null;
+    return <ReservationPageSkeleton />;
   }
 
   return (

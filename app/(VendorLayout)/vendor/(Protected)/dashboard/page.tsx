@@ -1,11 +1,9 @@
 "use client";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import {
@@ -15,18 +13,14 @@ import {
   StarIcon,
   TourIcon,
 } from "@/public/allIcons/page";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
 import { ChartAreaGradient } from "./Graph";
 import Link from "next/link";
+import axios from "axios";
+import { UpcomingReservations } from "./UpcomingReservations";
 
 export type DashboardCardProps = {
   image: React.ReactNode;
-  title: string;
+  title: number | string;
   description: string;
 };
 
@@ -55,29 +49,6 @@ export type exploreProps = {
     image: string;
   };
 };
-
-const dashboardCardData: DashboardCardProps[] = [
-  {
-    image: <BookingIcon color="white" />,
-    title: "5",
-    description: "Total Bookings",
-  },
-  {
-    image: <TourIcon color="white" />,
-    title: "4",
-    description: "upcoming Trips",
-  },
-  {
-    image: <DollarIcon color="white" />,
-    title: "$1,250",
-    description: "Payments Done",
-  },
-  {
-    image: <PaymentIcon2 color="white" />,
-    title: "$150",
-    description: "pending Payments",
-  },
-];
 
 const upComingReservationsData: UpComingReservationsProps[] = [
   {
@@ -132,44 +103,53 @@ const upComingReservationsData: UpComingReservationsProps[] = [
   },
 ];
 
-const exploreData: exploreProps[] = [
-  {
-    image: "/userDashboard/img8.png",
-    title: "Sunset ATV Safari Tour",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-  {
-    image: "/userDashboard/img9.png",
-    title: "Sunrise Hot Air Balloon Ride",
-    rating: 4.5,
-    groupSize: 20,
-    price: 465,
-    pickupAvailable: true,
-    _id: "0",
-    vendorDetails: {
-      image: "/userDashboard/img8.png",
-      title: "SkyView Balloon Tours",
-      tursabNumber: 12345,
-    },
-  },
-];
-
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
+  const vendorData = useAppSelector((s) => s.auth.user);
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const [data, setData] = useState({
+    totalBookings: 0,
+    upcomingTrips: 0,
+    paymentsDone: 0,
+    pendingPayments: 0,
+  });
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      let response = await axios.get("/api/vendor/dashboard");
+      setData(response.data);
+    };
+    getData();
+  }, []);
+
+  const dashboardCardData: DashboardCardProps[] = useMemo(() => {
+    return [
+      {
+        image: <BookingIcon color="white" />,
+        title: data.totalBookings,
+        description: "Total Bookings",
+      },
+      {
+        image: <TourIcon color="white" />,
+        title: data.upcomingTrips,
+        description: "upcoming Trips",
+      },
+      {
+        image: <DollarIcon color="white" />,
+        title: data.paymentsDone,
+        description: "Payments Done",
+      },
+      {
+        image: <PaymentIcon2 color="white" />,
+        title: data.pendingPayments,
+        description: "pending Payments",
+      },
+    ];
+  }, [data.totalBookings, vendorData?.vendorDetails?.paymentInfo?.currency]);
 
   return (
     <BasicStructureWithName name="Dashboard">
@@ -195,23 +175,7 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-          <BoxProviderWithName
-            className="flex-1"
-            name="Total Revenue"
-            rightSideComponent={
-              <div className="flex justify-start items-center gap-2">
-                <span className="text-[20px] font-medium">$120k</span>
-                <span className="text-[13px] font-medium bg-primary rounded-[45px] w-[55px] h-[25px] text-white flex justify-center items-center">
-                  +10%
-                </span>
-              </div>
-            }
-            hFull={true}
-          >
-            <div className="h-full flex flex-col justify-center items-start gap-4 relative w-full overflow-hidden">
-              <ChartAreaGradient />
-            </div>
-          </BoxProviderWithName>
+          <ChartAreaGradient />
         </div>
         <div className="col-span-16 xl:col-span-7 space-y-2">
           <BoxProviderWithName
@@ -258,100 +222,7 @@ export default function DashboardPage() {
           </BoxProviderWithName>
         </div>
       </div>
-      <div className="grid grid-cols-16 w-full mt-4 h-fit">
-        <div className="col-span-16 space-y-2">
-          <BoxProviderWithName
-            leftSideComponent={
-              <div className="flex justify-start items-center gap-2">
-                <span className="text-base font-semibold">Reservations</span>
-                <Select>
-                  <SelectTrigger className="w-full" style={{ height: "30px" }}>
-                    Today
-                  </SelectTrigger>
-                  <SelectContent className="w-full">
-                    {["Today", "This Week", "This Month"]?.map((item) => (
-                      <SelectItem key={item} value={item as string}>
-                        {item}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            }
-          >
-            <div className="w-full space-y-3">
-              <BoxProviderWithName
-                leftSideComponent={
-                  <ProfileBadge
-                    title="John D."
-                    subTitle="Apr 10, 2024"
-                    image="/userDashboard/cimg.png"
-                    size="medium"
-                  />
-                }
-                rightSideComponent={
-                  <div className="md:xl md:text-[26px] font-semibold text-primary">
-                    $569.00
-                  </div>
-                }
-                noBorder={true}
-                className="!px-0"
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 mt-2 gap-y-2 items-center">
-                  <div className="flex flex-col justify-start items-start">
-                    <span className="text-xs font-normal text-black/70">
-                      Tour Title
-                    </span>
-                    <span className="text-xs font-semibold">
-                      Sunset ATV Safari Tour
-                    </span>
-                  </div>
-                  <div className="flex flex-col justify-start items-start">
-                    <span className="text-xs font-normal text-black/70">
-                      Booking ID:
-                    </span>
-                    <span className="text-xs font-semibold">#CT-98213 </span>
-                  </div>
-                  <div className="flex flex-col justify-start items-start">
-                    <span className="text-xs font-normal text-black/70">
-                      Reservation Date
-                    </span>
-                    <span className="text-xs font-semibold">26 July, 2025</span>
-                  </div>
-                  <div className="flex flex-col justify-start items-start">
-                    <span className="text-xs font-normal text-black/70">
-                      Activity Date
-                    </span>
-                    <span className="text-xs font-semibold">26 July, 2025</span>
-                  </div>
-                  <div className="flex flex-col justify-start items-start">
-                    <span className="text-xs font-normal text-black/70">
-                      Pickup Location
-                    </span>
-                    <span className="text-xs font-semibold">Not Added</span>
-                    <span className="text-xs font-normal text-primary hover:no-underline underline">
-                      Ask for pickup location
-                    </span>
-                  </div>
-                  <div className="flex flex-col justify-start items-start">
-                    <span className="text-xs font-normal text-black/70">
-                      Participants
-                    </span>
-                    <span className="text-xs font-semibold">
-                      1 Child, 2 Adults
-                    </span>
-                  </div>
-                  <div className="flex flex-col justify-start items-start mt-4">
-                    <Button size={"lg"} variant={"green_secondary_button"}>
-                      View All Reservations
-                    </Button>
-                  </div>
-                </div>
-              </BoxProviderWithName>
-            </div>
-          </BoxProviderWithName>
-        </div>
-      </div>
+      <UpcomingReservations />
     </BasicStructureWithName>
   );
 }

@@ -7,6 +7,7 @@ import TourCard from "@/components/landingPage/landingPageTourCard";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setDisplayExploreItems } from "@/lib/store/slices/generalSlice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import LandingTourCardSkeleton from "@/components/Skeletons/LandingTourCardSkeleton";
 
 export default function Section2() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -45,9 +46,6 @@ export default function Section2() {
   };
 
   console.log("toursAndActivity---", displayExploreItems);
-  if (!displayExploreItems) {
-    return null;
-  }
 
   return (
     <div className="w-full h-fit">
@@ -83,22 +81,26 @@ export default function Section2() {
                 ))}
               </div>
             </div>
-            <button
-              onClick={handlePrev}
-              disabled={currentSlide === 0}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="w-5 h-5 text-gray-700" />
-            </button>
-            <button
-              onClick={handleNext}
-              disabled={currentSlide === displayExploreItems.length - 1}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-700" />
-            </button>
+            {displayExploreItems && (
+              <>
+                <button
+                  onClick={handlePrev}
+                  disabled={currentSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={currentSlide === displayExploreItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
             <div className="flex justify-center gap-2 mt-4">
               {displayExploreItems?.map((_, index) => (
                 <button
@@ -114,9 +116,13 @@ export default function Section2() {
           </div>
         </div>
         <div className="hidden md:grid w-full grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-          {displayExploreItems?.map((item, index) => (
-            <TourCard key={index} {...item} />
-          ))}
+          {loading
+            ? [0, 1, 2, 3]?.map((item) => (
+                <LandingTourCardSkeleton key={item} />
+              ))
+            : displayExploreItems?.map((item, index) => (
+                <TourCard key={index} {...item} />
+              ))}
         </div>
       </div>
     </div>

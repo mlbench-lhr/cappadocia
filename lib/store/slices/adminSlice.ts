@@ -10,6 +10,9 @@ export interface VisitSummaryResponse {
   app: VisitSummaryItem; // App visits summary
   blog: VisitSummaryItem; // Blog page visits summary
   blogs: VisitSummaryItem; // All blogs combined summary (or per blog if extended)
+  bookings: VisitSummaryItem; // All blogs combined summary (or per blog if extended)
+  users: VisitSummaryItem; // All blogs combined summary (or per blog if extended)
+  vendors: VisitSummaryItem; // All blogs combined summary (or per blog if extended)
 }
 
 interface BlogData {
@@ -34,6 +37,21 @@ const initialState: AdminState = {
       incremented: false,
     },
     blogs: {
+      total: 0,
+      percentageChange: 0,
+      incremented: false,
+    },
+    bookings: {
+      total: 0,
+      percentageChange: 0,
+      incremented: false,
+    },
+    users: {
+      total: 0,
+      percentageChange: 0,
+      incremented: false,
+    },
+    vendors: {
       total: 0,
       percentageChange: 0,
       incremented: false,

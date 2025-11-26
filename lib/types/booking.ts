@@ -10,6 +10,7 @@ export interface BookingWithPopulatedData {
   slotId: Types.ObjectId;
   activity: ToursAndActivity;
   vendor: {
+    _id: string;
     avatar: string;
     vendorDetails: VendorDetails;
   };

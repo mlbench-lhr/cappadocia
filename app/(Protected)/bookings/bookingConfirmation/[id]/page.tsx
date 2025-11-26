@@ -2,69 +2,98 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import Image from "next/image";
 import {
-  ClockIcon,
-  BookingIcon,
-  PeopleIcon,
   LocationIcon,
   PhoneIcon,
   MailIcon,
   StarIcon,
 } from "@/public/allIcons/page";
-import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import Link from "next/link";
-import {
-  IconAndTextTab,
-  IconAndTextTab2,
-} from "@/components/SmallComponents/IconAndTextTab";
-import {
-  Copy,
-  Forward,
-  Locate,
-  LocateIcon,
-  Mail,
-  Phone,
-  PhoneCallIcon,
-  Share,
-} from "lucide-react";
+import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
+import { Copy, CopyCheck, Forward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
-import { Textarea } from "@/components/ui/textarea";
 import DownloadInvoiceButton from "@/app/(Protected)/invoices/DownloadButton";
-import InputComponent from "@/components/InputComponent";
 import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
+import { useParams } from "next/navigation";
+import axios from "axios";
+import { BookingWithPopulatedData } from "@/lib/types/booking";
+import BookingConfirmPageSkeleton from "@/components/Skeletons/BookingConfirmPageSkeleton";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
-
+  const [isCopied, setIsCopied] = useState(false);
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+  const [data, setData] = useState<BookingWithPopulatedData | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  console.log("data-----", data);
 
-  const RightLabel = () => {
-    return (
-      <span className="text-[#008EFF] text-base font-normal">
-        Tour Status: upcoming
-      </span>
-    );
+  const { id }: { id: string } = useParams();
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true);
+        let response = await axios.get(`/api/booking/detail/${id}`);
+        console.log("response----", response.data);
+
+        if (response.data) {
+          setData(response.data);
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log("err---", error);
+      }
+    };
+    getData();
+  }, []);
+  const handleShare = async () => {
+    if (!data?._id) {
+      return;
+    }
+    const qrLink = `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data._id}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Reservation Details",
+          text: "View reservation details",
+          url: qrLink,
+        });
+      } catch (err) {
+        console.log("Share cancelled or failed:", err);
+      }
+    } else {
+      // fallback for desktop browsers
+      navigator.clipboard.writeText(qrLink);
+      alert("Link copied to clipboard!");
+    }
   };
-  const item = {
-    image: "/userDashboard/img3.png",
-    title: "Cappadocia balloons flying at sunrise",
-    date: new Date("2024-05-15T11:00:00"),
-    adultCount: 3,
-    childCount: 3,
-    bookingId: "TRX-47012",
-    status: "paid",
-    _id: "1",
+  const handleCopy = async () => {
+    if (!data?._id) {
+      return;
+    }
+    const qrLink = `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data._id}`;
+    try {
+      await navigator.clipboard.writeText(qrLink);
+      setIsCopied(true);
+    } catch (err) {
+      console.log("Copy failed:", err);
+    }
   };
 
+  if (loading) {
+    return <BookingConfirmPageSkeleton />;
+  }
   return (
     <BasicStructureWithName
       name="Booking Details"
@@ -80,34 +109,39 @@ export default function BookingsPage() {
                   <div className="w-full md:w-[360px]">
                     <TextInputComponent
                       label="Booking ID:"
-                      placeholder="434124"
+                      placeholder={data?.bookingId}
                     />
                   </div>
                   <div className="flex gap-2 items-center justify-start">
                     <span className="text-base font-normal">
                       Payment Status:
                     </span>
-                    <StatusBadge status="paid" />
+                    <StatusBadge status={data?.paymentStatus || ""} />
                   </div>
                   <h3 className="text-[18px] font-semibold">QR Code</h3>
                   <div className="w-[430px] h-[350px] flex justify-center items-center">
-                    <Image
-                      src={"/userDashboard/qrCode.png"}
-                      alt=""
-                      width={430}
-                      height={350}
-                      className="w-[430px] h-[350px] object-contain"
+                    <QRCodeSVG
+                      value={`${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data?._id}`}
+                      size={180}
+                      className="w-[430px] h-[350px] object-contain p-2"
                     />
                   </div>
                   <span className="text-[14px] font-normal">
                     Show this QR code at the tour start point for check-in.
                   </span>
                   <span className="text-[14px] font-medium text-primary">
-                    12tsNYRjzZ3LcLyEvn4XJCB4FV12GbWU
+                    {data?._id}
                   </span>
                   <div className="flex justify-start items-center gap-2">
-                    <Copy />
-                    <Forward />
+                    {isCopied ? (
+                      <CopyCheck
+                        onClick={handleCopy}
+                        className="cursor-pointer"
+                      />
+                    ) : (
+                      <Copy onClick={handleCopy} className="cursor-pointer" />
+                    )}
+                    <Forward onClick={handleShare} className="cursor-pointer" />
                   </div>
                   <Button variant={"main_green_button"}>Pay Now</Button>
                 </div>
@@ -117,14 +151,22 @@ export default function BookingsPage() {
                       <div className="w-full flex flex-col gap-3 justify-between items-center">
                         <div className="w-full flex justify-between items-center">
                           <Link
-                            href={`/vendor/detail/1`}
+                            href={`/vendor/detail/${data?.vendor._id}`}
                             className="w-[calc(100%-100px)]"
                           >
                             <ProfileBadge
                               size="custom"
-                              title="SkyView Balloon Tours"
-                              subTitle={"TÜRSAB Number: " + 1232}
-                              image="/userDashboard/img2.png"
+                              isTitleLink={true}
+                              title={
+                                data?.vendor?.vendorDetails?.companyName || ""
+                              }
+                              subTitle={
+                                "TÜRSAB Number: " +
+                                data?.vendor?.vendorDetails?.tursabNumber
+                              }
+                              image={
+                                data?.vendor?.avatar || "/placeholderDp.png"
+                              }
                               extraComponent={
                                 <div className="w-fit flex justify-start items-center gap-1">
                                   <StarIcon />
@@ -159,12 +201,14 @@ export default function BookingsPage() {
                         </span>
                         <IconAndTextTab2
                           icon={<PhoneIcon />}
-                          text={`+90 384 123 4567`}
+                          text={
+                            data?.vendor.vendorDetails.contactPhoneNumber || ""
+                          }
                           textClasses="text-black/70"
                         />
                         <IconAndTextTab2
                           icon={<MailIcon />}
-                          text={`info@skyviewballoon.com`}
+                          text={data?.vendor.vendorDetails.businessEmail || ""}
                           textClasses="text-black/70"
                         />
                       </div>

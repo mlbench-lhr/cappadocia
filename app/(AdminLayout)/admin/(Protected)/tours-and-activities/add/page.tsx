@@ -242,14 +242,6 @@ export default function BookingsPage() {
     );
   };
 
-  const handleLanguageChange = (lang: string) => {
-    const updated = selectedLanguages.includes(lang)
-      ? selectedLanguages.filter((l) => l !== lang)
-      : [...selectedLanguages, lang];
-    setSelectedLanguages(updated);
-    setValue("languages", updated);
-  };
-
   return (
     <BasicStructureWithName name="Add Tours / Activity" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
@@ -297,7 +289,7 @@ export default function BookingsPage() {
                   type="file"
                   accept=".jpg,.jpeg,.png,.svg"
                   onChange={handleFileSelect}
-                  disabled={isUploading || toursState.uploads.length >= 4}
+                  disabled={isUploading || toursState.uploads.length >= 10}
                   className="hidden"
                   id="document-upload"
                   multiple

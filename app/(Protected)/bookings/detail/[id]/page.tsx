@@ -12,6 +12,12 @@ import {
   PhoneIcon,
   MailIcon,
   StarIcon,
+  PeopleIcon,
+  BookingIcon,
+  ClockIcon2,
+  LocationIcon2,
+  PricePerPerson,
+  TotalPrice,
 } from "@/public/allIcons/page";
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
@@ -19,7 +25,7 @@ import {
   IconAndTextTab,
   IconAndTextTab2,
 } from "@/components/SmallComponents/IconAndTextTab";
-import { Copy, Forward } from "lucide-react";
+import { Copy, CopyCheck, Forward } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { Textarea } from "@/components/ui/textarea";
@@ -29,19 +35,17 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import Link from "next/link";
+import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
 
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -65,27 +69,66 @@ export default function BookingsPage() {
     };
     getData();
   }, []);
-  const RightLabel = () => {
-    return (
-      <span className="text-[#008EFF] text-base font-normal">
-        Tour Status: upcoming
-      </span>
-    );
-  };
+  const handleShare = async () => {
+    if (!data?._id) {
+      return;
+    }
+    const qrLink = `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data._id}`;
 
-  if (!data) {
-    return null;
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Reservation Details",
+          text: "View reservation details",
+          url: qrLink,
+        });
+      } catch (err) {
+        console.log("Share cancelled or failed:", err);
+      }
+    } else {
+      // fallback for desktop browsers
+      navigator.clipboard.writeText(qrLink);
+      alert("Link copied to clipboard!");
+    }
+  };
+  const handleCopy = async () => {
+    if (!data?._id) {
+      return;
+    }
+    const qrLink = `${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data._id}`;
+    try {
+      await navigator.clipboard.writeText(qrLink);
+      setIsCopied(true);
+    } catch (err) {
+      console.log("Copy failed:", err);
+    }
+  };
+  if (!data || loading) {
+    return <BookingPageSkeleton />;
   }
   return (
     <BasicStructureWithName
       name="Booking Details"
       showBackOption
-      rightSideComponent={<DownloadInvoiceButton />}
+      rightSideComponent={
+        <div className="flex justify-start items-center gap-2">
+          <Button variant={"green_secondary_button"}>
+            <Link href={"/explore/detail/" + data.activity._id}>
+              View Tour Details
+            </Link>
+          </Button>
+          <DownloadInvoiceButton bookingId={data?._id} />
+        </div>
+      }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName
           name={"Booking Information / #" + data?.bookingId}
-          rightSideComponent={RightLabel}
+          rightSideComponent={
+            <span className="text-[#008EFF] text-base font-normal capitalize">
+              Tour Status: {data.status}
+            </span>
+          }
         >
           <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
             <BoxProviderWithName noBorder={true} className="!border !px-3.5">
@@ -109,31 +152,35 @@ export default function BookingsPage() {
                       )}`}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
                       text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={
+                        <BookingIcon size="14" color="rgba(0, 0, 0, 0.5)" />
+                      }
                       text={`Booking ID: #${data?.bookingId}`}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={
+                        <LocationIcon size="14" color="rgba(0, 0, 0, 0.5)" />
+                      }
                       text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={<ClockIcon2 color="rgba(0, 0, 0, 0.5)" />}
                       text={`Duration: ${data?.activity?.duration} minutes`}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={<LocationIcon2 color="rgba(0, 0, 0, 0.5)" />}
                       text={`Meeting Point: ${data?.pickupLocation?.address}`}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={<PricePerPerson color="rgba(0, 0, 0, 0.5)" />}
                       text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
                     />
                     <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={<TotalPrice color="rgba(0, 0, 0, 0.5)" />}
                       text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
                     />
                   </div>
@@ -148,23 +195,31 @@ export default function BookingsPage() {
                     </div>
                     <h3 className="text-[18px] font-semibold">QR Code</h3>
                     <div className="w-[430px] h-[350px] flex justify-center items-center">
-                      <Image
-                        src={"/userDashboard/qrCode.png"}
-                        alt=""
-                        width={430}
-                        height={350}
-                        className="w-[430px] h-[350px] object-contain"
+                      <QRCodeSVG
+                        value={`${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data._id}`}
+                        size={180}
+                        className="w-[430px] h-[350px] object-contain p-2"
                       />
                     </div>
                     <span className="text-[14px] font-normal">
                       Show this QR code at the tour start point for check-in.
                     </span>
                     <span className="text-[14px] font-medium text-primary">
-                      12tsNYRjzZ3LcLyEvn4XJCB4FV12GbWU
+                      {data._id}
                     </span>
                     <div className="flex justify-start items-center gap-2">
-                      <Copy />
-                      <Forward />
+                      {isCopied ? (
+                        <CopyCheck
+                          onClick={handleCopy}
+                          className="cursor-pointer"
+                        />
+                      ) : (
+                        <Copy onClick={handleCopy} className="cursor-pointer" />
+                      )}
+                      <Forward
+                        onClick={handleShare}
+                        className="cursor-pointer"
+                      />
                     </div>
                     {data.paymentStatus === "pending" && (
                       <Button variant={"main_green_button"} asChild>
@@ -180,15 +235,24 @@ export default function BookingsPage() {
                         <div className="w-full flex flex-col gap-3 justify-between items-center">
                           <div className="w-full flex justify-between items-center">
                             <div className="w-[calc(100%-100px)]">
-                              <ProfileBadge
-                                size="large"
-                                title={data.vendor.vendorDetails.companyName}
-                                subTitle={
-                                  "TÜRSAB Number: " +
-                                  data.vendor.vendorDetails.tursabNumber
-                                }
-                                image={data.vendor.avatar}
-                              />
+                              <Link
+                                href={`/explore/vendor/detail/${data.vendor._id}`}
+                              >
+                                <ProfileBadge
+                                  isTitleLink={true}
+                                  size="large"
+                                  title={
+                                    data?.vendor?.vendorDetails?.companyName
+                                  }
+                                  subTitle={
+                                    "TÜRSAB Number: " +
+                                    data?.vendor?.vendorDetails?.tursabNumber
+                                  }
+                                  image={
+                                    data?.vendor?.avatar || "/placeholderDp.png"
+                                  }
+                                />
+                              </Link>
                             </div>
                             <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">
                               <IconAndTextTab2
@@ -231,9 +295,6 @@ export default function BookingsPage() {
                           {data.pickupLocation && (
                             <AddressLocationSelector
                               value={data.pickupLocation as LocationData}
-                              onChange={(data) => {
-                                setLocation1(data);
-                              }}
                               readOnly={true}
                               label="Enter Your Business Address"
                               className=" w-full h-[188px] rounded-xl "

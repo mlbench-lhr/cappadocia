@@ -29,6 +29,7 @@ export const ProfileBadge = ({
   size = "small",
   icon,
   extraComponent,
+  isTitleLink = false,
 }: {
   image?: string;
   title: string;
@@ -36,6 +37,7 @@ export const ProfileBadge = ({
   icon?: any;
   size?: "small" | "medium" | "large" | "custom";
   extraComponent?: React.ReactNode | React.ComponentType<any>;
+  isTitleLink?: boolean;
 }) => {
   const ExtraComponent = extraComponent;
   return (
@@ -55,7 +57,11 @@ export const ProfileBadge = ({
       )}
       {icon && icon}
       <div className={`flex flex-col justify-start leading-tight items-start`}>
-        <h4 className={`${headingTextSize[size]} font-medium text-black`}>
+        <h4
+          className={`${headingTextSize[size]} ${
+            isTitleLink && "hover:underline"
+          } font-medium text-black`}
+        >
           {title}
         </h4>
         <h5

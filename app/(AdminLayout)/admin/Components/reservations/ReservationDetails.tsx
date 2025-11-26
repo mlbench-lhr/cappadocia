@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,10 +11,14 @@ import {
   LocationIcon,
   MailIcon,
   PhoneIcon,
-  StarIcon,
+  PeopleIcon,
+  BookingIcon,
+  ClockIcon2,
+  LocationIcon2,
+  PricePerPerson,
+  TotalPrice,
 } from "@/public/allIcons/page";
 import AddressLocationSelector, { LocationData } from "@/components/map";
-import { Textarea } from "@/components/ui/textarea";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 
@@ -60,6 +62,7 @@ import { BookingWithPopulatedData } from "@/lib/types/booking";
 import moment from "moment";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
+import AdminReservationPageSkeleton from "@/components/Skeletons/AdminReservationPageSkeleton";
 
 // Main App Component
 const ReservationDetails: React.FC = () => {
@@ -69,11 +72,6 @@ const ReservationDetails: React.FC = () => {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
 
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -98,8 +96,8 @@ const ReservationDetails: React.FC = () => {
     getData();
   }, []);
 
-  if (!data) {
-    return null;
+  if (!data || loading) {
+    return <AdminReservationPageSkeleton />;
   }
 
   return (
@@ -157,31 +155,31 @@ const ReservationDetails: React.FC = () => {
                 )}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
                 text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<BookingIcon size="14" color="rgba(0, 0, 0, 0.5)" />}
                 text={`Booking ID: #${data?.bookingId}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<LocationIcon size="14" color="rgba(0, 0, 0, 0.5)" />}
                 text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<ClockIcon2 color="rgba(0, 0, 0, 0.5)" />}
                 text={`Duration: ${data?.activity?.duration} minutes`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<LocationIcon2 color="rgba(0, 0, 0, 0.5)" />}
                 text={`Meeting Point: ${data?.pickupLocation?.address}`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<PricePerPerson color="rgba(0, 0, 0, 0.5)" />}
                 text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
               />
               <IconAndTextTab
-                icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                icon={<TotalPrice color="rgba(0, 0, 0, 0.5)" />}
                 text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
               />
             </div>
@@ -199,7 +197,7 @@ const ReservationDetails: React.FC = () => {
                           "TÜRSAB Number: " +
                           data.vendor.vendorDetails.tursabNumber
                         }
-                        image={data.vendor.avatar}
+                        image={data.vendor.avatar || "/placeholderDp.png"}
                       />
                     </div>
                     <div className="w-fit h-fit px-1.5 py-1 bg-secondary rounded-[10px]">
@@ -238,9 +236,6 @@ const ReservationDetails: React.FC = () => {
                   {data.pickupLocation && (
                     <AddressLocationSelector
                       value={data.pickupLocation as LocationData}
-                      onChange={(data) => {
-                        setLocation1(data);
-                      }}
                       readOnly={true}
                       label="Enter Your Business Address"
                       className=" w-full h-[188px] rounded-xl "

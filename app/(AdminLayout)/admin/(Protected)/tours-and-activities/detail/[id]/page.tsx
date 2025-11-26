@@ -24,6 +24,12 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
+import { TextAreaInputComponent } from "@/components/SmallComponents/InputComponents";
+import { Pencil } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import UpdatableImageGallery from "@/components/UpdatableImageGallery";
+import { uploadMultipleFiles } from "@/lib/utils/upload";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -40,15 +46,23 @@ export default function BookingsPage() {
       </div>
     );
   };
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
 
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
+  const [editDescription, setEditDescription] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [description, setDescription] = useState<string>("");
+  useEffect(() => {
+    setDescription(data?.description || "");
+  }, [data?.description]);
+  const [uploads, setUploads] = useState<string[]>();
+  useEffect(() => {
+    setUploads(data?.uploads || []);
+  }, [data?.uploads]);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [updateLoading, setUpdateLoading] = useState<boolean>(false);
   console.log("data?.vendor?.vendorDetails?.address-----", data);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string>("");
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -88,27 +102,119 @@ export default function BookingsPage() {
       console.log("err---", error);
     }
   };
+  const updateActivity = async (
+    data: { description: string } | { uploads: string[] }
+  ) => {
+    try {
+      setUpdateLoading(true);
+      await axios.put(`/api/toursAndActivity/update/${id}`, data);
+      setUpdateLoading(false);
+      setEditDescription(false);
+    } catch (error) {
+      console.log("err---", error);
+    }
+  };
 
   if (loading) {
-    return <BasicStructureWithName name="">Loading....</BasicStructureWithName>;
+    return <ExplorePageSkeleton />;
   }
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || !uploads) return;
+    if (uploads.length + files.length > 10) {
+      setUploadError("Maximum 10 images allowed");
+      return;
+    }
+    for (const file of Array.from(files)) {
+      if (file.size > 5 * 1024 * 1024) {
+        setUploadError("Image size should be less than 5MB.");
+        return;
+      }
+    }
+    setIsUploading(true);
+    setUploadError("");
+    try {
+      const urls = await uploadMultipleFiles(Array.from(files), "uploads");
+      setUploads(urls);
+      updateActivity({ uploads: urls });
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setUploadError("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   return (
     <BasicStructureWithName name="Details" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
-            <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
-              Blue Tour – Hidden Cappadocia
-            </h1>
-            <ImageGallery imagesParam={data?.uploads || []} />
+            <div className="w-full flex justify-between items-center">
+              <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
+                {data?.title}
+              </h1>
+              <label htmlFor="document-upload">
+                {isUploading ? (
+                  "Saving..."
+                ) : (
+                  <Pencil className="cursor-pointer" size={14} />
+                )}
+              </label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png,.svg"
+                onChange={handleFileSelect}
+                disabled={isUploading || (uploads && uploads?.length >= 10)}
+                className="hidden"
+                id="document-upload"
+                multiple
+              />
+            </div>
+            <UpdatableImageGallery
+              imagesParam={uploads || []}
+              isUploading={isUploading}
+            />
             <BoxProviderWithName
               name="Trip Description:"
               className="text-base mt-2"
+              rightSideComponent={
+                editDescription ? (
+                  <Button
+                    variant={"main_green_button"}
+                    size={"sm"}
+                    onClick={() => {
+                      updateActivity({
+                        description: description,
+                      });
+                    }}
+                    loading={updateLoading}
+                  >
+                    Save
+                  </Button>
+                ) : (
+                  <Pencil
+                    className="cursor-pointer"
+                    size={14}
+                    onClick={() => {
+                      setEditDescription(true);
+                    }}
+                  />
+                )
+              }
             >
-              <span className="text-[14px] fot-normal leading-[14px]">
-                {data?.description}
-              </span>
+              {editDescription ? (
+                <TextAreaInputComponent
+                  label={""}
+                  placeholder={"Edit the description"}
+                  value={description}
+                  onChange={setDescription}
+                />
+              ) : (
+                <span className="text-[14px] fot-normal leading-[14px]">
+                  {description}
+                </span>
+              )}
             </BoxProviderWithName>
             <BoxProviderWithName
               name="About this tour:"
@@ -120,7 +226,7 @@ export default function BookingsPage() {
                   <div className="w-full flex-col flex justify-start items-start gap-5">
                     <ProfileBadge
                       size="custom"
-                      title="SkyView Balloon Tours"
+                      title={data?.vendor?.vendorDetails?.companyName || ""}
                       subTitle={
                         "TÜRSAB Number: " +
                         data?.vendor?.vendorDetails?.tursabNumber
@@ -212,9 +318,6 @@ export default function BookingsPage() {
                   {data?.vendor?.vendorDetails?.address && (
                     <AddressLocationSelector
                       value={data?.vendor?.vendorDetails?.address}
-                      onChange={(data) => {
-                        setLocation1(data);
-                      }}
                       readOnly={true}
                       label="Enter Your Business Address"
                       placeholder="Type address or click on map"

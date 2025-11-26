@@ -12,6 +12,7 @@ import { InvoicePopulated } from "@/lib/types/invoices";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { multiply } from "@/lib/helper/smallHelpers";
+import { InvoiceDetailSkeleton } from "@/components/Skeletons/InvoiceDetailSkeleton";
 export type InvoiceData = {
   invoice: {
     invoiceNumber: string;
@@ -163,25 +164,25 @@ export default function BookingsPage() {
     };
   }, [data?.invoicesId]);
 
-  if (!data) {
-    return null;
-  }
-
   return (
     <BasicStructureWithName name="Invoice Details" showBackOption>
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
             <div className="w-full flex flex-col justify-start items-start gap-y-7 md:gap-y-7 h-fit md:h-[550px] flex-nowrap md:flex-wrap">
-              {Object.entries(invoiceData).map(([heading, textList]) => (
-                <InvoiceTextBoxes
-                  key={heading}
-                  heading={heading}
-                  textList={textList}
-                />
-              ))}
+              {loading ? (
+                <InvoiceDetailSkeleton />
+              ) : (
+                Object.entries(invoiceData).map(([heading, textList]) => (
+                  <InvoiceTextBoxes
+                    key={heading}
+                    heading={heading}
+                    textList={textList}
+                  />
+                ))
+              )}
             </div>
-            <DownloadInvoiceButton data={data} />
+            {!loading && data && <DownloadInvoiceButton data={data} />}
           </div>
         </BoxProviderWithName>
       </div>

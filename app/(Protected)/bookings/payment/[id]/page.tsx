@@ -17,6 +17,7 @@ import { useParams, useRouter } from "next/navigation";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import axios from "axios";
 import moment from "moment";
+import BookingPaymentPageSkeleton from "@/components/Skeletons/BookingPaymentPageSkeleton";
 
 export type DashboardCardProps = {
   image: string;
@@ -98,8 +99,8 @@ export default function BookingsPage() {
     }
   };
 
-  if (!data) {
-    return null;
+  if (!data || loading) {
+    return <BookingPaymentPageSkeleton />;
   }
 
   return (
@@ -184,14 +185,18 @@ export default function BookingsPage() {
             <BoxProviderWithName textClasses=" text-[18px] font-semibold ">
               <div className="w-full flex justify-start items-start flex-col">
                 <div className="w-full flex justify-between items-center">
-                  <ProfileBadge
-                    size="large"
-                    title={data.vendor.vendorDetails.companyName}
-                    subTitle={
-                      "TÜRSAB Number: " + data.vendor.vendorDetails.tursabNumber
-                    }
-                    image={data.vendor.avatar}
-                  />
+                  <Link href={`/explore/vendor/detail/${data.vendor._id}`}>
+                    <ProfileBadge
+                      isTitleLink={true}
+                      size="large"
+                      title={data?.vendor?.vendorDetails?.companyName}
+                      subTitle={
+                        "TÜRSAB Number: " +
+                        data?.vendor?.vendorDetails?.tursabNumber
+                      }
+                      image={data?.vendor?.avatar || "/placeholderDp.png"}
+                    />
+                  </Link>
                   <div className="w-fit flex justify-start items-center gap-1">
                     <StarIcon />
                     <StarIcon />
@@ -267,9 +272,8 @@ export default function BookingsPage() {
               variant={"main_green_button"}
               className="w-full"
               onClick={() => {
-                router.push("/bookings");
+                router.push("/bookings/bookingConfirmation/" + id);
               }}
-              asChild
             >
               Reserve Booking
             </Button>

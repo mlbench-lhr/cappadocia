@@ -1,121 +1,72 @@
 "use client";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
-import moment from "moment";
-import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import Link from "next/link";
 import {
   BookingIcon,
-  ClockIcon,
   DollarIcon,
   PaymentIcon2,
-  PeopleIcon,
   TourIcon,
 } from "@/public/allIcons/page";
 import ImageSlider from "./ImageSlider";
 import { ExploreCappadocia } from "./ExploreCappadocia";
+import { UpcomingReservations } from "./UpcomingReservations";
 
-export type DashboardCardProps = {
-  image: React.ReactNode;
-  title: string;
-  description: string;
-};
-
-export type UpComingReservationsProps = {
-  image: string;
-  title: string;
-  date: Date;
-  adultCount: number;
-  childCount: number;
-  bookingId: string;
-  status: "paid" | "pending";
-  _id: string;
-};
-
-export type exploreProps = {
-  image: string;
-  title: string;
-  rating: number;
-  groupSize: number;
-  price: number;
-  pickupAvailable: Boolean;
-  _id: string;
-  vendorDetails: {
-    title: string;
-    tursabNumber: number;
-    image: string;
-  };
-};
-
-const dashboardCardData: DashboardCardProps[] = [
-  {
-    image: <BookingIcon color="white" />,
-    title: "5",
-    description: "Total Bookings",
-  },
-  {
-    image: <TourIcon color="white" />,
-    title: "4",
-    description: "upcoming Trips",
-  },
-  {
-    image: <DollarIcon color="white" />,
-    title: "$1,250",
-    description: "Payments Done",
-  },
-  {
-    image: <PaymentIcon2 color="white" />,
-    title: "$150",
-    description: "pending Payments",
-  },
-];
-
-const upComingReservationsData: UpComingReservationsProps[] = [
-  {
-    image: "/userDashboard/img3.png",
-    title: "Private Cappadocia Photography Tour",
-    date: new Date("2024-05-15T11:00:00"),
-    adultCount: 3,
-    childCount: 3,
-    bookingId: "TRX-47012",
-    status: "paid",
-    _id: "1",
-  },
-  {
-    image: "/userDashboard/img4.png",
-    title: "Cappadocia Hot Air Balloon Ride",
-    date: new Date("2024-05-15T11:00:00"),
-    adultCount: 3,
-    childCount: 0,
-    bookingId: "TRX-47012",
-    status: "paid",
-    _id: "2",
-  },
-  {
-    image: "/userDashboard/img5.png",
-    title: "Sunset ATV Safari Tour",
-    date: new Date("2024-05-15T11:00:00"),
-    adultCount: 1,
-    childCount: 0,
-    bookingId: "TRX-47012",
-    status: "pending",
-    _id: "3",
-  },
-];
+import axios from "axios";
+import { DashboardCardProps } from "@/app/(VendorLayout)/vendor/(Protected)/dashboard/page";
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch();
+  const vendorData = useAppSelector((s) => s.auth.user);
   const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const [data, setData] = useState({
+    totalBookings: 0,
+    upcomingTrips: 0,
+    paymentsDone: 0,
+    pendingPayments: 0,
+  });
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+
+  useEffect(() => {
+    const getData = async () => {
+      let response = await axios.get("/api/dashboard");
+      setData(response.data);
+    };
+    getData();
+  }, []);
+
+  const dashboardCardData: DashboardCardProps[] = useMemo(() => {
+    return [
+      {
+        image: <BookingIcon color="white" />,
+        title: data.totalBookings,
+        description: "Total Bookings",
+      },
+      {
+        image: <TourIcon color="white" />,
+        title: data.upcomingTrips,
+        description: "Upcoming Trips",
+      },
+      {
+        image: <DollarIcon color="white" />,
+        title: data.paymentsDone,
+        description: "Payments Done",
+      },
+      {
+        image: <PaymentIcon2 color="white" />,
+        title: data.pendingPayments,
+        description: "Pending Payments",
+      },
+    ];
+  }, [data.totalBookings, vendorData?.vendorDetails?.paymentInfo?.currency]);
 
   return (
     <BasicStructureWithName name="Dashboard">
@@ -165,70 +116,7 @@ export default function DashboardPage() {
           <ImageSlider />
         </div>
         <div className="col-span-16 xl:col-span-7 space-y-2">
-          <BoxProviderWithName name="upcoming Reservations">
-            <div className="w-full space-y-3">
-              {upComingReservationsData.map((item, index) => (
-                <BoxProviderWithName
-                  key={index}
-                  noBorder={true}
-                  className="!border !px-3.5"
-                >
-                  <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
-                    <Image
-                      alt=""
-                      src={item.image}
-                      width={120}
-                      height={120}
-                      className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center"
-                    />
-                    <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
-                      <h1 className="text-base font-semibold text-black leading-tight line-clamp-1">
-                        {item.title}
-                      </h1>
-                      <div className="flex justify-start items-center gap-1">
-                        <ClockIcon color="rgba(0, 0, 0, 0.5)" />
-                        <span className="">
-                          {moment(item.date).format("MMM DD, YYYY | hh:mm A")}
-                        </span>
-                      </div>
-                      <div className="flex justify-start items-center gap-1">
-                        <PeopleIcon color="rgba(0, 0, 0, 0.5)" />
-                        <span className="">
-                          Participants:{" "}
-                          {item.adultCount && (
-                            <>
-                              {item.adultCount}{" "}
-                              {item.adultCount > 1 ? "Adults" : "Adult"}
-                            </>
-                          )}
-                          {item.adultCount && item.childCount && ", "}
-                          {item.childCount && (
-                            <>
-                              {item.childCount}{" "}
-                              {item.childCount > 1 ? "Children" : "Child"}
-                            </>
-                          )}
-                        </span>
-                      </div>
-                      <div className="flex justify-start items-center gap-1">
-                        <BookingIcon color="rgba(0, 0, 0, 0.5)" size="15" />
-                        <span className="">Booking ID: #{item.bookingId} </span>
-                      </div>
-                      <div className="w-full flex justify-between items-center mt-2">
-                        <StatusBadge status={item.status} />
-                        <Link
-                          href={`/explore/detail/${item._id}`}
-                          className="text-primary underline hover:no-underline text-xs font-normal"
-                        >
-                          View Details
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </BoxProviderWithName>
-              ))}
-            </div>
-          </BoxProviderWithName>
+          <UpcomingReservations />
           <ExploreCappadocia />
         </div>
       </div>

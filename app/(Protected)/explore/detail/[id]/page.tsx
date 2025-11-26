@@ -28,6 +28,7 @@ import { AlternativeOptions } from "./AlternativeOptions";
 import { AvailabilityFilter } from "./AvailabilityFilter";
 import Link from "next/link";
 import { FavoriteButton } from "@/components/SmallComponents/FavoriteButton";
+import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -43,10 +44,6 @@ export default function BookingsPage() {
       </div>
     );
   };
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [checkAvailabilityToggle, setCheckAvailabilityToggle] =
@@ -71,8 +68,9 @@ export default function BookingsPage() {
     };
     getData();
   }, []);
-  if (!data) {
-    return null;
+
+  if (!data || loading) {
+    return <ExplorePageSkeleton />;
   }
   return (
     <BasicStructureWithName name="Details" showBackOption>
@@ -80,18 +78,24 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full flex justify-between items-center">
-              <ProfileBadge
-                size="medium"
-                title="SkyView Balloon Tours"
-                subTitle={"TÜRSAB Number: " + 324234}
-                image="/userDashboard/img2.png"
-              />
+              <Link href={`/explore/vendor/detail/${data.vendor._id}`}>
+                <ProfileBadge
+                  isTitleLink={true}
+                  size="medium"
+                  title={data?.vendor?.vendorDetails?.companyName}
+                  subTitle={
+                    "TÜRSAB Number: " +
+                    data?.vendor?.vendorDetails?.tursabNumber
+                  }
+                  image={data?.vendor?.avatar || "/placeholderDp.png"}
+                />
+              </Link>
               <div className="drop-shadow-lg w-fit h-fit">
                 <FavoriteButton _id={id} />
               </div>
             </div>
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
-              Blue Tour – Hidden Cappadocia
+              {data.title}
             </h1>
             <ImageGallery imagesParam={data?.uploads} />
             <BoxProviderWithName
@@ -112,7 +116,7 @@ export default function BookingsPage() {
                   <div className="w-full flex-col flex justify-start items-start gap-5">
                     <ProfileBadge
                       size="custom"
-                      title="SkyView Balloon Tours"
+                      title={data?.vendor?.vendorDetails?.companyName || ""}
                       subTitle={
                         "TÜRSAB Number: " +
                         data?.vendor?.vendorDetails?.tursabNumber
@@ -228,9 +232,6 @@ export default function BookingsPage() {
                 <div className="w-full col-span-1">
                   <AddressLocationSelector
                     value={data?.vendor?.vendorDetails?.address}
-                    onChange={(data) => {
-                      setLocation1(data);
-                    }}
                     readOnly={true}
                     label="Enter Your Business Address"
                     placeholder="Type address or click on map"

@@ -23,6 +23,7 @@ import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
 
 export interface UserResponse {
   id: string;
@@ -73,10 +74,6 @@ export default function BookingsPage() {
       </div>
     );
   };
-  const [location1, setLocation1] = useState<LocationData>({
-    address: "1600 Amphitheatre Parkway, Mountain View, CA",
-    coordinates: { lat: 37.4224764, lng: -122.0842499 },
-  });
 
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -102,7 +99,7 @@ export default function BookingsPage() {
   }, []);
 
   if (loading) {
-    return <BasicStructureWithName name="">Loading....</BasicStructureWithName>;
+    return <BookingPageSkeleton />;
   }
 
   return (
@@ -111,7 +108,7 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
-              Blue Tour – Hidden Cappadocia
+              {data?.title}
             </h1>
             <ImageGallery imagesParam={data?.uploads || []} />
             <BoxProviderWithName
@@ -132,7 +129,7 @@ export default function BookingsPage() {
                   <div className="w-full flex-col flex justify-start items-start gap-5">
                     <ProfileBadge
                       size="custom"
-                      title="SkyView Balloon Tours"
+                      title={data?.vendor?.vendorDetails?.companyName || ""}
                       subTitle={
                         "TÜRSAB Number: " +
                         data?.vendor?.vendorDetails?.tursabNumber
@@ -223,9 +220,6 @@ export default function BookingsPage() {
                   {data?.vendor?.vendorDetails?.address && (
                     <AddressLocationSelector
                       value={data?.vendor?.vendorDetails?.address}
-                      onChange={(data) => {
-                        setLocation1(data);
-                      }}
                       readOnly={true}
                       label="Enter Your Business Address"
                       placeholder="Type address or click on map"

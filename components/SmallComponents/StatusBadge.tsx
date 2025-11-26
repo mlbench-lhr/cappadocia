@@ -1,5 +1,6 @@
 const variants: any = {
   paid: { bg: "#E7FAE3", text: "#4A9E35" },
+  upcoming: { bg: "#E7FAE3", text: "#008EFF" },
   active: { bg: "#E7FAE3", text: "#4A9E35" },
   pending: { bg: "#F8E6D4", text: "#FF862F" },
   "pending Admin Approval": { bg: "#F8E6D4", text: "#FF862F" },
