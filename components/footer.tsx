@@ -22,11 +22,11 @@ export function Footer() {
           </div>
         </div>
         <div className="w-full px-[20px] md:px-[0px] py-8 border-y-2 border-[rgba(255,255,255,0.50)] font-[400] text-[12px] flex justify-center md:justify-start gap-2 md:gap-4 items-center">
-          <span>Terms & Conditions</span>
+          <Link href={"/terms-and-conditions"}>Terms & Conditions</Link>
           <span>|</span>
-          <span>Privacy Policy</span>
+          <Link href={"/privacy-policy"}>Privacy Policy</Link>
           <span>|</span>
-          <span>KVKK Privacy</span>
+          <Link href={"/privacy-policy"}>KVKK Privacy</Link>
         </div>
         <span className="w-full px-[20px] md:px-[0px] text-base font-[400] text-white mx-auto text-center">
           © 2025 Cappadocia Platform. All rights reserved.
