@@ -4,9 +4,9 @@ export const SettingProvider = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="col-span-3 md:col-span-2 ps-0 md:ps-6 flex justify-between items-start flex-col gap-[24px] h-fit">
-      <div className="w-fit mb-0 spacey-[15px]">
-        <h1 className="text-xl md:text-2xl font-semibold text-gray-900">
+    <div className="w-full col-span-3 lg:col-span-2 p-0 lg:ps-6 flex justify-between items-start flex-col gap-[24px] h-fit">
+      <div className="w-fit">
+        <h1 className="text-base md:text-2xl font-semibold text-gray-900">
           Change Password
         </h1>
       </div>

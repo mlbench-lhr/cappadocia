@@ -65,7 +65,7 @@ export function ChangePass() {
   }
 
   return (
-    <div className="w-full md:w-[70%] h-full flex justify-between items-end flex-col">
+    <div className="w-full lg:w-[70%] h-full flex justify-between items-end flex-col">
       <div className="w-full grid grid-cols-2 gap-[20px]">
         <div className="col-span-2 w-full grid grid-cols-2 gap-[20px]">
           <div className="col-span-2  flex flex-col gap-[10px] relative">
