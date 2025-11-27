@@ -7,7 +7,7 @@ import Link from "next/link";
 export const SwitchRoles = () => {
   const pathName = usePathname();
   return (
-    <div className="relative lg:absolute top-3 lg:top-0 right-3 lg:right-0 w-full flex justify-end items-center gap-2 pt-0 lg:pt-6 pr-0 lg:pr-6">
+    <div className="role-switch-position pb-3 right-3 lg:right-0 w-full flex justify-end items-center gap-2 pt-0 lg:pt-6 pr-0 lg:pr-6">
       <div className=" flex justify-start items-center gap-2">
         <Button
           className={`border border-primary h-[44px] ${
@@ -17,10 +17,10 @@ export const SwitchRoles = () => {
           } text-black font-semibold !rounded-2xl `}
           asChild
         >
-          <Link href={"/vendor/auth/signup"}>
+          <a href={"/vendor/auth/signup"}>
             <VendorIcon2 />
             Vendor
-          </Link>
+          </a>
         </Button>
         <Button
           className={`border border-primary h-[44px] ${
@@ -30,10 +30,10 @@ export const SwitchRoles = () => {
           } text-black font-semibold !rounded-2xl `}
           asChild
         >
-          <Link href={"/auth/signup"}>
+          <a href={"/auth/signup"}>
             <TravelerIcon />
             Traveler
-          </Link>
+          </a>
         </Button>
       </div>
     </div>

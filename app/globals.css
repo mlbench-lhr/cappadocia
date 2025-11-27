@@ -1226,3 +1226,19 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+.role-switch-position {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+@media (max-width: 1520px) {
+  .role-switch-position {
+    position: relative;
+  }
+}
+@media (max-height: 880px) {
+  .role-switch-position {
+    position: relative;
+  }
+}
