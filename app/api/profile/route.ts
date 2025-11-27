@@ -163,6 +163,18 @@ export const PUT = async (req: any) => {
     if (validatedData.favorites) {
       updateData.favorites = validatedData.favorites;
     }
+    console.log("body--------------------", body);
+
+    if (body.cover) {
+      updateData.vendorDetails.cover = body.cover;
+    }
+    if (body.vendorDetails) {
+      Object.keys(body.vendorDetails).forEach((key) => {
+        updateData[`vendorDetails.${key}`] =
+          body.vendorDetails![key as keyof typeof body.vendorDetails];
+      });
+    }
+
     console.log("updateData======-------------", updateData);
 
     // Handle direct field updates

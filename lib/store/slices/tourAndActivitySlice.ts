@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Types matching your mongoose schema
 export interface Slot {
-  _id: string;
+  _id?: string;
   startDate: Date;
   endDate: Date;
   adultPrice: number;
@@ -43,7 +43,6 @@ const initialState: ToursAndActivityState = {
   duration: 0,
   slots: [
     {
-      _id: "",
       startDate: new Date("2025-02-10"),
       endDate: new Date("2025-02-15"),
       adultPrice: 120,
