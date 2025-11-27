@@ -8,7 +8,7 @@ export default function SignupPage() {
   console.log("vendorDetails----", vendorDetails);
 
   return (
-    <AuthLayoutProvider>
+    <AuthLayoutProvider isVendor={true}>
       <VendorSignUp />
     </AuthLayoutProvider>
   );

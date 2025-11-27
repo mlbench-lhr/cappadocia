@@ -201,7 +201,7 @@ export default function VerifyEmailPage() {
   }
 
   return (
-    <AuthLayoutProvider>
+    <AuthLayoutProvider isVendor={true}>
       <Card className="w-full max-w-md auth-box-shadows">
         <CardHeader className="space-y-1">
           <CardTitle className="text-center">Email Verification</CardTitle>
