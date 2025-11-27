@@ -338,21 +338,21 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
                 <span className="text-sm font-medium leading-5">
                   I have read and agree to the{" "}
                   <Link
-                    href={"/"}
+                    href={"/privacy-policy"}
                     className="text-[#B32053] underline hover:no-underline"
                   >
                     KVKK Personal Data Protection Policy{" "}
                   </Link>
                   and{" "}
                   <Link
-                    href={"/"}
+                    href={"/terms-and-conditions"}
                     className="text-[#B32053] underline hover:no-underline"
                   >
                     Terms & Conditions{" "}
                   </Link>
                   and{" "}
                   <Link
-                    href={"/"}
+                    href={"/privacy-policy"}
                     className="text-[#B32053] underline hover:no-underline"
                   >
                     Privacy Statement.
