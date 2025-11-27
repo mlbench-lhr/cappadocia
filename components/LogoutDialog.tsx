@@ -26,15 +26,15 @@ export default function LogoutDialog({
   const handleConfirm = async () => {
     await signOut();
     router.refresh();
-    if (userRole === "user") {
-      router.push("/auth/login");
-      window.location.href = "/auth/login";
+    if (userRole === "admin") {
+      router.push("/admin/auth/login");
+      window.location.href = "/admin/auth/login";
     } else if (userRole === "vendor") {
       router.push("/vendor/auth/login");
       window.location.href = "/vendor/auth/login";
     } else {
-      router.push("/admin/auth/login");
-      window.location.href = "/admin/auth/login";
+      router.push("/auth/login");
+      window.location.href = "/auth/login";
     }
   };
   return (
@@ -66,7 +66,7 @@ export default function LogoutDialog({
 
           <div className="mt-6 flex items-center justify-end w-full">
             <DialogFooter className="w-full">
-              <div className="w-full grid grid-cols-2 gap-[20px]">
+              <div className="w-full grid grid-cols-2 gap-2">
                 <DialogClose asChild>
                   <Button
                     variant="secondary_button"

@@ -3,15 +3,21 @@ import { SwitchRoles } from "@/components/SmallComponents/SwitchRoles";
 export function AuthLayoutProvider({
   children,
   showImage1 = true,
+  isVendor = false,
 }: {
   children: React.ReactNode;
   showImage1?: boolean;
+  isVendor?: boolean;
 }) {
   return (
     <div className="h-full w-full flex justify-between">
       <div
         className={`${
-          showImage1 ? "auth-bg-image-1" : "auth-bg-image-2"
+          isVendor
+            ? "auth-bg-image-3"
+            : showImage1
+            ? "auth-bg-image-1"
+            : "auth-bg-image-2"
         } hidden lg:flex w-[50%] min-h-screen max-h-full`}
       ></div>
       <div className="w-full lg:w-1/2 h-full">
