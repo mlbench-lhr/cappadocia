@@ -10,7 +10,7 @@ import type { RootState } from "@/lib/store/store";
 import pencil from "@/public/pencil.svg";
 import { closeSidebar, toggleCollapse } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
-import { LayoutDashboard, Lock, X } from "lucide-react";
+import { BadgeDollarSign, LayoutDashboard, Lock, User, X } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,6 +25,12 @@ import {
   ReviewsIcon,
   SettingsIcon,
   TourIcon,
+  StarIcon,
+  CalendarIcon,
+  PaymentIcon2,
+  PaymentIcon3,
+  ReportsIcon,
+  UserIcon,
 } from "@/public/allIcons/page";
 
 const IconClose = ({ className = "" }: { className?: string }) => (
@@ -56,29 +62,39 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     icon: ReservationIcon,
   },
   {
-    name: "Favorites",
-    link: "/favorites",
-    icon: FavoritesIcon,
-  },
-  {
     name: "Reviews",
     link: "/reviews",
-    icon: ReviewsIcon,
+    icon: StarIcon,
   },
   {
-    name: "Settings",
-    link: "/settings",
-    icon: SettingsIcon,
+    name: "Calendar",
+    link: "/calendar",
+    icon: CalendarIcon,
   },
   {
-    name: "Help",
-    link: "/help",
-    icon: HelpIcon,
+    name: "Payments",
+    link: "/payments",
+    icon: BadgeDollarSign,
+  },
+  {
+    name: "Reports",
+    link: "/reports",
+    icon: ReportsIcon,
   },
   {
     name: "Messages",
     link: "/messages",
     icon: MessageIcon,
+  },
+  {
+    name: "Profile",
+    link: "/profile",
+    icon: UserIcon,
+  },
+  {
+    name: "Settings",
+    link: "/settings",
+    icon: SettingsIcon,
   },
 ];
 
@@ -136,6 +152,7 @@ export function Sidebar() {
                 >
                   <Icon
                     color={pathname.includes(item.link) ? "#B32053" : "#6B6B6B"}
+                    size={"18"}
                   />
                   {!isCollapsed && item.name}
                 </Link>
@@ -189,6 +206,7 @@ export function Sidebar() {
                       color={
                         pathname.includes(item.link) ? "#B32053" : "#6B6B6B"
                       }
+                      size={"18"}
                     />
                     {!isCollapsed && item.name}
                   </Link>
@@ -255,6 +273,7 @@ export function Sidebar() {
                 >
                   <Icon
                     color={pathname.includes(item.link) ? "#B32053" : "#6B6B6B"}
+                    size={"18"}
                   />
                   {item.name}
                 </Link>

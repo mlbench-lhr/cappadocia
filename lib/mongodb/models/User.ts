@@ -19,6 +19,7 @@ export interface VendorDetails {
     accountHolderName: string;
     currency: string;
   };
+  cover?: string;
 }
 
 export interface IUser extends Document {
@@ -93,6 +94,7 @@ const UserSchema = new Schema<IUser>(
     profileUpdated: { type: Boolean },
     vendorDetails: {
       type: {
+        cover: { type: String },
         companyName: { type: String, required: true },
         contactPersonName: { type: String, required: true },
         businessEmail: { type: String, required: true },

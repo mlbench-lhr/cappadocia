@@ -20,6 +20,7 @@ export interface VendorDetails {
     currency: string;
   };
   agreedToTerms: boolean;
+  cover?: string;
 }
 
 interface VendorState {
