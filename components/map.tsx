@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, JSX } from "react";
 import { Locate } from "lucide-react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
+import Swal from "sweetalert2";
 
 // Extend Window interface to include google
 declare global {
@@ -39,6 +38,11 @@ declare namespace google {
       lat(): number;
       lng(): number;
     }
+    class Circle {
+      constructor(opts?: CircleOptions);
+      setMap(map: Map | null): void;
+      getBounds(): LatLngBounds;
+    }
 
     interface LatLngLiteral {
       lat: number;
@@ -56,6 +60,17 @@ declare namespace google {
       position?: LatLng | LatLngLiteral;
       draggable?: boolean;
       animation?: any;
+    }
+    interface CircleOptions {
+      strokeColor?: string;
+      strokeOpacity?: number;
+      strokeWeight?: number;
+      fillColor?: string;
+      fillOpacity?: number;
+      map?: Map;
+      center?: LatLng | LatLngLiteral;
+      radius?: number;
+      clickable: boolean;
     }
 
     interface MapMouseEvent {
@@ -106,12 +121,17 @@ interface MapInstance {
   map: google.maps.Map | null;
   marker: google.maps.Marker | null;
   autocomplete: google.maps.places.Autocomplete | null;
+  radiusCircle: google.maps.Circle | null;
 }
 
 // Location data to be stored in DB
 export interface LocationData {
   address: string;
   coordinates: LatLng | null;
+}
+export interface RadiusLimit {
+  center: LatLng; // Center point for radius restriction
+  radiusKm: number; // Radius in kilometers
 }
 
 // Component Props
@@ -122,7 +142,23 @@ interface AddressLocationSelectorProps {
   label?: string;
   placeholder?: string;
   className?: string;
+  radiusLimit?: RadiusLimit; // New prop for radius limitation
 }
+
+// Label Component
+const Label = ({ htmlFor, className, children }: any) => (
+  <label htmlFor={htmlFor} className={className}>
+    {children}
+  </label>
+);
+
+// Input Component
+const Input = ({ className, ...props }: any) => (
+  <input
+    className={`px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+    {...props}
+  />
+);
 
 export default function AddressLocationSelector({
   value,
@@ -131,6 +167,7 @@ export default function AddressLocationSelector({
   label = "Registered Business Address",
   placeholder = "Enter Your Address",
   className = " w-full h-[490px] rounded-xl ",
+  radiusLimit, // New prop
 }: AddressLocationSelectorProps): JSX.Element {
   const [mapCenter, setMapCenter] = useState<LatLng>(
     value.coordinates || { lat: 35.2271, lng: -80.8431 }
@@ -140,7 +177,28 @@ export default function AddressLocationSelector({
     map: null,
     marker: null,
     autocomplete: null,
+    radiusCircle: null,
   });
+  const calculateDistance = (point1: LatLng, point2: LatLng): number => {
+    const R = 6371; // Earth's radius in kilometers
+    const dLat = ((point2.lat - point1.lat) * Math.PI) / 180;
+    const dLon = ((point2.lng - point1.lng) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((point1.lat * Math.PI) / 180) *
+        Math.cos((point2.lat * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  // Check if a point is within the allowed radius
+  const isWithinRadius = (point: LatLng): boolean => {
+    if (!radiusLimit) return true;
+    const distance = calculateDistance(radiusLimit.center, point);
+    return distance <= radiusLimit.radiusKm;
+  };
 
   useEffect(() => {
     // Load Google Maps script
@@ -176,9 +234,10 @@ export default function AddressLocationSelector({
   const initializeMap = (): void => {
     const mapElement = document.getElementById("map");
     if (!mapElement) return;
+    const initialCenter = radiusLimit ? radiusLimit.center : mapCenter;
 
     const map = new google.maps.Map(mapElement, {
-      center: mapCenter,
+      center: initialCenter,
       zoom: value.coordinates ? 15 : 14,
       styles: [
         {
@@ -188,6 +247,23 @@ export default function AddressLocationSelector({
         },
       ],
     });
+    if (radiusLimit && !readOnly) {
+      const circle = new google.maps.Circle({
+        strokeColor: "#2563eb",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#3b82f6",
+        fillOpacity: 0.15,
+        map: map,
+        center: radiusLimit.center,
+        radius: radiusLimit.radiusKm * 1000, // Convert km to meters
+        clickable: false, // Make circle non-clickable so map clicks work
+      });
+      mapRef.current.radiusCircle = circle;
+
+      // Fit map to show the entire circle
+      map.fitBounds(circle.getBounds()!);
+    }
 
     // Add marker
     const marker = new google.maps.Marker({
@@ -205,6 +281,18 @@ export default function AddressLocationSelector({
       map.addListener("click", (e: google.maps.MapMouseEvent) => {
         if (e.latLng) {
           const newCoords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+          // Check if within radius limit
+          if (radiusLimit && !isWithinRadius(newCoords)) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: `Selected location is outside the allowed ${radiusLimit.radiusKm}km radius. Please select a location within the restricted area.`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+            return;
+          }
+
           marker.setPosition(e.latLng);
           reverseGeocode(e.latLng, newCoords);
         }
@@ -214,6 +302,21 @@ export default function AddressLocationSelector({
       marker.addListener("dragend", (e: google.maps.MapMouseEvent) => {
         if (e.latLng) {
           const newCoords = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+          // Check if within radius limit
+          if (radiusLimit && !isWithinRadius(newCoords)) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: `Marker cannot be placed outside the allowed ${radiusLimit.radiusKm}km radius. Resetting to previous position.`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            // Reset marker to previous valid position
+            marker.setPosition(value.coordinates || radiusLimit.center || null);
+            return;
+          }
+
           reverseGeocode(e.latLng, newCoords);
         }
       });
@@ -230,6 +333,23 @@ export default function AddressLocationSelector({
         autocomplete.addListener("place_changed", () => {
           const place = autocomplete.getPlace();
           if (!place.geometry || !place.geometry.location) return;
+          const newCoords = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng(),
+          };
+
+          // Check if within radius limit
+          if (radiusLimit && !isWithinRadius(newCoords)) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: `Selected address is outside the allowed ${radiusLimit.radiusKm}km radius. Please choose an address within the restricted area.`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            return;
+          }
 
           if (place.geometry.viewport) {
             map.fitBounds(place.geometry.viewport);
@@ -237,11 +357,6 @@ export default function AddressLocationSelector({
             map.setCenter(place.geometry.location);
             map.setZoom(17);
           }
-
-          const newCoords = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng(),
-          };
 
           marker.setPosition(place.geometry.location);
           if (onChange) {
@@ -280,6 +395,18 @@ export default function AddressLocationSelector({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           };
+          // Check if within radius limit
+          if (radiusLimit && !isWithinRadius(pos)) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: `Your current location is outside the allowed ${radiusLimit.radiusKm}km radius. Please select a location within the restricted area.`,
+              timer: 1500,
+              showConfirmButton: false,
+            });
+            return;
+          }
+
           setMapCenter(pos);
 
           if (mapRef.current.map && mapRef.current.marker) {
@@ -319,6 +446,11 @@ export default function AddressLocationSelector({
               className="text-[14px] font-semibold"
             >
               {label}
+              {radiusLimit && (
+                <span className="ml-2 text-xs text-blue-600 font-normal">
+                  (Limited to {radiusLimit.radiusKm}km radius)
+                </span>
+              )}
             </Label>
 
             <div className="relative">
@@ -330,7 +462,7 @@ export default function AddressLocationSelector({
                 placeholder={placeholder}
                 readOnly={readOnly}
                 disabled={readOnly}
-                className="h-[44px] bg-white"
+                className="h-[44px] bg-white w-full"
               />
               {!readOnly && (
                 <button

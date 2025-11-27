@@ -417,6 +417,10 @@ export default function BookingsPage() {
                     readOnly={false}
                     label="Location"
                     placeholder="Type address or click on map"
+                    radiusLimit={{
+                      center: { lat: 35.2271, lng: -80.8431 },
+                      radiusKm: 10,
+                    }}
                   />
                 )}
               />
