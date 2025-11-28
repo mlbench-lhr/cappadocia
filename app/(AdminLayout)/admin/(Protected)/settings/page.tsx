@@ -7,44 +7,39 @@ import Image from "next/image";
 import {
   Bell,
   ChevronRight,
+  DollarSign,
   EditIcon,
-  FileCheck,
   Lock,
   LogOut,
-  Trash,
 } from "lucide-react";
 import { SettingProvider } from "./SettingProvider";
 import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
-import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 import { EditProfile } from "./EditProfile/page";
+import { Promotions } from "./Promotions/page";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
 
   const options: {
     icons: any;
-    name:
-      | "Profile"
-      | "Change Password"
-      | "Notifications"
-      | "Terms & Conditions";
+    name: "Profile" | "Change Password" | "Promotions" | "Payment Management";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
-    { icons: Bell, name: "Notifications" },
-    { icons: FileCheck, name: "Terms & Conditions" },
+    { icons: Bell, name: "Promotions" },
+    { icons: DollarSign, name: "Payment Management" },
   ];
   const components = {
     Profile: <EditProfile />,
     "Change Password": <ChangePass />,
-    Notifications: <ChangePass />,
-    "Terms & Conditions": <Terms />,
+    Promotions: <Promotions />,
+    "Payment Management": <Terms />,
   };
 
   const [activeComp, setActiveComp] = useState<
-    "Profile" | "Change Password" | "Notifications" | "Terms & Conditions"
-  >("Profile");
+    "Profile" | "Change Password" | "Promotions" | "Payment Management"
+  >("Promotions");
 
   return (
     <div className="flex flex-col gap-[32px] justify-start items-start w-full h-fit lg:h-[calc(100vh-120px)]">
@@ -72,12 +67,12 @@ export default function App() {
                     <div
                       key={index}
                       className={`w-fit lg:w-full flex justify-between items-center ${
-                        item.name === "Notifications"
+                        item.name === "Payment Management"
                           ? "cursor-not-allowed"
                           : "cursor-pointer"
                       }`}
                       onClick={() => {
-                        item.name !== "Notifications" &&
+                        item.name !== "Payment Management" &&
                           setActiveComp(item.name);
                       }}
                     >
@@ -105,16 +100,6 @@ export default function App() {
                     >
                       <LogOut size={16} className="hidden lg:block" />
                       <div className="w-fit">Logout</div>
-                    </div>
-                  }
-                />
-                <DeleteAccountDialog
-                  triggerComponent={
-                    <div
-                      className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 cursor-pointer`}
-                    >
-                      <Trash size={16} className="hidden lg:block" />
-                      <div className="w-fit">Delete Account</div>
                     </div>
                   }
                 />
