@@ -71,7 +71,8 @@ export function LoginForm({
           icon: "success",
           title: "OTP Resent!",
           text: "A new OTP has been sent to your email.",
-          confirmButtonColor: "#22c55e",
+          timer: 1500,
+          showConfirmButton: false,
         });
       } else {
         setError(data.error || "Failed to resend OTP");
@@ -79,7 +80,8 @@ export function LoginForm({
           icon: "error",
           title: "Error",
           text: data.error || "Failed to resend OTP",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+          timer: 1500,
+          showConfirmButton: false,
         });
       }
     } catch (err) {
@@ -88,7 +90,8 @@ export function LoginForm({
         icon: "error",
         title: "Error",
         text: "Failed to resend OTP",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
   };
@@ -158,7 +161,8 @@ export function LoginForm({
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
   }, [error]);

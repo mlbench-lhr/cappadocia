@@ -133,7 +133,7 @@ export default function BookingsPage() {
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         {/* Filter buttons */}
-        <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
+        <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap capitalize">
           {[
             "all",
             "pending",

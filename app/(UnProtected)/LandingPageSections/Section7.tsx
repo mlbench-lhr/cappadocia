@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Section7() {
   return (
@@ -33,7 +34,9 @@ export default function Section7() {
               booking a hot air balloon ride, an ATV adventure, or a cultural
               day tour.
             </p>
-            {/* <Button variant={"main_green_button"}>Read more </Button> */}
+            <Button variant={"main_green_button"} asChild>
+              <Link href={"/about"}>Read more</Link>
+            </Button>
           </div>
         </div>
       </div>

@@ -83,7 +83,7 @@ export default function VendorSignupStep2({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-4">
           <Controller
             name="address"
             control={control}
@@ -112,12 +112,13 @@ export default function VendorSignupStep2({
           )}
           <Button
             variant={"main_green_button"}
-            type="submit"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
             className="w-full"
           >
             Next
           </Button>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );

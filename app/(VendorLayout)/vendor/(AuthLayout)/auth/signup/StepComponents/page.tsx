@@ -79,7 +79,8 @@ const VendorSignUp = () => {
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-        confirmButtonColor: "#22c55e",
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
   }, [error]);
@@ -103,7 +104,7 @@ const VendorSignUp = () => {
   };
 
   const handleBack = () => {
-    if (signupSteps > 1) {
+    if (signupSteps > 0) {
       dispatch(updateProfileStepBack());
     }
   };
@@ -154,10 +155,7 @@ const VendorSignUp = () => {
             className="flex justify-start items-center gap-0 w-fit"
           >
             <div
-              className={`cursor-pointer flex justify-start items-center gap-2 hover:bg-gray-100 rounded-lg`}
-              onClick={() => {
-                handleStepClick(item.name, index);
-              }}
+              className={`flex justify-start items-center gap-2 hover:bg-gray-100 rounded-lg`}
             >
               <div
                 className={`w-[20px] h-[20px] rounded-full flex justify-center items-center font-[500] text-[11px] lg:text-[16px] ${

@@ -150,6 +150,8 @@ export default function BookingsPage() {
         icon: "error",
         title: "Error",
         text: error?.response?.data?.error || "Please try again.",
+        timer: 1500,
+        showConfirmButton: false,
       });
     } finally {
       setIsSubmitting(false);

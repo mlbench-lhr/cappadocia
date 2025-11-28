@@ -34,7 +34,8 @@ const EmailForm = () => {
           icon: "success",
           title: "Success",
           text: "Email sent successfully",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+          timer: 1500,
+          showConfirmButton: false,
         });
       } else {
         const { error } = await res.json();
@@ -42,7 +43,8 @@ const EmailForm = () => {
           icon: "error",
           title: "Error",
           text: error || "Something went wrong",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+          timer: 1500,
+          showConfirmButton: false,
         });
       }
     } catch (err) {
@@ -50,7 +52,8 @@ const EmailForm = () => {
         icon: "error",
         title: "Oops...",
         text: "Something went wrong",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        timer: 1500,
+        showConfirmButton: false,
       });
     } finally {
       setLoading(false);
@@ -109,9 +112,7 @@ const EmailForm = () => {
           {...register("message", { required: "Message is required" })}
         />
         {errors.message && (
-          <span className="text-red-500 text-sm">
-            {errors.message.message}
-          </span>
+          <span className="text-red-500 text-sm">{errors.message.message}</span>
         )}
       </div>
 

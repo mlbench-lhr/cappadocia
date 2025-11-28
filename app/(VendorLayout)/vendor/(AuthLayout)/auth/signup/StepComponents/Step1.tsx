@@ -7,10 +7,13 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
 import { setVendorField } from "@/lib/store/slices/vendorSlice";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
+import { Label } from "@/components/ui/label";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 const step1Schema = z
   .object({
@@ -40,7 +43,7 @@ interface VendorSignupStep1Props {
 export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
   const dispatch = useAppDispatch();
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
-
+  const [loading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -59,7 +62,6 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
       tursabNumber: vendorState.tursabNumber || "",
     },
   });
-  console.log("getValues----", getValues());
 
   useEffect(() => {
     const subscription = watch((value) => {
@@ -75,7 +77,28 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
     return () => subscription.unsubscribe();
   }, [watch, dispatch]);
 
-  const onSubmit = (data: Step1FormData) => {
+  const onSubmit: any = async (data: Step1FormData) => {
+    try {
+      setLoading(true);
+      const emailExists = await axios.get(
+        "/api/auth/email-exist/" + data.businessEmail
+      );
+      console.log("emailExists---", emailExists);
+    } catch (error: any) {
+      if (error?.response?.data?.message) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error?.response?.data?.message || "Failed to add blog",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        return;
+      }
+    } finally {
+      setLoading(false);
+    }
+
     Object.keys(data).forEach((key) => {
       dispatch(
         setVendorField({
@@ -95,7 +118,7 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-4">
           <div className="grid grid-cols-1 gap-4">
             <Controller
               name="companyName"
@@ -179,13 +202,23 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
               name="contactPhoneNumber"
               control={control}
               render={({ field }) => (
-                <PhoneNumberInput
-                  phoneNumber={field.value}
-                  setPhoneNumber={field.onChange}
-                />
+                <div className="space-y-1 col-span-1">
+                  <Label className="text-[14px] font-semibold">
+                    Phone Number
+                    {<span className="text-red-500 ml-1">*</span>}
+                  </Label>
+                  <PhoneNumberInput
+                    phoneNumber={field.value}
+                    setPhoneNumber={field.onChange}
+                  />
+                  {errors.contactPhoneNumber && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.contactPhoneNumber.message}
+                    </p>
+                  )}
+                </div>
               )}
             />
-
             <Controller
               name="tursabNumber"
               control={control}
@@ -201,11 +234,16 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
               )}
             />
 
-            <Button type="submit" className="w-full mt-2">
+            <Button
+              type="button"
+              onClick={handleSubmit(onSubmit)}
+              className="w-full mt-2"
+              loading={loading}
+            >
               Next
             </Button>
           </div>
-        </form>
+        </div>
 
         <div className="text-center text-sm">
           Already have an account?{" "}

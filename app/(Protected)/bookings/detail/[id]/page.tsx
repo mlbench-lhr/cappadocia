@@ -117,7 +117,9 @@ export default function BookingsPage() {
               View Tour Details
             </Link>
           </Button>
-          <DownloadInvoiceButton bookingId={data?._id} />
+          {data.paymentStatus === "paid" && (
+            <DownloadInvoiceButton bookingId={data?._id} />
+          )}
         </div>
       }
     >

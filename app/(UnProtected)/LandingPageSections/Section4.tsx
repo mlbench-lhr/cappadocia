@@ -21,7 +21,7 @@ export default function Section4() {
               <h1 className="font-bold text-3xl lg:text-[46px] w-[90%] lg:w-[500px] text-white leading-tight">
                 Cappadocia Gallery
               </h1>
-              <h2 className="font-[400] text-xl md:text-2xl w-[90%] md:w-[485px] text-[rgba(255,255,255,0.70)] leading-tight">
+              <h2 className="font-[400] text-xl md:text-xl w-[90%] md:w-[485px] text-[rgba(255,255,255,0.70)] leading-tight">
                 Experience stunning landscapes, vibrant skies, and unforgettable
                 memories captured by our travelers and partners.
               </h2>
