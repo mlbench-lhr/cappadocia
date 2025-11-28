@@ -16,7 +16,12 @@ import axios from "axios";
 import { useAppSelector } from "@/lib/store/hooks";
 import { useState } from "react";
 
-export default function DeleteAccountDialog() {
+export default function DeleteAccountDialog({
+  triggerComponent,
+}: {
+  triggerComponent?: React.ReactNode | React.ComponentType<any>;
+}) {
+  const TriggerComponent = triggerComponent;
   const router = useRouter();
   const userData = useAppSelector((s) => s.auth.user);
   const [deleting, setDeleting] = useState(false);
@@ -37,15 +42,25 @@ export default function DeleteAccountDialog() {
     router.push("/");
     window.location.href = "/";
   };
-  
+
   return (
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <div className="flex gap-3 items-center text-red-500">
-            <Trash size={15} strokeWidth={2} />
-            <button className="block px-2 py-2 text-sm">Delete Account</button>
-          </div>
+          {TriggerComponent ? (
+            typeof TriggerComponent === "function" ? (
+              <TriggerComponent />
+            ) : (
+              TriggerComponent
+            )
+          ) : (
+            <div className="flex gap-3 items-center text-red-500">
+              <Trash size={15} strokeWidth={2} />
+              <button className="block px-2 py-2 text-sm">
+                Delete Account
+              </button>
+            </div>
+          )}
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-lg rounded-[16px] flex flex-col justify-start items-center gap-[8px] p-[40px]">

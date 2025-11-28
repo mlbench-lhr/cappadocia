@@ -14,6 +14,10 @@ import {
   Trash,
 } from "lucide-react";
 import { SettingProvider } from "./SettingProvider";
+import { Terms } from "./Terms-and-conditions/page";
+import LogoutDialog from "@/components/LogoutDialog";
+import DeleteAccountDialog from "@/components/DeleteAccountDialog";
+import { EditProfile } from "./EditProfile/page";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -24,33 +28,22 @@ export default function App() {
       | "Profile"
       | "Change Password"
       | "Notifications"
-      | "Terms & Conditions"
-      | "Delete Account"
-      | "Logout";
+      | "Terms & Conditions";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
     { icons: Bell, name: "Notifications" },
     { icons: FileCheck, name: "Terms & Conditions" },
-    { icons: Trash, name: "Delete Account" },
-    { icons: LogOut, name: "Logout" },
   ];
   const components = {
-    Profile: <ChangePass />,
+    Profile: <EditProfile />,
     "Change Password": <ChangePass />,
     Notifications: <ChangePass />,
-    "Terms & Conditions": <ChangePass />,
-    "Delete Account": <ChangePass />,
-    Logout: <ChangePass />,
+    "Terms & Conditions": <Terms />,
   };
 
   const [activeComp, setActiveComp] = useState<
-    | "Profile"
-    | "Change Password"
-    | "Notifications"
-    | "Terms & Conditions"
-    | "Delete Account"
-    | "Logout"
+    "Profile" | "Change Password" | "Notifications" | "Terms & Conditions"
   >("Profile");
 
   return (
@@ -105,10 +98,32 @@ export default function App() {
                     </div>
                   );
                 })}
+                <LogoutDialog
+                  triggerComponent={
+                    <div
+                      className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 cursor-pointer`}
+                    >
+                      <LogOut size={16} className="hidden lg:block" />
+                      <div className="w-fit">Logout</div>
+                    </div>
+                  }
+                />
+                <DeleteAccountDialog
+                  triggerComponent={
+                    <div
+                      className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 cursor-pointer`}
+                    >
+                      <Trash size={16} className="hidden lg:block" />
+                      <div className="w-fit">Delete Account</div>
+                    </div>
+                  }
+                />
               </div>
             </div>
           </div>
-          <SettingProvider>{components[activeComp]}</SettingProvider>
+          <SettingProvider label={activeComp}>
+            {components[activeComp]}
+          </SettingProvider>
         </div>
       </div>
     </div>

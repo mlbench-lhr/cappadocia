@@ -121,10 +121,8 @@ export default function AdminUsersPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filteredUsers?.map((user) => (
-          <Fragment key={user.id}>
-            <UserCard key={user.id} user={user} />
-          </Fragment>
+        {filteredUsers?.map((user, index) => (
+          <UserCard key={index} user={user} />
         ))}
       </div>
 

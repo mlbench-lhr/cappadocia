@@ -78,6 +78,8 @@ const UpdateProfileSchema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   avatar: z.string().optional(),
+  fullName: z.string().optional(),
+  phoneNumber: z.string().optional(),
   blogTier: z.string().optional(),
   profileUpdated: z.boolean().optional(),
   favorites: z.array(ObjectIdSchema).optional(),
@@ -163,7 +165,7 @@ export const PUT = async (req: any) => {
     if (validatedData.favorites) {
       updateData.favorites = validatedData.favorites;
     }
-    console.log("body--------------------", body);
+    console.log("validatedData--------------------", validatedData);
 
     if (body.cover) {
       updateData.vendorDetails.cover = body.cover;
@@ -181,6 +183,9 @@ export const PUT = async (req: any) => {
     if (validatedData.firstName) updateData.firstName = validatedData.firstName;
     if (validatedData.lastName) updateData.lastName = validatedData.lastName;
     if (validatedData.avatar) updateData.avatar = validatedData.avatar;
+    if (validatedData.fullName) updateData.fullName = validatedData.fullName;
+    if (validatedData.phoneNumber)
+      updateData.phoneNumber = validatedData.phoneNumber;
     if (validatedData.blogTier) updateData.blogTier = validatedData.blogTier;
     try {
       if (validatedData.profileUpdated === true) {

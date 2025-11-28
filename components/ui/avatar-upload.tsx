@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState, useRef, Dispatch, SetStateAction } from "react";
-import { Camera, Loader, Sprout, Trophy, User } from "lucide-react";
+import { Camera, Loader, Pencil, Sprout, Trophy, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import pencil from "@/public/pencil.svg";
@@ -112,9 +112,9 @@ export function AvatarUpload({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={isUploading}
-          className="absolute top-0 right-0 p-1 text-white rounded-full transition-colors disabled:opacity-50 bg-[#D8E6DD]"
+          className="absolute top-0 right-0 p-2 text-white rounded-full transition-colors disabled:opacity-50 bg-primary"
         >
-          <Image width={16} height={16} src={pencil.src} alt="" />
+          <Pencil color="white" size={14} />
         </button>
       </div>
 

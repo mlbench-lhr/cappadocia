@@ -51,14 +51,13 @@ export function RoleCards() {
 
         <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-[24px] mt-[30px]">
           {roles.map((role, index) => (
-            <Fragment key={index}>
-              <HeadingCard
-                icon={role.icon}
-                heading={role.heading}
-                number={role.number}
-                text={role.text}
-              />
-            </Fragment>
+            <HeadingCard
+              key={index}
+              icon={role.icon}
+              heading={role.heading}
+              number={role.number}
+              text={role.text}
+            />
           ))}
         </div>
       </div>

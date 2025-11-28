@@ -15,12 +15,16 @@ import { signOut } from "@/lib/auth/auth-helpers";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { useAppSelector } from "@/lib/store/hooks";
+import React from "react";
 
 export default function LogoutDialog({
   adminStyle = false,
+  triggerComponent,
 }: {
   adminStyle?: boolean;
+  triggerComponent?: React.ReactNode | React.ComponentType<any>;
 }) {
+  const TriggerComponent = triggerComponent;
   const userRole = useAppSelector((s) => s.auth.user?.role);
   const router = useRouter();
   const handleConfirm = async () => {
@@ -41,7 +45,13 @@ export default function LogoutDialog({
     <>
       <Dialog>
         <DialogTrigger asChild>
-          {adminStyle ? (
+          {TriggerComponent ? (
+            typeof TriggerComponent === "function" ? (
+              <TriggerComponent />
+            ) : (
+              TriggerComponent
+            )
+          ) : adminStyle ? (
             <div className="flex gap-1 items-center justify-start">
               <LogOut size={15} strokeWidth={2} />
               <button className="block px-2 py-2 text-sm">Logout</button>
