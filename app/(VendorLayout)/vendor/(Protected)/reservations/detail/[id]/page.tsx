@@ -15,6 +15,7 @@ import { useParams } from "next/navigation";
 import moment from "moment";
 import { percentage } from "@/lib/helper/smallHelpers";
 import ReservationPageSkeleton from "@/components/Skeletons/ReservationPageSkeleton";
+import { formatPricing } from "@/lib/helper/textsFormat";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -62,7 +63,7 @@ export default function BookingsPage() {
                 noBorder={true}
                 className="!p-0"
                 leftSideComponent={
-                  <div className=" text-sm md:text-base font-semibold ">
+                  <div className="w-[260px] md:w-fit text-sm md:text-base font-semibold ">
                     Booking Information /{" "}
                     <span className="text-primary"> #{data.bookingId}</span>
                   </div>
@@ -73,9 +74,9 @@ export default function BookingsPage() {
                 rightSideLabel="Activity Details"
                 textClasses=" text-[18px] font-semibold "
               >
-                <BoxProviderWithName textClasses=" text-[18px] font-semibold ">
+                <BoxProviderWithName textClasses=" text-[18px] font-semibold">
                   <div className="w-full flex justify-start items-start flex-col">
-                    <div className="w-full flex justify-between items-center gap-2">
+                    <div className="w-full flex justify-between flex-wrap items-center gap-2">
                       <Image
                         src={data.activity.uploads?.[0]}
                         alt=""
@@ -83,7 +84,7 @@ export default function BookingsPage() {
                         height={200}
                         className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center rounded-2xl"
                       />
-                      <div className="w-full flex justify-center items-start flex-col">
+                      <div className="w-full flex justify-center items-start flex-col ">
                         <h2 className="text-base font-semibold">
                           {data.activity.title}
                         </h2>
@@ -156,35 +157,45 @@ export default function BookingsPage() {
                     <StatusBadge status={data.paymentStatus} />
                   </div>
                   <div className="w-full flex justify-between items-center">
-                    <span className="text-base font-medium">Base Price: </span>
-                    <span className="text-base font-medium">
+                    <span className="text-sm md:text-base font-medium">
+                      Base Price:{" "}
+                    </span>
+                    <span className="text-sm md:text-base font-medium">
+                      {formatPricing(data)}
+                      {/* {data.paymentDetails.currency}
+                      {data.activity.slots?.[0].childPrice} ×{" "}
+                      {data.childrenCount} Children +
                       {data.paymentDetails.currency}
-                      {data.activity.slots?.[0].adultPrice} × {data.adultsCount}{" "}
-                      Adults +{data.paymentDetails.currency}
                       {data.activity.slots?.[0].adultPrice} × {data.adultsCount}{" "}
                       Adults = {data.paymentDetails.currency}
-                      {data.paymentDetails.amount}
+                      {data.paymentDetails.amount} */}
                     </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
-                    <span className="text-base font-medium">Total paid: </span>
-                    <span className="text-base font-medium">
+                    <span className="text-sm md:text-base font-medium">
+                      Total paid:{" "}
+                    </span>
+                    <span className="text-sm md:text-base font-medium">
                       {data.paymentDetails.currency}
                       {data.paymentDetails.amount}
                     </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
-                    <span className="text-base font-medium">
+                    <span className="text-sm md:text-base font-medium">
                       Commission (Platform 15%):
                     </span>
-                    <span className="text-base font-medium">
+                    <span className="text-sm md:text-base font-medium">
                       {data.paymentDetails.currency}
                       {percentage(15, data.paymentDetails.amount)}
                     </span>
                   </div>
                   <div className="w-full flex justify-between items-center">
-                    <span className="text-base font-medium">Net Revenue: </span>
-                    <span className="text-base font-medium">€2000</span>
+                    <span className="text-sm md:text-base font-medium">
+                      Net Revenue:{" "}
+                    </span>
+                    <span className="text-sm md:text-base font-medium">
+                      €2000
+                    </span>
                   </div>
                 </div>
               </BoxProviderWithName>

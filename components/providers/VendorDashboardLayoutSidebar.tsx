@@ -258,7 +258,7 @@ export function Sidebar() {
             </div>
           </div>
 
-          <nav className="flex flex-col justify-start items-start gap-[24px] px-2 py-4 space-y-1 overflow-auto plan-text-style-4">
+          <nav className="flex flex-col justify-start items-start gap-1 md:gap-[24px] px-2 py-4 space-y-1 overflow-auto plan-text-style-4">
             {pathsArray.map((item) => {
               const Icon = item.icon;
               return (

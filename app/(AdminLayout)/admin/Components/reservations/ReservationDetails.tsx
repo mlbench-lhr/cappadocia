@@ -117,7 +117,7 @@ const ReservationDetails: React.FC = () => {
             noBorder={true}
             className="!p-0"
             leftSideComponent={
-              <div className=" text-sm md:text-base font-semibold ">
+              <div className="w-[260px] md:w-fit text-sm md:text-base font-semibold ">
                 Booking Information /{" "}
                 <span className="text-primary"> #{data.bookingId}</span>
               </div>

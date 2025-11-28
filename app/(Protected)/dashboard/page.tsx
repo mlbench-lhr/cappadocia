@@ -107,7 +107,7 @@ export default function DashboardPage() {
                     {item.image}
                   </div>
                 </div>
-                <span className="text-base font-medium">
+                <span className="text-sm md:text-base font-medium">
                   {item.description}
                 </span>
               </div>

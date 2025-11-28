@@ -78,6 +78,8 @@ const UpdateProfileSchema = z.object({
   firstName: z.string().optional(),
   lastName: z.string().optional(),
   avatar: z.string().optional(),
+  fullName: z.string().optional(),
+  phoneNumber: z.string().optional(),
   blogTier: z.string().optional(),
   profileUpdated: z.boolean().optional(),
   favorites: z.array(ObjectIdSchema).optional(),
@@ -163,24 +165,59 @@ export const PUT = async (req: any) => {
     if (validatedData.favorites) {
       updateData.favorites = validatedData.favorites;
     }
-    console.log("body--------------------", body);
+    console.log("validatedData--------------------", validatedData);
 
-    if (body.cover) {
-      updateData.vendorDetails.cover = body.cover;
-    }
+    // Handle vendorDetails updates
     if (body.vendorDetails) {
       Object.keys(body.vendorDetails).forEach((key) => {
-        updateData[`vendorDetails.${key}`] =
-          body.vendorDetails![key as keyof typeof body.vendorDetails];
+        const value = body.vendorDetails[key];
+        if (key === "address" && typeof value === "object") {
+          if (value.address !== undefined) {
+            updateData[`vendorDetails.address.address`] = value.address;
+          }
+          if (value.coordinates !== undefined) {
+            if (value.coordinates === null) {
+              updateData[`vendorDetails.address.coordinates`] = null;
+            } else {
+              updateData[`vendorDetails.address.coordinates.lat`] =
+                value.coordinates.lat;
+              updateData[`vendorDetails.address.coordinates.lng`] =
+                value.coordinates.lng;
+            }
+          }
+        } else if (key === "paymentInfo" && typeof value === "object") {
+          if (value.ibanNumber !== undefined) {
+            updateData[`vendorDetails.paymentInfo.ibanNumber`] =
+              value.ibanNumber;
+          }
+          if (value.bankName !== undefined) {
+            updateData[`vendorDetails.paymentInfo.bankName`] = value.bankName;
+          }
+          if (value.accountHolderName !== undefined) {
+            updateData[`vendorDetails.paymentInfo.accountHolderName`] =
+              value.accountHolderName;
+          }
+          if (value.currency !== undefined) {
+            updateData[`vendorDetails.paymentInfo.currency`] = value.currency;
+          }
+        } else {
+          updateData[`vendorDetails.${key}`] = value;
+        }
       });
     }
 
+    if (body.cover) {
+      updateData["vendorDetails.cover"] = body.cover;
+    }
     console.log("updateData======-------------", updateData);
 
     // Handle direct field updates
     if (validatedData.firstName) updateData.firstName = validatedData.firstName;
     if (validatedData.lastName) updateData.lastName = validatedData.lastName;
     if (validatedData.avatar) updateData.avatar = validatedData.avatar;
+    if (validatedData.fullName) updateData.fullName = validatedData.fullName;
+    if (validatedData.phoneNumber)
+      updateData.phoneNumber = validatedData.phoneNumber;
     if (validatedData.blogTier) updateData.blogTier = validatedData.blogTier;
     try {
       if (validatedData.profileUpdated === true) {

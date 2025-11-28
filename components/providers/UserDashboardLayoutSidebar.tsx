@@ -136,12 +136,12 @@ export function Sidebar() {
             </button>
           </div>
           <nav className="flex-1 space-y-2 overflow-auto plan-text-style-4">
-            {pathsArray.map((item) => {
+            {pathsArray.map((item, index) => {
               const Icon = item.icon;
               return (
                 <Link
                   href={item.link}
-                  key={item.link}
+                  key={index}
                   className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                     pathname.includes(item.link)
                       ? "text-primary bg-secondary"
@@ -203,12 +203,12 @@ export function Sidebar() {
               </button>
             </div>
             <nav className="flex-1 space-y-[32px] overflow-auto plan-text-style-4">
-              {pathsArray.map((item) => {
+              {pathsArray.map((item, index) => {
                 const Icon = item.icon;
                 return (
                   <Link
                     href={item.link}
-                    key={item.link}
+                    key={index}
                     className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                       pathname.includes(item.link)
                         ? "text-primary bg-secondary"
@@ -271,12 +271,12 @@ export function Sidebar() {
           </div>
 
           <nav className="flex flex-col justify-start items-start gap-[24px] px-2 py-4 space-y-1 overflow-auto plan-text-style-4">
-            {pathsArray.map((item) => {
+            {pathsArray.map((item, index) => {
               const Icon = item.icon;
               return (
                 <Link
                   href={item.link}
-                  key={item.link}
+                  key={index}
                   className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
                     pathname.includes(item.link)
                       ? "text-primary bg-secondary"
