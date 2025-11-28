@@ -20,6 +20,7 @@ export function Promotions() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   console.log("promotionalImages-----", promotionalImages);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<number | null>(null);
 
   useEffect(() => {
     async function onSubmit() {
@@ -75,7 +76,7 @@ export function Promotions() {
 
   const handleFileSelect = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "avatar" | "cover"
+    imageIndex: number
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -86,19 +87,20 @@ export function Promotions() {
       return;
     }
 
-    // Create preview
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-
     try {
-      setIsSubmitting(true);
+      setIsUploading(imageIndex);
       const url = await uploadFile(file, "promotionalImages");
-      setPromotionalImages([...promotionalImages, url]);
-      console.log("url-----", url);
-      setIsSubmitting(false);
-    } catch (error) {
-      console.error("Avatar upload failed:", error);
+
+      setPromotionalImages((prev) => {
+        const updated = [...prev];
+        updated[imageIndex] = url; // ← replace instead of append
+        return updated;
+      });
+    } catch (err) {
+      console.error(err);
       alert("Upload failed. Please try again.");
+    } finally {
+      setIsUploading(null);
     }
   };
 
@@ -108,7 +110,7 @@ export function Promotions() {
         {promotionalImages?.map((item, index) => (
           <div key={index} className="w-full h-fit relative">
             <LightboxProvider images={[item || "/coverPicPlaceholder.png"]}>
-              {loading ? (
+              {isUploading === index ? (
                 <Skeleton className="w-full h-[140px] object-cover object-center rounded-[10px]"></Skeleton>
               ) : (
                 <Image
@@ -122,7 +124,7 @@ export function Promotions() {
             </LightboxProvider>
             <label
               className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
-              htmlFor="document-upload"
+              htmlFor={`document-upload-${index}`}
             >
               <Pencil size={20} className="" color="#B32053" />
             </label>
@@ -130,11 +132,11 @@ export function Promotions() {
               type="file"
               accept=".pdf,.jpg,.jpeg,.png"
               onChange={(e) => {
-                handleFileSelect(e, "cover");
+                handleFileSelect(e, index);
               }}
               disabled={isSubmitting ? true : false}
               className="hidden"
-              id="document-upload"
+              id={`document-upload-${index}`}
             />
           </div>
         ))}
@@ -145,6 +147,7 @@ export function Promotions() {
         type="button"
         onClick={onSubmit}
         loading={isSubmitting}
+        disabled={isUploading !== null ? true : false}
       >
         Save Changes
       </Button>
