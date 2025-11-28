@@ -134,7 +134,7 @@ export default function VendorSignupStep5({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-4">
           <Controller
             name="ibanNumber"
             control={control}
@@ -219,14 +219,15 @@ export default function VendorSignupStep5({
           )}
 
           <Button
-            type="submit"
+            type="button"
+            onClick={handleSubmit(onSubmit)}
             className="w-full"
             loading={loading}
             loadingText="Completing Your Registration...."
           >
             Complete Registration
           </Button>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );

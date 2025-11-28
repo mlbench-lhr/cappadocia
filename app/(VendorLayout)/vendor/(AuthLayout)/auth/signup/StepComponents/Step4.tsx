@@ -112,7 +112,7 @@ export default function VendorSignupStep4({
         <CardTitle className="text-2xl font-bold">Profile & Branding</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-4">
           <Controller
             name="aboutUs"
             control={control}
@@ -165,10 +165,14 @@ export default function VendorSignupStep4({
             )}
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button
+            type="button"
+            onClick={handleSubmit(onSubmit)}
+            className="w-full"
+          >
             Next
           </Button>
-        </form>
+        </div>
       </CardContent>
     </Card>
   );
