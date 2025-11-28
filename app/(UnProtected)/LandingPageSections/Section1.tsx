@@ -155,10 +155,10 @@ export default function Section1() {
 
           {/* Overlay Content */}
           <div className="w-full flex flex-col items-center text-center absolute top-1/2 translate-y-[-55%] left-0 justify-center gap-2 z-10">
-            <h1 className="font-bold text-3xl md:text-[47px] w-[90%] md:w-[485px] text-white leading-tight transition-all duration-500">
+            <h1 className="font-bold text-3xl md:text-[42px] w-[90%] md:w-[485px] text-white leading-tight transition-all duration-500">
               {slides[currentSlide].title}
             </h1>
-            <h2 className="font-normal text-xl md:text-[24px] w-[90%] md:w-[485px] text-[rgba(255,255,255,0.74)] leading-tight transition-all duration-500">
+            <h2 className="font-normal text-xl md:text-[20px] w-[90%] md:w-[485px] text-[rgba(255,255,255,0.74)] leading-tight transition-all duration-500">
               {slides[currentSlide].subtitle}
             </h2>
             <Button asChild variant={"main_green_button"} className="mt-2">

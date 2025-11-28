@@ -79,7 +79,8 @@ const VendorSignUp = () => {
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-        confirmButtonColor: "#22c55e",
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
   }, [error]);

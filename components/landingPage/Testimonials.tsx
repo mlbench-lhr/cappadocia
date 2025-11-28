@@ -105,24 +105,24 @@ const TestimonialCard = ({ testimonial, isCenter }: any) => (
         <path
           d="M9.8667 7.89292C9.8667 9.75343 9.8667 10.6836 9.28876 11.2616C8.71075 11.8396 7.78049 11.8396 5.92005 11.8396C4.05957 11.8396 3.12934 11.8396 2.55137 11.2616C1.97339 10.6836 1.97339 9.75343 1.97339 7.89292C1.97339 6.03247 1.97339 5.10224 2.55137 4.52427C3.12934 3.94629 4.05957 3.94629 5.92005 3.94629C7.78049 3.94629 8.71075 3.94629 9.28876 4.52427C9.8667 5.10224 9.8667 6.03247 9.8667 7.89292Z"
           stroke="white"
-          stroke-width="1.11"
+          strokeWidth="1.11"
         />
         <path
           d="M9.86675 6.90625V11.3286C9.86675 15.2482 7.38461 18.5723 3.94678 19.7329"
           stroke="white"
-          stroke-width="1.11"
-          stroke-linecap="round"
+          strokeWidth="1.11"
+          strokeLinecap="round"
         />
         <path
           d="M21.7068 7.89292C21.7068 9.75343 21.7068 10.6836 21.1288 11.2616C20.5508 11.8396 19.6206 11.8396 17.7601 11.8396C15.8997 11.8396 14.9694 11.8396 14.3914 11.2616C13.8135 10.6836 13.8135 9.75343 13.8135 7.89292C13.8135 6.03247 13.8135 5.10224 14.3914 4.52427C14.9694 3.94629 15.8997 3.94629 17.7601 3.94629C19.6206 3.94629 20.5508 3.94629 21.1288 4.52427C21.7068 5.10224 21.7068 6.03247 21.7068 7.89292Z"
           stroke="white"
-          stroke-width="1.11"
+          strokeWidth="1.11"
         />
         <path
           d="M21.7066 6.90625V11.3286C21.7066 15.2482 19.2245 18.5723 15.7866 19.7329"
           stroke="white"
-          stroke-width="1.11"
-          stroke-linecap="round"
+          strokeWidth="1.11"
+          strokeLinecap="round"
         />
       </svg>
     </div>
@@ -135,6 +135,11 @@ export default function TravelersTestimonials() {
 
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev + 1) % testimonials?.length);
+  };
+  const prevSlide = () => {
+    setCurrentIndex(
+      (prev) => (prev - 1 + testimonials?.length) % testimonials?.length
+    );
   };
 
   const goToSlide = (index: any) => {
@@ -171,6 +176,48 @@ export default function TravelersTestimonials() {
           onMouseEnter={() => setIsAutoPlaying(false)}
           onMouseLeave={() => setIsAutoPlaying(true)}
         >
+          {/* Navigation Arrows */}
+          <button
+            onClick={prevSlide}
+            className="absolute left-0 md:left-4 bottom-0 md:top-1/3 md:-translate-y-3 z-30 bg-white/90 h-fit hover:bg-white p-1.5 md:p-3 rounded-full shadow-lg transition-all duration-300"
+            aria-label="Previous testimonial"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 md:h-6 w-4 md:w-6 text-[#113D48]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 md:right-4 bottom-0 md:top-1/3 md:-translate-y-3 z-30 bg-white/90 h-fit hover:bg-white p-1.5 md:p-3 rounded-full shadow-lg transition-all duration-300"
+            aria-label="Next testimonial"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 md:h-6 w-4 md:w-6 text-[#113D48]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
           {/* Desktop View - 3 Cards */}
           <div className="w-full hidden md:block overflow-hidden py-8 h-fit">
             <div className="w-[100%] flex justify-center items-center h-fit">

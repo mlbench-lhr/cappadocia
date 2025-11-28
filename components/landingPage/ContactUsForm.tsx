@@ -34,7 +34,8 @@ const ContactUsForm = () => {
           icon: "success",
           title: "Success",
           text: "Email sent successfully",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+          timer: 1500,
+          showConfirmButton: false,
         });
       } else {
         const { error } = await res.json();
@@ -42,7 +43,8 @@ const ContactUsForm = () => {
           icon: "error",
           title: "Error",
           text: error || "Something went wrong",
-          confirmButtonColor: "#22c55e", // match shadcn green if you want
+          timer: 1500,
+          showConfirmButton: false,
         });
       }
     } catch (err) {
@@ -50,7 +52,8 @@ const ContactUsForm = () => {
         icon: "error",
         title: "Oops...",
         text: "Something went wrong",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        timer: 1500,
+        showConfirmButton: false,
       });
     } finally {
       setLoading(false);

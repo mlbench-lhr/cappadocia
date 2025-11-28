@@ -47,7 +47,8 @@ export function ResetPasswordForm() {
         icon: "error",
         title: "Error",
         text: error || "Please try again.",
-        confirmButtonColor: "#22c55e", // match shadcn green if you want
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
   }, [error]);

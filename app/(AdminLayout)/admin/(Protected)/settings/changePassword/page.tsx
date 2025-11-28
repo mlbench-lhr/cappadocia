@@ -45,6 +45,8 @@ export function ChangePass() {
         icon: "success",
         title: "Success",
         text: data.message || "Password updated successfully",
+        timer: 1500,
+        showConfirmButton: false,
       });
 
       setOldPassword("");
@@ -55,6 +57,8 @@ export function ChangePass() {
         icon: "error",
         title: "Error",
         text: "Server error. Please try again later.",
+        timer: 1500,
+        showConfirmButton: false,
       });
     } finally {
       setIsSubmitting(false);

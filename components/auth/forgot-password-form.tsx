@@ -80,7 +80,8 @@ export function ForgotPasswordForm({
         icon: "error",
         title: "Error",
         text: error,
-        confirmButtonColor: "#B32053",
+        timer: 1500,
+        showConfirmButton: false,
       });
     }
   }, [error]);
@@ -111,7 +112,8 @@ export function ForgotPasswordForm({
           icon: "success",
           title: "OTP Sent",
           text: "OTP sent to your email!",
-          confirmButtonColor: "#B32053",
+          timer: 1500,
+          showConfirmButton: false,
         });
         setOtp("");
       }
@@ -138,7 +140,8 @@ export function ForgotPasswordForm({
           icon: "success",
           title: "OTP Resent",
           text: "OTP resent to your email!",
-          confirmButtonColor: "#B32053",
+          timer: 1500,
+          showConfirmButton: false,
         });
       }
     } catch {
@@ -174,7 +177,8 @@ export function ForgotPasswordForm({
           icon: "success",
           title: "OTP Verified",
           text: "OTP verified successfully!",
-          confirmButtonColor: "#B32053",
+          timer: 1500,
+          showConfirmButton: false,
         });
         reset();
       } else {
@@ -208,7 +212,8 @@ export function ForgotPasswordForm({
           icon: "success",
           title: "Password Updated",
           text: "Your password has been reset successfully!",
-          confirmButtonColor: "#B32053",
+          timer: 1500,
+          showConfirmButton: false,
         });
       }
     } catch {

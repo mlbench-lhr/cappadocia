@@ -295,6 +295,7 @@ export default function BlogsPage() {
         title: "Failed to search opportunities.",
         text: "The model is overloaded. Please try again later.",
         timer: 1500,
+        showConfirmButton: false,
       });
     } finally {
       setLoading(false);

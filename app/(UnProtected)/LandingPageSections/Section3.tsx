@@ -2,6 +2,7 @@
 import Tabs, { TabsProps } from "@/components/landingPage/tabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 
 const tourCardData: TabsProps[] = [
   {
@@ -36,8 +37,8 @@ export default function Section3() {
         <div className="w-full flex flex-col md:flex-row justify-between items-start h-fit gap-4 md:gap-0">
           <div className="w-full md:w-fit h-fit flex flex-col-reverse sm:flex-row md:flex-col justify-between md:justify-start gap-3 sm:gap-6 items-center md:items-start">
             <h1 className="font-semibold text-lg md:text-3xl">Why Choose Us</h1>
-            <Button disabled variant={"main_green_button"}>
-              Read Our Reviews
+            <Button variant={"main_green_button"} asChild>
+              <Link href={"/#ReadReviews"}>Read Our Reviews</Link>
             </Button>
           </div>
           <div className="w-full md:w-[415px] h-fit">

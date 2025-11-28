@@ -16,8 +16,8 @@ export function Footer() {
           <div className="flex justify-between items-start gap-y-[10px] gap-x-[40px] flex-col text-base">
             <span className="font-[600] text-white">Quick Links</span>
             <Link href="#About">About</Link>
-            <Link href="#WhyChoose">Why choose</Link>
-            <Link href="#Contact">Contact</Link>
+            <Link href="/#WhyChoose">Why choose</Link>
+            <Link href="/#Contact">Contact</Link>
             <Link href="/vendor/auth/signup">Become a vendor</Link>
           </div>
         </div>
