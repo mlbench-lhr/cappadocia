@@ -18,7 +18,16 @@ import { SettingProvider } from "./SettingProvider";
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
 
-  const options: { icons: any; name: string }[] = [
+  const options: {
+    icons: any;
+    name:
+      | "Profile"
+      | "Change Password"
+      | "Notifications"
+      | "Terms & Conditions"
+      | "Delete Account"
+      | "Logout";
+  }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
     { icons: Bell, name: "Notifications" },
@@ -26,6 +35,14 @@ export default function App() {
     { icons: Trash, name: "Delete Account" },
     { icons: LogOut, name: "Logout" },
   ];
+  const components = {
+    Profile: <ChangePass />,
+    "Change Password": <ChangePass />,
+    Notifications: <ChangePass />,
+    "Terms & Conditions": <ChangePass />,
+    "Delete Account": <ChangePass />,
+    Logout: <ChangePass />,
+  };
 
   const [activeComp, setActiveComp] = useState<
     | "Profile"
@@ -37,10 +54,10 @@ export default function App() {
   >("Profile");
 
   return (
-    <div className="flex flex-col gap-[32px] justify-start items-start w-full min-h-[calc(100vh-120px)]">
-      <div className="p-4 md:p-6 bg-white rounded-[24px] w-full relative min-h-[calc(100vh-120px)] border-2">
-        <div className="w-full mx-auto grid grid-cols-3 min-h-[calc(100vh-120px)]">
-          <div className="col-span-3 md:col-span-1 border-r-none md:border-r-2 pe-0 md:pe-6 pb-8 md:pb-0 pt-0 md:pt-10 min-h-[calc(100vh-120px)]">
+    <div className="flex flex-col gap-[32px] justify-start items-start w-full h-fit lg:h-[calc(100vh-120px)]">
+      <div className="p-4 lg:p-6 bg-white rounded-[24px] w-full relative h-fit lg:h-full border-2">
+        <div className="w-full mx-auto grid grid-cols-3 h-fit lg:h-full">
+          <div className="col-span-3 lg:col-span-1 border-r-none lg:border-r-2 pe-0 lg:pe-6 pb-8 lg:pb-0 pt-0 lg:pt-10 h-fit lg:h-full">
             <div className="w-full flex flex-col border-b-2 pb-4 justify-center items-center">
               <Image
                 src={userData?.avatar || "/placeholderDp.png"}
@@ -54,31 +71,44 @@ export default function App() {
               </h2>
               <h3 className="text-sm font-normal">{userData?.email}</h3>
             </div>
-            <div className="w-full flex flex-col justify-start items-start gap-4 pt-4">
-              {options.map((item, index) => {
-                let Icon = item.icons;
-                return (
-                  <div
-                    key={index}
-                    className="w-full flex justify-between items-center"
-                  >
+            <div className="w-full overflow-auto flex justify-start items-center">
+              <div className="w-fit lg:w-full flex flex-row lg:flex-col justify-start items-start gap-4 pt-4">
+                {options.map((item, index) => {
+                  let Icon = item.icons;
+                  return (
                     <div
-                      className={`w-full text-base font-medium flex justify-start items-center gap-2 ${
-                        item.name === activeComp && "text-primary"
+                      key={index}
+                      className={`w-fit lg:w-full flex justify-between items-center ${
+                        item.name === "Notifications"
+                          ? "cursor-not-allowed"
+                          : "cursor-pointer"
                       }`}
+                      onClick={() => {
+                        item.name !== "Notifications" &&
+                          setActiveComp(item.name);
+                      }}
                     >
-                      <Icon size={16} />
-                      {item.name}
+                      <div
+                        className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 ${
+                          item.name === activeComp && "text-primary"
+                        }`}
+                      >
+                        <Icon size={16} className="hidden lg:block" />
+                        <div className="w-fit">{item.name}</div>
+                      </div>
+                      <ChevronRight
+                        size={20}
+                        className={`hidden lg:block ${
+                          item.name === activeComp && "text-primary"
+                        }`}
+                      />
                     </div>
-                    <ChevronRight size={20} />
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-          <SettingProvider>
-            <ChangePass />
-          </SettingProvider>
+          <SettingProvider>{components[activeComp]}</SettingProvider>
         </div>
       </div>
     </div>
