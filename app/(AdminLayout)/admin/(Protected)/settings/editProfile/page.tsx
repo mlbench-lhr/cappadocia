@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PhoneInput from "react-phone-number-input";
-import 'react-phone-number-input/style.css'
+import "react-phone-number-input/style.css";
 export function EditProfile() {
   const userData = useAppSelector((state) => state.auth.user);
   const [firstName, setFirstName] = useState<undefined | string>("");
@@ -42,7 +42,10 @@ export function EditProfile() {
     <div className="w-96 h-full flex flex-col justify-between items-end">
       <div className="w-full flex flex-col gap-[20px]">
         {/* Email (disabled) */}
-        <div className="flex flex-col gap-[10px]" style={{ cursor: "not-allowed" }}>
+        <div
+          className="flex flex-col gap-[10px]"
+          style={{ cursor: "not-allowed" }}
+        >
           <Label htmlFor="email" className="label-style">
             Email <span className="text-red-500 ml-1">*</span>
           </Label>
@@ -70,7 +73,7 @@ export function EditProfile() {
         </div>
 
         <div className="flex flex-col gap-2.5">
-          <label htmlFor="phone" className="text-base font-medium">
+          <label htmlFor="phone" className="text-sm md:text-base font-medium">
             Phone Number <span className="text-red-500">*</span>
           </label>
 
@@ -89,7 +92,10 @@ export function EditProfile() {
         </div>
 
         {/* Email (disabled) */}
-        <div className="flex flex-col gap-[10px]" style={{ cursor: "not-allowed" }}>
+        <div
+          className="flex flex-col gap-[10px]"
+          style={{ cursor: "not-allowed" }}
+        >
           <Label htmlFor="email" className="label-style">
             Email <span className="text-red-500 ml-1">*</span>
           </Label>
@@ -114,7 +120,6 @@ export function EditProfile() {
         Save Changes
       </Button>
     </div>
-
   );
 }
 
