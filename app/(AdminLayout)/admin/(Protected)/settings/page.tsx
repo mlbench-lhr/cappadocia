@@ -15,8 +15,8 @@ import {
 import { SettingProvider } from "./SettingProvider";
 import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
-import { EditProfile } from "./EditProfile/page";
 import { Promotions } from "./Promotions/page";
+import { EditProfile } from "@/app/(AdminLayout)/admin/(Protected)/settings/EditProfile/page";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -39,7 +39,7 @@ export default function App() {
 
   const [activeComp, setActiveComp] = useState<
     "Profile" | "Change Password" | "Promotions" | "Payment Management"
-  >("Promotions");
+  >("Profile");
 
   return (
     <div className="flex flex-col gap-[32px] justify-start items-start w-full h-fit lg:h-[calc(100vh-120px)]">
