@@ -106,7 +106,7 @@ export function Promotions() {
 
   return (
     <div className="w-full h-full flex justify-between items-end flex-col">
-      <div className="w-full grid grid-cols-4 gap-[20px]">
+      <div className="w-full grid grid-cols-2 [@media(min-width:480px)]:grid-cols-4 gap-[20px]">
         {promotionalImages?.map((item, index) => (
           <div key={index} className="w-full h-fit relative">
             <LightboxProvider images={[item || "/coverPicPlaceholder.png"]}>
