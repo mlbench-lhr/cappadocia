@@ -115,6 +115,7 @@ export default function BookingsPage() {
       showBackOption
       rightSideComponent={
         <SearchComponent
+          placeholder="Search by invoice id..."
           searchQuery={searchQuery}
           onChangeFunc={setSearchQuery}
         />

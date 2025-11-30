@@ -195,10 +195,6 @@ export default function ExplorePage({
     getData();
   }, []);
 
-  if (!tours && !activity) {
-    return null;
-  }
-
   return (
     <BasicStructureWithName
       name={

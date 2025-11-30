@@ -75,6 +75,7 @@ export default function BookingsPage() {
       name="Reservations"
       rightSideComponent={
         <SearchComponent
+          placeholder="Search by booking id..."
           searchQuery={searchQuery}
           onChangeFunc={setSearchQuery}
         />

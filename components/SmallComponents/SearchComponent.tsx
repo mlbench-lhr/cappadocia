@@ -4,8 +4,10 @@ import { Input } from "../ui/input";
 export const SearchComponent = ({
   searchQuery,
   onChangeFunc,
+  placeholder = "Search...",
 }: {
   searchQuery: string;
+  placeholder?: string;
   onChangeFunc: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   return (
@@ -17,7 +19,7 @@ export const SearchComponent = ({
           onChangeFunc(e.target.value);
         }}
         className="w-full h-[44px] border-none absolute top-0 left-0 ps-10"
-        placeholder="Search..."
+        placeholder={placeholder}
       />
     </div>
   );

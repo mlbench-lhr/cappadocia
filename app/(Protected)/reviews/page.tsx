@@ -57,6 +57,11 @@ export default function BookingsPage() {
           }
           rightSideComponent={
             <SearchComponent
+              placeholder={
+                activeTab === "bookings"
+                  ? "Search by invoice id..."
+                  : "Search by title..."
+              }
               searchQuery={searchQuery}
               onChangeFunc={setSearchQuery}
             />
