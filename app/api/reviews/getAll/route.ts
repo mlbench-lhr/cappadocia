@@ -10,6 +10,7 @@ export async function GET() {
   const reviews = await Reviews.find()
     .populate("activity")
     .populate("vendor")
+    .populate("user")
     .populate("booking")
     .lean();
   return NextResponse.json({ data: reviews });

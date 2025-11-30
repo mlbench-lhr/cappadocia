@@ -129,7 +129,7 @@ export default function BookingsPage() {
         <BoxProviderWithName
           name={"Booking Information / #" + data?.bookingId}
           rightSideComponent={
-            <span className="text-[#008EFF] text-base font-normal capitalize">
+            <span className="text-[#008EFF] text-sm md:text-base font-normal capitalize">
               Tour Status: {data.status}
             </span>
           }
@@ -145,48 +145,64 @@ export default function BookingsPage() {
                     height={200}
                     className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center rounded-2xl"
                   />
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
+                  <div className="grid grid-cols-2 gap-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
                     <h1 className="col-span-2 text-base font-semibold text-black leading-tight line-clamp-1">
                       {data.activity.title}
                     </h1>
-                    <IconAndTextTab
-                      icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Date and Time: ${moment(data.selectDate).format(
-                        "MMM DD, YYYY | hh:mm A"
-                      )}`}
-                    />
-                    <IconAndTextTab
-                      icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
-                    />
-                    <IconAndTextTab
-                      icon={
-                        <BookingIcon size="14" color="rgba(0, 0, 0, 0.5)" />
-                      }
-                      text={`Booking ID: #${data?.bookingId}`}
-                    />
-                    <IconAndTextTab
-                      icon={
-                        <LocationIcon size="14" color="rgba(0, 0, 0, 0.5)" />
-                      }
-                      text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
-                    />
-                    <IconAndTextTab
-                      icon={<ClockIcon2 color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Duration: ${data?.activity?.duration} minutes`}
-                    />
-                    <IconAndTextTab
-                      icon={<LocationIcon2 color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Meeting Point: ${data?.pickupLocation?.address}`}
-                    />
-                    <IconAndTextTab
-                      icon={<PricePerPerson color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
-                    />
-                    <IconAndTextTab
-                      icon={<TotalPrice color="rgba(0, 0, 0, 0.5)" />}
-                      text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
-                    />
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={<ClockIcon color="rgba(0, 0, 0, 0.5)" />}
+                        text={`Date and Time: ${moment(data.selectDate).format(
+                          "MMM DD, YYYY | hh:mm A"
+                        )}`}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
+                        text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={
+                          <BookingIcon size="14" color="rgba(0, 0, 0, 0.5)" />
+                        }
+                        text={`Booking ID: #${data?.bookingId}`}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={
+                          <LocationIcon size="14" color="rgba(0, 0, 0, 0.5)" />
+                        }
+                        text={`Location: ${data?.vendor?.vendorDetails?.address?.address}`}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={<ClockIcon2 color="rgba(0, 0, 0, 0.5)" />}
+                        text={`Duration: ${data?.activity?.duration} minutes`}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={<LocationIcon2 color="rgba(0, 0, 0, 0.5)" />}
+                        text={`Meeting Point: ${data?.pickupLocation?.address}`}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={<PricePerPerson color="rgba(0, 0, 0, 0.5)" />}
+                        text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
+                      />
+                    </div>
+                    <div className="col-span-2 md:col-span-1">
+                      <IconAndTextTab
+                        icon={<TotalPrice color="rgba(0, 0, 0, 0.5)" />}
+                        text={`Total Price:  ${data.paymentDetails.currency} ${data.paymentDetails.amount}`}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="w-full grid grid-cols-12">
@@ -198,11 +214,11 @@ export default function BookingsPage() {
                       <StatusBadge status={data.paymentStatus} />
                     </div>
                     <h3 className="text-[18px] font-semibold">QR Code</h3>
-                    <div className="w-[430px] h-[350px] flex justify-center items-center">
+                    <div className="w-[150px] md:w-[300px] xl:w-[430px] h-[150px] md:h-[250px] xl:h-[350px] flex justify-center items-center">
                       <QRCodeSVG
                         value={`${process.env.NEXT_PUBLIC_BASE_URL}/vendor/reservations/detail/${data._id}`}
                         size={180}
-                        className="w-[430px] h-[350px] object-contain p-2"
+                        className="w-[150px] md:w-[300px] xl:w-[430px] h-[150px] md:h-[250px] xl:h-[350px] object-contain p-2"
                       />
                     </div>
                     <span className="text-[14px] font-normal">
@@ -324,20 +340,23 @@ export default function BookingsPage() {
                                     key={index}
                                     className="w-full flex flex-col justify-start items-start"
                                   >
-                                    <Textarea
-                                      className="bg-[#FFF8FB] border h-[90px]"
-                                      disabled
-                                      value={item.text}
-                                    />
+                                    {item.addedBy === "vendor" && (
+                                      <h3 className="text-base font-semibold">
+                                        Vendor Reply
+                                      </h3>
+                                    )}
+                                    <span className="bg-[#FFF8FB] border h-fit w-full py-2 px-3 rounded-lg">
+                                      {item.text}
+                                    </span>
                                     {item.uploads && (
-                                      <div className="w-full grid-cols-3 gap-2">
+                                      <div className="w-full grid-cols-3 gap-2 mt-2">
                                         {item.uploads.map((image, index2) => (
                                           <Image
                                             src={image}
                                             key={index2}
                                             height={100}
                                             width={100}
-                                            className="col-span-1"
+                                            className="col-span-1 h-[100px] object-cover object-center"
                                             alt=""
                                           />
                                         ))}
