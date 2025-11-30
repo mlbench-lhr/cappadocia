@@ -26,6 +26,7 @@ type ServerPaginationProviderProps<T> = {
   enabled?: boolean;
   presentData?: any;
   setTotalItems?: any;
+  refreshData?: number;
 };
 
 export function ServerPaginationProvider<T = any>({
@@ -39,6 +40,7 @@ export function ServerPaginationProvider<T = any>({
   enabled = true,
   presentData,
   setTotalItems,
+  refreshData,
 }: ServerPaginationProviderProps<T>) {
   const [data, setData] = useState<T[]>(presentData ? presentData : []);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -90,7 +92,6 @@ export function ServerPaginationProvider<T = any>({
         const total = pagination.totalPages;
         const totalCount = pagination.total;
         if (!presentData) {
-          console.log("responseData---", responseData);
           setData(fetchedData);
         }
 
@@ -125,7 +126,7 @@ export function ServerPaginationProvider<T = any>({
 
   useEffect(() => {
     fetchData(currentPage);
-  }, [currentPage, queryParams]);
+  }, [currentPage, queryParams, refreshData]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {

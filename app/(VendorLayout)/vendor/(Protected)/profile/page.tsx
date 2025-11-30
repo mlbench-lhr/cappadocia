@@ -41,8 +41,6 @@ export default function BookingsPage() {
 
   const [data, setData] = useState<VendorDetailsType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log("data?.vendor?.vendorDetails?.address-----", data);
-  console.log("previewUrl-----", previewUrl);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {

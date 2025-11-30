@@ -3,6 +3,7 @@ import { LocationData, Traveler } from "../store/slices/addbooking";
 import { VendorDetails } from "../store/slices/vendorSlice";
 import { ToursAndActivity } from "../mongodb/models/ToursAndActivity";
 import { User } from "./auth";
+import { ReviewsType } from "../mongodb/models/Reviews";
 
 export interface BookingWithPopulatedData {
   _id: string;
@@ -32,4 +33,5 @@ export interface BookingWithPopulatedData {
   childrenCount: number;
   paymentStatus: "paid" | "pending" | "refunded";
   status: "pending" | "upcoming" | "completed" | "cancelled" | "missed";
+  review?: ReviewsType | undefined | null;
 }

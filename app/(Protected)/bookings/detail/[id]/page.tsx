@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
@@ -37,19 +37,21 @@ import { BookingWithPopulatedData } from "@/lib/types/booking";
 import Link from "next/link";
 import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
 import { QRCodeSVG } from "qrcode.react";
+import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
+import Rating from "@/components/SmallComponents/RatingField";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [isCopied, setIsCopied] = useState(false);
-
+  const userId = useAppSelector((s) => s.auth?.user?.id);
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log("data-----", data);
+  const [reload, setReload] = useState<number>(0);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function BookingsPage() {
       }
     };
     getData();
-  }, []);
+  }, [reload]);
   const handleShare = async () => {
     if (!data?._id) {
       return;
@@ -303,32 +305,86 @@ export default function BookingsPage() {
                               placeholder="Type address or click on map"
                             />
                           )}
-                          <div className="w-full flex flex-col justify-start items-start gap-2">
-                            <div className="w-full flex justify-between items-center">
-                              <h3 className="text-base font-semibold">
-                                Your Feedback
-                              </h3>
-                              <div className="w-fit flex justify-start items-center gap-1">
-                                <StarIcon />
-                                <StarIcon />
-                                <StarIcon />
-                                <StarIcon />
-                                <StarIcon />
+                          {data.review ? (
+                            <>
+                              <div className="w-full flex flex-col justify-start items-start gap-2">
+                                <div className="w-full flex justify-between items-center">
+                                  <h3 className="text-base font-semibold">
+                                    Your Feedback
+                                  </h3>
+                                  <div className="w-fit flex justify-start items-center gap-1">
+                                    <Rating
+                                      value={data.review.rating}
+                                      iconsSize="18"
+                                    />
+                                  </div>
+                                </div>
+                                {data.review.review.map((item, index) => (
+                                  <div
+                                    key={index}
+                                    className="w-full flex flex-col justify-start items-start"
+                                  >
+                                    <Textarea
+                                      className="bg-[#FFF8FB] border h-[90px]"
+                                      disabled
+                                      value={item.text}
+                                    />
+                                    {item.uploads && (
+                                      <div className="w-full grid-cols-3 gap-2">
+                                        {item.uploads.map((image, index2) => (
+                                          <Image
+                                            src={image}
+                                            key={index2}
+                                            height={100}
+                                            width={100}
+                                            className="col-span-1"
+                                            alt=""
+                                          />
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                ))}
                               </div>
-                            </div>
-                            <Textarea
-                              className="bg-[#FFF8FB] border h-[90px]"
-                              value={
-                                "Amazing experience, balloon ride was unforgettable!"
+                              <ReviewModal
+                                _id={data.review._id}
+                                onSuccess={() => {
+                                  setReload(reload + 1);
+                                }}
+                                textProp={data.review.review?.[0]?.text}
+                                ratingProp={data.review.rating}
+                                uploadsProp={data.review.review?.[0]?.uploads}
+                                type="edit"
+                                triggerComponent={
+                                  <Button
+                                    variant={"main_green_button"}
+                                    className="w-full"
+                                  >
+                                    Edit Review
+                                  </Button>
+                                }
+                              />
+                            </>
+                          ) : (
+                            <ReviewModal
+                              activity={data.activity._id}
+                              booking={data._id}
+                              user={userId}
+                              vendor={data.vendor._id}
+                              onSuccess={() => {
+                                setReload(reload + 1);
+                              }}
+                              type="add"
+                              triggerComponent={
+                                <Button
+                                  variant={"main_green_button"}
+                                  className="w-full"
+                                >
+                                  Leave A Review
+                                </Button>
                               }
                             />
-                          </div>
-                          <Button
-                            variant={"main_green_button"}
-                            className="w-full"
-                          >
-                            Edit review
-                          </Button>
+                          )}
                         </div>
                       </BoxProviderWithName>
                     </BoxProviderWithName>

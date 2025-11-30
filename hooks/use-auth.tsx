@@ -31,7 +31,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const { data, error } = await getCurrentUser();
       if (data?.user) {
         dispatch(setReduxUser(data.user));
-        console.log("data?.user", data?.user);
       }
       if (error || !data) {
         setUser(null);

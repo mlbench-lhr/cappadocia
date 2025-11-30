@@ -93,7 +93,6 @@ export function DynamicTable({
 }: DynamicTableProps) {
   // Internal state for client-side pagination (fallback)
   const [internalPage, setInternalPage] = useState(1);
-  console.log("data----", data);
 
   // Determine if using server-side or client-side pagination
   const isServerPagination = !!serverPagination;

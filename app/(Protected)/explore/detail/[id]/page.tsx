@@ -48,7 +48,6 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const [checkAvailabilityToggle, setCheckAvailabilityToggle] =
     useState<boolean>(false);
-  console.log("data?.vendor?.vendorDetails?.address-----", data);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {

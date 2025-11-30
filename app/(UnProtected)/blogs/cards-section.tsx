@@ -27,7 +27,7 @@ export function CardSection() {
     page: 1,
     totalPages: 0,
   });
-  console.log("data-----", data);
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm);

@@ -37,6 +37,7 @@ export interface Booking {
   activity: Types.ObjectId;
   vendor: Types.ObjectId;
   user: Types.ObjectId;
+  review: Types.ObjectId;
   selectDate: string;
   email: string;
   fullName: string;
@@ -73,6 +74,7 @@ const BookingSchema = new Schema<Booking>(
     slotId: { type: Schema.Types.ObjectId, required: true },
     vendor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    review: { type: Schema.Types.ObjectId, ref: "Review", required: true },
 
     selectDate: { type: String, required: true },
 

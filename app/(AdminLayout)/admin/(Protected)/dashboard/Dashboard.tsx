@@ -316,7 +316,6 @@ const Dashboard: React.FC = () => {
       }
 
       const data = await response.json();
-      console.log("data-------", data);
 
       setLatestUsers(data.activities);
     } catch (err) {
