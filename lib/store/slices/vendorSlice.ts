@@ -21,6 +21,7 @@ export interface VendorDetails {
   };
   agreedToTerms: boolean;
   cover?: string;
+  rating: { average: number | 0; total: number | 0 };
 }
 
 interface VendorState {
@@ -53,6 +54,7 @@ const initialState: VendorState = {
       currency: "",
     },
     agreedToTerms: false,
+    rating: { average: 0, total: 0 },
   },
 };
 

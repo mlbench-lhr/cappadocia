@@ -61,6 +61,16 @@ export const ReviewDetailsModal = ({
                 <h4 className="text-sm font-normal">
                   {`From : ${data.booking.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.booking.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
                 </h4>
+                <div className="w-fit flex justify-start items-center gap-1">
+                  <StarIcon />
+                  <span className="text-[12px] font-medium text-black/70">
+                    {Number(data.activity.rating.average).toFixed(1)}
+                    <span className="text-black/50">
+                      {" "}
+                      ({data.activity.rating.total} Reviews)
+                    </span>
+                  </span>
+                </div>
               </div>
             </div>
             <ProfileBadge
@@ -75,7 +85,9 @@ export const ReviewDetailsModal = ({
                 <div className="w-fit flex justify-start items-center gap-1">
                   <StarIcon />
                   <span className="text-[12px] font-medium text-black/60">
-                    5
+                    {Number(data.vendor.vendorDetails.rating.average).toFixed(
+                      1
+                    )}
                   </span>
                 </div>
               }
@@ -101,19 +113,21 @@ export const ReviewDetailsModal = ({
                       disabled
                       value={item.text}
                     />
-                    <h3 className="text-base font-semibold">Uploads</h3>
-                    {item.uploads && (
-                      <div className="w-full grid-cols-3 gap-2">
-                        {item.uploads.map((image, index2) => (
-                          <Image
-                            src={image}
-                            key={index2}
-                            height={100}
-                            width={100}
-                            className="col-span-1 h-[100px]"
-                            alt=""
-                          />
-                        ))}
+                    {item.uploads?.length > 0 && (
+                      <div className="w-full flex flex-col justify-between items-start gap-2">
+                        <h3 className="text-base font-semibold">Uploads</h3>
+                        <div className="w-full grid-cols-3 gap-2">
+                          {item.uploads.map((image, index2) => (
+                            <Image
+                              src={image}
+                              key={index2}
+                              height={100}
+                              width={100}
+                              className="col-span-1 h-[100px]"
+                              alt=""
+                            />
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>

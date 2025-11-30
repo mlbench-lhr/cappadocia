@@ -232,7 +232,9 @@ export default function BookingsPage() {
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">4.2</h2>
+                <h2 className="text-2xl md:text-[37px] font-medium ">
+                  {data.vendorDetails.rating?.average?.toFixed(1)}
+                </h2>
                 <h2 className="text-sm md:text-base font-medium ">
                   Average Rating
                 </h2>

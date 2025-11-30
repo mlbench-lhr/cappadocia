@@ -64,9 +64,13 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full overflow-hidden h-[320px] relative">
-              <LightboxProvider images={["/coverPicPlaceholder.png"]}>
+              <LightboxProvider
+                images={[
+                  data.vendorDetails.cover || "/coverPicPlaceholder.png",
+                ]}
+              >
                 <Image
-                  src={"/coverPicPlaceholder.png"}
+                  src={data.vendorDetails.cover || "/coverPicPlaceholder.png"}
                   alt=""
                   width={100}
                   height={100}
@@ -117,7 +121,9 @@ export default function BookingsPage() {
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">4.2</h2>
+                <h2 className="text-2xl md:text-[37px] font-medium ">
+                  {data.vendorDetails.rating?.average?.toFixed(1)}
+                </h2>
                 <h2 className="text-sm md:text-base font-medium ">
                   Average Rating
                 </h2>

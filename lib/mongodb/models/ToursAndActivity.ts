@@ -34,6 +34,7 @@ export interface ToursAndActivity {
     isRejected: boolean;
     reason?: string;
   };
+  rating: { average: number | 0; total: number | 0 };
 }
 export interface ToursAndActivityWithVendor {
   _id: string;
@@ -109,6 +110,10 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     rejected: {
       isRejected: { type: Boolean, default: false },
       reason: { type: String },
+    },
+    rating: {
+      average: { type: Number, default: 0 },
+      total: { type: Number, default: 0 },
     },
   },
   { timestamps: true }

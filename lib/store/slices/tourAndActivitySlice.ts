@@ -25,6 +25,7 @@ export interface ToursAndActivityState {
   duration: number;
   slots: Slot[];
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
+  rating: { average: number | 0; total: number | 0 };
 }
 
 const initialState: ToursAndActivityState = {
@@ -50,6 +51,7 @@ const initialState: ToursAndActivityState = {
       seatsAvailable: 25,
     },
   ],
+  rating: { average: 0, total: 0 },
 };
 
 // Identify array-only fields

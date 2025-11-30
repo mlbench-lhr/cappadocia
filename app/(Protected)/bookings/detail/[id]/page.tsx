@@ -321,88 +321,96 @@ export default function BookingsPage() {
                               placeholder="Type address or click on map"
                             />
                           )}
-                          {data.review ? (
+                          {data.status === "completed" && (
                             <>
-                              <div className="w-full flex flex-col justify-start items-start gap-2">
-                                <div className="w-full flex justify-between items-center">
-                                  <h3 className="text-base font-semibold">
-                                    Your Feedback
-                                  </h3>
-                                  <div className="w-fit flex justify-start items-center gap-1">
-                                    <Rating
-                                      value={data.review.rating}
-                                      iconsSize="18"
-                                    />
-                                  </div>
-                                </div>
-                                {data.review.review.map((item, index) => (
-                                  <div
-                                    key={index}
-                                    className="w-full flex flex-col justify-start items-start"
-                                  >
-                                    {item.addedBy === "vendor" && (
+                              {data.review ? (
+                                <>
+                                  <div className="w-full flex flex-col justify-start items-start gap-2">
+                                    <div className="w-full flex justify-between items-center">
                                       <h3 className="text-base font-semibold">
-                                        Vendor Reply
+                                        Your Feedback
                                       </h3>
-                                    )}
-                                    <span className="bg-[#FFF8FB] border h-fit w-full py-2 px-3 rounded-lg">
-                                      {item.text}
-                                    </span>
-                                    {item.uploads && (
-                                      <div className="w-full grid-cols-3 gap-2 mt-2">
-                                        {item.uploads.map((image, index2) => (
-                                          <Image
-                                            src={image}
-                                            key={index2}
-                                            height={100}
-                                            width={100}
-                                            className="col-span-1 h-[100px] object-cover object-center"
-                                            alt=""
-                                          />
-                                        ))}
+                                      <div className="w-fit flex justify-start items-center gap-1">
+                                        <Rating
+                                          value={data.review.rating}
+                                          iconsSize="18"
+                                        />
                                       </div>
-                                    )}
+                                    </div>
+                                    {data.review.review.map((item, index) => (
+                                      <div
+                                        key={index}
+                                        className="w-full flex flex-col justify-start items-start"
+                                      >
+                                        {item.addedBy === "vendor" && (
+                                          <h3 className="text-base font-semibold">
+                                            Vendor Reply
+                                          </h3>
+                                        )}
+                                        <span className="bg-[#FFF8FB] border h-fit w-full py-2 px-3 rounded-lg">
+                                          {item.text}
+                                        </span>
+                                        {item.uploads && (
+                                          <div className="w-full grid-cols-3 gap-2 mt-2">
+                                            {item.uploads.map(
+                                              (image, index2) => (
+                                                <Image
+                                                  src={image}
+                                                  key={index2}
+                                                  height={100}
+                                                  width={100}
+                                                  className="col-span-1 h-[100px] object-cover object-center"
+                                                  alt=""
+                                                />
+                                              )
+                                            )}
+                                          </div>
+                                        )}
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
-                              <ReviewModal
-                                _id={data.review._id}
-                                onSuccess={() => {
-                                  setReload(reload + 1);
-                                }}
-                                textProp={data.review.review?.[0]?.text}
-                                ratingProp={data.review.rating}
-                                uploadsProp={data.review.review?.[0]?.uploads}
-                                type="edit"
-                                triggerComponent={
-                                  <Button
-                                    variant={"main_green_button"}
-                                    className="w-full"
-                                  >
-                                    Edit Review
-                                  </Button>
-                                }
-                              />
+                                  <ReviewModal
+                                    _id={data.review._id}
+                                    onSuccess={() => {
+                                      setReload(reload + 1);
+                                    }}
+                                    textProp={data.review.review?.[0]?.text}
+                                    ratingProp={data.review.rating}
+                                    uploadsProp={
+                                      data.review.review?.[0]?.uploads
+                                    }
+                                    type="edit"
+                                    triggerComponent={
+                                      <Button
+                                        variant={"main_green_button"}
+                                        className="w-full"
+                                      >
+                                        Edit Review
+                                      </Button>
+                                    }
+                                  />
+                                </>
+                              ) : (
+                                <ReviewModal
+                                  activity={data.activity._id}
+                                  booking={data._id}
+                                  user={userId}
+                                  vendor={data.vendor._id}
+                                  onSuccess={() => {
+                                    setReload(reload + 1);
+                                  }}
+                                  type="add"
+                                  triggerComponent={
+                                    <Button
+                                      variant={"main_green_button"}
+                                      className="w-full"
+                                    >
+                                      Leave A Review
+                                    </Button>
+                                  }
+                                />
+                              )}
                             </>
-                          ) : (
-                            <ReviewModal
-                              activity={data.activity._id}
-                              booking={data._id}
-                              user={userId}
-                              vendor={data.vendor._id}
-                              onSuccess={() => {
-                                setReload(reload + 1);
-                              }}
-                              type="add"
-                              triggerComponent={
-                                <Button
-                                  variant={"main_green_button"}
-                                  className="w-full"
-                                >
-                                  Leave A Review
-                                </Button>
-                              }
-                            />
                           )}
                         </div>
                       </BoxProviderWithName>
