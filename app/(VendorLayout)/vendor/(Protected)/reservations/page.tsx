@@ -28,7 +28,7 @@ export type bookingProps = {
     | "completed"
     | "cancelled"
     | "active"
-    | "pending Admin Approval";
+    | "pending admin approval";
   date: Date;
   _id: string;
   price: string;

@@ -18,7 +18,7 @@ export interface ToursAndActivity {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
+  status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
       _id: string;
@@ -48,7 +48,7 @@ export interface ToursAndActivityWithVendor {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
-  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
+  status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
       _id: string;
@@ -83,8 +83,8 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     category: { type: String },
     status: {
       type: String,
-      enum: ["pending Admin Approval", "active", "rejected", "upcoming"],
-      default: "pending Admin Approval",
+      enum: ["pending admin approval", "active", "rejected", "upcoming"],
+      default: "pending admin approval",
     },
     description: { type: String },
     uploads: { type: [String], default: [] },

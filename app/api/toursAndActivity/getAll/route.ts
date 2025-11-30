@@ -20,18 +20,42 @@ export async function GET(req: NextRequest) {
   const page = Number(url.searchParams.get("page")) || 1;
   const limit = Number(url.searchParams.get("limit")) || 7;
   const searchTerm = url.searchParams.get("search") || "";
+  const status = url.searchParams.get("status") || "";
   const category = url.searchParams.get("category");
+  const filters = url.searchParams.get("filters") || "";
 
   const query: any = {};
   if (payload.role === "vendor") {
     query.vendor = userId;
   }
-
+  if (status) {
+    query.status = status;
+  }
   if (searchTerm) {
     query.title = { $regex: searchTerm, $options: "i" };
   }
   if (category) {
     query.category = category;
+  }
+  if (filters) {
+    const filterArray = filters
+      .split(",")
+      .map((f) => f.trim())
+      .filter(Boolean);
+    console.log("filterArray-------", filterArray);
+
+    if (filterArray.length > 0) {
+      const validStatuses = [
+        "pending admin approval",
+        "active",
+        "rejected",
+        "upcoming",
+      ];
+      const validFilters = filterArray.filter((f) => validStatuses.includes(f));
+      if (validFilters.length > 0) {
+        query.status = { $in: validFilters };
+      }
+    }
   }
 
   const skip = (page - 1) * limit;
