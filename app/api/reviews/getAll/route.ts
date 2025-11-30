@@ -8,6 +8,8 @@ import { verifyToken } from "@/lib/auth/jwt";
 
 export async function GET(req: NextRequest) {
   let token = req.cookies.get("auth_token")?.value;
+  const url = new URL(req.url);
+  const limit = Number(url.searchParams.get("limit")) || 7;
   if (!token) {
     return NextResponse.json(
       { error: "Authorization token required" },
@@ -30,6 +32,7 @@ export async function GET(req: NextRequest) {
     .populate("vendor")
     .populate("user")
     .populate("booking")
+    .limit(limit)
     .lean();
   return NextResponse.json({ data: reviews });
 }

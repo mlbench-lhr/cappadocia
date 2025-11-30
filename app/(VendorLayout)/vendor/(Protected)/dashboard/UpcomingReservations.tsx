@@ -69,9 +69,9 @@ export const UpcomingReservations = () => {
                   <BoxProviderWithName
                     leftSideComponent={
                       <ProfileBadge
-                        title="John D."
-                        subTitle="Apr 10, 2024"
-                        image="/userDashboard/cimg.png"
+                        title={item.user.fullName}
+                        subTitle={item.user.email}
+                        image={item.user.avatar || "/placeholderDp.png"}
                         size="medium"
                       />
                     }
