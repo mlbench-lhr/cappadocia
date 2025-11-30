@@ -70,6 +70,7 @@ export interface ToursAndActivityWithVendor {
     avatar: string;
     vendorDetails: VendorDetails;
   };
+  rating: { average: number | 0; total: number | 0 };
 }
 export interface ToursAndActivityDocument extends ToursAndActivity, Document {
   _id: string;

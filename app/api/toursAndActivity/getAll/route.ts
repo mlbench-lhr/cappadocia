@@ -56,6 +56,25 @@ export async function GET(req: NextRequest) {
         query.status = { $in: validFilters };
       }
     }
+    const parsed = JSON.parse(filters);
+
+    parsed.forEach((f: any) => {
+      if (f.duration) {
+        query["slots.startDate"] = { $gte: new Date(f.duration.from) };
+        query["slots.endDate"] = { $lte: new Date(f.duration.to) };
+      }
+
+      if (f.priceRange) {
+        query["slots.adultPrice"] = {
+          $gte: f.priceRange.min,
+          $lte: f.priceRange.max,
+        };
+      }
+
+      if (typeof f.rating === "number") {
+        query["rating.average"] = { $gte: f.rating };
+      }
+    });
   }
 
   const skip = (page - 1) * limit;

@@ -8,17 +8,30 @@ import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import axios from "axios";
 import { TourAndActivityCardSkeleton } from "@/components/Skeletons/TourAndActivityCardSkeleton";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 
+const NoBookingsFound = () => {
+  return (
+    <div className="col-span-12 flex justify-center items-center">
+      <NoDataComponent text="No Activity Found" />
+    </div>
+  );
+};
 export default function ExploreActivities({
   type = "both",
+  filters = "",
+  searchQuery,
 }: {
   type: "both" | "Tour" | "Activity";
+  filters?: string;
+  searchQuery?: string;
 }) {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+  console.log("filters", filters);
 
   const [activity, setActivity] = useState<ToursAndActivityWithVendor[]>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -28,7 +41,9 @@ export default function ExploreActivities({
       try {
         setLoading(true);
         let response = await axios.get(
-          `/api/toursAndActivity/getAll?category=Activity`
+          `/api/toursAndActivity/getAll?category=Activity&search=${searchQuery}&limit=4&filters=${encodeURIComponent(
+            filters
+          )}`
         );
         console.log("response----", response);
 
@@ -41,7 +56,7 @@ export default function ExploreActivities({
       }
     };
     getData();
-  }, []);
+  }, [filters, searchQuery]);
 
   return (
     <BoxProviderWithName
@@ -52,13 +67,17 @@ export default function ExploreActivities({
       rightSideLabel="View All Activities"
     >
       <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-        {loading
-          ? [0, 1, 2, 3]?.map((item) => (
-              <TourAndActivityCardSkeleton key={item} />
-            ))
-          : activity?.map((item, index) => (
-              <TourAndActivityCard item={item} key={index} />
-            ))}
+        {loading ? (
+          [0, 1, 2, 3]?.map((item) => (
+            <TourAndActivityCardSkeleton key={item} />
+          ))
+        ) : activity && activity.length > 0 ? (
+          activity?.map((item, index) => (
+            <TourAndActivityCard item={item} key={index} />
+          ))
+        ) : (
+          <NoBookingsFound />
+        )}
       </div>
     </BoxProviderWithName>
   );

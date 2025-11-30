@@ -79,7 +79,7 @@ export const TourAndActivityCard = ({
               <div className="flex justify-start items-center gap-2">
                 <div className="flex justify-start items-center gap-1">
                   <StarIcon />
-                  <span className="">4.7</span>
+                  <span className="">{item.rating.average.toFixed(1)}</span>
                 </div>
               </div>
               <Button
