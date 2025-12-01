@@ -53,6 +53,7 @@ export interface Booking {
   };
   adultsCount: number;
   childrenCount: number;
+  completedAt: Date;
   paymentStatus: "paid" | "pending" | "refunded";
   status: "pending" | "upcoming" | "completed" | "cancelled" | "missed";
 }
@@ -99,7 +100,9 @@ const BookingSchema = new Schema<Booking>(
       currency: { type: String, required: true, default: "usd" },
       status: { type: String, required: false, default: "pending" },
     },
-
+    completedAt: {
+      type: Date,
+    },
     paymentStatus: {
       type: String,
       enum: ["paid", "pending", "refunded"],

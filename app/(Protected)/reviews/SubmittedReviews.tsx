@@ -106,7 +106,7 @@ export default function SubmittedReviews({
             setRefreshData(refreshData + 1);
           }}
           triggerComponent={
-            <div className="w-fit text-primary underline hover:no-underline text-xs font-normal">
+            <div className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer">
               View Details
             </div>
           }

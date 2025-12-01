@@ -5,11 +5,7 @@ import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { Column } from "@/app/(AdminLayout)/admin/Components/Table/page";
-import Rating from "@/components/SmallComponents/RatingField";
-import { Pencil, Trash } from "lucide-react";
 import Swal from "sweetalert2";
-import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
-import { ReviewDetailsModal } from "@/components/SmallComponents/ReviewDeatilsModal";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { DynamicTable } from "@/app/(AdminLayout)/admin/Components/Table/page";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
@@ -17,7 +13,6 @@ import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { ReviewWithPopulatedData } from "@/lib/types/review";
 import moment from "moment";
-import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { StatusText } from "@/components/SmallComponents/StatusText";
 import Link from "next/link";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
@@ -38,7 +33,20 @@ const NoBookingsFound = () => (
     }
   />
 );
-export default function BookingsPage() {
+export interface VendorInvoice {
+  invoiceId: string;
+  tourTitle: string;
+  bookingId: string;
+  amount: number;
+  currency: string;
+  date: string | null;
+  payoutStatus:
+    | "Eligible"
+    | "Not Eligible (Activity Tomorrow)"
+    | "Not Eligible (Activity not started yet)";
+}
+
+export default function PaymentsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,41 +55,10 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
-  const handleDelete = async (id: string) => {
-    Swal.fire({
-      title: "Delete Blog",
-      text: "Are you sure you want to delete this Blog?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#B32053",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Delete",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await fetch(`/api/reviews/delete/${id}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (res.ok) {
-            console.log(`Milestone ${id} marked as skipped`);
-          } else {
-            console.error("Failed to skip milestone");
-          }
-        } catch (err) {
-          console.error("Error skipping milestone:", err);
-        } finally {
-          setRefreshData(refreshData + 1);
-        }
-      }
-    });
-  };
-
   const columns: Column[] = [
     {
       header: "Tour Title",
-      accessor: "activity.title",
+      accessor: "tourTitle",
     },
     {
       header: "Booking ID",
@@ -89,8 +66,8 @@ export default function BookingsPage() {
     },
     {
       header: "Tour Status",
-      accessor: "status",
-      render: (item) => <StatusText status={item.status} />,
+      accessor: "payoutStatus",
+      render: (item) => <StatusText status={item.payoutStatus} />,
     },
     {
       header: "Amount",
@@ -100,6 +77,8 @@ export default function BookingsPage() {
       header: "Date",
       accessor: "date",
       render: (item) => {
+        console.log("item-----------", item);
+
         return (
           <span>
             {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
@@ -110,21 +89,25 @@ export default function BookingsPage() {
     {
       header: "Action",
       accessor: "role",
-      render: (item) => (
-        <Link
-          href={`/invoices/detail/${item.invoice}`}
-          className="text-[#B32053] underline"
-        >
-          View Details
-        </Link>
-      ),
+      render: (item) =>
+        item.payoutStatus === "Eligible" ? (
+          <div className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer">
+            Request Payout
+          </div>
+        ) : (
+          <Link
+            href={`/invoices/detail/${item._id}`}
+            className="text-[#B32053] underline"
+          >
+            View Invoice
+          </Link>
+        ),
     },
   ];
 
   // Prepare query params for the API
   const queryParams = {
     search: searchQuery,
-    filters: ["completed"],
   };
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -204,8 +187,8 @@ export default function BookingsPage() {
         </BoxProviderWithName>
         <BoxProviderWithName noBorder={true} name="Payout Details">
           {/* Server Pagination Provider wraps the table */}
-          <ServerPaginationProvider<ReviewWithPopulatedData>
-            apiEndpoint="/api/reviews/getAll" // Your API endpoint
+          <ServerPaginationProvider<VendorInvoice>
+            apiEndpoint="/api/payments/getVendorPayments" // Your API endpoint
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}

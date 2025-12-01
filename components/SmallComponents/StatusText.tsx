@@ -1,6 +1,8 @@
 const variants: any = {
   upcoming: { text: "#008EFF" },
   completed: { text: "#4A9E35" },
+  Eligible: { text: "#4A9E35" },
+  "Not Eligible (Activity Tomorrow)": { text: "#F5A903" },
   pending: { text: "#FF862F" },
   cancelled: { text: "rgba(255, 0, 0, 0.60)" },
 };
