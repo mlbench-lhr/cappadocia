@@ -18,7 +18,6 @@ import { Promotions } from "./Promotions/page";
 
 // Edit Profile comp
 
-("use client");
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import Swal from "sweetalert2";
