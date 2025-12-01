@@ -1,10 +1,208 @@
-import React from 'react'
-import PaymentsDashboard from '../../Components/payments/AllPayments'
+"use client";
+import { useAppDispatch } from "@/lib/store/hooks";
+import { useMediaQuery } from "react-responsive";
+import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
+import { useEffect, useState } from "react";
+import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
+import { Column } from "@/app/(AdminLayout)/admin/Components/Table/page";
+import Rating from "@/components/SmallComponents/RatingField";
+import { Pencil, Trash } from "lucide-react";
+import Swal from "sweetalert2";
+import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
+import { ReviewDetailsModal } from "@/components/SmallComponents/ReviewDeatilsModal";
+import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
+import { DynamicTable } from "@/app/(AdminLayout)/admin/Components/Table/page";
+import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
+import { Button } from "@/components/ui/button";
+import { ReviewWithPopulatedData } from "@/lib/types/review";
+import moment from "moment";
+import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
+import { StatusText } from "@/components/SmallComponents/StatusText";
+import Link from "next/link";
+import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
+import { PayoutDetailsModal } from "@/components/SmallComponents/PayoutDetailsModal";
+const BookingsLoadingSkeleton = () => (
+  <div className="w-full space-y-4 animate-pulse">
+    {[...Array(7)].map((_, i) => (
+      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+    ))}
+  </div>
+);
 
-function page() {
+// No data component
+const NoBookingsFound = () => (
+  <NoDataComponent
+    text="You don’t have any bookings yet."
+    actionComponent={
+      <Button variant={"main_green_button"}>Start Exploring Now</Button>
+    }
+  />
+);
+export default function BookingsPage() {
+  const dispatch = useAppDispatch();
+  const isMobile = useMediaQuery({ maxWidth: 1350 });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [refreshData, setRefreshData] = useState(0);
+  useEffect(() => {
+    if (isMobile) dispatch(closeSidebar());
+  }, []);
+
+  const handleDelete = async (id: string) => {
+    Swal.fire({
+      title: "Delete Blog",
+      text: "Are you sure you want to delete this Blog?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#B32053",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/api/reviews/delete/${id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          });
+
+          if (res.ok) {
+            console.log(`Milestone ${id} marked as skipped`);
+          } else {
+            console.error("Failed to skip milestone");
+          }
+        } catch (err) {
+          console.error("Error skipping milestone:", err);
+        } finally {
+          setRefreshData(refreshData + 1);
+        }
+      }
+    });
+  };
+
+  const columns: Column[] = [
+    {
+      header: "Vendor Name",
+      accessor: "activity.title",
+    },
+    {
+      header: "Tour Name",
+      accessor: "bookingId",
+    },
+    {
+      header: "Tour Date",
+      accessor: "date",
+      render: (item) => {
+        return (
+          <span>
+            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+          </span>
+        );
+      },
+    },
+    {
+      header: "Status",
+      accessor: "status",
+      render: (item) => <StatusBadge status={item.status} />,
+    },
+    {
+      header: "Requested Date",
+      accessor: "date",
+      render: (item) => {
+        return (
+          <span>
+            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+          </span>
+        );
+      },
+    },
+    {
+      header: "Action",
+      accessor: "role",
+      render: (item) => {
+        return <PayoutDetailsModal />;
+      },
+    },
+  ];
+
+  // Prepare query params for the API
+  const queryParams = {
+    search: searchQuery,
+    filters: ["completed"],
+  };
+  useEffect(() => {
+    if (isMobile) dispatch(closeSidebar());
+  }, []);
+
   return (
-    <PaymentsDashboard />
-  )
+    <BasicStructureWithName name="">
+      <div className="flex flex-col justify-start items-start w-full gap-0 h-fit">
+        <BoxProviderWithName noBorder={true} name="Payments">
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+            <BoxProviderWithName name="" className="col-span-1">
+              <div className="flex flex-col justify-start items-start gap-2 w-full">
+                <h2 className="text-sm md:text-base font-semibold">
+                  Total Revenue
+                </h2>
+                <span className="text-2xl md:text-[37px] font-semibold">
+                  €485,200
+                </span>
+                <span className="text-sm md:text-base font-medium text-[#51C058]">
+                  ↑ 18% from last month
+                </span>
+              </div>
+            </BoxProviderWithName>
+            <BoxProviderWithName name="" className="col-span-1">
+              <div className="flex flex-col justify-start items-start gap-2 w-full">
+                <h2 className="text-sm md:text-base font-semibold">
+                  Platform Commission
+                </h2>
+                <span className="text-2xl md:text-[37px] font-semibold">
+                  €48,520
+                </span>
+                <span className="text-sm md:text-base font-medium text-[#51C058]">
+                  ↑ 18% from last month
+                </span>
+              </div>
+            </BoxProviderWithName>
+            <BoxProviderWithName name="" className="col-span-1">
+              <div className="flex flex-col justify-start items-start gap-2 w-full">
+                <h2 className="text-sm md:text-base font-semibold">
+                  Vendor Net Earnings
+                </h2>
+                <span className="text-2xl md:text-[37px] font-semibold">
+                  €485,200
+                </span>
+                <span className="text-sm md:text-base font-medium text-[#51C058]">
+                  ↑ 18% from last month
+                </span>
+              </div>
+            </BoxProviderWithName>
+          </div>
+        </BoxProviderWithName>
+        <BoxProviderWithName noBorder={true} name="Payout Requests">
+          {/* Server Pagination Provider wraps the table */}
+          <ServerPaginationProvider<ReviewWithPopulatedData>
+            apiEndpoint="/api/reviews/getAll" // Your API endpoint
+            queryParams={queryParams}
+            LoadingComponent={BookingsLoadingSkeleton}
+            NoDataComponent={NoBookingsFound}
+            itemsPerPage={7}
+            refreshData={refreshData}
+          >
+            {(data, isLoading, refetch) => (
+              <BoxProviderWithName name="">
+                <DynamicTable
+                  data={data}
+                  columns={columns}
+                  itemsPerPage={7}
+                  onRowClick={(item) => console.log("Clicked:", item)}
+                  isLoading={isLoading}
+                />
+              </BoxProviderWithName>
+            )}
+          </ServerPaginationProvider>
+        </BoxProviderWithName>
+      </div>
+    </BasicStructureWithName>
+  );
 }
-
-export default page
