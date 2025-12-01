@@ -195,10 +195,6 @@ export default function ExplorePage({
     getData();
   }, []);
 
-  if (!tours && !activity) {
-    return null;
-  }
-
   return (
     <BasicStructureWithName
       name={
@@ -370,12 +366,20 @@ export default function ExplorePage({
           </Popover>
         </div>
         <BoxProviderWithName className="">
-          <div className="w-full space-y-0">
+          <div className="w-full space-y-4">
             {(type === "both" || type === "Tour") && (
-              <ExploreTours type={type} />
+              <ExploreTours
+                type={type}
+                filters={JSON.stringify(filters)}
+                searchQuery={searchQuery}
+              />
             )}
             {(type === "both" || type === "Activity") && (
-              <ExploreActivities type={type} />
+              <ExploreActivities
+                type={type}
+                filters={JSON.stringify(filters)}
+                searchQuery={searchQuery}
+              />
             )}
           </div>
         </BoxProviderWithName>

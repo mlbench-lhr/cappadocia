@@ -28,7 +28,6 @@ export default function BookingsPage() {
 
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log("data-----", data);
 
   useEffect(() => {
     const getData = async () => {

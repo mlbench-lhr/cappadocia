@@ -75,7 +75,6 @@ const ReservationDetails: React.FC = () => {
 
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log("data-----", data);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {

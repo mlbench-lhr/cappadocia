@@ -22,6 +22,7 @@ import axios from "axios";
 import { VendorDetailsType } from "@/lib/types/vendor";
 import { timeSince } from "@/lib/helper/timeFunctions";
 import VendorProfileSkeleton from "@/components/Skeletons/VendorProfileSkeleton";
+import ReviewSection from "../../../detail/[id]/ReviewSection";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -33,7 +34,6 @@ export default function BookingsPage() {
 
   const [data, setData] = useState<VendorDetailsType | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log("data?.vendor?.vendorDetails?.address-----", data);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -64,9 +64,13 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full overflow-hidden h-[320px] relative">
-              <LightboxProvider images={["/coverPicPlaceholder.png"]}>
+              <LightboxProvider
+                images={[
+                  data.vendorDetails.cover || "/coverPicPlaceholder.png",
+                ]}
+              >
                 <Image
-                  src={"/coverPicPlaceholder.png"}
+                  src={data.vendorDetails.cover || "/coverPicPlaceholder.png"}
                   alt=""
                   width={100}
                   height={100}
@@ -117,7 +121,9 @@ export default function BookingsPage() {
                 </h2>
               </div>
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">4.2</h2>
+                <h2 className="text-2xl md:text-[37px] font-medium ">
+                  {data.vendorDetails.rating?.average?.toFixed(1)}
+                </h2>
                 <h2 className="text-sm md:text-base font-medium ">
                   Average Rating
                 </h2>
@@ -187,154 +193,7 @@ export default function BookingsPage() {
             <BoxProviderWithName name="Gallery" className=" mt-4">
               <ImageGallery imagesParam={data.latestUploads} />
             </BoxProviderWithName>
-            <BoxProviderWithName
-              name="Reviews"
-              noBorder={true}
-              className="!p-0 mt-4"
-              rightSideLink="/explore"
-              rightSideLabel="See All"
-            >
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border">
-                  <div className="flex justify-start items-center w-full gap-3">
-                    <span className="text-[14px] font-medium text-primary">
-                      5
-                    </span>
-                    <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
-                      <div className="w-[70%] relative rounded-full overflow-hidden h-[8px] bg-primary"></div>
-                    </div>
-                  </div>
-                  <div className="flex justify-start items-center w-full gap-3">
-                    <span className="text-[14px] font-medium text-primary">
-                      4
-                    </span>
-                    <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
-                      <div className="w-[50%] relative rounded-full overflow-hidden h-[8px] bg-primary"></div>
-                    </div>
-                  </div>
-                  <div className="flex justify-start items-center w-full gap-3">
-                    <span className="text-[14px] font-medium text-primary">
-                      3
-                    </span>
-                    <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
-                      <div className="w-[60%] relative rounded-full overflow-hidden h-[8px] bg-primary"></div>
-                    </div>
-                  </div>
-                  <div className="flex justify-start items-center w-full gap-3">
-                    <span className="text-[14px] font-medium text-primary">
-                      2
-                    </span>
-                    <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
-                      <div className="w-[30%] relative rounded-full overflow-hidden h-[8px] bg-primary"></div>
-                    </div>
-                  </div>
-                  <div className="flex justify-start items-center w-full gap-3">
-                    <span className="text-[14px] font-medium text-primary">
-                      1
-                    </span>
-                    <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
-                      <div className="w-[20%] relative rounded-full overflow-hidden h-[8px] bg-primary"></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border flex flex-col justify-center items-center gap-2">
-                  <h1 className="text-4xl md:text-[56px] font-semibold text-primary">
-                    4.0
-                  </h1>
-                  <div className="w-fit flex justify-start items-center gap-1">
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                    <StarIcon />
-                  </div>
-                  <span className="text-[14px] font-normal text-black/70">
-                    9,676 reviews
-                  </span>
-                </div>
-              </div>
-            </BoxProviderWithName>
-            <BoxProviderWithName
-              name="All Reviews"
-              noBorder={true}
-              className="!p-0 mt-4"
-              rightSideLink="/explore"
-              rightSideLabel="See All"
-            >
-              <div className="w-full flex-col flex justify-start items-center gap-3.5">
-                <div className="rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">
-                  <div className="w-full flex justify-between items-center">
-                    <ProfileBadge
-                      size="medium"
-                      title="John D."
-                      subTitle={"Apr 10, 2024"}
-                      image="/userDashboard/img2.png"
-                    />
-                    <div className="w-fit flex justify-start items-center gap-1">
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <span className="text-[12px] font-medium text-black/60">
-                        5
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-[14px] font-normal text-black/70 leading-[18px]">
-                    The The sunrise hot air balloon ride was the absolute
-                    highlight of our trip to Cappadocia. The pickup from our
-                    hotel was smooth, the driver was punctual, and the staff at
-                    the launch site were super professional. Our pilot explained
-                    everything clearly, and once we were in the air, it was pure
-                    magic — floating over the fairy chimneys with the sun rising
-                    behind the valleys. The ride lasted about an hour, which was
-                    perfect. After landing, they even served us a small
-                    celebratory drink. Highly recommend booking in advance as
-                    spots sell out quickly air balloon ride was absolutely
-                    magical! Everything was well organized, and the view of
-                    Cappadocia at sunrise is something I’ll never forget.
-                  </span>
-                </div>
-                <div className="rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2">
-                  <div className="w-full flex justify-between items-center">
-                    <ProfileBadge
-                      size="medium"
-                      title="John D."
-                      subTitle={"Apr 10, 2024"}
-                      image="/userDashboard/img2.png"
-                    />
-                    <div className="w-fit flex justify-start items-center gap-1">
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <StarIcon />
-                      <span className="text-[12px] font-medium text-black/60">
-                        5
-                      </span>
-                    </div>
-                  </div>
-                  <span className="text-[14px] font-normal text-black/70 leading-[18px]">
-                    The The sunrise hot air balloon ride was the absolute
-                    highlight of our trip to Cappadocia. The pickup from our
-                    hotel was smooth, the driver was punctual, and the staff at
-                    the launch site were super professional. Our pilot explained
-                    everything clearly, and once we were in the air, it was pure
-                    magic — floating over the fairy chimneys with the sun rising
-                    behind the valleys. The ride lasted about an hour, which was
-                    perfect. After landing, they even served us a small
-                    celebratory drink. Highly recommend booking in advance as
-                    spots sell out quickly air balloon ride was absolutely
-                    magical! Everything was well organized, and the view of
-                    Cappadocia at sunrise is something I’ll never forget.
-                  </span>
-                </div>
-                <Button variant={"outline"} className="text-primary">
-                  See more Reviews
-                </Button>
-              </div>
-            </BoxProviderWithName>
+            <ReviewSection type="vendor" />
           </div>
         </BoxProviderWithName>
       </div>

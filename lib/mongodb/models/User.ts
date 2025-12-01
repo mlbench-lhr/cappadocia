@@ -20,6 +20,7 @@ export interface VendorDetails {
     currency: string;
   };
   cover?: string;
+  rating: { average: number | 0; total: number | 0 };
 }
 
 export interface IUser extends Document {
@@ -115,6 +116,10 @@ const UserSchema = new Schema<IUser>(
           bankName: { type: String, required: true },
           accountHolderName: { type: String, required: true },
           currency: { type: String, required: true },
+        },
+        rating: {
+          average: { type: Number, default: 0 },
+          total: { type: Number, default: 0 },
         },
       },
       required: function () {

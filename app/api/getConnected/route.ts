@@ -37,7 +37,6 @@ async function sendResendEmail(to: string, subject: string, html: string) {
       subject,
       html,
     });
-    console.log("data--------", data);
     return { ok: true, data };
   } catch (err) {
     console.error("Resend email error:", err);

@@ -2,8 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import Booking from "@/lib/mongodb/models/booking";
 import connectDB from "@/lib/mongodb/connection";
 import "@/lib/mongodb/models/ToursAndActivity";
+import { verifyToken } from "@/lib/auth/jwt";
 
 export async function GET(req: NextRequest) {
+  let token = req.cookies.get("auth_token")?.value;
+  if (!token) {
+    return NextResponse.json(
+      { error: "Authorization token required" },
+      { status: 401 }
+    );
+  }
+  const payload = verifyToken(token);
+  const userId = payload.userId;
+  console.log("userId------", payload);
   await connectDB();
 
   const url = new URL(req.url);
@@ -12,8 +23,14 @@ export async function GET(req: NextRequest) {
   const searchTerm = url.searchParams.get("search") || "";
   const status = url.searchParams.get("status") || "";
   const filters = url.searchParams.get("filters") || "";
+  console.log("searchTerm------", searchTerm);
 
   const query: any = {};
+  if (payload.role === "user") {
+    query.user = userId;
+  } else if (payload.role === "vendor") {
+    query.vendor = userId;
+  }
 
   if (searchTerm) {
     query.$or = [

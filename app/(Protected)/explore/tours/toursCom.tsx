@@ -2,17 +2,28 @@
 import { useAppDispatch } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
-import axios from "axios";
-import LandingTourCardSkeleton from "@/components/Skeletons/LandingTourCardSkeleton";
 import { TourAndActivityCardSkeleton } from "@/components/Skeletons/TourAndActivityCardSkeleton";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
+import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
 
+const NoBookingsFound = () => {
+  return (
+    <div className="col-span-12 flex justify-center items-center">
+      <NoDataComponent text="No Tours Found" />
+    </div>
+  );
+};
 export default function ExploreTours({
   type = "both",
+  filters = "",
+  searchQuery,
 }: {
+  filters?: string;
+  searchQuery?: string;
   type: "both" | "Tour" | "Activity";
 }) {
   const dispatch = useAppDispatch();
@@ -20,29 +31,7 @@ export default function ExploreTours({
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
-  const [tours, setTours] = useState<ToursAndActivityWithVendor[]>();
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        setLoading(true);
-        let response = await axios.get(
-          `/api/toursAndActivity/getAll?category=Tour`
-        );
-        console.log("response----", response);
-
-        if (response.data?.data) {
-          setTours(response.data?.data);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.log("err---", error);
-      }
-    };
-    getData();
-  }, []);
+  console.log("filters", filters);
 
   return (
     <BoxProviderWithName
@@ -52,15 +41,26 @@ export default function ExploreTours({
       rightSideLink={type === "both" ? "/explore/tours" : undefined}
       rightSideLabel="View All Tours"
     >
-      <div className="w-full space-y-3 grid grid-cols-12 gap-3">
-        {loading
-          ? [0, 1, 2, 3]?.map((item) => (
-              <TourAndActivityCardSkeleton key={item} />
-            ))
-          : tours?.map((item, index) => (
+      <ServerPaginationProvider<ToursAndActivityWithVendor>
+        apiEndpoint="/api/toursAndActivity/getAll" // Your API endpoint
+        queryParams={{
+          category: "Tour",
+          search: searchQuery,
+          filters: filters.includes("all") ? [] : filters,
+        }}
+        LoadingComponent={TourAndActivityCardSkeleton}
+        NoDataComponent={NoBookingsFound}
+        itemsPerPage={type === "both" ? 4 : 7}
+        fixedLimit={type === "both" ? true : false}
+      >
+        {(data, isLoading, refetch) => (
+          <div className="w-full space-y-3 grid grid-cols-12 gap-3">
+            {data?.map((item, index) => (
               <TourAndActivityCard item={item} key={index} />
             ))}
-      </div>
+          </div>
+        )}
+      </ServerPaginationProvider>
     </BoxProviderWithName>
   );
 }

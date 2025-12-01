@@ -24,8 +24,9 @@ type ServerPaginationProviderProps<T> = {
   NoDataComponent?: React.ComponentType;
   itemsPerPage?: number;
   enabled?: boolean;
-  presentData?: any;
   setTotalItems?: any;
+  refreshData?: number;
+  fixedLimit?: boolean;
 };
 
 export function ServerPaginationProvider<T = any>({
@@ -37,10 +38,11 @@ export function ServerPaginationProvider<T = any>({
   NoDataComponent,
   itemsPerPage = 10,
   enabled = true,
-  presentData,
   setTotalItems,
+  refreshData,
+  fixedLimit = false,
 }: ServerPaginationProviderProps<T>) {
-  const [data, setData] = useState<T[]>(presentData ? presentData : []);
+  const [data, setData] = useState<T[]>([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -89,10 +91,7 @@ export function ServerPaginationProvider<T = any>({
         const fetchedData = Array.isArray(responseData) ? responseData : [];
         const total = pagination.totalPages;
         const totalCount = pagination.total;
-        if (!presentData) {
-          console.log("responseData---", responseData);
-          setData(fetchedData);
-        }
+        setData(fetchedData);
 
         setTotalPages(total);
         if (setTotalItems) {
@@ -106,9 +105,7 @@ export function ServerPaginationProvider<T = any>({
       } catch (err) {
         console.error("Error fetching data:", err);
         setError(err instanceof Error ? err.message : "Failed to fetch data");
-        if (!presentData) {
-          setData([]);
-        }
+        setData([]);
         setTotalPages(1);
       } finally {
         setIsFetching(false);
@@ -125,7 +122,7 @@ export function ServerPaginationProvider<T = any>({
 
   useEffect(() => {
     fetchData(currentPage);
-  }, [currentPage, queryParams]);
+  }, [currentPage, queryParams, refreshData]);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages && page !== currentPage) {
@@ -145,12 +142,7 @@ export function ServerPaginationProvider<T = any>({
   }
 
   // Show no data component if no data after loading
-  if (
-    presentData &&
-    !isInitialLoading &&
-    data.length === 0 &&
-    NoDataComponent
-  ) {
+  if (!isInitialLoading && data.length === 0 && NoDataComponent) {
     return <NoDataComponent />;
   }
 
@@ -160,66 +152,69 @@ export function ServerPaginationProvider<T = any>({
       {children(data, isFetching, refetch)}
 
       {/* Pagination */}
-      {!isInitialLoading && data.length > 0 && totalPages > 1 && (
-        <Pagination className="w-full">
-          <PaginationContent className="relative w-full flex justify-center items-center">
-            <PaginationItem className="absolute left-1 sm:left-8">
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage > 1) handlePageChange(currentPage - 1);
-                }}
-                // @ts-ignore
-                disabled={currentPage <= 1}
-              />
-            </PaginationItem>
+      {!fixedLimit &&
+        !isInitialLoading &&
+        data.length > 0 &&
+        totalPages > 1 && (
+          <Pagination className="w-full">
+            <PaginationContent className="relative w-full flex justify-center items-center">
+              <PaginationItem className="absolute left-1 sm:left-8">
+                <PaginationPrevious
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage > 1) handlePageChange(currentPage - 1);
+                  }}
+                  // @ts-ignore
+                  disabled={currentPage <= 1}
+                />
+              </PaginationItem>
 
-            {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
-              const pageNum =
-                totalPages <= 5
-                  ? i + 1
-                  : currentPage <= 3
-                  ? i + 1
-                  : currentPage >= totalPages - 2
-                  ? totalPages - 4 + i
-                  : currentPage - 2 + i;
+              {Array.from({ length: Math.min(totalPages, 5) }).map((_, i) => {
+                const pageNum =
+                  totalPages <= 5
+                    ? i + 1
+                    : currentPage <= 3
+                    ? i + 1
+                    : currentPage >= totalPages - 2
+                    ? totalPages - 4 + i
+                    : currentPage - 2 + i;
 
-              return (
-                <PaginationItem key={i}>
-                  <PaginationLink
-                    href="#"
-                    isActive={currentPage === pageNum}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handlePageChange(pageNum);
-                    }}
-                  >
-                    {pageNum}
-                  </PaginationLink>
-                </PaginationItem>
-              );
-            })}
+                return (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      href="#"
+                      isActive={currentPage === pageNum}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange(pageNum);
+                      }}
+                    >
+                      {pageNum}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              })}
 
-            {totalPages > 5 && currentPage < totalPages - 2 && (
-              <PaginationEllipsis />
-            )}
+              {totalPages > 5 && currentPage < totalPages - 2 && (
+                <PaginationEllipsis />
+              )}
 
-            <PaginationItem className="absolute right-1 sm:right-5">
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (currentPage < totalPages)
-                    handlePageChange(currentPage + 1);
-                }}
-                // @ts-ignore
-                disabled={currentPage >= totalPages}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      )}
+              <PaginationItem className="absolute right-1 sm:right-5">
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (currentPage < totalPages)
+                      handlePageChange(currentPage + 1);
+                  }}
+                  // @ts-ignore
+                  disabled={currentPage >= totalPages}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
     </div>
   );
 }

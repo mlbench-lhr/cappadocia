@@ -4,8 +4,19 @@ import "@/lib/mongodb/models/ToursAndActivity";
 import "@/lib/mongodb/models/booking";
 import "@/lib/mongodb/models/User";
 import Invoice from "@/lib/mongodb/models/Invoice";
+import { verifyToken } from "@/lib/auth/jwt";
 
 export async function GET(req: NextRequest) {
+  let token = req.cookies.get("auth_token")?.value;
+  if (!token) {
+    return NextResponse.json(
+      { error: "Authorization token required" },
+      { status: 401 }
+    );
+  }
+  const payload = verifyToken(token);
+  const userId = payload.userId;
+  console.log("userId------", payload);
   await connectDB();
 
   const url = new URL(req.url);
@@ -15,6 +26,11 @@ export async function GET(req: NextRequest) {
   const status = url.searchParams.get("status") || "";
 
   const query: any = {};
+  if (payload.role === "user") {
+    query.user = userId;
+  } else if (payload.role === "vendor") {
+    query.vendor = userId;
+  }
 
   if (searchTerm) {
     query.$or = [{ invoicesId: { $regex: searchTerm, $options: "i" } }];

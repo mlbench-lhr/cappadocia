@@ -13,7 +13,6 @@ export default function DownloadInvoiceButton({
   bookingId?: string;
 }) {
   const [loading, setLoading] = useState<boolean>(false);
-  console.log("data-----", data);
 
   const getDataAndDownload = async () => {
     try {

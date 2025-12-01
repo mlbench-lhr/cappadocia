@@ -379,8 +379,6 @@ export default function ExtracurricularsAndAwards() {
   };
 
   const onSubmit = async (data: FormData) => {
-    console.log("data------------", data);
-
     try {
       const res = await fetch("/api/profile", {
         method: "PUT",

@@ -28,7 +28,7 @@ export type bookingProps = {
     | "completed"
     | "cancelled"
     | "active"
-    | "pending Admin Approval";
+    | "pending admin approval";
   date: Date;
   _id: string;
   price: string;
@@ -75,6 +75,7 @@ export default function BookingsPage() {
       name="Reservations"
       rightSideComponent={
         <SearchComponent
+          placeholder="Search by booking id..."
           searchQuery={searchQuery}
           onChangeFunc={setSearchQuery}
         />

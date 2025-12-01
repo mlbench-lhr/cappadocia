@@ -60,7 +60,6 @@ export default function BookingsPage() {
   }, [data?.uploads]);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
   const [updateLoading, setUpdateLoading] = useState<boolean>(false);
-  console.log("data?.vendor?.vendorDetails?.address-----", data);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string>("");
 

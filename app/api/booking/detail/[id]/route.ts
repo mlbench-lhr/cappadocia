@@ -2,6 +2,7 @@
 import connectDB from "@/lib/mongodb/connection";
 import Booking from "@/lib/mongodb/models/booking";
 import "@/lib/mongodb/models/ToursAndActivity";
+import "@/lib/mongodb/models/Reviews";
 
 export async function GET(
   req: Request,
@@ -12,6 +13,7 @@ export async function GET(
     .populate("activity")
     .populate("vendor")
     .populate("user")
+    .populate("review")
     .lean();
   if (!booking) return Response.json({ error: "Not found" }, { status: 404 });
 

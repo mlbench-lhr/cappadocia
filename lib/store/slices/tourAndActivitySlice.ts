@@ -24,7 +24,8 @@ export interface ToursAndActivityState {
   cancellationPolicy: string;
   duration: number;
   slots: Slot[];
-  status: "pending Admin Approval" | "active" | "rejected" | "upcoming";
+  status: "pending admin approval" | "active" | "rejected" | "upcoming";
+  rating: { average: number | 0; total: number | 0 };
 }
 
 const initialState: ToursAndActivityState = {
@@ -38,7 +39,7 @@ const initialState: ToursAndActivityState = {
   included: [],
   notIncluded: [],
   itinerary: [],
-  status: "pending Admin Approval",
+  status: "pending admin approval",
   cancellationPolicy: "",
   duration: 0,
   slots: [
@@ -50,6 +51,7 @@ const initialState: ToursAndActivityState = {
       seatsAvailable: 25,
     },
   ],
+  rating: { average: 0, total: 0 },
 };
 
 // Identify array-only fields
