@@ -16,7 +16,7 @@ import { SettingProvider } from "./SettingProvider";
 import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
 import { Promotions } from "./Promotions/page";
-import { EditProfile } from "@/app/(AdminLayout)/admin/(Protected)/settings/EditProfile/page";
+import AdminEditProfile from "./EditProfile/page";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -31,7 +31,7 @@ export default function App() {
     { icons: DollarSign, name: "Payment Management" },
   ];
   const components = {
-    Profile: <EditProfile />,
+    Profile: <AdminEditProfile />,
     "Change Password": <ChangePass />,
     Promotions: <Promotions />,
     "Payment Management": <Terms />,

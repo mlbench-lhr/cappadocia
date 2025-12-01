@@ -12,7 +12,7 @@ import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { updateUser } from "@/lib/store/slices/authSlice";
 import { AvatarUpload } from "@/components/ui/avatar-upload";
 
-export function EditProfile() {
+export default function AdminEditProfile() {
   const userData = useAppSelector((state) => state.auth.user);
   const dispatch = useAppDispatch();
 
