@@ -75,7 +75,7 @@ const BookingSchema = new Schema<Booking>(
     slotId: { type: Schema.Types.ObjectId, required: true },
     vendor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    review: { type: Schema.Types.ObjectId, ref: "Review", required: true },
+    review: { type: Schema.Types.ObjectId, ref: "Review" },
 
     selectDate: { type: String, required: true },
 
