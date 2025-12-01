@@ -976,7 +976,16 @@ button {
 }
 
 .custom-table-row td {
-  border-bottom: #dbdfe9 1px solid !important;
+  border-bottom: 1px solid #dbdfe9 !important;
+}
+.custom-table-row:last-child td {
+  border-bottom: none !important;
+}
+.custom-table-row td {
+  border-bottom: 1px solid #dbdfe9 !important;
+}
+.custom-table-row:last-child td {
+  border-bottom: none !important;
 }
 
 .not_started {
