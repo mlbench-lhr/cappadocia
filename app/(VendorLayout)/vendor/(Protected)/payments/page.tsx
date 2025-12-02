@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch } from "@/lib/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
@@ -16,6 +16,9 @@ import moment from "moment";
 import { StatusText } from "@/components/SmallComponents/StatusText";
 import Link from "next/link";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
+import axios from "axios";
+import { percentage } from "@/lib/helper/smallHelpers";
+
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
@@ -34,6 +37,10 @@ const NoBookingsFound = () => (
   />
 );
 export interface VendorInvoice {
+  _id: string;
+  booking: { _id: string };
+  activity: { _id: string };
+  user: string;
   invoiceId: string;
   tourTitle: string;
   bookingId: string;
@@ -51,9 +58,24 @@ export default function PaymentsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshData, setRefreshData] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const userData = useAppSelector((s) => s.auth.user);
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+
+  const addPayment = async (paymentData: any) => {
+    try {
+      setLoading(true);
+      await axios.post("/api/payments/addPayment", paymentData);
+      setRefreshData(refreshData + 1);
+    } catch (error) {
+      console.log("error----", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns: Column[] = [
     {
@@ -89,10 +111,23 @@ export default function PaymentsPage() {
     {
       header: "Action",
       accessor: "role",
-      render: (item) =>
+      render: (item: VendorInvoice) =>
         item.payoutStatus === "Eligible" ? (
-          <div className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer">
-            Request Payout
+          <div
+            className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer"
+            onClick={() => {
+              addPayment({
+                booking: item.booking._id,
+                activity: item.activity._id,
+                vendor: userData?.id,
+                user: item.user,
+                total: item.amount,
+                vendorPayment: percentage(15, item.amount),
+                commission: 15,
+              });
+            }}
+          >
+            {!loading ? "Request Payout" : "Requesting.."}
           </div>
         ) : (
           <Link

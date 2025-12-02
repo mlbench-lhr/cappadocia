@@ -6,24 +6,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import Rating from "./RatingField";
-import Image from "next/image";
-import { Textarea } from "../ui/textarea";
-import { ProfileBadge } from "./ProfileBadge";
-import { StarIcon } from "@/public/allIcons/page";
 import { Button } from "../ui/button";
-import Link from "next/link";
+import RejectVendorDialog from "../RejectVendorDialog";
+import { useState } from "react";
 
 interface ReviewButtonProps {
-  data?: {
+  data: {
+    _id: string;
     activity: {
-      title: "Cappadocia Sunrise Balloon Ride";
+      title: string;
     };
     booking: {
       paymentDetails: {
-        totalAmount: 0;
-        vendorPayable: 0;
-        commission: 15;
+        totalAmount: number;
+        vendorPayable: number;
+        commission: number;
       };
     };
   };
@@ -32,21 +29,11 @@ interface ReviewButtonProps {
 }
 
 export const PayoutDetailsModal = ({
-  data = {
-    activity: {
-      title: "Cappadocia Sunrise Balloon Ride",
-    },
-    booking: {
-      paymentDetails: {
-        totalAmount: 0,
-        vendorPayable: 0,
-        commission: 15,
-      },
-    },
-  },
+  data,
   triggerComponent,
   onSuccess,
 }: ReviewButtonProps) => {
+  const [open, setOpen] = useState(false);
   const TriggerComponent = triggerComponent || (
     <div className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer">
       View Details
@@ -54,7 +41,7 @@ export const PayoutDetailsModal = ({
   );
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-full">
         {TriggerComponent &&
           (typeof TriggerComponent === "function" ? (
@@ -84,7 +71,7 @@ export const PayoutDetailsModal = ({
                 Vendor Net Payable
               </h4>
               <h4 className="text-sm font-medium text-black/70">
-                {data.booking.paymentDetails.vendorPayable}
+                {data.booking.paymentDetails.vendorPayable.toFixed(2)}
               </h4>
             </div>
             <div className="flex flex-col gap-1 justify-start items-start w-1/2">
@@ -99,9 +86,13 @@ export const PayoutDetailsModal = ({
               <Button variant={"main_green_button"} className="!bg-[#51C058]">
                 Accept
               </Button>
-              <Button variant={"main_green_button"} className="!bg-[#FF0D0D]">
-                Reject
-              </Button>
+              <RejectVendorDialog
+                type={"payment"}
+                id={data._id}
+                onSuccess={() => {
+                  setOpen(false);
+                }}
+              />
             </div>
           </div>
         </DialogDescription>

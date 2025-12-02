@@ -22,6 +22,7 @@ import { StatusText } from "@/components/SmallComponents/StatusText";
 import Link from "next/link";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { PayoutDetailsModal } from "@/components/SmallComponents/PayoutDetailsModal";
+import { percentage } from "@/lib/helper/smallHelpers";
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
@@ -82,11 +83,11 @@ export default function BookingsPage() {
   const columns: Column[] = [
     {
       header: "Vendor Name",
-      accessor: "activity.title",
+      accessor: "vendor.fullName",
     },
     {
       header: "Tour Name",
-      accessor: "bookingId",
+      accessor: "activity.title",
     },
     {
       header: "Tour Date",
@@ -94,15 +95,15 @@ export default function BookingsPage() {
       render: (item) => {
         return (
           <span>
-            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+            {moment(item?.booking?.selectDate).format("MMM DD, YYYY | hh:mm A")}
           </span>
         );
       },
     },
     {
       header: "Status",
-      accessor: "status",
-      render: (item) => <StatusBadge status={item.status} />,
+      accessor: "paymentStatus",
+      render: (item) => <StatusBadge status={item.paymentStatus} />,
     },
     {
       header: "Requested Date",
@@ -110,7 +111,7 @@ export default function BookingsPage() {
       render: (item) => {
         return (
           <span>
-            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+            {moment(item?.createdAt).format("MMM DD, YYYY | hh:mm A")}
           </span>
         );
       },
@@ -118,8 +119,27 @@ export default function BookingsPage() {
     {
       header: "Action",
       accessor: "role",
-      render: (item) => {
-        return <PayoutDetailsModal />;
+      render: (item: ReviewWithPopulatedData) => {
+        return (
+          <PayoutDetailsModal
+            data={{
+              _id: item._id,
+              activity: {
+                title: item.activity.title,
+              },
+              booking: {
+                paymentDetails: {
+                  totalAmount: item.booking.paymentDetails.amount,
+                  vendorPayable: percentage(
+                    85,
+                    item.booking.paymentDetails.amount
+                  ),
+                  commission: 15,
+                },
+              },
+            }}
+          />
+        );
       },
     },
   ];
@@ -182,7 +202,7 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true} name="Payout Requests">
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<ReviewWithPopulatedData>
-            apiEndpoint="/api/reviews/getAll" // Your API endpoint
+            apiEndpoint="/api/payments/getAdminPayments" // Your API endpoint
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}

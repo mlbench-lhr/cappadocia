@@ -18,10 +18,12 @@ import Swal from "sweetalert2";
 
 export default function RejectVendorDialog({
   id,
-  type,
+  type = "vendor",
+  onSuccess,
 }: {
   id: string;
-  type?: "activity" | "vendor";
+  type?: "activity" | "vendor" | "payment";
+  onSuccess?: () => void;
 }) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
@@ -74,6 +76,30 @@ export default function RejectVendorDialog({
     }
   };
 
+  const handleConfirmPayment = async () => {
+    try {
+      setDeleting(true);
+      await axios.put(`/api/payments/update/${id}`, {
+        paymentStatus: "rejected",
+        rejected: {
+          isRejected: true,
+          reason: reason,
+        },
+      });
+      setDeleting(false);
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: `Vendor rejected Successfully`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+      onSuccess && onSuccess();
+    } catch (error) {
+      console.log("err---", error);
+    }
+  };
+
   return (
     <>
       <Dialog>
@@ -103,7 +129,11 @@ export default function RejectVendorDialog({
                 <DialogClose asChild>
                   <Button
                     onClick={
-                      type === "vendor" ? handleConfirm : handleConfirmActivity
+                      type === "vendor"
+                        ? handleConfirm
+                        : type === "payment"
+                        ? handleConfirmPayment
+                        : handleConfirmActivity
                     }
                     variant={"main_green_button"}
                     className="w-full !bg-red-500"
