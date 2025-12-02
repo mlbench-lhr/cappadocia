@@ -20,7 +20,8 @@ export interface VendorDetails {
     currency: string;
   };
   cover?: string;
-  rating: { average: number | 0; total: number | 0 };
+  stripeAccountId: string;
+  rating?: { average: number | 0; total: number | 0 };
 }
 
 export interface IUser extends Document {
@@ -96,6 +97,7 @@ const UserSchema = new Schema<IUser>(
     vendorDetails: {
       type: {
         cover: { type: String },
+        stripeAccountId: { type: String, required: true },
         companyName: { type: String, required: true },
         contactPersonName: { type: String, required: true },
         businessEmail: { type: String, required: true },

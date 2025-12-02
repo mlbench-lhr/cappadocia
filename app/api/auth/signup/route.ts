@@ -5,6 +5,10 @@ import { hashPassword } from "@/lib/auth/password";
 import { generateOTP, getOTPExpiryTime } from "@/lib/auth/otp";
 import { sendVerificationEmail } from "@/lib/email/email-service";
 import { z } from "zod";
+import {
+  createConnectedAccount,
+  createOnboardingLink,
+} from "@/lib/utils/stripeConnnect";
 
 export const CoordinatesSchema = z.object({
   lat: z
@@ -112,8 +116,13 @@ export async function POST(request: NextRequest) {
       emailVerificationOTPExpires: emailVerificationOTPExpires,
     });
     if (validatedData.vendorDetails) {
-      user.vendorDetails = validatedData.vendorDetails;
+      const stripeAccountId = await createConnectedAccount();
+      user.vendorDetails = {
+        ...validatedData.vendorDetails,
+        stripeAccountId,
+      };
       user.role = "vendor";
+      await user.save();
     }
     await user.save();
 

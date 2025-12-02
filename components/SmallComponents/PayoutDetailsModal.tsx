@@ -9,6 +9,7 @@ import {
 import { Button } from "../ui/button";
 import RejectVendorDialog from "../RejectVendorDialog";
 import { useState } from "react";
+import { useAppSelector } from "@/lib/store/hooks";
 
 interface ReviewButtonProps {
   data: {
@@ -26,19 +27,43 @@ interface ReviewButtonProps {
   };
   triggerComponent?: React.ReactNode | React.ComponentType<any>;
   onSuccess?: () => void;
+  stripeAccountId: string;
 }
 
 export const PayoutDetailsModal = ({
+  stripeAccountId,
   data,
   triggerComponent,
   onSuccess,
 }: ReviewButtonProps) => {
+  console.log("userData=======", stripeAccountId);
   const [open, setOpen] = useState(false);
   const TriggerComponent = triggerComponent || (
     <div className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer">
       View Details
     </div>
   );
+
+  async function sendPayout() {
+    try {
+      const res = await fetch("/api/payments/sendVendorCommission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stripeAccountId,
+          amount: 10,
+          currency: "eur",
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to send payout");
+
+      console.log(data);
+    } catch (err: any) {
+      console.log("Error sending payout: " + err.message);
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -86,7 +111,7 @@ export const PayoutDetailsModal = ({
               <Button
                 variant={"main_green_button"}
                 className="!bg-[#51C058]"
-                onClick={() => {}}
+                onClick={sendPayout}
               >
                 Accept
               </Button>

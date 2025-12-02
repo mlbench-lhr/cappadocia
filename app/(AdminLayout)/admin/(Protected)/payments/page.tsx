@@ -83,8 +83,11 @@ export default function BookingsPage() {
       header: "Action",
       accessor: "role",
       render: (item: ReviewWithPopulatedData) => {
+        console.log("item------", item);
+
         return (
           <PayoutDetailsModal
+            stripeAccountId={item.vendor.vendorDetails.stripeAccountId}
             data={{
               _id: item._id,
               activity: {
