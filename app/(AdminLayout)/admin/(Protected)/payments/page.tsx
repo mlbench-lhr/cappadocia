@@ -5,11 +5,7 @@ import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { Column } from "@/app/(AdminLayout)/admin/Components/Table/page";
-import Rating from "@/components/SmallComponents/RatingField";
-import { Pencil, Trash } from "lucide-react";
 import Swal from "sweetalert2";
-import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
-import { ReviewDetailsModal } from "@/components/SmallComponents/ReviewDeatilsModal";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { DynamicTable } from "@/app/(AdminLayout)/admin/Components/Table/page";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
@@ -18,11 +14,9 @@ import { Button } from "@/components/ui/button";
 import { ReviewWithPopulatedData } from "@/lib/types/review";
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
-import { StatusText } from "@/components/SmallComponents/StatusText";
-import Link from "next/link";
-import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { PayoutDetailsModal } from "@/components/SmallComponents/PayoutDetailsModal";
 import { percentage } from "@/lib/helper/smallHelpers";
+
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
@@ -48,37 +42,6 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
-
-  const handleDelete = async (id: string) => {
-    Swal.fire({
-      title: "Delete Blog",
-      text: "Are you sure you want to delete this Blog?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#B32053",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Delete",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await fetch(`/api/reviews/delete/${id}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (res.ok) {
-            console.log(`Milestone ${id} marked as skipped`);
-          } else {
-            console.error("Failed to skip milestone");
-          }
-        } catch (err) {
-          console.error("Error skipping milestone:", err);
-        } finally {
-          setRefreshData(refreshData + 1);
-        }
-      }
-    });
-  };
 
   const columns: Column[] = [
     {
@@ -137,6 +100,9 @@ export default function BookingsPage() {
                   commission: 15,
                 },
               },
+            }}
+            onSuccess={() => {
+              setRefreshData(refreshData + 1);
             }}
           />
         );
