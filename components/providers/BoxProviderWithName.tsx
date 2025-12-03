@@ -59,7 +59,7 @@ export const BoxProviderWithName = ({
           )}
         </div>
       )}
-      <div className={`w-full ${hFull && "h-full"}`}>{children}</div>
+      <div className={`w-full ${hFull && " h-full "}`}>{children}</div>
     </div>
   );
 };
