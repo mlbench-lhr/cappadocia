@@ -1,4 +1,5 @@
 // pages/api/send-payout.ts
+import Payments from "@/lib/mongodb/models/Payments";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -8,8 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: NextRequest) {
   try {
-    const { stripeAccountId, amount, currency } = await req.json();
-    console.log("---------------", { stripeAccountId, amount, currency });
+    const { stripeAccountId, amount, currency, payment_id } = await req.json();
 
     if (!stripeAccountId || !amount || !currency) {
       return NextResponse.json(
@@ -25,9 +25,13 @@ export async function POST(req: NextRequest) {
       destination: stripeAccountId,
     });
 
+    await Payments.updateOne(
+      { _id: payment_id },
+      { $set: { paymentStatus: "paid" } }
+    );
     return NextResponse.json({ message: "Transfer successful", transfer });
   } catch (error: any) {
-    console.error(error);
+    console.log("error in accepting-----", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
