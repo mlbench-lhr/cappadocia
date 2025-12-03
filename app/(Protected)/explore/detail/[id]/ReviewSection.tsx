@@ -17,6 +17,7 @@ export interface ReviewsApiResponse {
   averageRating: number;
   totalReviews: number;
   ratingBreakdown: Record<number, number>;
+  ratingCounts: Record<number, number>;
 }
 
 export default function ReviewSection({
@@ -57,6 +58,7 @@ export default function ReviewSection({
             averageRating: response.data?.data?.averageRating,
             totalReviews: response.data?.data?.totalReviews,
             ratingBreakdown: response.data?.data?.ratingBreakdown,
+            ratingCounts: response.data?.data?.ratingCounts,
           });
         }
         if (response.data?.data?.reviews) {

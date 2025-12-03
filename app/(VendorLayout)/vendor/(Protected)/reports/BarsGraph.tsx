@@ -68,7 +68,10 @@ export function ChartBarGradient({
 
   useEffect(() => {
     const getData = async () => {
-      let response = await axios.get("/api/vendor/dashboardBarGraph");
+      let response = await axios.get<BarChartResponse>(
+        "/api/reports/tourPerformance"
+      );
+      console.log("tourPerformance response---------", response);
       setData(response.data);
     };
     getData();
