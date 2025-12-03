@@ -17,6 +17,13 @@ export const RatingBreakdown = () => {
       4: 0,
       5: 0,
     },
+    ratingCounts: {
+      1: 0,
+      2: 0,
+      3: 0,
+      4: 0,
+      5: 0,
+    },
   });
   console.log("data------", data);
 
@@ -35,6 +42,7 @@ export const RatingBreakdown = () => {
             averageRating: response.data?.data?.averageRating,
             totalReviews: response.data?.data?.totalReviews,
             ratingBreakdown: response.data?.data?.ratingBreakdown,
+            ratingCounts: response.data?.data?.ratingCounts,
           });
         }
         setLoading(false);
@@ -65,7 +73,7 @@ export const RatingBreakdown = () => {
               <div className="w-full flex justify-between items-center">
                 <span className="text-[12px] font-semibold ">{r} Stars</span>
                 <span className="text-[12px] font-medium text-black/70 ">
-                  {r} Reviews
+                  {data.ratingCounts[i + 1]} Reviews
                 </span>
               </div>
               <div className="w-full relative rounded-full overflow-hidden h-[10px] bg-[#E8D3D3]">

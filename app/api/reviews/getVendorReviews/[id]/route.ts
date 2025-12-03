@@ -41,12 +41,19 @@ export async function GET(
     ])
   );
 
+  const ratingCounts = Object.fromEntries(
+    Object.entries(breakdown).map(([star, count]: any) => [star, count])
+  );
+
+  console.log("ratingCounts----", ratingCounts);
+
   return NextResponse.json({
     data: {
       reviews,
       averageRating,
       totalReviews,
       ratingBreakdown,
+      ratingCounts,
     },
   });
 }
