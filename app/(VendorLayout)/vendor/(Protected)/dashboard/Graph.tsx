@@ -34,7 +34,11 @@ export interface RevenueSummaryResponse {
   chartData: RevenueChartItem[];
 }
 
-export function ChartAreaGradient() {
+export function ChartAreaGradient({
+  className = " flex-1 ",
+}: {
+  className?: string;
+}) {
   const dispatch = useAppDispatch();
   const vendorData = useAppSelector((s) => s.auth.user);
   const isMobile = useMediaQuery({ maxWidth: 1350 });
@@ -65,10 +69,10 @@ export function ChartAreaGradient() {
   }, []);
   return (
     <BoxProviderWithName
-      className="flex-1"
+      className={className}
       name="Total Revenue"
       rightSideComponent={
-        <div className="flex justify-start items-center gap-2">
+        <div className="flex justify-start items-center gap-2 h-[25px]">
           <span className="text-[20px] font-medium">
             {vendorData?.vendorDetails.paymentInfo.currency}
             {data.totalRevenue}
@@ -80,7 +84,7 @@ export function ChartAreaGradient() {
       }
       hFull={true}
     >
-      <div className="h-full flex flex-col justify-center items-start gap-4 relative w-full overflow-hidden">
+      <div className="h-[calc(100%-25px)] flex flex-col justify-center items-start relative w-full overflow-hidden">
         <div className="w-full p-0 h-full m-0 border-0 px-0 shadow-none ">
           <div className="w-full px-0 h-full ">
             <ChartContainer

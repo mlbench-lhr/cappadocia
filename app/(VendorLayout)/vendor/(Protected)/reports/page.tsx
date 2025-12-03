@@ -5,11 +5,12 @@ import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useMemo, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BookingIcon, DollarIcon, StarIcon } from "@/public/allIcons/page";
-import { ChartAreaGradient } from "./Graph";
 import axios from "axios";
 import { RatingBreakdown } from "./RatingBreakdown";
 import { Skeleton } from "@/components/ui/skeleton";
 import { boolean } from "zod";
+import { ChartAreaGradient } from "../dashboard/Graph";
+import { ChartBarGradient } from "./BarsGraph";
 
 export type DashboardCardProps = {
   image: React.ReactNode;
@@ -119,11 +120,16 @@ export default function DashboardPage() {
                 ))}
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-2 h-[320px]">
+            <div className="col-span-2 h-[320px] overflow-hidden">
               <ChartAreaGradient className=" h-full " />
             </div>
             <div className="col-span-1 h-[320px]">
               <RatingBreakdown />
+            </div>
+          </div>
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="col-span-2 h-[470px]">
+              <ChartBarGradient />
             </div>
           </div>
         </div>
