@@ -1,5 +1,5 @@
 // /api/stripe/account-status
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -12,7 +12,14 @@ export async function POST(req: NextRequest) {
 
     const account = await stripe.accounts.retrieve(stripeAccountId);
 
-    return Response.json(account);
+    return NextResponse.json({
+      connected: true,
+      charges_enabled: account.charges_enabled,
+      payouts_enabled: account.payouts_enabled,
+      details_submitted: account.details_submitted,
+      transfers_active: account.capabilities?.transfers === "active",
+      sellerCountry: account.country,
+    });
   } catch (err) {
     return Response.json({ error: "Failed to fetch status" }, { status: 500 });
   }

@@ -2,7 +2,7 @@
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useMediaQuery } from "react-responsive";
 import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { Column } from "@/app/(AdminLayout)/admin/Components/Table/page";
 import Swal from "sweetalert2";
@@ -54,6 +54,13 @@ export interface VendorInvoice {
     | "Not Eligible (Activity Tomorrow)"
     | "Not Eligible (Activity not started yet)";
 }
+type StripeStatus = {
+  connected: boolean;
+  charges_enabled?: boolean;
+  payouts_enabled?: boolean;
+  details_submitted?: boolean;
+  transfers_active?: boolean;
+};
 
 export default function PaymentsPage() {
   const dispatch = useAppDispatch();
@@ -62,8 +69,11 @@ export default function PaymentsPage() {
   const [refreshData, setRefreshData] = useState(0);
   const [loading, setLoading] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState(false);
+  const [status, setStatus] = useState<StripeStatus | null>(null);
   const router = useRouter();
   const userData = useAppSelector((s) => s.auth.user);
+  console.log("status--", status);
+
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
@@ -166,9 +176,13 @@ export default function PaymentsPage() {
     const getStatus = async () => {
       try {
         setLoading(true);
-        let resp = await axios.post("/api/payments/account-status", {
-          stripeAccountId: userData?.vendorDetails?.stripeAccountId,
-        });
+        let resp = await axios.post<StripeStatus>(
+          "/api/payments/account-status",
+          {
+            stripeAccountId: userData?.vendorDetails?.stripeAccountId,
+          }
+        );
+        setStatus(resp.data);
         console.log("resp-------", resp.data);
         setLoading(false);
       } catch (error) {
@@ -177,6 +191,16 @@ export default function PaymentsPage() {
     };
     userData?.vendorDetails?.stripeAccountId && getStatus();
   }, [userData?.vendorDetails?.stripeAccountId]);
+  const needsAction = useMemo(
+    () =>
+      Boolean(
+        status?.connected &&
+          (!status?.payouts_enabled ||
+            !status?.details_submitted ||
+            !status?.transfers_active)
+      ),
+    [status?.connected]
+  );
 
   return (
     <BasicStructureWithName name="">
@@ -250,13 +274,53 @@ export default function PaymentsPage() {
                 }
               />
             </div>
-            <Button
-              variant={"main_green_button"}
-              onClick={getOnboardingLink}
-              loading={loadingBtn}
-            >
-              Finish Setup
-            </Button>
+            <div className="flex items-center gap-3">
+              {status === null ? null : !status?.connected ? (
+                <Button
+                  variant={"main_green_button"}
+                  onClick={getOnboardingLink}
+                  loading={loadingBtn}
+                >
+                  Connect Bank Account
+                </Button>
+              ) : (
+                <>
+                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-md text-sm">
+                    Connected
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-md text-sm ${
+                      status?.payouts_enabled
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {status?.payouts_enabled
+                      ? "Payouts Enabled"
+                      : "Payouts Pending"}
+                  </span>
+                  <span
+                    className={`px-3 py-1 rounded-md text-sm ${
+                      status?.details_submitted
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    Details{" "}
+                    {status?.details_submitted ? "Submitted" : "Missing"}
+                  </span>
+
+                  {needsAction && (
+                    <button
+                      onClick={getOnboardingLink}
+                      className="px-4 py-2 bg-primary text-white rounded-md cursor-pointer"
+                    >
+                      Details Missing
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         </BoxProviderWithName>
         <BoxProviderWithName noBorder={true} name="Payout Details">
