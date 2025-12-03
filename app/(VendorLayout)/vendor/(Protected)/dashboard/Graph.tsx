@@ -19,7 +19,7 @@ export const description = "An area chart with gradient fill";
 
 const chartConfig = {
   amount: {
-    label: "Desktop",
+    label: "Bookings",
     color: "#B32053",
   },
 } satisfies ChartConfig;
@@ -78,7 +78,8 @@ export function ChartAreaGradient({
             {data.totalRevenue}
           </span>
           <span className="text-[13px] font-medium bg-primary rounded-[45px] w-fit px-2 h-[25px] text-white flex justify-center items-center">
-            {data.incremented ? "+" : "-"} {data.percentageChange}%
+            {/* {data.incremented ? "+" : "-"} */}
+            {data.percentageChange}%
           </span>
         </div>
       }

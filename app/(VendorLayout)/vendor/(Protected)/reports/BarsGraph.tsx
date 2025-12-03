@@ -1,7 +1,6 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-
 import {
   ChartConfig,
   ChartContainer,
@@ -18,20 +17,20 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 export const description = "A bar chart with multiple data series";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  bookings: {
+    label: "Bookings",
     color: "#B32053",
   },
-  mobile: {
-    label: "Mobile",
+  revenue: {
+    label: "Revenue",
     color: "#DEC3D1",
   },
 } satisfies ChartConfig;
 
 export interface BarChartItem {
   tourName: string;
-  desktop: number;
-  mobile: number;
+  bookings: number;
+  revenue: number;
 }
 
 export interface BarChartResponse {
@@ -47,25 +46,19 @@ export function ChartBarGradient({
   className?: string;
 }) {
   const dispatch = useAppDispatch();
-  const vendorData = useAppSelector((s) => s.auth.user);
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [data, setData] = useState<BarChartResponse>({
     totalRevenue: 120000,
     percentageChange: 10.2,
     incremented: true,
     chartData: [
-      { tourName: "January", desktop: 186, mobile: 80 },
-      { tourName: "February", desktop: 305, mobile: 200 },
-      { tourName: "March", desktop: 237, mobile: 120 },
-      { tourName: "April", desktop: 73, mobile: 190 },
-      { tourName: "May", desktop: 209, mobile: 130 },
-      { tourName: "June", desktop: 214, mobile: 140 },
-      { tourName: "January", desktop: 186, mobile: 80 },
-      { tourName: "February", desktop: 305, mobile: 200 },
-      { tourName: "March", desktop: 237, mobile: 120 },
-      { tourName: "April", desktop: 73, mobile: 190 },
-      { tourName: "May", desktop: 209, mobile: 130 },
-      { tourName: "June", desktop: 214, mobile: 140 },
+      { tourName: "Blue tour", bookings: 186, revenue: 80 },
+      { tourName: "Blue tour", bookings: 305, revenue: 200 },
+      { tourName: "Blue tour", bookings: 237, revenue: 120 },
+      { tourName: "Blue tour", bookings: 73, revenue: 190 },
+      { tourName: "Blue tour", bookings: 73, revenue: 190 },
+      { tourName: "Blue tour", bookings: 73, revenue: 190 },
+      { tourName: "Blue tour", bookings: 214, revenue: 140 },
     ],
   });
 
@@ -119,8 +112,12 @@ export function ChartBarGradient({
                   cursor={false}
                   content={<ChartTooltipContent indicator="dashed" />}
                 />
-                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+                <Bar
+                  dataKey="bookings"
+                  fill="var(--color-bookings)"
+                  radius={4}
+                />
+                <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
               </BarChart>
             </ChartContainer>
           </div>

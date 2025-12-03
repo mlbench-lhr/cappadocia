@@ -8,12 +8,11 @@ import { BookingIcon, DollarIcon, StarIcon } from "@/public/allIcons/page";
 import axios from "axios";
 import { RatingBreakdown } from "./RatingBreakdown";
 import { Skeleton } from "@/components/ui/skeleton";
-import { boolean } from "zod";
 import { ChartAreaGradient } from "../dashboard/Graph";
 import { ChartBarGradient } from "./BarsGraph";
 
-export type DashboardCardProps = {
-  image: React.ReactNode;
+export type ReportsCardsData = {
+  image?: React.ReactNode;
   title: number | string;
   description: string;
   progress: { value: number; increment: boolean };
@@ -24,12 +23,29 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const vendorData = useAppSelector((s) => s.auth.user);
   const isMobile = useMediaQuery({ maxWidth: 1350 });
-  const [data, setData] = useState({
-    totalBookings: 0,
-    upcomingTrips: 0,
-    paymentsDone: 0,
-    pendingPayments: 0,
-  });
+  const [reportsCardData, setReportsCardData] = useState<ReportsCardsData[]>([
+    {
+      title: 0,
+      description: "Total Revenue",
+      progress: { value: 18.0, increment: true },
+    },
+    {
+      title: 0,
+      description: "Total Bookings",
+      progress: { value: 18.0, increment: true },
+    },
+    {
+      title: 0,
+      description: "Average Rating",
+      progress: { value: 18.0, increment: true },
+    },
+  ]);
+
+  const images = [
+    <DollarIcon color="white" />,
+    <BookingIcon color="white" />,
+    <StarIcon color="white" size="18" />,
+  ];
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -39,8 +55,11 @@ export default function DashboardPage() {
     const getData = async () => {
       try {
         setLoading(true);
-        let response = await axios.get("/api/vendor/dashboard");
-        setData(response.data);
+        let response = await axios.get<ReportsCardsData[]>(
+          "/api/reports/getStats"
+        );
+        console.log("response----------", response.data);
+        setReportsCardData(response.data);
       } catch (error) {
       } finally {
         setLoading(false);
@@ -48,29 +67,7 @@ export default function DashboardPage() {
     };
     getData();
   }, []);
-
-  const dashboardCardData: DashboardCardProps[] = useMemo(() => {
-    return [
-      {
-        image: <DollarIcon color="white" />,
-        title: data.paymentsDone,
-        description: "Total Revenue",
-        progress: { value: 18.0, increment: true },
-      },
-      {
-        image: <BookingIcon color="white" />,
-        title: data.totalBookings,
-        description: "Total Bookings",
-        progress: { value: 18.0, increment: true },
-      },
-      {
-        image: <StarIcon color="white" size="18" />,
-        title: data.upcomingTrips,
-        description: "Average Rating",
-        progress: { value: 18.0, increment: true },
-      },
-    ];
-  }, [data.totalBookings, vendorData?.vendorDetails?.paymentInfo?.currency]);
+  console.log("reportsCardData----------", reportsCardData);
 
   return (
     <BasicStructureWithName name="Performance Reports">
@@ -78,7 +75,7 @@ export default function DashboardPage() {
         <div className="col-span-16 h-full flex flex-col justify-start items-start gap-4">
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
             {loading
-              ? dashboardCardData.map((item, index) => (
+              ? reportsCardData.map((item, index) => (
                   <div
                     className="border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
                     key={index}
@@ -88,7 +85,7 @@ export default function DashboardPage() {
                         {item.title}
                       </Skeleton>
                       <Skeleton className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                        {item.image}
+                        {images[index]}
                       </Skeleton>
                     </div>
                     <Skeleton className="text-sm md:text-base font-medium text-transparent">
@@ -96,7 +93,7 @@ export default function DashboardPage() {
                     </Skeleton>
                   </div>
                 ))
-              : dashboardCardData.map((item, index) => (
+              : reportsCardData.map((item, index) => (
                   <div
                     className="border rounded-2xl py-3 px-4.5 flex flex-col gap-2 justify-between items-start line-clamp-1"
                     key={index}
@@ -106,7 +103,7 @@ export default function DashboardPage() {
                         {item.description}
                       </span>
                       <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                        {item.image}
+                        {images[index]}
                       </div>
                     </div>
                     <span className="text-4xl font-semibold line-clamp-1 leading-none">
