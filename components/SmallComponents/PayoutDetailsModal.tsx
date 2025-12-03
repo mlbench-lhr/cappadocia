@@ -6,55 +6,69 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import Rating from "./RatingField";
-import Image from "next/image";
-import { Textarea } from "../ui/textarea";
-import { ProfileBadge } from "./ProfileBadge";
-import { StarIcon } from "@/public/allIcons/page";
 import { Button } from "../ui/button";
-import Link from "next/link";
-
+import RejectVendorDialog from "../RejectVendorDialog";
+import { useState } from "react";
 interface ReviewButtonProps {
-  data?: {
+  data: {
+    _id: string;
     activity: {
-      title: "Cappadocia Sunrise Balloon Ride";
+      title: string;
     };
     booking: {
       paymentDetails: {
-        totalAmount: 0;
-        vendorPayable: 0;
-        commission: 15;
+        totalAmount: number;
+        vendorPayable: number;
+        commission: number;
       };
     };
   };
   triggerComponent?: React.ReactNode | React.ComponentType<any>;
   onSuccess?: () => void;
+  stripeAccountId: string;
 }
 
 export const PayoutDetailsModal = ({
-  data = {
-    activity: {
-      title: "Cappadocia Sunrise Balloon Ride",
-    },
-    booking: {
-      paymentDetails: {
-        totalAmount: 0,
-        vendorPayable: 0,
-        commission: 15,
-      },
-    },
-  },
+  stripeAccountId,
+  data,
   triggerComponent,
   onSuccess,
 }: ReviewButtonProps) => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const TriggerComponent = triggerComponent || (
     <div className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer">
       View Details
     </div>
   );
 
+  async function sendPayout() {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/payments/sendVendorCommission", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          payment_id: data._id,
+          stripeAccountId,
+          amount: 10,
+          currency: "eur",
+        }),
+      });
+
+      const respData = await res.json();
+      setOpen(false);
+      onSuccess && onSuccess();
+      if (!res.ok) throw new Error(respData.error || "Failed to send payout");
+    } catch (err: any) {
+      console.log("Error sending payout: " + err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger className="w-full">
         {TriggerComponent &&
           (typeof TriggerComponent === "function" ? (
@@ -84,7 +98,7 @@ export const PayoutDetailsModal = ({
                 Vendor Net Payable
               </h4>
               <h4 className="text-sm font-medium text-black/70">
-                {data.booking.paymentDetails.vendorPayable}
+                {data.booking.paymentDetails.vendorPayable.toFixed(2)}
               </h4>
             </div>
             <div className="flex flex-col gap-1 justify-start items-start w-1/2">
@@ -96,12 +110,24 @@ export const PayoutDetailsModal = ({
               </h4>
             </div>
             <div className="w-full grid grid-cols-2 gap-4">
-              <Button variant={"main_green_button"} className="!bg-[#51C058]">
+              <Button
+                variant={"main_green_button"}
+                className="!bg-[#51C058]"
+                onClick={() => {
+                  sendPayout();
+                }}
+                loading={loading}
+              >
                 Accept
               </Button>
-              <Button variant={"main_green_button"} className="!bg-[#FF0D0D]">
-                Reject
-              </Button>
+              <RejectVendorDialog
+                type={"payment"}
+                id={data._id}
+                onSuccess={() => {
+                  setOpen(false);
+                  onSuccess && onSuccess();
+                }}
+              />
             </div>
           </div>
         </DialogDescription>

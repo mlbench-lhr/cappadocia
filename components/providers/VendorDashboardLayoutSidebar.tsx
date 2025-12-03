@@ -44,7 +44,9 @@ const IconClose = ({ className = "" }: { className?: string }) => (
     <path d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
-
+const PaymentIcon = ({ color }: { color: string }) => (
+  <BadgeDollarSign color={color} size={"17"} />
+);
 const pathsArray: { name: string; link: string; icon: any }[] = [
   {
     name: "Dashboard",
@@ -74,7 +76,7 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
   {
     name: "Payments",
     link: "/payments",
-    icon: BadgeDollarSign,
+    icon: PaymentIcon,
   },
   {
     name: "Reports",

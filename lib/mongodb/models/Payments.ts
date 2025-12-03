@@ -22,6 +22,15 @@ const PaymentsSchema = new Schema<Payments>(
     total: { type: Number },
     vendorPayment: { type: Number },
     commission: { type: Number },
+    paymentStatus: {
+      type: String,
+      default: "pending",
+      enum: ["pending", "paid", "rejected"],
+    },
+    rejected: {
+      isRejected: { type: Boolean, default: false },
+      reason: { type: String },
+    },
   },
   { timestamps: true }
 );

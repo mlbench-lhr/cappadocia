@@ -109,6 +109,9 @@ export async function GET(req: NextRequest) {
         completedAt: completedAt ? completedAt.toISOString() : null,
         bookingStatus: bookingStatus || "N/A",
         payoutStatus,
+        booking: invoice.booking,
+        activity: invoice.activity,
+        user: invoice.user,
       };
     });
 

@@ -16,13 +16,7 @@ import Image from "next/image";
 export interface ReviewsApiResponse {
   averageRating: number;
   totalReviews: number;
-  ratingBreakdown: {
-    1: number;
-    2: number;
-    3: number;
-    4: number;
-    5: number;
-  };
+  ratingBreakdown: Record<number, number>;
 }
 
 export default function ReviewSection({

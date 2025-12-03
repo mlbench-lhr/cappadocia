@@ -5,11 +5,7 @@ import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useEffect, useState } from "react";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { Column } from "@/app/(AdminLayout)/admin/Components/Table/page";
-import Rating from "@/components/SmallComponents/RatingField";
-import { Pencil, Trash } from "lucide-react";
 import Swal from "sweetalert2";
-import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
-import { ReviewDetailsModal } from "@/components/SmallComponents/ReviewDeatilsModal";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { DynamicTable } from "@/app/(AdminLayout)/admin/Components/Table/page";
 import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
@@ -18,10 +14,9 @@ import { Button } from "@/components/ui/button";
 import { ReviewWithPopulatedData } from "@/lib/types/review";
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
-import { StatusText } from "@/components/SmallComponents/StatusText";
-import Link from "next/link";
-import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import { PayoutDetailsModal } from "@/components/SmallComponents/PayoutDetailsModal";
+import { percentage } from "@/lib/helper/smallHelpers";
+
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
@@ -48,45 +43,14 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, []);
 
-  const handleDelete = async (id: string) => {
-    Swal.fire({
-      title: "Delete Blog",
-      text: "Are you sure you want to delete this Blog?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#B32053",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Delete",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await fetch(`/api/reviews/delete/${id}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (res.ok) {
-            console.log(`Milestone ${id} marked as skipped`);
-          } else {
-            console.error("Failed to skip milestone");
-          }
-        } catch (err) {
-          console.error("Error skipping milestone:", err);
-        } finally {
-          setRefreshData(refreshData + 1);
-        }
-      }
-    });
-  };
-
   const columns: Column[] = [
     {
       header: "Vendor Name",
-      accessor: "activity.title",
+      accessor: "vendor.fullName",
     },
     {
       header: "Tour Name",
-      accessor: "bookingId",
+      accessor: "activity.title",
     },
     {
       header: "Tour Date",
@@ -94,15 +58,15 @@ export default function BookingsPage() {
       render: (item) => {
         return (
           <span>
-            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+            {moment(item?.booking?.selectDate).format("MMM DD, YYYY | hh:mm A")}
           </span>
         );
       },
     },
     {
       header: "Status",
-      accessor: "status",
-      render: (item) => <StatusBadge status={item.status} />,
+      accessor: "paymentStatus",
+      render: (item) => <StatusBadge status={item.paymentStatus} />,
     },
     {
       header: "Requested Date",
@@ -110,7 +74,7 @@ export default function BookingsPage() {
       render: (item) => {
         return (
           <span>
-            {moment(item?.selectDate).format("MMM DD, YYYY | hh:mm A")}
+            {moment(item?.createdAt).format("MMM DD, YYYY | hh:mm A")}
           </span>
         );
       },
@@ -118,8 +82,33 @@ export default function BookingsPage() {
     {
       header: "Action",
       accessor: "role",
-      render: (item) => {
-        return <PayoutDetailsModal />;
+      render: (item: ReviewWithPopulatedData) => {
+        console.log("item------", item);
+
+        return (
+          <PayoutDetailsModal
+            stripeAccountId={item.vendor.vendorDetails.stripeAccountId}
+            data={{
+              _id: item._id,
+              activity: {
+                title: item.activity.title,
+              },
+              booking: {
+                paymentDetails: {
+                  totalAmount: item.booking.paymentDetails.amount,
+                  vendorPayable: percentage(
+                    85,
+                    item.booking.paymentDetails.amount
+                  ),
+                  commission: 15,
+                },
+              },
+            }}
+            onSuccess={() => {
+              setRefreshData(refreshData + 1);
+            }}
+          />
+        );
       },
     },
   ];
@@ -182,7 +171,7 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true} name="Payout Requests">
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<ReviewWithPopulatedData>
-            apiEndpoint="/api/reviews/getAll" // Your API endpoint
+            apiEndpoint="/api/payments/getAdminPayments" // Your API endpoint
             queryParams={queryParams}
             LoadingComponent={BookingsLoadingSkeleton}
             NoDataComponent={NoBookingsFound}
