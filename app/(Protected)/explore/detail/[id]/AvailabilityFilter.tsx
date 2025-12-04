@@ -9,6 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
+import { languagesOptions } from "@/lib/constants";
 import { useAppSelector } from "@/lib/store/hooks";
 import axios from "axios";
 import { ArrowRight } from "lucide-react";
@@ -92,11 +93,15 @@ export const AvailabilityFilter = () => {
               setSelectedLanguage(e);
             }}
           >
-            <SelectTrigger className="w-full">English</SelectTrigger>
+            <SelectTrigger className="w-full">
+              {selectedLanguage || "Select Language"}
+            </SelectTrigger>
             <SelectContent className="w-full">
-              <SelectItem value="English">English</SelectItem>
-              <SelectItem value="Turkish">Turkish</SelectItem>
-              <SelectItem value="Chinese">Chinese</SelectItem>
+              {languagesOptions.map((item, index) => (
+                <SelectItem value={item} key={index}>
+                  {item}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
