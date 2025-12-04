@@ -36,10 +36,7 @@ const BookingsLoadingSkeleton = () => (
 // No data component
 const NoBookingsFound = () => (
   <NoDataComponent
-    text="You don’t have any bookings yet."
-    actionComponent={
-      <Button variant={"main_green_button"}>Start Exploring Now</Button>
-    }
+    text="No Data Found"
   />
 );
 

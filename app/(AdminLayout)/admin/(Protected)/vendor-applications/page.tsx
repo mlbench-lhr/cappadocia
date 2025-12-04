@@ -36,14 +36,7 @@ const BookingsLoadingSkeleton = () => (
 );
 
 // No data component
-const NoBookingsFound = () => (
-  <NoDataComponent
-    text="You don’t have any bookings yet."
-    actionComponent={
-      <Button variant={"main_green_button"}>Start Exploring Now</Button>
-    }
-  />
-);
+const NoBookingsFound = () => <NoDataComponent text="No Data Found" />;
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
