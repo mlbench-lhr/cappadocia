@@ -63,19 +63,9 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     icon: ReservationIcon,
   },
   {
-    name: "Favorites",
-    link: "/favorites",
-    icon: FavoritesIcon,
-  },
-  {
     name: "Payments",
     link: "/payments",
     icon: PaymentIcon,
-  },
-  {
-    name: "Reviews",
-    link: "/reviews",
-    icon: ReviewsIcon,
   },
   {
     name: "Settings",
@@ -83,13 +73,8 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     icon: SettingsIcon,
   },
   {
-    name: "Help",
-    link: "/help",
-    icon: HelpIcon,
-  },
-  {
-    name: "Messages",
-    link: "/messages",
+    name: "Support Requests",
+    link: "/supportRequests",
     icon: MessageIcon,
   },
 ];
