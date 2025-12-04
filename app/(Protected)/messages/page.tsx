@@ -15,7 +15,7 @@ const Messages = () => {
   const sender = useSearchParams().get("sender");
   const isMobile = useMediaQuery({ maxWidth: 950 });
 
-  // console.log("sender-------", sender);
+  console.log("sender-------", sender);
 
   const messagesArray = [
     {
