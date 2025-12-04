@@ -1,4 +1,3 @@
-
 export const majorsOptions = [
   "All",
   "Arts",
@@ -542,3 +541,36 @@ export const careerOptions: Record<string, string[]> = {
     "Development Consultant",
   ],
 };
+
+export const languagesOptions = [
+  "English",
+  "Turkish",
+  "Spanish",
+  "French",
+  "German",
+  "Italian",
+  "Portuguese",
+  "Russian",
+  "Chinese",
+  "Japanese",
+  "Korean",
+  "Arabic",
+  "Hindi",
+  "Bengali",
+  "Urdu",
+  "Persian",
+  "Dutch",
+  "Swedish",
+  "Norwegian",
+  "Danish",
+  "Finnish",
+  "Polish",
+  "Czech",
+  "Greek",
+  "Hebrew",
+  "Thai",
+  "Vietnamese",
+  "Indonesian",
+  "Malay",
+  "Swahili",
+];

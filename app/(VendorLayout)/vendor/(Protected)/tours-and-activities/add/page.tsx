@@ -29,6 +29,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image";
+import { languagesOptions } from "@/lib/constants";
 
 const tourFormSchema = z.object({
   title: z.string().min(1, "Tour title is required"),
@@ -66,7 +67,6 @@ export default function BookingsPage() {
   const [newIncluded, setNewIncluded] = useState<string>("");
   const [newNotIncluded, setNewNotIncluded] = useState<string>("");
   const [newItinerary, setNewItinerary] = useState<string>("");
-  console.log("toursState---", toursState);
   const router = useRouter();
   const {
     control,
@@ -91,6 +91,7 @@ export default function BookingsPage() {
       uploads: toursState.uploads || [],
     },
   });
+  console.log("errors---", errors);
 
   const watchedValues = watch();
 
@@ -325,6 +326,11 @@ export default function BookingsPage() {
               {uploadError && (
                 <p className="text-sm text-red-500">{uploadError}</p>
               )}
+              {errors.uploads?.message && (
+                <p className="text-sm text-red-500">
+                  {errors.uploads?.message}
+                </p>
+              )}
 
               <div className="flex justify-start items-center gap-2">
                 {toursState.uploads.map((url, index) => (
@@ -422,7 +428,7 @@ export default function BookingsPage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white"
               >
                 <option value="">Select a language</option>
-                {["English", "Chinese", "Turkish"].map(
+                {languagesOptions.map(
                   (lang) =>
                     !selectedLanguages.includes(lang) && (
                       <option key={lang} value={lang}>
@@ -436,7 +442,7 @@ export default function BookingsPage() {
                   {selectedLanguages.map((lang) => (
                     <span
                       key={lang}
-                      className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                      className="flex items-center gap-2 px-3 py-1 bg-secondary text-primary rounded-full text-sm"
                     >
                       {lang}
                       <button
@@ -454,7 +460,7 @@ export default function BookingsPage() {
                             })
                           );
                         }}
-                        className="text-blue-600 hover:text-blue-800 flex items-center justify-center"
+                        className="text-primary hover:primary flex items-center justify-center"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -521,7 +527,7 @@ export default function BookingsPage() {
             textClasses=" text-[18px] font-semibold "
           >
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-11">
+              <div className="col-span-10">
                 <input
                   type="text"
                   placeholder="Enter included item"
@@ -530,27 +536,23 @@ export default function BookingsPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              <div className="flex justify-center items-end">
-                <Button
-                  variant="outline"
-                  className="h-[44px] bg-transparent"
-                  type="button"
-                  disabled
-                >
-                  <X size={24} />
-                </Button>
-              </div>
-              <div className="col-span-3">
+              <div className="col-span-2">
                 <Button
                   variant="green_secondary_button"
-                  className="h-[44px]"
+                  className="h-[44px] w-full"
                   size="lg"
                   type="button"
                   onClick={handleAddIncluded}
                 >
-                  <Plus size={24} />
-                  Add item
+                  Add
                 </Button>
+              </div>
+              <div className="col-span-12 w-full">
+                {errors.included?.message && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.included?.message}
+                  </p>
+                )}
               </div>
               {toursState.included.map((item, index) => (
                 <div
@@ -574,7 +576,7 @@ export default function BookingsPage() {
             textClasses=" text-[18px] font-semibold "
           >
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-11">
+              <div className="col-span-10">
                 <input
                   type="text"
                   placeholder="Enter excluded item"
@@ -583,27 +585,23 @@ export default function BookingsPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              <div className="flex justify-center items-end">
-                <Button
-                  variant="outline"
-                  className="h-[44px] bg-transparent"
-                  type="button"
-                  disabled
-                >
-                  <X size={24} />
-                </Button>
-              </div>
-              <div className="col-span-3">
+              <div className="col-span-2">
                 <Button
                   variant="green_secondary_button"
-                  className="h-[44px]"
+                  className="h-[44px] w-full"
                   size="lg"
                   type="button"
                   onClick={handleAddNotIncluded}
                 >
-                  <Plus size={24} />
-                  Add item
+                  Add
                 </Button>
+              </div>
+              <div className="col-span-12 w-full">
+                {errors.notIncluded?.message && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.notIncluded?.message}
+                  </p>
+                )}
               </div>
               {toursState.notIncluded.map((item, index) => (
                 <div
@@ -627,7 +625,7 @@ export default function BookingsPage() {
             textClasses=" text-[18px] font-semibold "
           >
             <div className="grid grid-cols-12 gap-4">
-              <div className="col-span-11">
+              <div className="col-span-10">
                 <input
                   type="text"
                   placeholder={`Enter stop ${toursState.itinerary.length + 1}`}
@@ -636,27 +634,23 @@ export default function BookingsPage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
-              <div className="flex justify-center items-end">
-                <Button
-                  variant="outline"
-                  className="h-[44px] bg-transparent"
-                  type="button"
-                  disabled
-                >
-                  <X size={24} />
-                </Button>
-              </div>
-              <div className="col-span-3">
+              <div className="col-span-2">
                 <Button
                   variant="green_secondary_button"
-                  className="h-[44px]"
+                  className="h-[44px] w-full"
                   size="lg"
                   type="button"
                   onClick={handleAddItinerary}
                 >
-                  <Plus size={24} />
-                  Add item
+                  Add
                 </Button>
+              </div>
+              <div className="col-span-12 w-full">
+                {errors.itinerary?.message && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.itinerary?.message}
+                  </p>
+                )}
               </div>
               {toursState.itinerary.map((stop, index) => (
                 <div
