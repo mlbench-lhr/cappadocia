@@ -4,14 +4,18 @@ import { Input } from "../ui/input";
 export const SearchComponent = ({
   searchQuery,
   onChangeFunc,
+  width = " w-full sm:w-[325px] ",
   placeholder = "Search...",
 }: {
   searchQuery: string;
   placeholder?: string;
+  width?: string;
   onChangeFunc: React.Dispatch<React.SetStateAction<string>>;
 }) => {
   return (
-    <div className="w-full sm:w-[325px] h-[44px] relative border rounded-[10px] flex items-center justify-start ps-2 text-black/50">
+    <div
+      className={`${width} h-[44px] relative border rounded-[10px] flex items-center justify-start ps-2 text-black/50`}
+    >
       <Search size={22} />
       <Input
         value={searchQuery}
