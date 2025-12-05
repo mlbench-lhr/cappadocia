@@ -7,6 +7,7 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 import { TourAndActivityCard } from "@/components/TourAndActivityCard";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import axios from "axios";
+import { useParams } from "next/navigation";
 
 export const AlternativeOptions = () => {
   const dispatch = useAppDispatch();
@@ -17,12 +18,15 @@ export const AlternativeOptions = () => {
 
   const [activity, setActivity] = useState<ToursAndActivityWithVendor[]>();
   const [loading, setLoading] = useState<boolean>(true);
+  const { id }: { id: string } = useParams();
 
   useEffect(() => {
     const getData = async () => {
       try {
         setLoading(true);
-        let response = await axios.get(`/api/toursAndActivity/getAll?limit=4`);
+        let response = await axios.get(
+          `/api/toursAndActivity/getAll?limit=4&alternativeOf=${id}`
+        );
         console.log("response----", response);
 
         if (response.data?.data) {
@@ -36,7 +40,7 @@ export const AlternativeOptions = () => {
     getData();
   }, []);
 
-  if (!activity) {
+  if (!activity || activity.length < 1) {
     return null;
   }
 

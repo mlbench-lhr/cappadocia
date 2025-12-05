@@ -6,6 +6,7 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
 
+    let message = "";
     const { tourId, selectedDate, selectedLanguage, participants } =
       await req.json();
 
@@ -39,6 +40,8 @@ export async function POST(req: NextRequest) {
         const end = new Date(slot.endDate);
 
         if (!(dateObj >= start && dateObj <= end)) {
+          message =
+            "Sorry, this date is not available. Please select another date.";
           isValid = false;
         }
       }
@@ -46,6 +49,7 @@ export async function POST(req: NextRequest) {
       // participants filter
       if (participants) {
         if (slot.seatsAvailable < participants) {
+          message = "This Booking does not have enough available seats";
           isValid = false;
         }
       }
@@ -56,6 +60,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       tourId,
       matchingSlots,
+      message: message,
     });
   } catch (err: any) {
     console.error(err);

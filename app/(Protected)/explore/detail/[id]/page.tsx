@@ -242,8 +242,8 @@ export default function BookingsPage() {
             <div className="w-full" id="checkAvailabilityToggle">
               {checkAvailabilityToggle && <AvailabilityFilter />}
             </div>
-            <AlternativeOptions />
             <ReviewSection type="activity" />
+            <AlternativeOptions />
           </div>
         </BoxProviderWithName>
       </div>

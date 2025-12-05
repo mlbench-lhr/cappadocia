@@ -140,83 +140,85 @@ export default function ReviewSection({
           </div>
         </div>
       </BoxProviderWithName>
-      <BoxProviderWithName
-        name="All Reviews"
-        noBorder={true}
-        className="!p-0 mt-4"
-      >
-        <div className="w-full flex-col flex justify-start items-center gap-3.5">
-          {reviews?.map((item, index) => (
-            <div
-              key={index}
-              className="w-full rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2"
-            >
-              <div className="w-full flex justify-between items-center">
-                <ProfileBadge
-                  size="medium"
-                  title={item.user.fullName}
-                  subTitle={item.user.email}
-                  image={item.user.avatar}
-                />
-                <div className="w-fit flex justify-start items-center gap-1">
-                  <Rating value={item.rating} iconsSize="18" />
-                  <span className="text-[12px] font-medium text-black/60">
-                    {item.rating}
-                  </span>
+      {reviews && reviews?.length > 0 && (
+        <BoxProviderWithName
+          name="All Reviews"
+          noBorder={true}
+          className="!p-0 mt-4"
+        >
+          <div className="w-full flex-col flex justify-start items-center gap-3.5">
+            {reviews?.map((item, index) => (
+              <div
+                key={index}
+                className="w-full rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2"
+              >
+                <div className="w-full flex justify-between items-center">
+                  <ProfileBadge
+                    size="medium"
+                    title={item.user.fullName}
+                    subTitle={item.user.email}
+                    image={item.user.avatar}
+                  />
+                  <div className="w-fit flex justify-start items-center gap-1">
+                    <Rating value={item.rating} iconsSize="18" />
+                    <span className="text-[12px] font-medium text-black/60">
+                      {item.rating}
+                    </span>
+                  </div>
                 </div>
-              </div>
-              {item.review.map((item2, index) => (
-                <div
-                  key={index}
-                  className="w-full flex flex-col justify-start items-start"
-                >
-                  {item2.addedBy === "vendor" && (
-                    <div className="w-full mb-2">
-                      <ProfileBadge
-                        size="medium"
-                        title={item.vendor.vendorDetails.companyName}
-                        subTitle={
-                          "TÜRSAB Number: " +
-                          item.vendor.vendorDetails.tursabNumber
-                        }
-                        image={item.vendor.avatar || "/placeholderDp.png"}
-                      />
-                    </div>
-                  )}
-                  <span className="text-[14px] font-normal text-black/70 leading-[18px]">
-                    {item2.text}
-                  </span>
-                  {item2.uploads && (
-                    <div className="w-full grid-cols-3 gap-2">
-                      {item2.uploads.map((image, index2) => (
-                        <Image
-                          src={image}
-                          key={index2}
-                          height={100}
-                          width={100}
-                          className="col-span-1 object-cover object-center h-[100px] "
-                          alt=""
+                {item.review.map((item2, index) => (
+                  <div
+                    key={index}
+                    className="w-full flex flex-col justify-start items-start"
+                  >
+                    {item2.addedBy === "vendor" && (
+                      <div className="w-full mb-2">
+                        <ProfileBadge
+                          size="medium"
+                          title={item.vendor.vendorDetails.companyName}
+                          subTitle={
+                            "TÜRSAB Number: " +
+                            item.vendor.vendorDetails.tursabNumber
+                          }
+                          image={item.vendor.avatar || "/placeholderDp.png"}
                         />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          ))}
-          {data.totalReviews > 2 && (
-            <Button
-              variant={"outline"}
-              className="text-primary"
-              onClick={() => {
-                setLimit(limit + 3);
-              }}
-            >
-              See More Reviews
-            </Button>
-          )}
-        </div>
-      </BoxProviderWithName>
+                      </div>
+                    )}
+                    <span className="text-[14px] font-normal text-black/70 leading-[18px]">
+                      {item2.text}
+                    </span>
+                    {item2.uploads && (
+                      <div className="w-full grid-cols-3 gap-2">
+                        {item2.uploads.map((image, index2) => (
+                          <Image
+                            src={image}
+                            key={index2}
+                            height={100}
+                            width={100}
+                            className="col-span-1 object-cover object-center h-[100px] "
+                            alt=""
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+            {data.totalReviews > 2 && (
+              <Button
+                variant={"outline"}
+                className="text-primary"
+                onClick={() => {
+                  setLimit(limit + 3);
+                }}
+              >
+                See More Reviews
+              </Button>
+            )}
+          </div>
+        </BoxProviderWithName>
+      )}
     </div>
   );
 }
