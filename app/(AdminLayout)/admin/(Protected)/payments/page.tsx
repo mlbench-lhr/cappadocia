@@ -39,7 +39,10 @@ export default function BookingsPage() {
   const columns: Column[] = [
     {
       header: "Vendor Name",
-      accessor: "vendor.fullName",
+      accessor: "vendor?.fullName",
+      render: (item) => {
+        return <span>{item?.vendor?.fullName}</span>;
+      },
     },
     {
       header: "Tour Name",
@@ -59,7 +62,7 @@ export default function BookingsPage() {
     {
       header: "Status",
       accessor: "paymentStatus",
-      render: (item) => <StatusBadge status={item.paymentStatus} />,
+      render: (item) => <StatusBadge status={item?.paymentStatus} />,
     },
     {
       header: "Requested Date",
@@ -80,18 +83,18 @@ export default function BookingsPage() {
 
         return (
           <PayoutDetailsModal
-            stripeAccountId={item.vendor.vendorDetails.stripeAccountId}
+            stripeAccountId={item?.vendor?.vendorDetails?.stripeAccountId}
             data={{
-              _id: item._id,
+              _id: item?._id,
               activity: {
-                title: item.activity.title,
+                title: item?.activity?.title,
               },
               booking: {
                 paymentDetails: {
-                  totalAmount: item.booking.paymentDetails.amount,
+                  totalAmount: item?.booking?.paymentDetails?.amount,
                   vendorPayable: percentage(
                     85,
-                    item.booking.paymentDetails.amount
+                    item?.booking?.paymentDetails?.amount
                   ),
                   commission: 15,
                 },

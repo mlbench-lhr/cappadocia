@@ -29,7 +29,21 @@ export function Navigation() {
         Home
       </Link>
       <Link
-        href="#About"
+        href="/blogs"
+        className={
+          pathname.includes("blogs")
+            ? "font-[600] text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
+        }
+        onClick={() => {
+          setIsMobileMenuOpen(false);
+          setPathname("blogs");
+        }}
+      >
+        Blogs
+      </Link>
+      <Link
+        href="/#About"
         className={
           pathname.includes("About")
             ? "font-[600] text-[16px]"
@@ -57,7 +71,7 @@ export function Navigation() {
         Tours & Activities
       </Link>
       <Link
-        href="#Contact"
+        href="/#Contact"
         className={
           pathname.includes("Contact")
             ? "font-[600] text-[16px]"

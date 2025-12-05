@@ -62,7 +62,7 @@ function ProfileMenu() {
                   </span>
                 </Link>
                 <LogoutDialog />
-                <DeleteAccountDialog />
+                {/* <DeleteAccountDialog /> */}
               </div>
             </PopoverContent>
           </Popover>

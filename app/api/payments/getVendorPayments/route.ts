@@ -88,14 +88,14 @@ export async function GET(req: NextRequest) {
         const bookingDateOnly = new Date(bookingDate);
         bookingDateOnly.setHours(0, 0, 0, 0);
 
-        if (bookingDateOnly < today) {
-          payoutStatus =
-            "Not Eligible (Activity passed but not marked completed)";
-        } else if (bookingDateOnly.getTime() === today.getTime()) {
-          payoutStatus = "Not Eligible (Activity is today)";
-        } else {
-          payoutStatus = "Not Eligible (Activity not started yet)";
-        }
+        // if (bookingDateOnly < today) {
+        //   payoutStatus =
+        //     "Not Eligible (Activity passed but not marked completed)";
+        // } else if (bookingDateOnly.getTime() === today.getTime()) {
+        //   payoutStatus = "Not Eligible (Activity is today)";
+        // } else {
+        //   payoutStatus = "Not Eligible (Activity not started yet)";
+        // }
       }
 
       return {

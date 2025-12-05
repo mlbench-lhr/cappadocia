@@ -257,7 +257,7 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
         <BoxProviderWithName
           name="Tour Information"
-          textClasses=" text-[18px] font-semibold "
+          textClasses=" text-[14px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormTextInput
@@ -354,7 +354,7 @@ export default function BookingsPage() {
         </BoxProviderWithName>
         <BoxProviderWithName
           name="Policies & Languages"
-          textClasses=" text-[18px] font-semibold "
+          textClasses=" text-[14px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1 col-span-1">
@@ -425,7 +425,7 @@ export default function BookingsPage() {
                   }
                   e.target.value = "";
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px] bg-white"
               >
                 <option value="">Select a language</option>
                 {languagesOptions.map(
@@ -478,7 +478,7 @@ export default function BookingsPage() {
         </BoxProviderWithName>
         <BoxProviderWithName
           name="Duration & Pickup Option"
-          textClasses=" text-[18px] font-semibold "
+          textClasses=" text-[14px] font-semibold "
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
@@ -489,7 +489,7 @@ export default function BookingsPage() {
               <input
                 type="number"
                 placeholder="Enter duration in hours"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
                 onChange={(e) => {
                   const value = Number.parseInt(e.target.value) || 0;
                   setValue("duration", value);
@@ -524,7 +524,7 @@ export default function BookingsPage() {
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
           <BoxProviderWithName
             name="What's included"
-            textClasses=" text-[18px] font-semibold "
+            textClasses=" text-[14px] font-semibold "
           >
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-10">
@@ -533,7 +533,7 @@ export default function BookingsPage() {
                   placeholder="Enter included item"
                   value={newIncluded}
                   onChange={(e) => setNewIncluded(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
                 />
               </div>
               <div className="col-span-2">
@@ -573,7 +573,7 @@ export default function BookingsPage() {
           </BoxProviderWithName>
           <BoxProviderWithName
             name="What's not included"
-            textClasses=" text-[18px] font-semibold "
+            textClasses=" text-[14px] font-semibold "
           >
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-10">
@@ -582,7 +582,7 @@ export default function BookingsPage() {
                   placeholder="Enter excluded item"
                   value={newNotIncluded}
                   onChange={(e) => setNewNotIncluded(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
                 />
               </div>
               <div className="col-span-2">
@@ -622,7 +622,7 @@ export default function BookingsPage() {
           </BoxProviderWithName>
           <BoxProviderWithName
             name="Itinerary Builder"
-            textClasses=" text-[18px] font-semibold "
+            textClasses=" text-[14px] font-semibold "
           >
             <div className="grid grid-cols-12 gap-4">
               <div className="col-span-10">
@@ -631,7 +631,7 @@ export default function BookingsPage() {
                   placeholder={`Enter stop ${toursState.itinerary.length + 1}`}
                   value={newItinerary}
                   onChange={(e) => setNewItinerary(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
                 />
               </div>
               <div className="col-span-2">
