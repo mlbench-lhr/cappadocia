@@ -3,6 +3,8 @@ const variants: any = {
   completed: { text: "#4A9E35" },
   Eligible: { text: "#4A9E35" },
   "Not Eligible (Activity Tomorrow)": { text: "#F5A903" },
+  "Not Eligible (Completed less than 1 day ago)": { text: "#F5A903" },
+  "Not Eligible (Activity not completed yet)": { text: "#F5A903" },
   pending: { text: "#FF862F" },
   cancelled: { text: "rgba(255, 0, 0, 0.60)" },
 };
