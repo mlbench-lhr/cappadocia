@@ -25,7 +25,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import moment from "moment";
 import Swal from "sweetalert2";
 import axios, { AxiosError } from "axios";
@@ -41,12 +41,13 @@ export const LocationData = z.object({
 
 const bookingSchema = z.object({
   selectDate: z.string().min(1, "Please select a date"),
-  participants: z
-    .string()
-    .min(1, "Number of participants is required")
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-      message: "Must be a positive number",
-    }),
+  // participants: z
+  //   .string()
+  //   .min(1, "Number of participants is required")
+  //   .refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
+  //     message: "Must be a positive number",
+  //   }),
+  participants: z.string().optional(),
   email: z.string().email("Invalid email address").min(1, "Email is required"),
   fullName: z.string().min(2, "Full name must be at least 2 characters"),
   phoneNumber: z.string().min(10, "Valid phone number is required"),
@@ -203,14 +204,14 @@ export default function BookingsPage() {
               type="date"
               required
             />
-            <FormTextInput
+            {/* <FormTextInput
               control={control}
               name="participants"
               label="Participants"
               placeholder="Enter no of participants"
               type="number"
               required
-            />
+            /> */}
           </div>
         </BoxProviderWithName>
 
