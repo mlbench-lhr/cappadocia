@@ -90,14 +90,14 @@ export default function DashboardPage() {
                   >
                     <div className="w-full flex justify-between items-center">
                       <Skeleton className="text-4xl font-semibold line-clamp-1 text-transparent">
-                        {item.title}
+                        {item?.title}
                       </Skeleton>
                       <Skeleton className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                        {item.image}
+                        {item?.image}
                       </Skeleton>
                     </div>
                     <Skeleton className="text-sm md:text-base font-medium text-transparent">
-                      {item.description}
+                      {item?.description}
                     </Skeleton>
                   </div>
                 ))
@@ -108,14 +108,14 @@ export default function DashboardPage() {
                   >
                     <div className="w-full flex justify-between items-center">
                       <h1 className="text-4xl font-semibold line-clamp-1">
-                        {item.title}
+                        {item?.title}
                       </h1>
                       <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
-                        {item.image}
+                        {item?.image}
                       </div>
                     </div>
                     <span className="text-sm md:text-base font-medium">
-                      {item.description}
+                      {item?.description}
                     </span>
                   </div>
                 ))}
