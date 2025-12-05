@@ -150,7 +150,7 @@ export default function BookingsPage() {
               </LightboxProvider>
               <label
                 className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer bottom-14 right-2 shadow-lg"
-                htmlFor="document-upload"
+                htmlFor="document-upload-cover"
               >
                 <Camera size={20} className="" color="#B32053" />
               </label>
@@ -162,7 +162,7 @@ export default function BookingsPage() {
                 }}
                 disabled={loadingType ? true : false}
                 className="hidden"
-                id="document-upload"
+                id="document-upload-cover"
               />
               <div className="h-[90px] md:h-[180px] w-[90px] md:w-[180px] rounded-full absolute left-4 sm:left-8 lg:left-14 bottom-0">
                 <LightboxProvider
