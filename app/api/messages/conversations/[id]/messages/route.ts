@@ -4,6 +4,7 @@ import Conversation from "@/lib/mongodb/models/Conversation";
 import Message from "@/lib/mongodb/models/Message";
 import { verifyToken } from "@/lib/auth/jwt";
 import { pusherServer } from "@/lib/pusher/server";
+import { sendNotification } from "@/lib/pusher/notify";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -114,6 +115,22 @@ export async function POST(
       "conversation-updated",
       convPayload
     );
+
+    const recipients = convo.participants
+      .map((p) => p.toString())
+      .filter((p) => p !== userId);
+
+    for (const rid of recipients) {
+      await sendNotification({
+        recipientId: rid,
+        name: "New message",
+        type: "chat",
+        message: text,
+        link: `/messages?sender=${userId}`,
+        relatedId: convo._id.toString(),
+        endDate: msg.createdAt,
+      });
+    }
 
     return NextResponse.json({ message: msg });
   } catch (e: any) {

@@ -10,6 +10,7 @@ import notIcon1 from "@/public/notIcon.svg";
 import notIcon2 from "@/public/notIcon Blog.svg";
 import Image from "next/image";
 import axios from "axios";
+import { pusherClient } from "@/lib/pusher/client";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -18,10 +19,12 @@ import { Button } from "@/components/ui/button";
 interface Notification {
   name: string;
   type: string;
-  endDate: string;
-  image: string;
+  endDate?: string;
+  image?: string;
   _id: string;
   createdAt: string;
+  message?: string;
+  link?: string;
 }
 
 export default function CalendarPage() {
@@ -31,6 +34,7 @@ export default function CalendarPage() {
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const userId = useAppSelector((s) => s.auth.user?.id);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -57,6 +61,18 @@ export default function CalendarPage() {
     }
     getNot();
   }, []);
+  useEffect(() => {
+    if (!userId) return;
+    const channel = pusherClient.subscribe(`notification-user-${userId}`);
+    const handler = (data: Notification) => {
+      setNotifications((prev) => [data, ...prev]);
+    };
+    channel.bind("notification-new", handler);
+    return () => {
+      channel.unbind("notification-new", handler);
+      pusherClient.unsubscribe(`notification-user-${userId}`);
+    };
+  }, [userId]);
   useEffect(() => {
     async function markRead() {
       try {
@@ -243,23 +259,39 @@ const NotificationBox = ({ item }: { item: Notification }) => {
           </div>
         )}
         <div className="w-[calc(100%-60px)] lg:w-[50%] flex justify-start items-start flex-col gap-[5px] line-clamp-2">
-          <span className="w-fit lg:w-[100%] leading-[20px] text-[14px]">
-            Your {item.type} deadline is{" "}
-            {moment(item.endDate).format("MMM DD, YYYY")}. Don’t miss it make
-            sure to complete it on time.
-          </span>
-          <span className="text-[#51606E] text-[12px]">
-            {moment(item.createdAt).format("MMM DD, YYYY")}
-          </span>
+          {item.type === "chat" ? (
+            <>
+              <span className="w-fit lg:w-[100%] leading-[20px] text-[14px]">
+                New message {item.message ? `: ${item.message}` : ""}
+              </span>
+              <span className="text-[#51606E] text-[12px]">
+                {moment(item.createdAt).format("MMM DD, YYYY")}
+              </span>
+            </>
+          ) : (
+            <>
+              <span className="w-fit lg:w-[100%] leading-[20px] text-[14px]">
+                Your {item.type} deadline is {moment(item.endDate).format("MMM DD, YYYY")}.
+              </span>
+              <span className="text-[#51606E] text-[12px]">
+                {moment(item.createdAt).format("MMM DD, YYYY")}
+              </span>
+            </>
+          )}
         </div>
       </div>
-      <X
-        size={20}
-        className="cursor-pointer"
-        onClick={() => {
-          deleteNot(item._id);
-        }}
-      />
+      <div className="flex items-center gap-2">
+        {item.link ? (
+          <a href={item.link} className="text-primary text-sm">Open</a>
+        ) : null}
+        <X
+          size={20}
+          className="cursor-pointer"
+          onClick={() => {
+            deleteNot(item._id);
+          }}
+        />
+      </div>
     </div>
   );
 };

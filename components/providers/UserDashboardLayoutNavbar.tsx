@@ -1,6 +1,6 @@
 "use client";
 
-import type React from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import logo from "@/public/logo.png";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
@@ -18,6 +18,16 @@ import Link from "next/link";
 import { setHasNew } from "@/lib/store/slices/notificationSlice";
 import DeleteAccountDialog from "../DeleteAccountDialog";
 import { NotificationIcon } from "@/public/allIcons/page";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { pusherClient } from "@/lib/pusher/client";
+import axios from "axios";
+import moment from "moment";
 
 function ProfileMenu() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -89,6 +99,53 @@ export function Navbar() {
   const { isCollapsed } = useSelector((s: RootState) => s.sidebar);
   const hasNew = useAppSelector((s) => s.notification.hasNew);
   const userData = useAppSelector((state) => state.auth.user);
+  const [open, setOpen] = React.useState(false);
+  const [notifications, setNotifications] = React.useState<
+    Array<{
+      _id: string;
+      type: string;
+      name: string;
+      image?: string;
+      message?: string;
+      link?: string;
+      createdAt: string;
+      endDate?: string;
+      isUnread?: boolean;
+    }>
+  >([]);
+
+  React.useEffect(() => {
+    async function load() {
+      try {
+        const res = await axios.get("/api/notifications");
+        const items = res.data || [];
+        setNotifications(items);
+        if (items.some((i: any) => i.isUnread)) dispatch(setHasNew(true));
+      } catch {}
+    }
+    load();
+  }, []);
+
+  React.useEffect(() => {
+    const uid = userData?.id;
+    if (!uid) return;
+    const channel = pusherClient.subscribe(`notification-user-${uid}`);
+    const handler = (data: any) => {
+      setNotifications((prev) => [data, ...prev]);
+      dispatch(setHasNew(true));
+    };
+    channel.bind("notification-new", handler);
+    return () => {
+      channel.unbind("notification-new", handler);
+      pusherClient.unsubscribe(`notification-user-${uid}`);
+    };
+  }, [userData?.id]);
+
+  React.useEffect(() => {
+    if (!open) return;
+    dispatch(setHasNew(false));
+    axios.put("/api/notifications/markRead").catch(() => {});
+  }, [open]);
 
   return (
     <header className="w-full bg-white border-b h-[78px] flex justify-end items-center">
@@ -131,19 +188,71 @@ export function Navbar() {
             <div className="relative">
               <ProfileMenu />
             </div>
-            <Link
-              href={"/Notifications"}
-              className="relative cursor-pointer bg-secondary w-[38px] h-[38px] flex justify-center items-center rounded-full"
-              onClick={() => dispatch(setHasNew(false))}
-            >
-              <NotificationIcon color="#B32053" />
-              {hasNew && (
-                <span
-                  className="absolute -top-1 -right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white"
-                  aria-label="New notifications"
-                />
-              )}
-            </Link>
+            <Drawer direction="right" open={open} onOpenChange={setOpen}>
+              <DrawerTrigger asChild>
+                <button
+                  className="relative cursor-pointer bg-secondary w-[38px] h-[38px] flex justify-center items-center rounded-full"
+                  aria-label="Notifications"
+                >
+                  <NotificationIcon color="#B32053" />
+                  {hasNew && (
+                    <span className="absolute -top-1 -right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
+                  )}
+                </button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Notifications</DrawerTitle>
+                </DrawerHeader>
+                <div className="p-4 space-y-3 max-h-[75vh] overflow-auto">
+                  {notifications.length === 0 ? (
+                    <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
+                      No notification found
+                    </div>
+                  ) : (
+                    notifications.map((n) => (
+                      <div
+                        key={n._id}
+                        className="flex items-center justify-between gap-3 border-b pb-3 last:border-b-0"
+                      >
+                        <div className="flex items-center gap-3 w-[calc(100%-80px)]">
+                          {n.image ? (
+                            <Image
+                              src={n.image}
+                              alt=""
+                              width={40}
+                              height={40}
+                              className="rounded-full w-10 h-10 object-cover"
+                            />
+                          ) : (
+                            <div className="rounded-full w-10 h-10 bg-[#B32053]" />
+                          )}
+                          <div className="flex flex-col gap-1 w-full">
+                            {n.type === "chat" ? (
+                              <span className="text-sm">
+                                New message{n.message ? `: ${n.message}` : ""}
+                              </span>
+                            ) : (
+                              <span className="text-sm">{n.name}</span>
+                            )}
+                            <span className="text-xs text-black/60">
+                              {moment(n.createdAt).format("MMM DD, YYYY")}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {n.link ? (
+                            <a href={n.link} className="text-primary text-xs">
+                              Open
+                            </a>
+                          ) : null}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </DrawerContent>
+            </Drawer>
           </div>
         </div>
       </div>
