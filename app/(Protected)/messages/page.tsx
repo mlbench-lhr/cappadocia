@@ -161,7 +161,8 @@ const Messages = () => {
     return conversations.filter((c) => {
       const p = c.participants || [];
       const other = p.find((u: any) => u._id !== currentUserId);
-      const name = other?.fullName || "";
+      const name =
+        other?.role === "admin" ? "Cappadocia Platform" : other?.fullName || "";
       return name.toLowerCase().includes(q);
     });
   }, [search, conversations, currentUserId]);
@@ -176,26 +177,6 @@ const Messages = () => {
     );
     setInputText("");
   };
-
-  const messagesArray = [
-    {
-      sentBy: "user",
-      message:
-        "Hello, I’m interested in the Cappadocia Red Tour. Can you confirm if pickup from my hotel in Ürgüp is included?",
-      date: "04:45 PM",
-    },
-    {
-      sentBy: "vendor",
-      message:
-        "Hi Ali 👋 Yes, pickup from Ürgüp is available. There’s a €10 fee for that location.",
-      date: "04:45 PM",
-    },
-    {
-      sentBy: "user",
-      message: "Okay, noted. What’s the group size limit for this tour?",
-      date: "04:45 PM",
-    },
-  ];
 
   return (
     <BasicStructureWithName
@@ -231,7 +212,7 @@ const Messages = () => {
                     key={c._id}
                     onClick={() => {
                       setSelectedConversationId(c._id);
-                      router.push(`messages?sender=${c._id}`);
+                      router.push(`messages?sender=${other?._id}`);
                     }}
                     className={`w-full text-left flex justify-between items-start gap-[15px] px-2 lg:px-4 xl:px-6 py-4 border-b ${
                       selectedConversationId === c._id
@@ -241,15 +222,25 @@ const Messages = () => {
                   >
                     <Image
                       alt=""
-                      src={other?.avatar || "/placeholderDp.png"}
+                      src={
+                        other?.role === "admin"
+                          ? "/smallLogo.png"
+                          : other?.avatar || "/placeholderDp.png"
+                      }
                       width={35}
                       height={35}
-                      className="rounded-[8px]"
+                      className={`rounded-[8px] ${
+                        other?.role === "admin"
+                          ? "object-contain"
+                          : "object-cover"
+                      } w-[35px] h-[35px]`}
                     />
                     <div className="w-[calc(100%-50px)] flex flex-col justify-between items-start">
                       <div className="w-full flex justify-between items-center">
                         <h1 className="text-base font-semibold">
-                          {other?.fullName || "User"}
+                          {other?.role === "admin"
+                            ? "Cappadocia Platform"
+                            : other?.fullName || "User"}
                         </h1>
                         <span className="text-sm font-normal text-black/70">
                           {new Date(c.latestMessageAt).toLocaleTimeString([], {
@@ -277,13 +268,23 @@ const Messages = () => {
             <div className="w-full border-b px-2 lg:px-4 xl:px-6 py-4 text-sm font-semibold flex justify-start items-center gap-2">
               <Image
                 alt=""
-                src={selectedOther?.avatar || "/placeholderDp.png"}
+                src={
+                  selectedOther?.role === "admin"
+                    ? "/smallLogo.png"
+                    : selectedOther?.avatar || "/placeholderDp.png"
+                }
                 width={35}
                 height={35}
-                className="rounded-[8px]"
+                className={`rounded-[8px] ${
+                  selectedOther?.role === "admin"
+                    ? "object-contain"
+                    : "object-cover"
+                } w-[35px] h-[35px]`}
               />
               <span className="text-sm font-semibold">
-                {selectedOther?.fullName || "Messages"}
+                {selectedOther?.role === "admin"
+                  ? "Cappadocia Platform"
+                  : selectedOther?.fullName || "Messages"}
               </span>
             </div>
           </div>

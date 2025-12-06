@@ -74,7 +74,7 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
   },
   {
     name: "Support Requests",
-    link: "/supportRequests",
+    link: "/support",
     icon: MessageIcon,
   },
 ];
