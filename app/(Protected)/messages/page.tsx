@@ -35,6 +35,11 @@ const Messages = () => {
     const p = selectedConversation?.participants || [];
     return p.find((u: any) => u._id !== currentUserId);
   }, [selectedConversation, currentUserId]);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   useEffect(() => {
     const run = async () => {
@@ -282,7 +287,7 @@ const Messages = () => {
               </span>
             </div>
           </div>
-          <div className="h-[calc(100%-180px)] w-full overflow-auto">
+          <div className="h-[calc(100%-180px)] w-full overflow-auto scrollbar-hide">
             <div className="min-h-full max-h-fit w-full flex justify-end items-start flex-col gap-3 md:gap-6 px-0 md:px-10">
               {messages.map((item: any, index: number) => (
                 <div
@@ -310,6 +315,7 @@ const Messages = () => {
                   </span>
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
           </div>
           <div className="w-full h-[75px] pt-3 flex flex-col justify-start items-start px-0 md:px-10">
