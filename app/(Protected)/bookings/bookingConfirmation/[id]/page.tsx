@@ -187,11 +187,8 @@ export default function BookingsPage() {
                             />
                           </div>
                         </div>
-                        <Button
-                          variant={"main_green_button"}
-                          className="w-full"
-                        >
-                          Chat
+                        <Button variant={"main_green_button"} className="w-full" asChild>
+                          <Link href={`/messages?sender=${data?.vendor._id}`}>Chat</Link>
                         </Button>
                       </div>
                       <div className="flex flex-col justify-start items-start gap-2 mt-3">

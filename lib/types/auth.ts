@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { VendorDetails } from "../mongodb/models/User";
 
 export interface User {
+  _id?: string;
   id: string;
   email: string;
   firstName?: string;

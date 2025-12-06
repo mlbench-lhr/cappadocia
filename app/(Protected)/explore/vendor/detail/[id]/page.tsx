@@ -7,6 +7,7 @@ import { BasicStructureWithName } from "@/components/providers/BasicStructureWit
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   LocationIcon,
@@ -99,8 +100,9 @@ export default function BookingsPage() {
               <Button
                 variant={"main_green_button"}
                 className="w-full md:w-[160px]"
+                asChild
               >
-                Chat
+                <Link href={`/messages?sender=${data._id}`}>Chat</Link>
               </Button>
             </div>
             <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3.5">

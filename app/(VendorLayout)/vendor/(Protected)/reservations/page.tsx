@@ -140,9 +140,12 @@ export default function BookingsPage() {
                                   <span className="text-xs font-semibold">
                                     Not Added
                                   </span>
-                                  <span className="text-xs font-normal text-primary hover:no-underline underline">
+                                  <Link
+                                    href={`/messages?sender=${item.user._id}`}
+                                    className="text-xs font-normal text-primary hover:no-underline underline"
+                                  >
                                     Ask for pickup location
-                                  </span>
+                                  </Link>
                                 </>
                               )}
                             </div>
@@ -164,8 +167,13 @@ export default function BookingsPage() {
                               <Button
                                 size={"lg"}
                                 variant={"green_secondary_button"}
+                                asChild
                               >
-                                Contact Traveler
+                                <Link
+                                  href={`/messages?sender=${item.user._id}`}
+                                >
+                                  Contact Traveler
+                                </Link>
                               </Button>
                               <Button
                                 size={"lg"}
