@@ -178,14 +178,14 @@ export function Navbar() {
               <IconMenu className="h-5 w-5" />
             </button>
           </div>
-          <div className="hidden md:flex items-center gap-3">
-            <div>
+          <div className="flex items-center gap-3">
+            <div className="hidden md:block">
               <div className="text-[14px] font-medium">
                 {userData?.fullName}
               </div>
               <div className="text-[12px] font-[400]">{userData?.email}</div>
             </div>
-            <div className="relative">
+            <div className="relative hidden md:block">
               <ProfileMenu />
             </div>
             <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -200,7 +200,7 @@ export function Navbar() {
                   )}
                 </button>
               </DrawerTrigger>
-              <DrawerContent>
+              <DrawerContent className="bg-secondary">
                 <DrawerHeader>
                   <DrawerTitle>Notifications</DrawerTitle>
                 </DrawerHeader>
@@ -215,19 +215,21 @@ export function Navbar() {
                         key={n._id}
                         className="flex items-center justify-between gap-3 border-b pb-3 last:border-b-0"
                       >
-                        <div className="flex items-center gap-3 w-[calc(100%-80px)]">
+                        <div className="flex items-center gap-3 w-[calc(100%-52px)]">
                           {n.image ? (
                             <Image
                               src={n.image}
                               alt=""
-                              width={40}
-                              height={40}
-                              className="rounded-full w-10 h-10 object-cover"
+                              width={35}
+                              height={35}
+                              className="rounded-full w-[35px] h-[35px] object-cover"
                             />
                           ) : (
-                            <div className="rounded-full w-10 h-10 bg-[#B32053]" />
+                            <div className="rounded-full w-[35px] h-[35px] bg-[#B32053] flex justify-center items-center">
+                              <NotificationIcon color="white" size="18" />
+                            </div>
                           )}
-                          <div className="flex flex-col gap-1 w-full">
+                          <div className="flex flex-col gap-1 w-[calc(100%-47px])]">
                             {n.type === "chat" ? (
                               <span className="text-sm">
                                 New message{n.message ? `: ${n.message}` : ""}
@@ -240,7 +242,7 @@ export function Navbar() {
                             </span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 w-[40px] justify-end">
                           {n.link ? (
                             <a href={n.link} className="text-primary text-xs">
                               Open
