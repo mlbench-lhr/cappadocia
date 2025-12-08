@@ -365,12 +365,18 @@ export const UserIcon = ({
     </svg>
   );
 };
-export const NotificationIcon = ({ color }: { color: string }) => {
+export const NotificationIcon = ({
+  color,
+  size = "25",
+}: {
+  color: string;
+  size?: string;
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="19"
-      height="25"
+      width={size}
+      height={size}
       viewBox="0 0 19 25"
       fill="none"
     >

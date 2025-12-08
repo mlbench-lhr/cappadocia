@@ -1,28 +1,41 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Types, Document } from "mongoose";
 
-export interface NotificationType extends Document {
+export interface NotificationAttrs {
+  userId: Types.ObjectId;
   name: string;
-  type: "Blog" | "Opportunity";
-  endDate: Date;
+  type: string;
+  message?: string;
   image?: string;
-  relatedId: string;
-  createdAt: Date;
-  isUnread: boolean;
-  userId?: string;
+  link?: string;
+  relatedId?: string;
+  endDate?: Date | null;
+  isUnread?: boolean;
 }
 
-const NotificationSchema = new Schema<NotificationType>(
+export interface NotificationDocument extends Document, NotificationAttrs {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const NotificationSchema = new Schema<NotificationDocument>(
   {
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
-    type: { type: String, enum: ["Blog", "Opportunity"], required: true },
-    endDate: { type: Date, required: true },
+    type: { type: String, required: true },
+    message: { type: String },
     image: { type: String },
-    relatedId: { type: String, required: true },
+    link: { type: String },
+    relatedId: { type: String },
+    endDate: { type: Date, default: null },
     isUnread: { type: Boolean, default: true },
-    userId: { type: String },
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Notification ||
-  mongoose.model<NotificationType>("Notification", NotificationSchema);
+NotificationSchema.index({ userId: 1, createdAt: -1 });
+
+const Notification =
+  mongoose.models.Notification ||
+  mongoose.model<NotificationDocument>("Notification", NotificationSchema);
+
+export default Notification;

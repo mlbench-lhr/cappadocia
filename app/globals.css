@@ -1255,3 +1255,11 @@ input[type="number"] {
     position: relative;
   }
 }
+/* Tailwind plugin not needed, just add this in globals.css or your component CSS */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
