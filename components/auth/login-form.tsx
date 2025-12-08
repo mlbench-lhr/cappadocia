@@ -170,6 +170,9 @@ export function LoginForm({
   return (
     <Card className="w-full md:w-[450px] auth-box-shadows">
       <CardHeader className="space-y-1">
+        <Link href={"/"}>
+          <Image src={"/logo.png"} width={100} height={20} alt="" />
+        </Link>
         <CardTitle className="heading-text-style-4">
           {isAdmin ? "Login" : "Welcome Back"}
         </CardTitle>

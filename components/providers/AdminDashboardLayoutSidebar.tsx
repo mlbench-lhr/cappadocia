@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
 import { closeSidebar, toggleCollapse } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
-import { BadgeDollarSign, Lock, X } from "lucide-react";
+import { BadgeDollarSign, Lock, Newspaper, X } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -41,6 +41,9 @@ const IconClose = ({ className = "" }: { className?: string }) => (
 const PaymentIcon = ({ color }: { color: string }) => (
   <BadgeDollarSign color={color} size={"17"} />
 );
+const BlogIcon = ({ color }: { color: string }) => (
+  <Newspaper color={color} size={"17"} />
+);
 const pathsArray: { name: string; link: string; icon: any }[] = [
   {
     name: "Dashboard",
@@ -66,6 +69,11 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     name: "Payments",
     link: "/payments",
     icon: PaymentIcon,
+  },
+  {
+    name: "Blogs",
+    link: "/blogs",
+    icon: BlogIcon,
   },
   {
     name: "Settings",

@@ -17,7 +17,7 @@ export const SwitchRoles = () => {
           } text-black font-semibold !rounded-2xl `}
           asChild
         >
-          <a href={"/vendor/auth/signup"}>
+          <a href={"/vendor/auth/login"}>
             <VendorIcon2 />
             Vendor
           </a>

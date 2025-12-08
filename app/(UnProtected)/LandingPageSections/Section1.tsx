@@ -98,16 +98,16 @@ export default function Section1() {
         "Book local experiences, guided tours, and adventures — all in one place.",
     },
     {
-      image: "/landing page/pic2.jpg", // Add more images
-      title: "Discover the Best Tours & Activities in Cappadocia",
+      image: "/landing page/pic2.jpg",
+      title: "Explore Unique Adventures Across Stunning Cappadocia",
       subtitle:
-        "Book local experiences, guided tours, and adventures — all in one place.",
+        "Find top-rated journeys, expert-led tours, and activities — all in one spot.",
     },
     {
-      image: "/landing page/pic3.jpg", // Add more images
-      title: "Discover the Best Tours & Activities in Cappadocia",
+      image: "/landing page/pic3.jpg",
+      title: "Experience the Top Attractions & Hidden Gems of Cappadocia",
       subtitle:
-        "Book local experiences, guided tours, and adventures — all in one place.",
+        "Enjoy curated excursions, cultural tours, and fun activities — all together here.",
     },
   ];
 
