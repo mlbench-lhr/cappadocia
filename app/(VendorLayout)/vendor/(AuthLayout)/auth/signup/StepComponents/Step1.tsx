@@ -14,6 +14,7 @@ import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import Swal from "sweetalert2";
+import Image from "next/image";
 
 const step1Schema = z
   .object({
@@ -113,6 +114,9 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
+        <Link href={"/"}>
+          <Image src={"/logo.png"} width={100} height={20} alt="" />
+        </Link>
         <CardTitle className="text-2xl font-bold">
           Vendor Application Form
         </CardTitle>

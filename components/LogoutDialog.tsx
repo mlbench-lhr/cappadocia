@@ -37,8 +37,8 @@ export default function LogoutDialog({
       router.push("/vendor/auth/login");
       window.location.href = "/vendor/auth/login";
     } else {
-      router.push("/auth/login");
-      window.location.href = "/auth/login";
+      router.push("/");
+      window.location.href = "/";
     }
   };
   return (

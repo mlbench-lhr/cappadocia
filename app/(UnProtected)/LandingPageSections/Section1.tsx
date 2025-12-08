@@ -98,16 +98,16 @@ export default function Section1() {
         "Book local experiences, guided tours, and adventures — all in one place.",
     },
     {
-      image: "/landing page/pic2.jpg", // Add more images
-      title: "Discover the Best Tours & Activities in Cappadocia",
+      image: "/landing page/pic2.jpg",
+      title: "Explore Unique Adventures Across Stunning Cappadocia",
       subtitle:
-        "Book local experiences, guided tours, and adventures — all in one place.",
+        "Find top-rated journeys, expert-led tours, and activities — all in one spot.",
     },
     {
-      image: "/landing page/pic3.jpg", // Add more images
-      title: "Discover the Best Tours & Activities in Cappadocia",
+      image: "/landing page/pic3.jpg",
+      title: "Experience the Top Attractions & Hidden Gems of Cappadocia",
       subtitle:
-        "Book local experiences, guided tours, and adventures — all in one place.",
+        "Enjoy curated excursions, cultural tours, and fun activities — all together here.",
     },
   ];
 
@@ -257,6 +257,7 @@ export default function Section1() {
             <div className="h-fit ps-0 md:ps-2 w-full md:w-[30%] flex items-center justify-start text-center gap-[9px] md:gap-2 relative">
               <div className="h-[20px] w-[3px] hidden md:block rounded-full bg-[rgba(0,0,0,0.50)]"></div>
               <svg
+                className="mr-1"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"

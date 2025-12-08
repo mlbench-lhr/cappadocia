@@ -16,9 +16,19 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { LoginForm } from "@/components/auth/login-form";
+import { SignupForm } from "@/components/auth/signup-form";
+import { useAuth } from "@/hooks/use-auth";
 
 export const AvailabilityFilter = () => {
   const { id }: { id: string } = useParams();
+  const { user } = useAuth();
   const vendorDetails = useAppSelector((s) => s.vendor.vendorDetails);
   const [selectedSlot, setSelectedSlot] = useState<
     | [
@@ -46,6 +56,8 @@ export const AvailabilityFilter = () => {
     adult: 0,
     child: 0,
   });
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<"login" | "signup">("login");
   const checkAvailability = async () => {
     try {
       setLoading(true);
@@ -157,12 +169,34 @@ export const AvailabilityFilter = () => {
               Available — {vendorDetails?.paymentInfo?.currency || "€"}
               {selectedSlot?.[0]?.adultPrice} per person
             </span>
-            <Button variant={"main_green_button"} size={"sm"} asChild>
-              <Link href={`/bookings/book/${id}`}> Book now</Link>
+            <Button
+              variant={"main_green_button"}
+              size={"sm"}
+              onClick={(e) => {
+                if (!user) {
+                  e.preventDefault();
+                  setAuthTab("login");
+                  setAuthDialogOpen(true);
+                } else {
+                  window.location.href = `/bookings/book/${id}`;
+                }
+              }}
+            >
+              Book now
             </Button>
           </>
         )}
       </div>
+
+      <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
+        <DialogContent className="max-w-md">
+          {authTab === "login" ? (
+            <LoginForm redirectTo={`/bookings/book/${id}`} />
+          ) : (
+            <SignupForm redirectTo={`/bookings/book/${id}`} />
+          )}
+        </DialogContent>
+      </Dialog>
     </BoxProviderWithName>
   );
 };

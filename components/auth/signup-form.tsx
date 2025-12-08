@@ -25,7 +25,7 @@ type SignupFormValues = {
   agreedToTerms: boolean;
 };
 
-export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
+export function SignupForm({ isVendor, redirectTo }: { isVendor?: Boolean; redirectTo?: string }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("Passwords do not match");
@@ -87,7 +87,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
     setError("");
 
     try {
-      const { error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle(redirectTo);
       if (error) {
         setError(error.message);
       }
@@ -129,6 +129,9 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
   return (
     <Card className="w-full max-w-md auth-box-shadows min-h-fit max-h-full">
       <CardHeader className="space-y-1">
+        <Link href={"/"}>
+          <Image src={"/logo.png"} width={100} height={20} alt="" />
+        </Link>
         <CardTitle className="heading-text-style-4">
           Create an Account
         </CardTitle>

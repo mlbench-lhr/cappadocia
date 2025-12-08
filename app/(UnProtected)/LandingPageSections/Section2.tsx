@@ -11,10 +11,16 @@ import LandingTourCardSkeleton from "@/components/Skeletons/LandingTourCardSkele
 
 export default function Section2() {
   const [loading, setLoading] = useState<boolean>(true);
+  const [popularLoading, setPopularLoading] = useState<boolean>(true);
+  const [ratedLoading, setRatedLoading] = useState<boolean>(true);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const [currentPopularSlide, setCurrentPopularSlide] = useState<number>(0);
+  const [currentRatedSlide, setCurrentRatedSlide] = useState<number>(0);
   const displayExploreItems = useAppSelector(
     (s) => s.general.displayExploreItems
   );
+  const [popularItems, setPopularItems] = useState<any[]>([]);
+  const [topRatedItems, setTopRatedItems] = useState<any[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -32,7 +38,35 @@ export default function Section2() {
         console.log("err---", error);
       }
     };
+    const getPopular = async () => {
+      try {
+        setPopularLoading(true);
+        const resp = await axios.get(
+          `/api/toursAndActivity/getAll?limit=4&sortBy=popular`
+        );
+        if (resp.data?.data) setPopularItems(resp.data.data);
+      } catch (e) {
+        console.log("popular err---", e);
+      } finally {
+        setPopularLoading(false);
+      }
+    };
+    const getTopRated = async () => {
+      try {
+        setRatedLoading(true);
+        const resp = await axios.get(
+          `/api/toursAndActivity/getAll?limit=4&sortBy=rating`
+        );
+        if (resp.data?.data) setTopRatedItems(resp.data.data);
+      } catch (e) {
+        console.log("rated err---", e);
+      } finally {
+        setRatedLoading(false);
+      }
+    };
     getData();
+    getPopular();
+    getTopRated();
   }, []);
   const handleNext = () => {
     if (displayExploreItems && currentSlide < displayExploreItems.length - 1) {
@@ -42,6 +76,26 @@ export default function Section2() {
   const handlePrev = () => {
     if (currentSlide > 0) {
       setCurrentSlide(currentSlide - 1);
+    }
+  };
+  const handleNextPopular = () => {
+    if (popularItems && currentPopularSlide < popularItems.length - 1) {
+      setCurrentPopularSlide(currentPopularSlide + 1);
+    }
+  };
+  const handlePrevPopular = () => {
+    if (currentPopularSlide > 0) {
+      setCurrentPopularSlide(currentPopularSlide - 1);
+    }
+  };
+  const handleNextRated = () => {
+    if (topRatedItems && currentRatedSlide < topRatedItems.length - 1) {
+      setCurrentRatedSlide(currentRatedSlide + 1);
+    }
+  };
+  const handlePrevRated = () => {
+    if (currentRatedSlide > 0) {
+      setCurrentRatedSlide(currentRatedSlide - 1);
     }
   };
 
@@ -115,6 +169,125 @@ export default function Section2() {
             </div>
           </div>
         </div>
+        {/* Popular (Mobile) */}
+        <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-base">Most Popular</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentPopularSlide * 100}%)`,
+                }}
+              >
+                {popularItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            {popularItems && popularItems.length > 0 && (
+              <>
+                <button
+                  onClick={handlePrevPopular}
+                  disabled={currentPopularSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextPopular}
+                  disabled={currentPopularSlide === popularItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
+            <div className="flex justify-center gap-2 mt-4">
+              {popularItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPopularSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentPopularSlide
+                      ? "bg-gray-300 w-6"
+                      : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Top Rated (Mobile) */}
+        <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-base">Top Rated</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentRatedSlide * 100}%)`,
+                }}
+              >
+                {topRatedItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            {topRatedItems && topRatedItems.length > 0 && (
+              <>
+                <button
+                  onClick={handlePrevRated}
+                  disabled={currentRatedSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextRated}
+                  disabled={currentRatedSlide === topRatedItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
+            <div className="flex justify-center gap-2 mt-4">
+              {topRatedItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentRatedSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentRatedSlide
+                      ? "bg-gray-300 w-6"
+                      : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
         <div className="hidden md:grid w-full grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
           {loading
             ? [0, 1, 2, 3]?.map((item) => (
@@ -123,6 +296,44 @@ export default function Section2() {
             : displayExploreItems?.map((item, index) => (
                 <TourCard key={index} {...item} />
               ))}
+        </div>
+
+        {/* Most Popular */}
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Most Popular</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {popularLoading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : popularItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
+        </div>
+
+        {/* Top Rated */}
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Top Rated</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {ratedLoading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : topRatedItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
         </div>
       </div>
     </div>

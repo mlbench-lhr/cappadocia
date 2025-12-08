@@ -31,9 +31,11 @@ type LoginFormValues = {
 export function LoginForm({
   isAdmin,
   isVendor,
+  redirectTo,
 }: {
   isAdmin?: Boolean;
   isVendor?: Boolean;
+  redirectTo?: string;
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -129,7 +131,7 @@ export function LoginForm({
         router.push("/vendor/dashboard");
         router.refresh();
       } else {
-        router.push("/explore");
+        router.push(redirectTo || "/explore");
         router.refresh();
       }
     } catch (err) {
@@ -144,7 +146,7 @@ export function LoginForm({
     setError("");
 
     try {
-      const { error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle(redirectTo);
       if (error) {
         setError(error.message);
       }
@@ -170,6 +172,9 @@ export function LoginForm({
   return (
     <Card className="w-full md:w-[450px] auth-box-shadows">
       <CardHeader className="space-y-1">
+        <Link href={"/"}>
+          <Image src={"/logo.png"} width={100} height={20} alt="" />
+        </Link>
         <CardTitle className="heading-text-style-4">
           {isAdmin ? "Login" : "Welcome Back"}
         </CardTitle>

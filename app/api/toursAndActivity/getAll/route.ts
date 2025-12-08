@@ -5,14 +5,8 @@ import { verifyToken } from "@/lib/auth/jwt";
 
 export async function GET(req: NextRequest) {
   let token = req.cookies.get("auth_token")?.value;
-  if (!token) {
-    return NextResponse.json(
-      { error: "Authorization token required" },
-      { status: 401 }
-    );
-  }
-  const payload = verifyToken(token);
-  const userId = payload.userId;
+  const payload = token ? verifyToken(token) : null;
+  const userId = payload?.userId;
   console.log("userId------", payload);
   await connectDB();
 
@@ -24,9 +18,11 @@ export async function GET(req: NextRequest) {
   const category = url.searchParams.get("category");
   const filters = url.searchParams.get("filters") || "";
   const alternativeOf = url.searchParams.get("alternativeOf") || "";
+  const sortBy = url.searchParams.get("sortBy") || "latest"; // latest | popular | rating
 
   const query: any = {};
-  if (payload.role === "vendor") {
+
+  if (payload && payload.role === "vendor") {
     query.vendor = userId;
   }
   if (status) {
@@ -116,14 +112,52 @@ export async function GET(req: NextRequest) {
 
   const skip = (page - 1) * limit;
 
-  const [items, total] = await Promise.all([
-    ToursAndActivity.find(query)
+  let items: any[] = [];
+  const total = await ToursAndActivity.countDocuments(query);
+
+  if (sortBy === "popular") {
+    items = await ToursAndActivity.aggregate([
+      { $match: query },
+      {
+        $lookup: {
+          from: "bookings",
+          localField: "_id",
+          foreignField: "activity",
+          as: "bookings",
+        },
+      },
+      { $addFields: { bookingsCount: { $size: "$bookings" } } },
+      { $sort: { bookingsCount: -1, createdAt: -1 } },
+      { $skip: skip },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: "users",
+          localField: "vendor",
+          foreignField: "_id",
+          as: "vendor",
+        },
+      },
+      { $unwind: { path: "$vendor", preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          bookings: 0,
+        },
+      },
+    ]);
+  } else if (sortBy === "rating") {
+    items = await ToursAndActivity.find(query)
       .populate("vendor")
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 }),
-    ToursAndActivity.countDocuments(query),
-  ]);
+      .sort({ "rating.average": -1, "rating.total": -1, createdAt: -1 });
+  } else {
+    items = await ToursAndActivity.find(query)
+      .populate("vendor")
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+  }
 
   return NextResponse.json({
     data: items,

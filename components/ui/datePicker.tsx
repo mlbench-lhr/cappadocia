@@ -13,7 +13,7 @@ export default function DeadlinePicker({
   date,
   setDate,
   onRemove,
-  textClass = " text-base ",
+  textClass = " text-[12px] ",
 }: {
   date: Date | undefined;
   setDate: any;
@@ -27,7 +27,7 @@ export default function DeadlinePicker({
           <PopoverTrigger asChild>
             <Button
               variant="outline"
-              className={`w-full justify-between text-left font-medium ${textClass} flex items-center border-none shadow-none h-[37px] ps-0 px-0 hover:bg-transparent ${
+              className={`w-full justify-between text-left font-medium ${textClass} flex items-center border-none shadow-none h-[37px] ps-0 px-0 hover:bg-transparent leading-tight ${
                 !date && "text-muted-foreground"
               }`}
             >
