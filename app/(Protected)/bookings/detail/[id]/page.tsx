@@ -39,6 +39,7 @@ import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
 import { QRCodeSVG } from "qrcode.react";
 import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
 import Rating from "@/components/SmallComponents/RatingField";
+import Swal from "sweetalert2";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -52,6 +53,7 @@ export default function BookingsPage() {
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [reload, setReload] = useState<number>(0);
+  const [cancelLoading, setCancelLoading] = useState<boolean>(false);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -71,6 +73,39 @@ export default function BookingsPage() {
     };
     getData();
   }, [reload]);
+  const handleCancelBooking = async () => {
+    if (!data?._id) return;
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won’t be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#B32053",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
+    });
+    if (!result.isConfirmed) return;
+    try {
+      setCancelLoading(true);
+      await axios.patch(`/api/booking/update/${data._id}`, {
+        status: "cancelled",
+      });
+      await Swal.fire(
+        "Cancelled!",
+        "Booking cancelled successfully.",
+        "success"
+      );
+      setReload(reload + 1);
+    } catch (error) {
+      await Swal.fire(
+        "Failed",
+        "Failed to cancel booking. Please try again.",
+        "error"
+      );
+    } finally {
+      setCancelLoading(false);
+    }
+  };
   const handleShare = async () => {
     if (!data?._id) {
       return;
@@ -88,9 +123,8 @@ export default function BookingsPage() {
         console.log("Share cancelled or failed:", err);
       }
     } else {
-      // fallback for desktop browsers
       navigator.clipboard.writeText(qrLink);
-      alert("Link copied to clipboard!");
+      await Swal.fire("Copied!", "Link copied to clipboard.", "success");
     }
   };
   const handleCopy = async () => {
@@ -119,6 +153,25 @@ export default function BookingsPage() {
               View Tour Details
             </Link>
           </Button>
+          {(() => {
+            const hoursUntilStart = moment(data.selectDate).diff(
+              moment(),
+              "hours"
+            );
+            const canCancel =
+              (data.status === "pending" || data.status === "upcoming") &&
+              hoursUntilStart > 24;
+            if (!canCancel) return null;
+            return (
+              <Button
+                variant={"destructive"}
+                onClick={handleCancelBooking}
+                loading={cancelLoading}
+              >
+                Cancel Booking
+              </Button>
+            );
+          })()}
           {data.paymentStatus === "paid" && (
             <DownloadInvoiceButton bookingId={data?._id} />
           )}
@@ -281,7 +334,11 @@ export default function BookingsPage() {
                               />
                             </div>
                           </div>
-                          <Button variant={"main_green_button"} className="w-full" asChild>
+                          <Button
+                            variant={"main_green_button"}
+                            className="w-full"
+                            asChild
+                          >
                             <Link href={`/messages?sender=${data.vendor._id}`}>
                               Chat
                             </Link>
