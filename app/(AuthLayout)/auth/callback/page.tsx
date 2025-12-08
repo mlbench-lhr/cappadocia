@@ -22,7 +22,14 @@ export default function AuthCallbackPage() {
       document.cookie = `auth_token=${token}; path=/; max-age=${
         7 * 24 * 60 * 60
       }; secure; samesite=strict`;
-      router.push("/explore");
+      const cookie = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("post_login_redirect="))
+        ?.split("=")[1];
+      const redirect = cookie ? decodeURIComponent(cookie) : "/explore";
+      document.cookie =
+        "post_login_redirect=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      router.push(redirect);
     } else {
       // No token, redirect to login
       router.push("/auth/login");

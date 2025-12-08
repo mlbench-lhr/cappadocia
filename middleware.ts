@@ -6,8 +6,6 @@ export async function middleware(request: NextRequest) {
 
   const protectedRoutes = [
     "/dashboard",
-    "/explore",
-    "/explore/detail",
     "/admin/dashboard",
     "/admin/blogs",
     "/vendor/dashboard",
@@ -89,6 +87,14 @@ export async function middleware(request: NextRequest) {
         request.url
       )
     );
+  }
+
+  // Not logged in → allow explore and rewrite to public layout
+  if (!user && pathname.startsWith("/explore")) {
+    const url = request.nextUrl;
+    const rewritten = new URL(url);
+    rewritten.pathname = pathname.replace(/^\/explore/, "/public-explore");
+    return NextResponse.rewrite(rewritten);
   }
 
   // Role mismatch

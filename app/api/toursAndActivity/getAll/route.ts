@@ -5,14 +5,8 @@ import { verifyToken } from "@/lib/auth/jwt";
 
 export async function GET(req: NextRequest) {
   let token = req.cookies.get("auth_token")?.value;
-  if (!token) {
-    return NextResponse.json(
-      { error: "Authorization token required" },
-      { status: 401 }
-    );
-  }
-  const payload = verifyToken(token);
-  const userId = payload.userId;
+  const payload = token ? verifyToken(token) : null;
+  const userId = payload?.userId;
   console.log("userId------", payload);
   await connectDB();
 
@@ -26,7 +20,8 @@ export async function GET(req: NextRequest) {
   const alternativeOf = url.searchParams.get("alternativeOf") || "";
 
   const query: any = {};
-  if (payload.role === "vendor") {
+
+  if (payload && payload.role === "vendor") {
     query.vendor = userId;
   }
   if (status) {

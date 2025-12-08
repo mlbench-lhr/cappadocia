@@ -31,9 +31,11 @@ type LoginFormValues = {
 export function LoginForm({
   isAdmin,
   isVendor,
+  redirectTo,
 }: {
   isAdmin?: Boolean;
   isVendor?: Boolean;
+  redirectTo?: string;
 }) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -129,7 +131,7 @@ export function LoginForm({
         router.push("/vendor/dashboard");
         router.refresh();
       } else {
-        router.push("/explore");
+        router.push(redirectTo || "/explore");
         router.refresh();
       }
     } catch (err) {
@@ -144,7 +146,7 @@ export function LoginForm({
     setError("");
 
     try {
-      const { error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle(redirectTo);
       if (error) {
         setError(error.message);
       }

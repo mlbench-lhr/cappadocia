@@ -25,7 +25,7 @@ type SignupFormValues = {
   agreedToTerms: boolean;
 };
 
-export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
+export function SignupForm({ isVendor, redirectTo }: { isVendor?: Boolean; redirectTo?: string }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("Passwords do not match");
@@ -87,7 +87,7 @@ export function SignupForm({ isVendor }: { isVendor?: Boolean }) {
     setError("");
 
     try {
-      const { error } = await signInWithGoogle();
+      const { error } = await signInWithGoogle(redirectTo);
       if (error) {
         setError(error.message);
       }

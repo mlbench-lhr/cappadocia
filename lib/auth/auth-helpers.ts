@@ -61,9 +61,12 @@ export const signIn = async (email: string, password: string) => {
   }
 };
 
-export const signInWithGoogle = async () => {
+export const signInWithGoogle = async (redirectTo?: string) => {
   try {
-    // Redirect to Google OAuth endpoint
+    if (redirectTo) {
+      const safe = redirectTo.startsWith("/") ? redirectTo : "/explore";
+      document.cookie = `post_login_redirect=${encodeURIComponent(safe)}; path=/; max-age=${5 * 60}; samesite=strict`;
+    }
     window.location.href = "/api/auth/google";
     return { error: null };
   } catch (error: any) {
