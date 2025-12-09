@@ -19,9 +19,7 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col justify-between">
           <div className="h-fit flex flex-col">
             <Navigation />
-            <main className="mx-auto element pt-6 px-4 md:px-0">
-              {children}
-            </main>
+            <main className="mx-auto element">{children}</main>
           </div>
           <Footer />
         </div>
