@@ -1,16 +1,35 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function Section4() {
   const [date, setDate] = useState();
+  const [background, setBackground] = useState<string>("/landing page/image 6.png");
+  const [thumbs, setThumbs] = useState<string[]>([
+    "/landing page/img 7.png",
+    "/landing page/img 8.png",
+    "/landing page/img 9.png",
+  ]);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const s = (await res.data)?.data || {};
+        if (s.section4Background) setBackground(s.section4Background);
+        if (s.section4Thumbs?.length) setThumbs(s.section4Thumbs);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
 
   return (
     <div className="w-full h-fit pt-12">
       <div className="w-full flex flex-col items-center justify-center h-fit relative z-0">
         <div className="w-full flex flex-col items-center h-[653px] justify-end relative z-0">
           <Image
-            src={"/landing page/image 6.png"}
+            src={background}
             alt=""
             width={100}
             height={100}
@@ -28,21 +47,21 @@ export default function Section4() {
             </div>
             <div className="w-fit flex items-end text-start justify-start gap-2">
               <Image
-                src={"/landing page/img 7.png"}
+                src={thumbs[0]}
                 alt=""
                 width={223}
                 height={179}
                 className="w-[223px] h-[150px] md:h-[179px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               <Image
-                src={"/landing page/img 8.png"}
+                src={thumbs[1]}
                 alt=""
                 width={233}
                 height={200}
                 className="w-[233px] h-[170px] md:h-[200px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               <Image
-                src={"/landing page/img 9.png"}
+                src={thumbs[2]}
                 alt=""
                 width={233}
                 height={237}

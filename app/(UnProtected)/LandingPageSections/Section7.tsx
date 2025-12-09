@@ -2,15 +2,28 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Section7() {
+  const [image, setImage] = useState<string>("/landing page/img 11.png");
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const s = (await res.data)?.data || {};
+        if (s.section7Image) setImage(s.section7Image);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
   return (
     <div className="w-full h-fit pt-10" id="About">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-12 lg:pb-12 gap-14">
         <div className="w-full flex justify-start items-center gap-y-10 gap-x-15 flex-wrap">
           <div className="relative flex justify-center items-center w-full lg:w-fit h-fit z-[0]">
             <Image
-              src={"/landing page/img 11.png"}
+              src={image}
               alt=""
               width={530}
               height={680}

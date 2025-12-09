@@ -3,34 +3,60 @@ import Tabs, { TabsProps } from "@/components/landingPage/tabs";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-
-const tourCardData: TabsProps[] = [
-  {
-    image: "/landing page/tab icon.png",
-    title: "Verified Experiences",
-    description:
-      "All tours and activities are checked and rated by real travelers.",
-  },
-  {
-    image: "/landing page/tab icon 2.png",
-    title: "Secure Payments",
-    description:
-      "All tours and activities are checked and rated by real travelers.",
-  },
-  {
-    image: "/landing page/tab icon 3.png",
-    title: "Trusted Vendors",
-    description: "We partner only with licensed and reviewed local operators.",
-  },
-  {
-    image: "/landing page/tab icon 4.png",
-    title: "24/7 Support",
-    description:
-      "Our local support team is always ready to help you on your journey.",
-  },
-];
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Section3() {
+  const [mainImages, setMainImages] = useState<string[]>([
+    "/landing page/image (4).png",
+    "/landing page/image (5).png",
+  ]);
+  const [tabIcons, setTabIcons] = useState<string[]>([
+    "/landing page/tab icon.png",
+    "/landing page/tab icon 2.png",
+    "/landing page/tab icon 3.png",
+    "/landing page/tab icon 4.png",
+  ]);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const s = (await res.data)?.data || {};
+        if (s.section3MainImages?.length) setMainImages(s.section3MainImages);
+        if (s.section3TabIcons?.length) setTabIcons(s.section3TabIcons);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
+
+  const tourCardData: TabsProps[] = [
+    {
+      image: tabIcons[0],
+      title: "Verified Experiences",
+      description:
+        "All tours and activities are checked and rated by real travelers.",
+    },
+    {
+      image: tabIcons[1],
+      title: "Secure Payments",
+      description:
+        "All tours and activities are checked and rated by real travelers.",
+    },
+    {
+      image: tabIcons[2],
+      title: "Trusted Vendors",
+      description:
+        "We partner only with licensed and reviewed local operators.",
+    },
+    {
+      image: tabIcons[3],
+      title: "24/7 Support",
+      description:
+        "Our local support team is always ready to help you on your journey.",
+    },
+  ];
+
   return (
     <div className="w-full h-fit pt-12" id="WhyChoose">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] gap-12">
@@ -51,14 +77,14 @@ export default function Section3() {
         <div className="w-full grid grid-cols-4 xl:grid-cols-16 gap-6 xl:gap-4 relative">
           <div className="w-full relative h-fit col-span-4 xl:col-span-10 [@media(min-width:1350px)]:col-span-9 flex flex-col md:flex-row justify-start items-center gap-3.5">
             <Image
-              src={"/landing page/image (4).png"}
+              src={mainImages[0]}
               alt="appadocia cave dwellings"
               className="w-full xl:w-[323px] h-[350px] sm:h-[516px] object-cover object-center rounded-[10px]"
               width={323}
               height={516}
             />
             <Image
-              src={"/landing page/image (5).png"}
+              src={mainImages[1]}
               alt="Cappadocia cave dwellings"
               className="w-full xl:w-[319px] h-[350px] sm:h-[414px] object-cover object-center rounded-[10px]"
               width={319}

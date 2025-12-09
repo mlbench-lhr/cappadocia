@@ -1,8 +1,21 @@
 "use client";
 import ContactUsForm from "@/components/landingPage/ContactUsForm";
 import Image from "next/image";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Section6() {
+  const [image, setImage] = useState<string>("/landing page/img 10.png");
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const s = (await res.data)?.data || {};
+        if (s.section6Image) setImage(s.section6Image);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
   return (
     <div className="w-full h-fit pt-12" id="Contact">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] pt-[20px] lg:pt-[35px] pb-[40px] lg:pb-[90px] bg-[#FFEAF4] overflow-hidden gap-14">
@@ -16,7 +29,7 @@ export default function Section6() {
           <div className="relative flex justify-center items-center w-full lg:w-fit h-fit z-[0]">
             <div className="w-full lg:w-[410px] h-[400px] md:h-[500px] object-cover object-center rounded-[12px] bg-primary absolute top-0 left-0 rotate-[170deg] z-[0]"></div>
             <Image
-              src={"/landing page/img 10.png"}
+              src={image}
               alt=""
               width={100}
               height={100}

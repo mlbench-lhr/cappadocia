@@ -1,14 +1,27 @@
 "use client";
 import Testimonials from "@/components/landingPage/Testimonials";
 import Image from "next/image";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Section8() {
+  const [background, setBackground] = useState<string>("/landing page/image 6.png");
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const s = (await res.data)?.data || {};
+        if (s.section8Background) setBackground(s.section8Background);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
   return (
     <div className="w-full h-fit" id="ReadReviews">
       <div className="w-full flex flex-col items-center justify-center h-fit relative z-0">
         <div className="w-full flex flex-col items-center h-[650px] md:h-[753px] justify-end relative z-0">
           <Image
-            src={"/landing page/image 6.png"}
+            src={background}
             alt=""
             width={100}
             height={100}
