@@ -17,6 +17,8 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
   const [commission, setCommission] = useState<string>("");
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [isRejected, setIsRejected] = useState<boolean>(false);
 
   const router = useRouter();
   const { id }: { id: string } = useParams();
@@ -35,6 +37,8 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
               ? String(existing)
               : ""
           );
+          setIsVerified(!!response.data?.isRoleVerified);
+          setIsRejected(!!response.data?.isRejected);
         }
         setLoading(false);
       } catch (error) {
@@ -267,16 +271,18 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
-          <button
-            onClick={accept}
-            disabled={actionLoading}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
-          >
-            {actionLoading ? "Accepting" : "Accept"}
-          </button>
-          <RejectVendorDialog id={id} />
-        </div>
+        {!isVerified && (
+          <div className="flex gap-3">
+            <button
+              onClick={accept}
+              disabled={actionLoading}
+              className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
+            >
+              {actionLoading ? "Accepting..." : "Accept"}
+            </button>
+            <RejectVendorDialog id={id} />
+          </div>
+        )}
       </div>
     </div>
   );

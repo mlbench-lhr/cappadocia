@@ -17,7 +17,7 @@ export const GET = async (
 
     // Get user details
     const user: any = await User.findOne({ _id: id })
-      .select("vendorDetails")
+      .select("vendorDetails isRoleVerified roleRejected")
       .lean();
 
     if (!user) {
@@ -28,6 +28,8 @@ export const GET = async (
 
     return NextResponse.json({
       user: user?.vendorDetails,
+      isRoleVerified: !!user?.isRoleVerified,
+      isRejected: !!user?.roleRejected?.isRoleRejected,
     });
   } catch (error) {
     console.error("User detail API error:", error);

@@ -268,6 +268,15 @@ const NotificationBox = ({ item }: { item: Notification }) => {
                 {moment(item.createdAt).format("MMM DD, YYYY")}
               </span>
             </>
+          ) : item.message ? (
+            <>
+              <span className="w-fit lg:w-[100%] leading-[20px] text-[14px]">
+                {item.message}
+              </span>
+              <span className="text-[#51606E] text-[12px]">
+                {moment(item.createdAt).format("MMM DD, YYYY")}
+              </span>
+            </>
           ) : (
             <>
               <span className="w-fit lg:w-[100%] leading-[20px] text-[14px]">

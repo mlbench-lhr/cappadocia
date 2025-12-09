@@ -7,6 +7,7 @@ const variants: any = {
   "Not Eligible (Activity not completed yet)": { text: "#F5A903" },
   pending: { text: "#FF862F" },
   cancelled: { text: "rgba(255, 0, 0, 0.60)" },
+  missed: { text: "red" },
 };
 export const StatusText = ({ status }: { status: string }) => {
   return (

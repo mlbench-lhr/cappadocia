@@ -11,15 +11,24 @@ export const GET = withAuth(async (req) => {
     const page = Number(url.searchParams.get("page")) || 1;
     const limit = Number(url.searchParams.get("limit")) || 7;
     const searchTerm = url.searchParams.get("search") || "";
+    const filtersParam = url.searchParams.get("filters") || "pending";
+    const filters = filtersParam.split(",").filter(Boolean);
 
     await connectDB();
 
     // Build search query
-    const searchQuery: any = {
-      role: "vendor",
-      isRoleVerified: false,
-      // roleRejected: { $exists: false },
-    };
+    const searchQuery: any = { role: "vendor" };
+
+    if (filters.includes("approved")) {
+      searchQuery.isRoleVerified = true;
+    } else if (filters.includes("rejected")) {
+      searchQuery["roleRejected.isRoleRejected"] = true;
+      searchQuery.isRoleVerified = false;
+    } else {
+      // pending by default
+      searchQuery.isRoleVerified = false;
+      searchQuery["roleRejected.isRoleRejected"] = { $ne: true };
+    }
 
     if (searchTerm.trim()) {
       searchQuery.$or = [

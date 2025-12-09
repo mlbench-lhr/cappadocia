@@ -43,7 +43,7 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [totalItems, setTotalItems] = useState<number>(0);
-  const [filters, setFilters] = useState<string[]>(["all"]);
+  const [filters, setFilters] = useState<string[]>(["pending"]);
 
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -108,6 +108,24 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+        <div className="flex items-center gap-2">
+          {["pending", "approved", "rejected"].map((filter) => {
+            const isActive =
+              (filter === "all" && filters.includes("all")) ||
+              filters.includes(filter.toLowerCase());
+
+            return (
+              <div
+                onClick={() => setFilters([filter])}
+                className={`cursor-pointer ${
+                  isActive ? "bg-secondary text-primary" : "border"
+                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
+              >
+                {filter}
+              </div>
+            );
+          })}
+        </div>
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<vendorProps>
