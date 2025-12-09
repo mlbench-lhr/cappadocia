@@ -96,12 +96,6 @@ export default function BookingsPage() {
       subHeading={"Total Applications: " + totalItems}
       rightSideComponent={
         <div className="flex justify-start items-center gap-2">
-          <Button className="" variant={"main_green_button"}>
-            <Link href={`/admin/tours-and-activities/add`}>
-              Add Tour/Activity
-            </Link>
-            <Plus className="mr-2 h-4 w-4" />
-          </Button>
           <SearchComponent
             searchQuery={searchQuery}
             onChangeFunc={setSearchQuery}

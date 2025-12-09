@@ -77,7 +77,7 @@ export async function PUT(
             <p style="color: #000;">Welcome aboard!</p>
             <hr />
             <p style="font-size: 12px; color:#000;">
-              <a href="https://cappadociaplatform.com/vendor/dashboard" style="color: #555;">Go to dashboard</a>
+              <a href="https://cappadocia-alpha.vercel.app/vendor/dashboard" style="color: #555;">Go to dashboard</a>
             </p>
           </div>`;
         if (resend) {
@@ -122,7 +122,7 @@ export async function PUT(
             </p>
             <hr />
             <p style="font-size: 12px; color:#000;">
-              <a href="https://cappadociaplatform.com/vendor/settings" style="color: #555;">Update application</a>
+              <a href="https://cappadocia-alpha.vercel.app/vendor/settings" style="color: #555;">Update application</a>
             </p>
           </div>`;
         if (resend) {
