@@ -21,13 +21,13 @@ export function AuthLayoutProvider({
         } hidden lg:flex w-[50%] min-h-screen max-h-full`}
       ></div>
       <div
-        className={`w-full lg:w-1/2 ${
+        className={`bgWhiteImp w-full lg:w-1/2 ${
           isVendor
-            ? "auth-bg-image-3"
+            ? "auth-bg-image-3m"
             : showImage1
-            ? "auth-bg-image-1"
-            : "auth-bg-image-2"
-        }`}
+            ? "auth-bg-image-1m"
+            : "auth-bg-image-2m"
+        } `}
       >
         {showImage1 && <SwitchRoles />}
         <div

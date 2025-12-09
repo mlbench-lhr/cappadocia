@@ -575,8 +575,22 @@ button {
   line-height: 20px; /* 142.857% */
   letter-spacing: 0.1px;
 }
-
 @media (max-width: 1024px) {
+  .auth-bg-image-1m {
+    background-image: url("/loginPageImage.png");
+    background-size: cover;
+    background-position: center;
+  }
+  .auth-bg-image-2m {
+    background-image: url("/authPageImage2.png");
+    background-size: cover;
+    background-position: center;
+  }
+  .auth-bg-image-3m {
+    background-image: url("/vendorAuthPageImage.png");
+    background-size: cover;
+    background-position: center;
+  }
   .heading-text-style-1 {
     color: var(--Schemes-On-Surface, #171d1a);
     text-align: center;
