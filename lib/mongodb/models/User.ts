@@ -21,6 +21,7 @@ export interface VendorDetails {
   };
   cover?: string;
   stripeAccountId: string;
+  commission?: number;
   rating?: { average: number | 0; total: number | 0 };
 }
 
@@ -119,6 +120,7 @@ const UserSchema = new Schema<IUser>(
           accountHolderName: { type: String, required: true },
           currency: { type: String, required: true },
         },
+        commission: { type: Number, default: 0 },
         rating: {
           average: { type: Number, default: 0 },
           total: { type: Number, default: 0 },

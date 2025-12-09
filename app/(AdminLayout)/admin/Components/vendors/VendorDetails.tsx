@@ -16,6 +16,7 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
   const [data, setData] = useState<VendorDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [commission, setCommission] = useState<string>("");
 
   const router = useRouter();
   const { id }: { id: string } = useParams();
@@ -28,6 +29,12 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         );
         if (response.data?.user) {
           setData(response.data?.user);
+          const existing = (response.data?.user as VendorDetails)?.commission;
+          setCommission(
+            typeof existing === "number" && !isNaN(existing)
+              ? String(existing)
+              : ""
+          );
         }
         setLoading(false);
       } catch (error) {
@@ -38,9 +45,21 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
   }, []);
   const accept = async () => {
     try {
+      const pct = Number(commission);
+      if (!commission || isNaN(pct) || pct < 0 || pct > 100) {
+        Swal.fire({
+          icon: "error",
+          title: "Commission required",
+          text: "Please set a valid commission percentage between 0 and 100.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        return;
+      }
       setActionLoading(true);
       await axios.put(`/api/admin/vendor-applications/update/${id}`, {
         isRoleVerified: true,
+        "vendorDetails.commission": pct,
       });
       setActionLoading(false);
       Swal.fire({
@@ -182,6 +201,25 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         <div className="border rounded-lg p-6 mb-6 w-[622px]">
           <h3 className="text-lg font-semibold mb-3">About Us</h3>
           <p className="text-gray-500 leading-relaxed">{data?.aboutUs}</p>
+        </div>
+
+        {/* Commission Field */}
+        <div className="border rounded-lg p-6 mb-6 w-[622px]">
+          <label className="block text-sm font-semibold mb-2">
+            Commission (%)
+          </label>
+          <input
+            type="number"
+            min={0}
+            max={100}
+            value={commission}
+            onChange={(e) => setCommission(e.target.value)}
+            className="border rounded-md px-3 py-2 w-full text-sm"
+            placeholder="Enter commission percentage"
+          />
+          <p className="text-xs text-gray-500 mt-2">
+            Required to accept vendor account request.
+          </p>
         </div>
 
         {/* Documents Uploaded */}
