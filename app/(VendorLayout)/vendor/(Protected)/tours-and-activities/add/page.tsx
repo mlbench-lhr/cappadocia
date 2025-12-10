@@ -63,6 +63,8 @@ export default function BookingsPage() {
   const [uploadError, setUploadError] = useState<string>("");
   const [cancellationPolicyHours, setCancellationPolicyHours] =
     useState<number>(0);
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [newIncluded, setNewIncluded] = useState<string>("");
   const [newNotIncluded, setNewNotIncluded] = useState<string>("");
@@ -483,21 +485,83 @@ export default function BookingsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-[14px] font-semibold">
-                Duration (hours)
+                Duration (start time – end time)
                 <span className="text-red-500 ml-1">*</span>
               </Label>
-              <input
-                type="number"
-                placeholder="Enter duration in hours"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
-                onChange={(e) => {
-                  const value = Number.parseInt(e.target.value) || 0;
-                  setValue("duration", value);
-                  dispatch(setField({ field: "duration", value }));
-                }}
-                defaultValue={toursState.duration || ""}
-                required
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-[12px]">Start Time</Label>
+                  <input
+                    type="time"
+                    step="1"
+                    value={startTime}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setStartTime(v);
+                      dispatch(
+                        setField({ field: "durationStartTime", value: v })
+                      );
+                      const parse = (t: string) => {
+                        const [hh, mm, ss] = t.split(":");
+                        const h = parseInt(hh || "0");
+                        const m = parseInt(mm || "0");
+                        const s = parseInt(ss || "0");
+                        return h * 60 + m + s / 60;
+                      };
+                      const compute = (s: string, e2: string) => {
+                        if (!s || !e2) return 0;
+                        let start = parse(s);
+                        let end = parse(e2);
+                        let diff = end - start;
+                        if (diff < 0) diff += 24 * 60;
+                        const hours = diff / 60;
+                        return Math.max(0, Math.round(hours * 100) / 100);
+                      };
+                      const hours = compute(v, endTime);
+                      setValue("duration", hours);
+                      dispatch(setField({ field: "duration", value: hours }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px] bg-white"
+                    required
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-[12px]">End Time</Label>
+                  <input
+                    type="time"
+                    step="1"
+                    value={endTime}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setEndTime(v);
+                      dispatch(
+                        setField({ field: "durationEndTime", value: v })
+                      );
+                      const parse = (t: string) => {
+                        const [hh, mm, ss] = t.split(":");
+                        const h = parseInt(hh || "0");
+                        const m = parseInt(mm || "0");
+                        const s = parseInt(ss || "0");
+                        return h * 60 + m + s / 60;
+                      };
+                      const compute = (s: string, e2: string) => {
+                        if (!s || !e2) return 0;
+                        let start = parse(s);
+                        let end = parse(e2);
+                        let diff = end - start;
+                        if (diff < 0) diff += 24 * 60;
+                        const hours = diff / 60;
+                        return Math.max(0, Math.round(hours * 100) / 100);
+                      };
+                      const hours = compute(startTime, v);
+                      setValue("duration", hours);
+                      dispatch(setField({ field: "duration", value: hours }));
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px] bg-white"
+                    required
+                  />
+                </div>
+              </div>
               {errors.duration?.message && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.duration?.message}
