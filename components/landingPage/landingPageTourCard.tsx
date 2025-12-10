@@ -34,10 +34,14 @@ export default function TourCard(item: ToursAndActivityWithVendor) {
             </span>
             <span className="text-xs text-gray-500">/Person</span>
           </div>
-          <div className="flex items-center gap-1">
-            <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
-            <span className="text-base font-medium text-gray-900">{4.6}</span>
-          </div>
+          {item?.rating?.average ? (
+            <div className="flex items-center gap-1">
+              <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+              <span className="text-base font-medium text-gray-900">
+                {item.rating.average}
+              </span>
+            </div>
+          ) : null}
         </div>
 
         {/* Duration and Button */}

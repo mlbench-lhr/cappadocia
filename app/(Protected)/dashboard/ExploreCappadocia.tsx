@@ -92,10 +92,12 @@ export const ExploreCappadocia = () => {
                           </span>
                           <span className="">/Person</span>
                         </div>
-                        <div className="flex justify-start items-center gap-1">
-                          <StarIcon />
-                          <span className="">4.6</span>
-                        </div>
+                        {item?.rating?.average ? (
+                          <div className="flex justify-start items-center gap-1">
+                            <StarIcon />
+                            <span className="">{item.rating.average}</span>
+                          </div>
+                        ) : null}
                       </div>
                       <Button
                         variant={"green_secondary_button"}
