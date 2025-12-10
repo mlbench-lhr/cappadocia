@@ -42,6 +42,7 @@ export function LoginForm({
   const [error, setError] = useState("");
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
 
   const {
     control,
@@ -168,6 +169,20 @@ export function LoginForm({
       });
     }
   }, [error]);
+  useEffect(() => {
+    const err = searchParams.get("error");
+    if (!err) return;
+    let message = "Authentication error. Please try again.";
+    if (err === "social_admin_forbidden") {
+      message =
+        "This account cannot use social login. Please sign in with email and password.";
+    } else if (err === "oauth_error") {
+      message = "Google sign-in failed. Please try again.";
+    } else if (err === "oauth_cancelled") {
+      message = "Google sign-in was cancelled.";
+    }
+    setError(message);
+  }, [searchParams]);
 
   return (
     <Card className="w-full md:w-[450px] auth-box-shadows">

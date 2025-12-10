@@ -32,11 +32,18 @@ export async function GET(request: NextRequest) {
 
     // Get user info from Google
     const googleUser = await googleOAuth.getUserInfo(tokens.access_token);
+    const emailLower = (googleUser.email || "").toLowerCase().trim();
 
     // Check if user already exists
     let user = await User.findOne({
-      $or: [{ email: googleUser.email }, { googleId: googleUser.id }],
+      $or: [{ email: emailLower }, { googleId: googleUser.id }],
     });
+    if (user && user.role === "admin") {
+      const baseUrl = process.env.NEXTAUTH_URL || request.nextUrl.origin;
+      return NextResponse.redirect(
+        `${baseUrl}/auth/login?error=social_admin_forbidden`
+      );
+    }
 
     if (user) {
       // Update existing user with Google ID if not set
@@ -48,7 +55,7 @@ export async function GET(request: NextRequest) {
     } else {
       // Create new user
       user = new User({
-        email: googleUser.email,
+        email: emailLower,
         fullName: googleUser.given_name + googleUser.family_name,
         googleId: googleUser.id,
         avatar: googleUser.picture,
