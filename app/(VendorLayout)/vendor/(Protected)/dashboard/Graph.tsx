@@ -113,7 +113,9 @@ export function ChartAreaGradient({
                   axisLine={false}
                   tickMargin={20}
                   tickCount={3}
-                  tickFormatter={(value) => "$" + value}
+                  tickFormatter={(value) =>
+                    (vendorData?.vendorDetails.paymentInfo.currency || "$") + value
+                  }
                 />
                 <ChartTooltip
                   cursor={false}
