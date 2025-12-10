@@ -29,6 +29,10 @@ const step5Schema = z.object({
 type Step5FormData = z.infer<typeof step5Schema>;
 
 const currencyOptions = ["Euro (EUR)", "US Dollar (USD)", "Turkish Lira (TRY)"];
+const labelToSymbol = (v: string) =>
+  v.includes("USD") ? "$" : v.includes("EUR") ? "€" : v.includes("TRY") ? "₺" : v;
+const symbolToLabel = (s: string) =>
+  s === "$" ? "US Dollar (USD)" : s === "€" ? "Euro (EUR)" : s === "₺" ? "Turkish Lira (TRY)" : "";
 
 interface VendorSignupStep5Props {
   onNext?: () => void;
@@ -54,7 +58,7 @@ export default function VendorSignupStep5({
       ibanNumber: vendorState.paymentInfo.ibanNumber || "",
       bankName: vendorState.paymentInfo.bankName || "",
       accountHolderName: vendorState.paymentInfo.accountHolderName || "",
-      currency: vendorState.paymentInfo.currency || "",
+      currency: symbolToLabel(vendorState.paymentInfo.currency || ""),
       agreedToTerms: vendorState.agreedToTerms || false,
     },
   });
@@ -85,7 +89,7 @@ export default function VendorSignupStep5({
       if (value.currency) {
         dispatch(
           setPaymentInfo({
-            currency: value.currency,
+            currency: labelToSymbol(value.currency),
           })
         );
       }
@@ -107,7 +111,7 @@ export default function VendorSignupStep5({
         ibanNumber: data.ibanNumber,
         bankName: data.bankName,
         accountHolderName: data.accountHolderName,
-        currency: data.currency,
+        currency: labelToSymbol(data.currency),
       })
     );
     dispatch(
