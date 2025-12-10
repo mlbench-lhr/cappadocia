@@ -1,6 +1,6 @@
 "use client";
 import { AvatarUpload } from "@/components/ui/avatar-upload";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import React, { useEffect, useState } from "react";
@@ -189,6 +189,7 @@ export default function AddDialog({
     setValue,
     watch,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -250,7 +251,7 @@ export default function AddDialog({
       setCoverImage(item.coverImage);
       setEditorContent(item.text || "");
     }
-  }, [item, reset]);
+  }, [item?.coverImage, item?.title, item?.text]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -305,11 +306,18 @@ export default function AddDialog({
                 >
                   Title <span className="text-red-500 ml-1">*</span>
                 </Label>
-                <Input
-                  id="title"
-                  className="input-style"
-                  placeholder="Enter Title"
-                  {...register("title")}
+                <Controller
+                  name={"title"}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <Input
+                      value={field.value}
+                      onChange={field.onChange}
+                      id="title"
+                      className="input-style"
+                      placeholder="Enter Title"
+                    />
+                  )}
                 />
                 {errors.title && (
                   <p className="text-red-500 text-sm">{errors.title.message}</p>
