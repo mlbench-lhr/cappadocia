@@ -34,6 +34,7 @@ export async function PUT(req: NextRequest) {
   const updatePayload: any = {};
   if (body.promotionalImages) updatePayload.promotionalImages = body.promotionalImages;
   if (body.section1Slides) updatePayload.section1Slides = body.section1Slides;
+  if (body.section1SlidesData) updatePayload.section1SlidesData = body.section1SlidesData;
   if (body.section3MainImages) updatePayload.section3MainImages = body.section3MainImages;
   if (body.section3TabIcons) updatePayload.section3TabIcons = body.section3TabIcons;
   if (body.section4Background !== undefined) updatePayload.section4Background = body.section4Background;

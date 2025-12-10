@@ -18,6 +18,8 @@ export interface ToursAndActivity {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
+  durationStartTime?: string;
+  durationEndTime?: string;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
@@ -49,6 +51,8 @@ export interface ToursAndActivityWithVendor {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
+  durationStartTime?: string;
+  durationEndTime?: string;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
@@ -97,6 +101,8 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     itinerary: { type: [String], default: [] },
     cancellationPolicy: { type: String, required: true },
     duration: { type: Number, required: true },
+    durationStartTime: { type: String },
+    durationEndTime: { type: String },
     slots: [
       {
         _id: { type: Schema.Types.ObjectId, auto: true },

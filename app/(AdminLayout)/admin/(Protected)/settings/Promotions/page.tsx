@@ -20,6 +20,28 @@ export function Promotions() {
     "/landing page/pic2.jpg",
     "/landing page/pic3.jpg",
   ]);
+  const [section1SlidesData, setSection1SlidesData] = useState<
+    { image: string; title: string; subtitle: string }[]
+  >([
+    {
+      image: "/landing page/pic1.png",
+      title: "Discover the Best Tours & Activities in Cappadocia",
+      subtitle:
+        "Book local experiences, guided tours, and adventures — all in one place.",
+    },
+    {
+      image: "/landing page/pic2.jpg",
+      title: "Explore Unique Adventures Across Stunning Cappadocia",
+      subtitle:
+        "Find top-rated journeys, expert-led tours, and activities — all in one spot.",
+    },
+    {
+      image: "/landing page/pic3.jpg",
+      title: "Experience the Top Attractions & Hidden Gems of Cappadocia",
+      subtitle:
+        "Enjoy curated excursions, cultural tours, and fun activities — all together here.",
+    },
+  ]);
   const [section3MainImages, setSection3MainImages] = useState<string[]>([
     "/landing page/image (4).png",
     "/landing page/image (5).png",
@@ -55,7 +77,15 @@ export function Promotions() {
         const res = await axios.get("/api/promotionalImages");
         const data = await res.data;
         const s = data?.data || {};
-        if (s.section1Slides?.length) setSection1Slides(s.section1Slides);
+        if (s.section1SlidesData?.length) {
+          setSection1SlidesData(s.section1SlidesData);
+          setSection1Slides(s.section1SlidesData.map((d: any) => d.image));
+        } else if (s.section1Slides?.length) {
+          setSection1Slides(s.section1Slides);
+          setSection1SlidesData((prev) =>
+            prev.map((p, i) => ({ ...p, image: s.section1Slides[i] || p.image }))
+          );
+        }
         if (s.section3MainImages?.length)
           setSection3MainImages(s.section3MainImages);
         if (s.section3TabIcons?.length) setSection3TabIcons(s.section3TabIcons);
@@ -77,6 +107,7 @@ export function Promotions() {
       setIsSubmitting(true);
       const res = await axios.put("/api/promotionalImages", {
         section1Slides,
+        section1SlidesData,
         section3MainImages,
         section3TabIcons,
         section4Background,
@@ -122,6 +153,9 @@ export function Promotions() {
         const arr = [...section1Slides];
         arr[index!] = url;
         setSection1Slides(arr);
+        setSection1SlidesData((prev) =>
+          prev.map((p, i) => (i === index ? { ...p, image: url } : p))
+        );
       } else if (key === "section3MainImages") {
         const arr = [...section3MainImages];
         arr[index!] = url;
@@ -153,7 +187,7 @@ export function Promotions() {
       <div className="w-full space-y-6">
         <div className="w-full">
           <h2 className="text-base font-semibold mb-3">
-            Hero Section – Slider Images
+            Hero Section – Slider Content
           </h2>
           <div className="grid grid-cols-2 [@media(min-width:480px)]:grid-cols-3 gap-[20px]">
             {section1Slides.map((item, index) => (
@@ -185,6 +219,33 @@ export function Promotions() {
                   className="hidden"
                   id={`upload-section1-${index}`}
                 />
+                <div className="mt-2 space-y-2">
+                  <input
+                    type="text"
+                    value={section1SlidesData[index]?.title || ""}
+                    onChange={(e) =>
+                      setSection1SlidesData((prev) =>
+                        prev.map((p, i) =>
+                          i === index ? { ...p, title: e.target.value } : p
+                        )
+                      )
+                    }
+                    className="w-full h-[36px] px-3 py-2 rounded-[8px] border"
+                    placeholder="Slide title"
+                  />
+                  <textarea
+                    value={section1SlidesData[index]?.subtitle || ""}
+                    onChange={(e) =>
+                      setSection1SlidesData((prev) =>
+                        prev.map((p, i) =>
+                          i === index ? { ...p, subtitle: e.target.value } : p
+                        )
+                      )
+                    }
+                    className="w-full min-h-[60px] px-3 py-2 rounded-[8px] border"
+                    placeholder="Slide subtitle"
+                  />
+                </div>
               </div>
             ))}
           </div>

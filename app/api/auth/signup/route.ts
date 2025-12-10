@@ -9,6 +9,7 @@ import {
   createConnectedAccount,
   createOnboardingLink,
 } from "@/lib/utils/stripeConnnect";
+import { sendNotification } from "@/lib/pusher/notify";
 
 export const CoordinatesSchema = z.object({
   lat: z
@@ -123,6 +124,23 @@ export async function POST(request: NextRequest) {
       };
       user.role = "vendor";
       await user.save();
+
+      try {
+        const admins = await User.find({ role: "admin" }).select("_id").lean();
+        const displayName =
+          user.vendorDetails?.companyName || user.fullName || "Vendor";
+        for (const a of admins) {
+          await sendNotification({
+            recipientId: a._id.toString(),
+            name: "New Vendor Application",
+            type: "admin-vendor-request",
+            message: `New vendor application: ${displayName}`,
+            link: `/admin/vendor-applications/detail/${user._id.toString()}`,
+            relatedId: user._id.toString(),
+            endDate: new Date(),
+          });
+        }
+      } catch {}
     }
     await user.save();
 

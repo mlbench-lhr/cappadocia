@@ -5,6 +5,8 @@ import Booking from "@/lib/mongodb/models/booking";
 import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
 import Notification from "@/lib/mongodb/models/Notification";
 import { sendNotification } from "@/lib/pusher/notify";
+import User from "@/lib/mongodb/models/User";
+import { Resend } from "resend";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,6 +39,10 @@ export async function GET(req: NextRequest) {
       .lean();
 
     let userRemindersSent = 0;
+    const RESEND_API_KEY = process.env.RESEND_API_KEY as string;
+    const EMAIL_FROM =
+      process.env.EMAIL_FROM || "noreply@cappadociaplatform.com";
+    const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
     for (const b of candidates) {
       const startOfDay = moment(b.selectDate, "YYYY-MM-DD").startOf("day");
@@ -66,6 +72,23 @@ export async function GET(req: NextRequest) {
           relatedId: b._id.toString(),
           endDate: startOfDay.toDate(),
         });
+        if (resend) {
+          try {
+            const u = await User.findById(b.user)
+              .select("email fullName")
+              .lean();
+            const to = u?.email;
+            if (to) {
+              const subject = "Booking Reminder: 24 hours remaining";
+              const html = `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 24px;"><h2 style="color: #000;">Hello ${
+                u?.fullName || "Traveler"
+              },</h2><p style="color: #000;">${message} for booking <strong>#${
+                b.bookingId
+              }</strong>.</p><p style="color: #000;">View details: <a href="https://cappadocia-alpha.vercel.app/bookings/detail/${b._id.toString()}" style="color:#555">Open booking</a></p></div>`;
+              await resend.emails.send({ from: EMAIL_FROM, to, subject, html });
+            }
+          } catch {}
+        }
         userRemindersSent++;
       }
     }
@@ -80,13 +103,14 @@ export async function GET(req: NextRequest) {
     let vendorRemindersSent = 0;
 
     for (const t of upcomingTours) {
-      const slotsInWindow = (t.slots || []).filter(
-        (s: any) => moment(s.startDate).isBetween(now, next24h, undefined, "[]")
+      const slotsInWindow = (t.slots || []).filter((s: any) =>
+        moment(s.startDate).isBetween(now, next24h, undefined, "[]")
       );
       if (slotsInWindow.length < 1) continue;
 
       const earliestSlot = slotsInWindow.sort(
-        (a: any, b: any) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        (a: any, b: any) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
       )[0];
 
       const exists = await Notification.findOne({
@@ -117,7 +141,9 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (error: any) {
-    return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
-

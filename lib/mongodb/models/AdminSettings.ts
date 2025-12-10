@@ -5,6 +5,7 @@ export interface AdminSettingsType extends Document {
   _id: string;
   promotionalImages: string[];
   section1Slides: string[];
+  section1SlidesData: { image: string; title: string; subtitle: string }[];
   section3MainImages: string[];
   section3TabIcons: string[];
   section4Background: string;
@@ -19,6 +20,16 @@ const AdminSettingSchema = new Schema<AdminSettingsType>(
   {
     promotionalImages: [{ type: String }],
     section1Slides: [{ type: String }],
+    section1SlidesData: [
+      new Schema(
+        {
+          image: { type: String },
+          title: { type: String },
+          subtitle: { type: String },
+        },
+        { _id: false }
+      ),
+    ],
     section3MainImages: [{ type: String }],
     section3TabIcons: [{ type: String }],
     section4Background: { type: String },

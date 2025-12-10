@@ -5,6 +5,7 @@ import moment from "moment";
 import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
 import Booking from "@/lib/mongodb/models/booking";
 import { Slot } from "@/lib/store/slices/tourAndActivitySlice";
+import { sendNotification } from "@/lib/pusher/notify";
 
 // Helper function to generate unique booking ID
 function generateBookingId(): string {
@@ -182,6 +183,18 @@ export async function POST(req: NextRequest) {
 
     // Commit transaction
     await session.commitTransaction();
+
+    try {
+      await sendNotification({
+        recipientId: activity.vendor.toString(),
+        name: "New Booking",
+        type: "vendor-booking-new",
+        message: `New booking #${newBooking.bookingId}`,
+        link: "/vendor/reservations",
+        relatedId: newBooking._id.toString(),
+        endDate: new Date(newBooking.selectDate),
+      });
+    } catch {}
 
     return NextResponse.json(
       {

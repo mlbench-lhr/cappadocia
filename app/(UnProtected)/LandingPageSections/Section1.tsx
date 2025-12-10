@@ -94,6 +94,28 @@ export default function Section1() {
     "/landing page/pic2.jpg",
     "/landing page/pic3.jpg",
   ]);
+  const [slidesData, setSlidesData] = useState<
+    { image: string; title: string; subtitle: string }[]
+  >([
+    {
+      image: "/landing page/pic1.png",
+      title: "Discover the Best Tours & Activities in Cappadocia",
+      subtitle:
+        "Book local experiences, guided tours, and adventures — all in one place.",
+    },
+    {
+      image: "/landing page/pic2.jpg",
+      title: "Explore Unique Adventures Across Stunning Cappadocia",
+      subtitle:
+        "Find top-rated journeys, expert-led tours, and activities — all in one spot.",
+    },
+    {
+      image: "/landing page/pic3.jpg",
+      title: "Experience the Top Attractions & Hidden Gems of Cappadocia",
+      subtitle:
+        "Enjoy curated excursions, cultural tours, and fun activities — all together here.",
+    },
+  ]);
 
   useEffect(() => {
     async function fetchSettings() {
@@ -101,32 +123,20 @@ export default function Section1() {
         const res = await axios.get("/api/promotionalImages");
         const data = await res.data;
         const s = data?.data || {};
-        if (s.section1Slides?.length) setSlidesImages(s.section1Slides);
+        if (s.section1SlidesData?.length) {
+          setSlidesData(s.section1SlidesData);
+          setSlidesImages(s.section1SlidesData.map((d: any) => d.image));
+        } else if (s.section1Slides?.length) {
+          setSlidesImages(s.section1Slides);
+          setSlidesData((prev) =>
+            prev.map((p, i) => ({ ...p, image: s.section1Slides[i] || p.image }))
+          );
+        }
       } catch (e) {}
     }
     fetchSettings();
   }, []);
-
-  const slides = [
-    {
-      image: slidesImages[0],
-      title: "Discover the Best Tours & Activities in Cappadocia",
-      subtitle:
-        "Book local experiences, guided tours, and adventures — all in one place.",
-    },
-    {
-      image: slidesImages[1],
-      title: "Explore Unique Adventures Across Stunning Cappadocia",
-      subtitle:
-        "Find top-rated journeys, expert-led tours, and activities — all in one spot.",
-    },
-    {
-      image: slidesImages[2],
-      title: "Experience the Top Attractions & Hidden Gems of Cappadocia",
-      subtitle:
-        "Enjoy curated excursions, cultural tours, and fun activities — all together here.",
-    },
-  ];
+  const slides = slidesData;
 
   // Auto-play slider every 5 seconds
   useEffect(() => {

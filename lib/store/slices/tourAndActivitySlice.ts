@@ -23,6 +23,8 @@ export interface ToursAndActivityState {
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
+  durationStartTime: string;
+  durationEndTime: string;
   slots: Slot[];
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   rating: { average: number | 0; total: number | 0 };
@@ -42,6 +44,8 @@ const initialState: ToursAndActivityState = {
   status: "pending admin approval",
   cancellationPolicy: "",
   duration: 0,
+  durationStartTime: "",
+  durationEndTime: "",
   slots: [
     {
       startDate: new Date("2025-02-10"),
