@@ -3,6 +3,8 @@ import Booking from "@/lib/mongodb/models/booking";
 import Invoice from "@/lib/mongodb/models/Invoice";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import Notification from "@/lib/mongodb/models/Notification";
+import { sendNotification } from "@/lib/pusher/notify";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
@@ -140,6 +142,40 @@ export async function POST(req: NextRequest) {
                 "ℹ️ Invoice already exists for this booking:",
                 existingInvoice.invoicesId
               );
+            }
+
+            const hasUserConfirm = await Notification.findOne({
+              userId: updatedBooking.user,
+              type: "booking-confirmation",
+              relatedId: updatedBooking._id.toString(),
+            }).lean();
+            if (!hasUserConfirm) {
+              await sendNotification({
+                recipientId: updatedBooking.user.toString(),
+                name: "Booking Confirmed",
+                type: "booking-confirmation",
+                message: `Your booking #${updatedBooking.bookingId} is confirmed`,
+                link: `/bookings/detail/${updatedBooking._id.toString()}`,
+                relatedId: updatedBooking._id.toString(),
+                endDate: new Date(updatedBooking.selectDate),
+              });
+            }
+
+            const hasVendorPayment = await Notification.findOne({
+              userId: updatedBooking.vendor,
+              type: "vendor-booking-payment",
+              relatedId: updatedBooking._id.toString(),
+            }).lean();
+            if (!hasVendorPayment) {
+              await sendNotification({
+                recipientId: updatedBooking.vendor.toString(),
+                name: "Booking Payment Confirmed",
+                type: "vendor-booking-payment",
+                message: `Payment confirmed for booking #${updatedBooking.bookingId}`,
+                link: "/vendor/reservations",
+                relatedId: updatedBooking._id.toString(),
+                endDate: new Date(updatedBooking.selectDate),
+              });
             }
           } else {
             console.error("❌ Failed to update booking:", bookingId);

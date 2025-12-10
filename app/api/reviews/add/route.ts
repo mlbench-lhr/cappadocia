@@ -4,6 +4,7 @@ import Reviews from "@/lib/mongodb/models/Reviews";
 import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
 import User from "@/lib/mongodb/models/User";
 import { NextRequest, NextResponse } from "next/server";
+import { sendNotification } from "@/lib/pusher/notify";
 
 export async function POST(req: NextRequest) {
   await connectDB();
@@ -33,5 +34,16 @@ export async function POST(req: NextRequest) {
       "vendorDetails.rating.total": vendorRatingCount,
     },
   });
+  try {
+    await sendNotification({
+      recipientId: body.vendor,
+      name: "New Review Submitted",
+      type: "vendor-review-new",
+      message: "You received a new review",
+      link: "/vendor/reports",
+      relatedId: created._id.toString(),
+      endDate: created.createdAt,
+    });
+  } catch {}
   return NextResponse.json(created);
 }

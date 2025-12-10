@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
 import connectDB from "@/lib/mongodb/connection";
 import { verifyToken } from "@/lib/auth/jwt";
+import User from "@/lib/mongodb/models/User";
+import { sendNotification } from "@/lib/pusher/notify";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,6 +25,21 @@ export async function POST(req: NextRequest) {
       ...body.toursState,
       vendor: userId,
     });
+
+    try {
+      const admins = await User.find({ role: "admin" }).select("_id").lean();
+      for (const a of admins) {
+        await sendNotification({
+          recipientId: a._id.toString(),
+          name: "New Tour Publish Request",
+          type: "admin-tour-request",
+          message: `New tour submitted: ${created.title}`,
+          link: `/admin/tours-and-activities/detail/${created._id.toString()}`,
+          relatedId: created._id.toString(),
+          endDate: new Date(),
+        });
+      }
+    } catch {}
 
     return NextResponse.json({ data: created }, { status: 201 });
   } catch (error) {
