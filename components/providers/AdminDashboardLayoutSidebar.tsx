@@ -110,7 +110,7 @@ export function Sidebar() {
           className={`gap-[40px] hidden md:flex flex-col bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
         >
           <div className="flex items-center justify-between font-semibold w-full">
-            <Link href={"/"}>
+            <Link href={"/admin/dashboard"}>
               <Image
                 src={logo.src}
                 alt=""
@@ -167,7 +167,7 @@ export function Sidebar() {
             className={`gap-[40px] h-full hidden md:flex flex-col bg-white border-r ${desktopWidth} transition-width duration-200 shrink-0 p-[20px]`}
           >
             <div className="flex items-start justify-between font-semibold w-full">
-              <Link href={"/"}>
+              <Link href={"/admin/dashboard"}>
                 <Image src={logo.src} alt="" width={59} height={32} />
               </Link>
               <button

@@ -29,15 +29,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (user?.role === "vendor" && !user.isRoleVerified) {
-      return NextResponse.json(
-        {
-          error:
-            "Your vendor account is not is not verified yet, please try again later.",
-        },
-        { status: 401 }
-      );
-    }
+    // if (user?.role === "vendor" && !user.isRoleVerified) {
+    //   return NextResponse.json(
+    //     {
+    //       error:
+    //         "Your vendor account is not is not verified yet, please try again later.",
+    //     },
+    //     { status: 401 }
+    //   );
+    // }
 
     if (!user.googleId && !user.isEmailVerified) {
       return NextResponse.json(

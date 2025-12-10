@@ -89,22 +89,39 @@ export default function Section1() {
     dispatch(setActivityFilterDate(undefined));
   };
 
-  // Array of slider images - add your images here
+  const [slidesImages, setSlidesImages] = useState<string[]>([
+    "/landing page/pic1.png",
+    "/landing page/pic2.jpg",
+    "/landing page/pic3.jpg",
+  ]);
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const data = await res.data;
+        const s = data?.data || {};
+        if (s.section1Slides?.length) setSlidesImages(s.section1Slides);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
+
   const slides = [
     {
-      image: "/landing page/pic1.png",
+      image: slidesImages[0],
       title: "Discover the Best Tours & Activities in Cappadocia",
       subtitle:
         "Book local experiences, guided tours, and adventures — all in one place.",
     },
     {
-      image: "/landing page/pic2.jpg",
+      image: slidesImages[1],
       title: "Explore Unique Adventures Across Stunning Cappadocia",
       subtitle:
         "Find top-rated journeys, expert-led tours, and activities — all in one spot.",
     },
     {
-      image: "/landing page/pic3.jpg",
+      image: slidesImages[2],
       title: "Experience the Top Attractions & Hidden Gems of Cappadocia",
       subtitle:
         "Enjoy curated excursions, cultural tours, and fun activities — all together here.",

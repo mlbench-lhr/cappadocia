@@ -16,6 +16,9 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
   const [data, setData] = useState<VendorDetails | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [commission, setCommission] = useState<string>("");
+  const [isVerified, setIsVerified] = useState<boolean>(false);
+  const [isRejected, setIsRejected] = useState<boolean>(false);
 
   const router = useRouter();
   const { id }: { id: string } = useParams();
@@ -28,6 +31,14 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         );
         if (response.data?.user) {
           setData(response.data?.user);
+          const existing = (response.data?.user as VendorDetails)?.commission;
+          setCommission(
+            typeof existing === "number" && !isNaN(existing)
+              ? String(existing)
+              : ""
+          );
+          setIsVerified(!!response.data?.isRoleVerified);
+          setIsRejected(!!response.data?.isRejected);
         }
         setLoading(false);
       } catch (error) {
@@ -38,9 +49,21 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
   }, []);
   const accept = async () => {
     try {
+      const pct = Number(commission);
+      if (!commission || isNaN(pct) || pct < 0 || pct > 100) {
+        Swal.fire({
+          icon: "error",
+          title: "Commission required",
+          text: "Please set a valid commission percentage between 0 and 100.",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        return;
+      }
       setActionLoading(true);
       await axios.put(`/api/admin/vendor-applications/update/${id}`, {
         isRoleVerified: true,
+        "vendorDetails.commission": pct,
       });
       setActionLoading(false);
       Swal.fire({
@@ -184,6 +207,25 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
           <p className="text-gray-500 leading-relaxed">{data?.aboutUs}</p>
         </div>
 
+        {/* Commission Field */}
+        <div className="border rounded-lg p-6 mb-6 w-[622px]">
+          <label className="block text-sm font-semibold mb-2">
+            Commission (%)
+          </label>
+          <input
+            type="number"
+            min={0}
+            max={100}
+            value={commission}
+            onChange={(e) => setCommission(e.target.value)}
+            className="border rounded-md px-3 py-2 w-full text-sm"
+            placeholder="Enter commission percentage"
+          />
+          <p className="text-xs text-gray-500 mt-2">
+            Required to accept vendor account request.
+          </p>
+        </div>
+
         {/* Documents Uploaded */}
         <div className="mb-6 w-full">
           <h3 className="text-sm font-semibold mb-3">Documents Uploaded</h3>
@@ -229,16 +271,18 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3">
-          <button
-            onClick={accept}
-            disabled={actionLoading}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
-          >
-            {actionLoading ? "Accepting" : "Accept"}
-          </button>
-          <RejectVendorDialog id={id} />
-        </div>
+        {!isVerified && (
+          <div className="flex gap-3">
+            <button
+              onClick={accept}
+              disabled={actionLoading}
+              className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
+            >
+              {actionLoading ? "Accepting..." : "Accept"}
+            </button>
+            <RejectVendorDialog id={id} />
+          </div>
+        )}
       </div>
     </div>
   );

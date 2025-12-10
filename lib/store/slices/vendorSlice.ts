@@ -22,6 +22,7 @@ export interface VendorDetails {
   agreedToTerms: boolean;
   cover?: string;
   stripeAccountId: string;
+  commission?: number;
   rating: { average: number | 0; total: number | 0 };
 }
 
@@ -55,6 +56,7 @@ const initialState: VendorState = {
       currency: "",
     },
     stripeAccountId: "",
+    commission: 0,
     agreedToTerms: false,
     rating: { average: 0, total: 0 },
   },

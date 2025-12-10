@@ -139,7 +139,7 @@ export default function RejectVendorDialog({
                     className="w-full !bg-red-500"
                     disabled={deleting}
                   >
-                    {deleting ? "Rejecting" : "Reject"}
+                    {deleting ? "Rejecting..." : "Reject"}
                   </Button>
                 </DialogClose>
               </div>

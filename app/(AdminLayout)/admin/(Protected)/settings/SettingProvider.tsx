@@ -13,7 +13,7 @@ export const SettingProvider = ({
         </h1>
       </div>
       <div className="w-full h-full rounded-[15px] py-[16px] grid grid-cols-3">
-        <div className="w-full h-full pb-[16px] grid col-span-3">
+        <div className="w-full h-full pb-[16px] grid col-span-3 overflow-auto">
           {children}
         </div>
       </div>

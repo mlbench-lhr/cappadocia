@@ -9,8 +9,8 @@ export function Navigation() {
   const [pathname, setPathname] = useState("");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const user_id = useAppSelector((s) => s.auth.user?.id);
-  console.log("user_id", user_id, pathname);
-  console.log("pathname----", pathname);
+  const user_role = useAppSelector((s) => s.auth.user?.role);
+  console.log("user_role", user_role);
 
   const navLinks = (
     <>
@@ -125,7 +125,17 @@ export function Navigation() {
           {/* Desktop Button */}
           <div className="flex items-center space-x-4">
             <Button asChild variant={"main_green_button"}>
-              <Link href={user_id ? "/explore" : "/auth/login"}>
+              <Link
+                href={
+                  !user_id
+                    ? "/auth/login"
+                    : user_role === "admin"
+                    ? "/admin/dashboard"
+                    : user_role === "vendor"
+                    ? "/vendor/dashboard"
+                    : "/explore"
+                }
+              >
                 {user_id ? "Get Started" : "Login Now"}
               </Link>
             </Button>

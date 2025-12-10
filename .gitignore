@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-
+/nextjs-project
 # next.js
 /.next/
 /out/

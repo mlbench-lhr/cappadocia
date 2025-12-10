@@ -7,57 +7,90 @@ import axios from "axios";
 import { uploadFile } from "@/lib/utils/upload";
 import Image from "next/image";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
-import { Camera, Pencil } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export function Promotions() {
-  const [promotionalImages, setPromotionalImages] = useState<string[]>([
-    "/coverPicPlaceholder.png",
-    "/coverPicPlaceholder.png",
-    "/coverPicPlaceholder.png",
-    "/coverPicPlaceholder.png",
-  ]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  console.log("promotionalImages-----", promotionalImages);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isUploading, setIsUploading] = useState<number | null>(null);
+  const [isUploading, setIsUploading] = useState<string | null>(null);
+
+  const [section1Slides, setSection1Slides] = useState<string[]>([
+    "/landing page/pic1.png",
+    "/landing page/pic2.jpg",
+    "/landing page/pic3.jpg",
+  ]);
+  const [section3MainImages, setSection3MainImages] = useState<string[]>([
+    "/landing page/image (4).png",
+    "/landing page/image (5).png",
+  ]);
+  const [section3TabIcons, setSection3TabIcons] = useState<string[]>([
+    "/landing page/tab icon.png",
+    "/landing page/tab icon 2.png",
+    "/landing page/tab icon 3.png",
+    "/landing page/tab icon 4.png",
+  ]);
+  const [section4Background, setSection4Background] = useState<string>(
+    "/landing page/image 6.png"
+  );
+  const [section4Thumbs, setSection4Thumbs] = useState<string[]>([
+    "/landing page/img 7.png",
+    "/landing page/img 8.png",
+    "/landing page/img 9.png",
+  ]);
+  const [section6Image, setSection6Image] = useState<string>(
+    "/landing page/img 10.png"
+  );
+  const [section7Image, setSection7Image] = useState<string>(
+    "/landing page/img 11.png"
+  );
+  const [section8Background, setSection8Background] = useState<string>(
+    "/landing page/image 6.png"
+  );
 
   useEffect(() => {
-    async function onSubmit() {
+    async function fetchSettings() {
       try {
         setLoading(true);
         const res = await axios.get("/api/promotionalImages");
         const data = await res.data;
-        console.log("promotionalImages-------", data);
-        setPromotionalImages(
-          data?.data?.promotionalImages || [
-            "/coverPicPlaceholder.png",
-            "/coverPicPlaceholder.png",
-            "/coverPicPlaceholder.png",
-            "/coverPicPlaceholder.png",
-          ]
-        );
+        const s = data?.data || {};
+        if (s.section1Slides?.length) setSection1Slides(s.section1Slides);
+        if (s.section3MainImages?.length)
+          setSection3MainImages(s.section3MainImages);
+        if (s.section3TabIcons?.length) setSection3TabIcons(s.section3TabIcons);
+        if (s.section4Background) setSection4Background(s.section4Background);
+        if (s.section4Thumbs?.length) setSection4Thumbs(s.section4Thumbs);
+        if (s.section6Image) setSection6Image(s.section6Image);
+        if (s.section7Image) setSection7Image(s.section7Image);
+        if (s.section8Background) setSection8Background(s.section8Background);
       } catch (err) {
-        console.log(err);
       } finally {
         setLoading(false);
       }
     }
-    onSubmit();
+    fetchSettings();
   }, []);
 
   async function onSubmit() {
     try {
       setIsSubmitting(true);
       const res = await axios.put("/api/promotionalImages", {
-        promotionalImages: promotionalImages,
+        section1Slides,
+        section3MainImages,
+        section3TabIcons,
+        section4Background,
+        section4Thumbs,
+        section6Image,
+        section7Image,
+        section8Background,
       });
-      const data = await res.data;
+      await res.data;
 
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: data.message || "Images updated successfully",
+        text: "Images updated successfully",
         timer: 1500,
         showConfirmButton: false,
       });
@@ -74,80 +107,311 @@ export function Promotions() {
     }
   }
 
-  const handleFileSelect = async (
+  const handleUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    imageIndex: number
+    key: string,
+    index?: number
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    // Validate file size (5MB limit for avatars)
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Image size should be less than 5MB.");
-      return;
-    }
-
+    if (file.size > 5 * 1024 * 1024) return;
     try {
-      setIsUploading(imageIndex);
+      setIsUploading(`${key}-${index ?? 0}`);
       const url = await uploadFile(file, "promotionalImages");
-
-      setPromotionalImages((prev) => {
-        const updated = [...prev];
-        updated[imageIndex] = url; // ← replace instead of append
-        return updated;
-      });
-    } catch (err) {
-      console.error(err);
-      alert("Upload failed. Please try again.");
+      if (key === "section1Slides") {
+        const arr = [...section1Slides];
+        arr[index!] = url;
+        setSection1Slides(arr);
+      } else if (key === "section3MainImages") {
+        const arr = [...section3MainImages];
+        arr[index!] = url;
+        setSection3MainImages(arr);
+      } else if (key === "section3TabIcons") {
+        const arr = [...section3TabIcons];
+        arr[index!] = url;
+        setSection3TabIcons(arr);
+      } else if (key === "section4Background") {
+        setSection4Background(url);
+      } else if (key === "section4Thumbs") {
+        const arr = [...section4Thumbs];
+        arr[index!] = url;
+        setSection4Thumbs(arr);
+      } else if (key === "section6Image") {
+        setSection6Image(url);
+      } else if (key === "section7Image") {
+        setSection7Image(url);
+      } else if (key === "section8Background") {
+        setSection8Background(url);
+      }
     } finally {
       setIsUploading(null);
     }
   };
 
   return (
-    <div className="w-full h-full flex justify-between items-end flex-col">
-      <div className="w-full grid grid-cols-2 [@media(min-width:480px)]:grid-cols-4 gap-[20px]">
-        {promotionalImages?.map((item, index) => (
-          <div key={index} className="w-full h-fit relative">
-            <LightboxProvider images={[item || "/coverPicPlaceholder.png"]}>
-              {isUploading === index ? (
-                <Skeleton className="w-full h-[140px] object-cover object-center rounded-[10px]"></Skeleton>
-              ) : (
-                <Image
-                  src={item || "/coverPicPlaceholder.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="w-full h-[140px] object-cover object-center rounded-[10px]"
+    <div className="w-full h-[calc(100vh-300px)] flex justify-between overflow-y-auto items-end flex-col gap-6">
+      <div className="w-full space-y-6">
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">
+            Hero Section – Slider Images
+          </h2>
+          <div className="grid grid-cols-2 [@media(min-width:480px)]:grid-cols-3 gap-[20px]">
+            {section1Slides.map((item, index) => (
+              <div key={index} className="w-full h-fit relative">
+                <LightboxProvider images={[item]}>
+                  {isUploading === `section1Slides-${index}` ? (
+                    <Skeleton className="w-full h-[140px] object-cover object-center rounded-[10px]"></Skeleton>
+                  ) : (
+                    <Image
+                      src={item}
+                      alt=""
+                      width={100}
+                      height={100}
+                      className="w-full h-[140px] object-cover object-center rounded-[10px]"
+                    />
+                  )}
+                </LightboxProvider>
+                <label
+                  className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                  htmlFor={`upload-section1-${index}`}
+                >
+                  <Pencil size={20} color="#B32053" />
+                </label>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={(e) => handleUpload(e, "section1Slides", index)}
+                  disabled={isSubmitting}
+                  className="hidden"
+                  id={`upload-section1-${index}`}
                 />
-              )}
-            </LightboxProvider>
-            <label
-              className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
-              htmlFor={`document-upload-${index}`}
-            >
-              <Pencil size={20} className="" color="#B32053" />
-            </label>
-            <input
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={(e) => {
-                handleFileSelect(e, index);
-              }}
-              disabled={isSubmitting ? true : false}
-              className="hidden"
-              id={`document-upload-${index}`}
-            />
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">
+            Why Choose Us Section
+          </h2>
+          <div className="grid grid-cols-2 gap-[20px]">
+            {section3MainImages.map((item, index) => (
+              <div key={index} className="w-full h-fit relative">
+                <LightboxProvider images={[item]}>
+                  {isUploading === `section3MainImages-${index}` ? (
+                    <Skeleton className="w-full h-[200px] object-cover object-center rounded-[10px]"></Skeleton>
+                  ) : (
+                    <Image
+                      src={item}
+                      alt=""
+                      width={100}
+                      height={100}
+                      className="w-full h-[200px] object-cover object-center rounded-[10px]"
+                    />
+                  )}
+                </LightboxProvider>
+                <label
+                  className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                  htmlFor={`upload-section3-main-${index}`}
+                >
+                  <Pencil size={20} color="#B32053" />
+                </label>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={(e) => handleUpload(e, "section3MainImages", index)}
+                  disabled={isSubmitting}
+                  className="hidden"
+                  id={`upload-section3-main-${index}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">Cappadocia Gallery</h2>
+          <div className="grid grid-cols-1 gap-[20px]">
+            <div className="w-full h-fit relative">
+              <LightboxProvider images={[section4Background]}>
+                {isUploading === `section4Background-0` ? (
+                  <Skeleton className="w-full h-[160px] object-cover object-center rounded-[10px]"></Skeleton>
+                ) : (
+                  <Image
+                    src={section4Background}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="w-full h-[160px] object-cover object-center rounded-[10px]"
+                  />
+                )}
+              </LightboxProvider>
+              <label
+                className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                htmlFor={`upload-section4-bg`}
+              >
+                <Pencil size={20} color="#B32053" />
+              </label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => handleUpload(e, "section4Background", 0)}
+                disabled={isSubmitting}
+                className="hidden"
+                id={`upload-section4-bg`}
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-[20px]">
+              {section4Thumbs.map((item, index) => (
+                <div key={index} className="w-full h-fit relative">
+                  <LightboxProvider images={[item]}>
+                    {isUploading === `section4Thumbs-${index}` ? (
+                      <Skeleton className="w-full h-[140px] object-cover object-center rounded-[10px]"></Skeleton>
+                    ) : (
+                      <Image
+                        src={item}
+                        alt=""
+                        width={100}
+                        height={100}
+                        className="w-full h-[140px] object-cover object-center rounded-[10px]"
+                      />
+                    )}
+                  </LightboxProvider>
+                  <label
+                    className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                    htmlFor={`upload-section4-thumb-${index}`}
+                  >
+                    <Pencil size={20} color="#B32053" />
+                  </label>
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png"
+                    onChange={(e) => handleUpload(e, "section4Thumbs", index)}
+                    disabled={isSubmitting}
+                    className="hidden"
+                    id={`upload-section4-thumb-${index}`}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">Get in Touch With Us</h2>
+          <div className="grid grid-cols-1 gap-[20px]">
+            <div className="w-full h-fit relative">
+              <LightboxProvider images={[section6Image]}>
+                {isUploading === `section6Image-0` ? (
+                  <Skeleton className="w-full h-[200px] object-cover object-center rounded-[10px]"></Skeleton>
+                ) : (
+                  <Image
+                    src={section6Image}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="w-full h-[200px] object-cover object-center rounded-[10px]"
+                  />
+                )}
+              </LightboxProvider>
+              <label
+                className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                htmlFor={`upload-section6-image`}
+              >
+                <Pencil size={20} color="#B32053" />
+              </label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => handleUpload(e, "section6Image", 0)}
+                disabled={isSubmitting}
+                className="hidden"
+                id={`upload-section6-image`}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">
+            What Our Travelers Say
+          </h2>
+          <div className="grid grid-cols-1 gap-[20px]">
+            <div className="w-full h-fit relative">
+              <LightboxProvider images={[section8Background]}>
+                {isUploading === `section8Background-0` ? (
+                  <Skeleton className="w-full h-[160px] object-cover object-center rounded-[10px]"></Skeleton>
+                ) : (
+                  <Image
+                    src={section8Background}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="w-full h-[160px] object-cover object-center rounded-[10px]"
+                  />
+                )}
+              </LightboxProvider>
+              <label
+                className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                htmlFor={`upload-section8-bg`}
+              >
+                <Pencil size={20} color="#B32053" />
+              </label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => handleUpload(e, "section8Background", 0)}
+                disabled={isSubmitting}
+                className="hidden"
+                id={`upload-section8-bg`}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">About Us</h2>
+          <div className="grid grid-cols-1 gap-[20px]">
+            <div className="w-full h-fit relative">
+              <LightboxProvider images={[section7Image]}>
+                {isUploading === `section7Image-0` ? (
+                  <Skeleton className="w-full h-[200px] object-cover object-center rounded-[10px]"></Skeleton>
+                ) : (
+                  <Image
+                    src={section7Image}
+                    alt=""
+                    width={100}
+                    height={100}
+                    className="w-full h-[200px] object-cover object-center rounded-[10px]"
+                  />
+                )}
+              </LightboxProvider>
+              <label
+                className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                htmlFor={`upload-section7-image`}
+              >
+                <Pencil size={20} color="#B32053" />
+              </label>
+              <input
+                type="file"
+                accept=".jpg,.jpeg,.png"
+                onChange={(e) => handleUpload(e, "section7Image", 0)}
+                disabled={isSubmitting}
+                className="hidden"
+                id={`upload-section7-image`}
+              />
+            </div>
+          </div>
+        </div>
       </div>
+
       <Button
         variant={"main_green_button"}
         className="mt-5"
         type="button"
         onClick={onSubmit}
         loading={isSubmitting}
-        disabled={isUploading !== null ? true : false}
+        disabled={isUploading !== null}
       >
         Save Changes
       </Button>
