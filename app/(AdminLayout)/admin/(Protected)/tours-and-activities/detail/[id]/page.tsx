@@ -17,19 +17,16 @@ import {
   PaymentIcon,
 } from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
-import AddressLocationSelector, { LocationData } from "@/components/map";
-import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
-import RejectVendorDialog from "@/components/RejectVendorDialog";
+import AddressLocationSelector from "@/components/map";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
-import Swal from "sweetalert2";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
-import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
 import { TextAreaInputComponent } from "@/components/SmallComponents/InputComponents";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UpdatableImageGallery from "@/components/UpdatableImageGallery";
 import { uploadMultipleFiles } from "@/lib/utils/upload";
+import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -58,7 +55,6 @@ export default function BookingsPage() {
   useEffect(() => {
     setUploads(data?.uploads || []);
   }, [data?.uploads]);
-  const [actionLoading, setActionLoading] = useState<boolean>(false);
   const [updateLoading, setUpdateLoading] = useState<boolean>(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string>("");
@@ -82,25 +78,6 @@ export default function BookingsPage() {
     getData();
   }, []);
 
-  const accept = async () => {
-    try {
-      setActionLoading(true);
-      await axios.put(`/api/toursAndActivity/update/${id}`, {
-        isVerified: true,
-      });
-      setActionLoading(false);
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: `Vendor approved Successfully`,
-        timer: 1500,
-        showConfirmButton: false,
-      });
-      router.push("/admin/tours-and-activities");
-    } catch (error) {
-      console.log("err---", error);
-    }
-  };
   const updateActivity = async (
     data: { description: string } | { uploads: string[] }
   ) => {
@@ -327,16 +304,7 @@ export default function BookingsPage() {
             </BoxProviderWithName>
           </div>
         </BoxProviderWithName>
-        <div className="flex gap-3">
-          <button
-            onClick={accept}
-            disabled={actionLoading}
-            className="bg-green-500 hover:bg-green-600 text-white px-8 py-1 rounded-lg font-semibold"
-          >
-            {actionLoading ? "Accepting" : "Accept"}
-          </button>
-          <RejectVendorDialog type={"activity"} id={id} />
-        </div>
+        <div className="flex gap-3" />
       </div>
     </BasicStructureWithName>
   );

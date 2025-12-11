@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
 import connectDB from "@/lib/mongodb/connection";
+import { verifyToken } from "@/lib/auth/jwt";
 
 export async function GET(
   req: NextRequest,
@@ -17,6 +18,19 @@ export async function GET(
 
   if (!item)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
+
+  const token = req.cookies.get("auth_token")?.value;
+  const payload = token ? verifyToken(token) : null;
+
+  if (!item.isVerified) {
+    const vendorId = (item.vendor as any)?._id
+      ? (item.vendor as any)._id.toString()
+      : (item.vendor as any).toString();
+    const isOwner = !!payload && payload.userId === vendorId;
+    if (!isOwner) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+  }
 
   return NextResponse.json({ data: item });
 }
