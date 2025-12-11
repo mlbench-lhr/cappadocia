@@ -38,6 +38,10 @@ export default function VendorSignupStep2({
 }: VendorSignupStep2Props) {
   const dispatch = useAppDispatch();
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
+  const cappadociaRadius = {
+    center: { lat: 38.6431, lng: 34.852 },
+    radiusKm: 100,
+  };
 
   const {
     control,
@@ -102,6 +106,7 @@ export default function VendorSignupStep2({
                 label="Address & Location"
                 className="w-full h-[188px] rounded-xl"
                 placeholder="Enter Address & Location"
+                radiusLimit={cappadociaRadius}
               />
             )}
           />
