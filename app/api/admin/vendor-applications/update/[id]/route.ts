@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb/connection";
 import User from "@/lib/mongodb/models/User";
+import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
 import { Resend } from "resend";
 import { sendNotification } from "@/lib/pusher/notify";
 
@@ -48,6 +49,17 @@ export async function PUT(
 
     if (!updatedUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    if (body?.isRoleVerified === true) {
+      try {
+        await ToursAndActivity.updateMany(
+          { vendor: id },
+          { $set: { isVerified: true, status: "active" } }
+        );
+      } catch (e) {
+        console.error("Bulk verify tours failed:", (e as any)?.message || e);
+      }
     }
 
     // Send email + notification based on action

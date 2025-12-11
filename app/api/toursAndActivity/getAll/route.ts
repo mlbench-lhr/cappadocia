@@ -24,6 +24,8 @@ export async function GET(req: NextRequest) {
 
   if (payload && payload.role === "vendor") {
     query.vendor = userId;
+  } else {
+    query.isVerified = true;
   }
   if (status) {
     query.status = status;

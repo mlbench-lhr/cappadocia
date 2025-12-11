@@ -4,13 +4,11 @@ import { Clock, MapPin, Globe, CreditCard, CheckCircle, XCircle } from 'lucide-r
 import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import RejectionModal from '../modals/RejectionModal';
 
 interface TourDetailsProps { }
 
 const TourDetails: React.FC<TourDetailsProps> = () => {
     const router = useRouter();
-    const [openRejectionModal, setOpenRejectionModal] = React.useState(false);
     const handleBack = () => {
         router.back();
     };
@@ -268,18 +266,10 @@ const TourDetails: React.FC<TourDetailsProps> = () => {
                     </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-3 mt-10">
-                    <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-2 rounded-lg font-semibold">
-                        Accept
-                    </button>
-                    <button onClick={() => setOpenRejectionModal(true)} className="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-lg font-semibold">
-                        Reject
-                    </button>
-                </div>
+                <div className="flex gap-3 mt-10" />
             </div>
 
-            <RejectionModal open={openRejectionModal} onClose={() => setOpenRejectionModal(false)} onSubmit={()=> setOpenRejectionModal(false)} />.
+            
         </div>
     );
 };
