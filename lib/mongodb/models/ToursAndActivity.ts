@@ -40,6 +40,7 @@ export interface ToursAndActivity {
     isRejected: boolean;
     reason?: string;
   };
+  recommended?: boolean;
   rating: { average: number | 0; total: number | 0 };
 }
 export interface ToursAndActivityWithVendor {
@@ -82,6 +83,7 @@ export interface ToursAndActivityWithVendor {
     avatar: string;
     vendorDetails: VendorDetails;
   };
+  recommended?: boolean;
   rating: { average: number | 0; total: number | 0 };
 }
 export interface ToursAndActivityDocument extends ToursAndActivity, Document {
@@ -137,6 +139,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
       average: { type: Number, default: 0 },
       total: { type: Number, default: 0 },
     },
+    recommended: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

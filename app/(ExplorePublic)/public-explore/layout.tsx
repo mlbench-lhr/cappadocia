@@ -19,7 +19,9 @@ export default function RootLayout({
         <div className="min-h-screen flex flex-col justify-between">
           <div className="h-fit flex flex-col">
             <Navigation />
-            <main className="mx-auto element">{children}</main>
+            <main className="mx-auto element px-[20px] py-4 lg:px-[80px] 2xl:px-[90px]">
+              {children}
+            </main>
           </div>
           <Footer />
         </div>

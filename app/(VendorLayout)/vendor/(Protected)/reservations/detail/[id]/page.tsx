@@ -109,6 +109,12 @@ export default function BookingsPage() {
                         {data.adultsCount} Adults, {data.childrenCount} Children{" "}
                       </span>
                     </div>
+                    <div className="w-full flex justify-start items-center gap-8">
+                      <span className="text-xs font-normal">
+                        Booking status:
+                      </span>
+                      <StatusBadge status={data.status} />
+                    </div>
                   </div>
                 </BoxProviderWithName>
               </BoxProviderWithName>

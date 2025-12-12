@@ -19,6 +19,7 @@ export async function GET(req: NextRequest) {
   const filters = url.searchParams.get("filters") || "";
   const alternativeOf = url.searchParams.get("alternativeOf") || "";
   const sortBy = url.searchParams.get("sortBy") || "latest"; // latest | popular | rating
+  const recommendedParam = url.searchParams.get("recommended");
 
   const query: any = {};
 
@@ -38,6 +39,12 @@ export async function GET(req: NextRequest) {
   }
   if (category) {
     query.category = category;
+  }
+  if (recommendedParam !== null) {
+    const val = recommendedParam?.toLowerCase();
+    if (val === "true" || val === "false") {
+      query.recommended = val === "true";
+    }
   }
   if (filters) {
     const filterArray = filters
