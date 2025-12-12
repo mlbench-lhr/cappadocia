@@ -21,11 +21,33 @@ import PhoneNumberInput from "@/components/PhoneNumberInput";
 import AddressLocationSelector from "@/components/map";
 import Link from "next/link";
 import { updateUser } from "@/lib/store/slices/authSlice";
+import Swal from "sweetalert2";
 
 const LatLng = z.object({
   lat: z.number(),
   lng: z.number(),
 });
+
+const turkishBanks = [
+  "Ziraat Bankası",
+  "VakıfBank",
+  "Halkbank",
+  "Akbank",
+  "Garanti BBVA",
+  "Yapı Kredi",
+  "İşbank",
+  "DenizBank",
+  "QNB Finansbank",
+  "TEB",
+];
+const normalize = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+const turkishBanksNorm = turkishBanks.map(normalize);
+const isTurkishIBAN = (v: string) => /^TR\d{24}$/.test(v.toUpperCase());
 
 const completeFormSchema = z.object({
   // Basic Information
@@ -46,10 +68,19 @@ const completeFormSchema = z.object({
   }),
 
   // Payment Information
-  ibanNumber: z.string().min(15, "IBAN must be at least 15 characters"),
-  bankName: z.string().min(2, "Bank name is required"),
+  ibanNumber: z
+    .string()
+    .transform((v) => v.replace(/\s+/g, ""))
+    .refine((v) => isTurkishIBAN(v), {
+      message: "Invalid Turkish IBAN. Must start with TR and be 26 characters",
+    }),
+  bankName: z.string().refine((v) => turkishBanksNorm.includes(normalize(v)), {
+    message: "Bank must be a recognized Turkish bank",
+  }),
   accountHolderName: z.string().min(2, "Account holder name is required"),
-  currency: z.string().min(1, "Currency selection is required"),
+  currency: z.string().refine((v) => v === "Turkish Lira (TRY)", {
+    message: "Currency must be Turkish Lira (TRY)",
+  }),
 });
 
 type CompleteFormData = z.infer<typeof completeFormSchema>;
@@ -277,14 +308,36 @@ export function EditProfile({
       const responseData = await res.json();
 
       if (!res.ok) {
-        throw new Error(responseData.message || "Failed to update profile");
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text:
+            responseData.error ||
+            responseData.message ||
+            "Failed to update profile",
+          timer: 1500,
+          showConfirmButton: false,
+        });
+        return;
       }
 
       dispatch(updateUser(responseData?.user));
       onSubmitCallback?.();
-    } catch (error) {
-      console.error("Profile update error:", error);
-      // You can add error handling here (e.g., show a toast notification)
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: responseData.message || "Profile updated successfully",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error: any) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: error?.message || "Failed to update profile",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     }
   };
 
