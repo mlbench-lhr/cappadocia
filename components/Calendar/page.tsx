@@ -2,25 +2,33 @@
 import { useState, useRef, useEffect } from "react";
 
 export default function CalendarGrid() {
-  const dates = [
-    "12 Nov",
-    "13 Nov",
-    "14 Nov",
-    "15 Nov",
-    "16 Nov",
-    "17 Nov",
-    "18 Nov",
-  ];
-  const rooms = [
-    { id: "106", name: "Deluxe Arch Suite" },
-    { id: "101", name: "Deluxe Cave Suite" },
+  // Generate next 14 days from today
+  const generateDates = () => {
+    const dates = [];
+    const today = new Date();
+    for (let i = 0; i < 14; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      const day = date.getDate();
+      const month = date.toLocaleString("en-US", { month: "short" });
+      dates.push(`${day} ${month}`);
+    }
+    return dates;
+  };
+
+  const dates = generateDates();
+  const rows = [
+    { id: "stop", name: "Stop Booking" },
+    { id: "adult", name: "Adult Price (EUR)" },
+    { id: "child", name: "Child Price (EUR)" },
+    { id: "seats", name: "Seats Available" },
   ];
 
   // initialize as strings so user can type freely
   const initial = {};
-  rooms.forEach((r) => {
+  rows.forEach((r) => {
     initial[r.id] = {};
-    dates.forEach((d) => (initial[r.id][d] = "300"));
+    dates.forEach((d) => (initial[r.id][d] = r.id === "seats" ? "10" : "300"));
   });
 
   const [values, setValues] = useState(initial);
@@ -28,18 +36,18 @@ export default function CalendarGrid() {
   const isDragging = useRef(false);
   const inputRefs = useRef({});
 
-  const keyFor = (roomId, date) => `${roomId}||${date}`;
+  const keyFor = (rowId, date) => `${rowId}||${date}`;
 
-  const handleMouseDown = (roomId, date, e) => {
+  const handleMouseDown = (rowId, date, e) => {
     e.preventDefault();
-    const k = keyFor(roomId, date);
+    const k = keyFor(rowId, date);
     isDragging.current = true;
     setSelectedKeys(new Set([k]));
   };
 
-  const handleMouseEnter = (roomId, date) => {
+  const handleMouseEnter = (rowId, date) => {
     if (!isDragging.current) return;
-    const k = keyFor(roomId, date);
+    const k = keyFor(rowId, date);
     setSelectedKeys((prev) => {
       const next = new Set(prev);
       next.add(k);
@@ -67,58 +75,49 @@ export default function CalendarGrid() {
     setValues((prev) => {
       const copy = { ...prev };
       selectedKeys.forEach((k) => {
-        const [roomId, date] = k.split("||");
-        copy[roomId] = { ...copy[roomId], [date]: val };
+        const [rowId, date] = k.split("||");
+        copy[rowId] = { ...copy[rowId], [date]: val };
       });
       return copy;
     });
   };
 
   return (
-    <div style={{ padding: 12, userSelect: "none" }}>
-      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+    <div className="p-3 select-none">
+      <table className="border-collapse w-full">
         <thead>
           <tr>
-            <th
-              style={{
-                border: "1px solid #ddd",
-                padding: 8,
-                textAlign: "left",
-              }}
-            >
-              Room
+            <th className="border border-gray-300 p-2 text-left bg-gray-200">
+              Hot Air Balloon Sunrise
             </th>
             {dates.map((d) => (
-              <th key={d} style={{ border: "1px solid #ddd", padding: 8 }}>
+              <th key={d} className="border border-gray-300 p-2 bg-gray-200">
                 {d}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {rooms.map((room) => (
-            <tr key={room.id}>
-              <td style={{ border: "1px solid #ddd", padding: 8 }}>
-                {room.name}
+          {rows.map((row) => (
+            <tr key={row.id}>
+              <td className="border border-gray-300 p-2 bg-gray-50">
+                {row.name}
               </td>
               {dates.map((date) => {
-                const k = keyFor(room.id, date);
+                const k = keyFor(row.id, date);
                 const isSelected = selectedKeys.has(k);
                 return (
                   <td
                     key={date}
-                    onMouseDown={(e) => handleMouseDown(room.id, date, e)}
-                    onMouseEnter={() => handleMouseEnter(room.id, date)}
-                    style={{
-                      border: "1px solid #ddd",
-                      padding: 0,
-                      background: isSelected ? "#cfe8ff" : "white",
-                      width: 80,
-                    }}
+                    onMouseDown={(e) => handleMouseDown(row.id, date, e)}
+                    onMouseEnter={() => handleMouseEnter(row.id, date)}
+                    className={`border border-gray-300 p-0 w-20 ${
+                      isSelected ? "bg-blue-100" : "bg-white"
+                    }`}
                   >
                     <input
                       ref={(el) => (inputRefs.current[k] = el)}
-                      value={values[room.id][date]}
+                      value={values[row.id][date]}
                       onChange={(e) => {
                         const newVal = e.target.value;
                         // if this cell is selected, apply to all selected
@@ -127,7 +126,7 @@ export default function CalendarGrid() {
                         } else {
                           setValues((prev) => ({
                             ...prev,
-                            [room.id]: { ...prev[room.id], [date]: newVal },
+                            [row.id]: { ...prev[row.id], [date]: newVal },
                           }));
                         }
                       }}
@@ -139,15 +138,7 @@ export default function CalendarGrid() {
                           return next;
                         });
                       }}
-                      style={{
-                        width: "100%",
-                        padding: 8,
-                        border: "none",
-                        outline: "none",
-                        background: "transparent",
-                        textAlign: "center",
-                        boxSizing: "border-box",
-                      }}
+                      className="w-full p-2 border-none outline-none bg-transparent text-center"
                     />
                   </td>
                 );
