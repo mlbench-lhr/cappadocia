@@ -2,7 +2,6 @@
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { TravelerIcon, VendorIcon2 } from "@/public/allIcons/page";
-import Link from "next/link";
 
 export const SwitchRoles = () => {
   const pathName = usePathname();
@@ -30,7 +29,7 @@ export const SwitchRoles = () => {
           } text-black font-semibold !rounded-2xl `}
           asChild
         >
-          <a href={"/auth/signup"}>
+          <a href={"/auth/login"}>
             <TravelerIcon />
             Traveler
           </a>

@@ -9,12 +9,14 @@ import * as z from "zod";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { useEffect, useState } from "react";
 import { TextInputComponent } from "@/components/SmallComponents/InputComponents";
+import { Input } from "@/components/ui/input";
 import { setVendorField } from "@/lib/store/slices/vendorSlice";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Image from "next/image";
+import { Eye, EyeOff } from "lucide-react";
 
 const step1Schema = z
   .object({
@@ -45,6 +47,8 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
   const dispatch = useAppDispatch();
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const {
     control,
     handleSubmit,
@@ -174,15 +178,39 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
               name="password"
               control={control}
               render={({ field }) => (
-                <TextInputComponent
-                  label="Password"
-                  type="password"
-                  placeholder="Enter password"
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={errors.password?.message}
-                  required
-                />
+                <div className="space-y-1 col-span-1">
+                  <Label className="text-[14px] font-semibold">
+                    Password<span className="text-red-500 ml-1">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter password"
+                      className={`bg-white ${errors.password ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      required
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-1/2 translate-y-[-50%] h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                  {errors.password && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
               )}
             />
 
@@ -190,15 +218,39 @@ export default function VendorSignupStep1({ onNext }: VendorSignupStep1Props) {
               name="confirmPassword"
               control={control}
               render={({ field }) => (
-                <TextInputComponent
-                  label="Confirm Password"
-                  type="password"
-                  placeholder="Confirm password"
-                  value={field.value}
-                  onChange={field.onChange}
-                  error={errors.confirmPassword?.message}
-                  required
-                />
+                <div className="space-y-1 col-span-1">
+                  <Label className="text-[14px] font-semibold">
+                    Confirm Password<span className="text-red-500 ml-1">*</span>
+                  </Label>
+                  <div className="relative">
+                    <Input
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirm password"
+                      className={`bg-white ${errors.confirmPassword ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                      required
+                      value={field.value || ""}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      className="absolute right-0 top-1/2 translate-y-[-50%] h-full px-3 py-2 hover:bg-transparent"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.confirmPassword.message}
+                    </p>
+                  )}
+                </div>
               )}
             />
 
