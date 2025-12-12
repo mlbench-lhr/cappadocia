@@ -33,6 +33,7 @@ import { languagesOptions } from "@/lib/constants";
 import AddressLocationSelector, {
   LocationData as MapLocationData,
 } from "@/components/map";
+import { LatLng } from "@/lib/store/slices/addbooking";
 
 const LatLng = z.object({
   lat: z.number(),
@@ -76,8 +77,11 @@ export default function BookingsPage() {
   const [uploadError, setUploadError] = useState<string>("");
   const [cancellationPolicyHours, setCancellationPolicyHours] =
     useState<number>(0);
-  const vendorCoords = useAppSelector(
+  const vendorLocation = useAppSelector(
     (s) => s.auth.user?.vendorDetails?.address?.coordinates
+  );
+  const [vendorCoords, setVendorCoords] = useState<LatLng>(
+    vendorLocation as LatLng
   );
   const [startTime, setStartTime] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
@@ -401,7 +405,7 @@ export default function BookingsPage() {
                   label="Tour Address & Location"
                   placeholder="Enter tour location"
                   radiusLimit={{
-                    center: (vendorCoords as any) || { lat: 0, lng: 0 },
+                    center: (vendorCoords as LatLng) || { lat: 0, lng: 0 },
                     radiusKm: 10,
                   }}
                 />
