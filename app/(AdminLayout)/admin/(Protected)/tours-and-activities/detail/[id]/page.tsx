@@ -21,12 +21,12 @@ import AddressLocationSelector from "@/components/map";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
-import ExplorePageSkeleton from "@components/Skeletons/ExplorePageSkeleton";
 import { TextAreaInputComponent } from "@/components/SmallComponents/InputComponents";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UpdatableImageGallery from "@/components/UpdatableImageGallery";
 import { uploadMultipleFiles } from "@/lib/utils/upload";
+import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
