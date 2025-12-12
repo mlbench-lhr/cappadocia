@@ -54,8 +54,8 @@ const initialState: ToursAndActivityState = {
   },
   slots: [
     {
-      startDate: new Date("2025-02-10"),
-      endDate: new Date("2025-02-15"),
+      startDate: new Date("2025-12-10"),
+      endDate: new Date("2026-12-15"),
       adultPrice: 120,
       childPrice: 80,
       seatsAvailable: 25,
