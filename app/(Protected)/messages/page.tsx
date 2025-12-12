@@ -262,7 +262,7 @@ const Messages = () => {
         <div
           className={`${
             sender ? "block" : "hidden"
-          } [@media(min-width:950px)]:block h-full col-span-12 [@media(min-width:950px)]:col-span-8 overflow-auto `}
+          } [@media(min-width:950px)]:block h-full [@media(min-width:950px)]:border-l-2 col-span-12 [@media(min-width:950px)]:col-span-8 overflow-auto `}
         >
           <div className="w-full h-[100px] flex flex-col justify-start items-start ">
             <div className="w-full border-b px-2 lg:px-4 xl:px-6 py-4 text-sm font-semibold flex justify-start items-center gap-2">
