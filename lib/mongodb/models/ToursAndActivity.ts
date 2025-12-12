@@ -35,6 +35,7 @@ export interface ToursAndActivity {
       seatsAvailable: number;
     }
   ];
+  stopBookingDates: [Date];
   isVerified: boolean;
   rejected: {
     isRejected: boolean;
@@ -73,6 +74,7 @@ export interface ToursAndActivityWithVendor {
       seatsAvailable: number;
     }
   ];
+  stopBookingDates: [Date];
   isVerified: boolean;
   rejected: {
     isRejected: boolean;
@@ -130,6 +132,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
         seatsAvailable: { type: Number, required: true },
       },
     ],
+    stopBookingDates: [{ type: Date, required: false }],
     isVerified: { type: Boolean, default: false },
     rejected: {
       isRejected: { type: Boolean, default: false },
