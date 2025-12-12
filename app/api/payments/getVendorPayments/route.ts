@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
       today.setHours(0, 0, 0, 0);
 
       // Determine payout status based on completedAt date
-      let payoutStatus = "Not Eligible (Activity not completed yet)";
+      let payoutStatus = "Not Eligible";
 
       if (bookingStatus === "completed" && completedAt) {
         // Create a date object for completedAt with time set to start of day
@@ -77,12 +77,12 @@ export async function GET(req: NextRequest) {
           payoutStatus = "Eligible";
         } else {
           // Booking completed today or in the future (edge case)
-          payoutStatus = "Not Eligible (Completed less than 1 day ago)";
+          payoutStatus = "Not Eligible";
         }
       } else if (bookingStatus === "cancelled") {
-        payoutStatus = "Not Eligible (Booking cancelled)";
+        payoutStatus = "Not Eligible";
       } else if (bookingStatus === "missed") {
-        payoutStatus = "Not Eligible (Booking missed)";
+        payoutStatus = "Not Eligible";
       } else if (bookingDate) {
         // Fallback: Check booking date if status is not completed
         const bookingDateOnly = new Date(bookingDate);
