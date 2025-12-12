@@ -122,6 +122,12 @@ export default function Section2() {
           </div>
         </div>
         <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-base">Latest Tours</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
           <div className="relative">
             <div className="overflow-hidden">
               <div
@@ -288,14 +294,22 @@ export default function Section2() {
             </div>
           </div>
         </div>
-        <div className="hidden md:grid w-full grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-          {loading
-            ? [0, 1, 2, 3]?.map((item) => (
-                <LandingTourCardSkeleton key={item} />
-              ))
-            : displayExploreItems?.map((item, index) => (
-                <TourCard key={index} {...item} />
-              ))}
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Latest Tours</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {loading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : displayExploreItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
         </div>
 
         {/* Most Popular */}
