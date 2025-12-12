@@ -70,6 +70,7 @@ export default function BookingsPage() {
   const { id }: { id: string } = useParams();
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const bookingState = useAppSelector((s) => s.addBooking);
   console.log("bookingState:", bookingState, id);
@@ -145,6 +146,31 @@ export default function BookingsPage() {
   }, [id]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    const dateParam = searchParams.get("date");
+    const participantsParam = searchParams.get("participants");
+    if (dateParam) {
+      dispatch(setField({ field: "selectDate", value: dateParam }));
+      setValue("selectDate", dateParam);
+    }
+    const count = participantsParam ? parseInt(participantsParam, 10) : NaN;
+    if (!isNaN(count) && count > 0) {
+      const currentTravelers = bookingState.travelers || [];
+      const blanksNeeded = count - currentTravelers.length;
+      let newTravelers = currentTravelers.slice(0, count);
+      if (blanksNeeded > 0) {
+        const blank = { fullName: "", dob: "", nationality: "", passport: "" };
+        newTravelers = [
+          ...currentTravelers,
+          ...Array.from({ length: blanksNeeded }, () => ({ ...blank })),
+        ];
+      }
+      dispatch(setField({ field: "travelers", value: newTravelers }));
+      setValue("travelers", newTravelers);
+      dispatch(setField({ field: "participants", value: String(count) }));
+      setValue("participants", String(count) as any);
+    }
+  }, []);
 
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);

@@ -178,7 +178,15 @@ export const AvailabilityFilter = () => {
                   setAuthTab("login");
                   setAuthDialogOpen(true);
                 } else {
-                  window.location.href = `/bookings/book/${id}`;
+                  const dateStr = selectedDate
+                    ? new Date(selectedDate).toISOString().split("T")[0]
+                    : "";
+                    const count = (participants?.adult || 0) + (participants?.child || 0);
+                    const qs = new URLSearchParams();
+                    if (dateStr) qs.set("date", dateStr);
+                    if (count > 0) qs.set("participants", String(count));
+                    const href = `/bookings/book/${id}` + (qs.toString() ? `?${qs.toString()}` : "");
+                    window.location.href = href;
                 }
               }}
             >
@@ -191,9 +199,29 @@ export const AvailabilityFilter = () => {
       <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
         <DialogContent className="max-w-md">
           {authTab === "login" ? (
-            <LoginForm redirectTo={`/bookings/book/${id}`} />
+            (() => {
+              const dateStr = selectedDate
+                ? new Date(selectedDate).toISOString().split("T")[0]
+                : "";
+              const count = (participants?.adult || 0) + (participants?.child || 0);
+              const qs = new URLSearchParams();
+              if (dateStr) qs.set("date", dateStr);
+              if (count > 0) qs.set("participants", String(count));
+              const redirectTo = `/bookings/book/${id}` + (qs.toString() ? `?${qs.toString()}` : "");
+              return <LoginForm redirectTo={redirectTo} />;
+            })()
           ) : (
-            <SignupForm redirectTo={`/bookings/book/${id}`} />
+            (() => {
+              const dateStr = selectedDate
+                ? new Date(selectedDate).toISOString().split("T")[0]
+                : "";
+              const count = (participants?.adult || 0) + (participants?.child || 0);
+              const qs = new URLSearchParams();
+              if (dateStr) qs.set("date", dateStr);
+              if (count > 0) qs.set("participants", String(count));
+              const redirectTo = `/bookings/book/${id}` + (qs.toString() ? `?${qs.toString()}` : "");
+              return <SignupForm redirectTo={redirectTo} />;
+            })()
           )}
         </DialogContent>
       </Dialog>

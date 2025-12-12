@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, JSX } from "react";
 import { Locate } from "lucide-react";
 import Swal from "sweetalert2";
+import { useAppSelector } from "@/lib/store/hooks";
 
 // Extend Window interface to include google
 declare global {
@@ -179,6 +180,9 @@ export default function AddressLocationSelector({
     autocomplete: null,
     radiusCircle: null,
   });
+  const vendorCoords = useAppSelector(
+    (s) => s.auth.user?.vendorDetails?.address?.coordinates
+  );
   const calculateDistance = (point1: LatLng, point2: LatLng): number => {
     const R = 6371; // Earth's radius in kilometers
     const dLat = ((point2.lat - point1.lat) * Math.PI) / 180;
