@@ -236,6 +236,12 @@ export function Sidebar() {
           </aside>
         </div>
       )}
+      {isMiddleScreen && !isCollapsed && (
+        <div
+          onClick={() => dispatch(toggleCollapse())}
+          className="fixed inset-0 z-30 bg-black/50 hidden md:block"
+        />
+      )}
       {/* Mobile sheet / drawer */}
       <div
         className={`fixed inset-y-0 left-0 z-40 md:hidden ${
@@ -323,6 +329,12 @@ export function Sidebar() {
           </nav>
         </div>
       </div>
+      {isOpen && (
+        <div
+          onClick={() => dispatch(closeSidebar())}
+          className="fixed inset-0 z-30 bg-black/50 md:hidden"
+        />
+      )}
     </>
   );
 }
