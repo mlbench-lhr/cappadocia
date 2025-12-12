@@ -56,9 +56,9 @@ const initialState: ToursAndActivityState = {
     {
       startDate: new Date("2025-12-10"),
       endDate: new Date("2026-12-15"),
-      adultPrice: 120,
-      childPrice: 80,
-      seatsAvailable: 25,
+      adultPrice: 130,
+      childPrice: 60,
+      seatsAvailable: 40,
     },
   ],
   rating: { average: 0, total: 0 },
