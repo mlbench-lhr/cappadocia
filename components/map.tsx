@@ -221,6 +221,33 @@ export default function AddressLocationSelector({
       initializeMap();
     }
   }, [isMapLoaded]);
+  useEffect(() => {
+    if (!mapRef.current.map) return;
+    if (readOnly) return;
+    if (radiusLimit) {
+      if (mapRef.current.radiusCircle) {
+        mapRef.current.radiusCircle.setMap(null);
+      }
+      const circle = new google.maps.Circle({
+        strokeColor: "#2563eb",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#3b82f6",
+        fillOpacity: 0.15,
+        map: mapRef.current.map,
+        center: radiusLimit.center,
+        radius: radiusLimit.radiusKm * 1000,
+        clickable: false,
+      });
+      mapRef.current.radiusCircle = circle;
+      mapRef.current.map.fitBounds(circle.getBounds()!);
+    } else {
+      if (mapRef.current.radiusCircle) {
+        mapRef.current.radiusCircle.setMap(null);
+        mapRef.current.radiusCircle = null;
+      }
+    }
+  }, [radiusLimit, readOnly]);
 
   // Update map when value changes externally
   useEffect(() => {
