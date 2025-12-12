@@ -346,7 +346,7 @@ export default function BookingsPage() {
                     </div>
                   ) : (
                     <span className="text-sm text-gray-600">
-                      Click to upload images ({toursState.uploads.length}/4)
+                      Click to upload images ({toursState.uploads.length}/10)
                     </span>
                   )}
                 </label>

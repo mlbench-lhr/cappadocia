@@ -266,7 +266,7 @@ const ReservationDetails: React.FC = () => {
                 />
               </div>
             </BoxProviderWithName>
-            <QRCode />
+            {/* <QRCode /> */}
           </div>
         </div>
       </div>
