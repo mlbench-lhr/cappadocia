@@ -20,6 +20,10 @@ export interface ToursAndActivity {
   duration: number;
   durationStartTime?: string;
   durationEndTime?: string;
+  location?: {
+    address: string;
+    coordinates: { lat: number; lng: number } | null;
+  };
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
@@ -53,6 +57,10 @@ export interface ToursAndActivityWithVendor {
   duration: number;
   durationStartTime?: string;
   durationEndTime?: string;
+  location?: {
+    address: string;
+    coordinates: { lat: number; lng: number } | null;
+  };
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
@@ -103,6 +111,13 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     duration: { type: Number, required: true },
     durationStartTime: { type: String },
     durationEndTime: { type: String },
+    location: {
+      address: { type: String },
+      coordinates: {
+        lat: { type: Number },
+        lng: { type: Number },
+      },
+    },
     slots: [
       {
         _id: { type: Schema.Types.ObjectId, auto: true },

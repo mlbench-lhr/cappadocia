@@ -21,13 +21,25 @@ import {
   addArrayItem,
   deleteArrayItem,
 } from "@/lib/store/slices/tourAndActivitySlice";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { uploadMultipleFiles } from "@/lib/utils/upload";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import AddressLocationSelector, {
+  LocationData as MapLocationData,
+} from "@/components/map";
+
+const LatLng = z.object({
+  lat: z.number(),
+  lng: z.number(),
+});
+export const LocationData = z.object({
+  address: z.string().min(1, ""),
+  coordinates: LatLng.nullable(),
+});
 
 const tourFormSchema = z.object({
   title: z.string().min(1, "Tour title is required"),
@@ -48,6 +60,7 @@ const tourFormSchema = z.object({
     .array(z.string())
     .min(1, "At least one image is required")
     .max(4, "Maximum 4 images allowed"),
+  location: LocationData,
 });
 
 type TourFormData = z.infer<typeof tourFormSchema>;
@@ -56,6 +69,9 @@ export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const toursState = useAppSelector((s) => s.tourAndActivity);
+  const vendorCoords = useAppSelector(
+    (s) => s.auth.user?.vendorDetails?.address?.coordinates
+  );
   const [isUploading, setIsUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploadError, setUploadError] = useState<string>("");
@@ -88,6 +104,10 @@ export default function BookingsPage() {
       notIncluded: toursState.notIncluded || [],
       itinerary: toursState.itinerary || [],
       uploads: toursState.uploads || [],
+      location: toursState.location || {
+        address: "",
+        coordinates: null,
+      },
     },
   });
 
@@ -111,12 +131,15 @@ export default function BookingsPage() {
           value: watchedValues.pickupAvailable,
         })
       );
+    if (watchedValues.location)
+      dispatch(setField({ field: "location", value: watchedValues.location }));
   }, [
     watchedValues.title,
     watchedValues.category,
     watchedValues.description,
     watchedValues.duration,
     watchedValues.pickupAvailable,
+    watchedValues.location,
     dispatch,
   ]);
 
@@ -349,6 +372,38 @@ export default function BookingsPage() {
                 )}
               </div>
             </div>
+          </div>
+        </BoxProviderWithName>
+        <BoxProviderWithName
+          name="Tour Location"
+          textClasses=" text-[18px] font-semibold "
+        >
+          <div className="w-full lg:w-2/3 mt-2">
+            <Controller
+              name="location"
+              control={control}
+              render={({ field }) => (
+                <AddressLocationSelector
+                  value={
+                    (field.value as unknown as MapLocationData) || {
+                      address: "",
+                      coordinates: null,
+                    }
+                  }
+                  onChange={(data) => {
+                    field.onChange(data as any);
+                    dispatch(setField({ field: "location", value: data }));
+                  }}
+                  readOnly={false}
+                  label="Tour Address & Location"
+                  placeholder="Enter tour location"
+                  radiusLimit={{
+                    center: (vendorCoords as any) || { lat: 0, lng: 0 },
+                    radiusKm: 10,
+                  }}
+                />
+              )}
+            />
           </div>
         </BoxProviderWithName>
         <BoxProviderWithName

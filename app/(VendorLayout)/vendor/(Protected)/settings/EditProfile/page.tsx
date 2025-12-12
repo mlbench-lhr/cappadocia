@@ -56,9 +56,21 @@ type CompleteFormData = z.infer<typeof completeFormSchema>;
 
 const currencyOptions = ["Euro (EUR)", "US Dollar (USD)", "Turkish Lira (TRY)"];
 const labelToSymbol = (v: string) =>
-  v.includes("USD") ? "$" : v.includes("EUR") ? "€" : v.includes("TRY") ? "₺" : v;
+  v.includes("USD")
+    ? "$"
+    : v.includes("EUR")
+    ? "€"
+    : v.includes("TRY")
+    ? "₺"
+    : v;
 const symbolToLabel = (s: string) =>
-  s === "$" ? "US Dollar (USD)" : s === "€" ? "Euro (EUR)" : s === "₺" ? "Turkish Lira (TRY)" : "";
+  s === "$"
+    ? "US Dollar (USD)"
+    : s === "€"
+    ? "Euro (EUR)"
+    : s === "₺"
+    ? "Turkish Lira (TRY)"
+    : "";
 
 interface VendorCompleteFormProps {
   onSubmit?: () => void;
@@ -114,7 +126,9 @@ export function EditProfile({
         bankName: userData.vendorDetails.paymentInfo?.bankName || "",
         accountHolderName:
           userData.vendorDetails.paymentInfo?.accountHolderName || "",
-        currency: symbolToLabel(userData.vendorDetails.paymentInfo?.currency || ""),
+        currency: symbolToLabel(
+          userData.vendorDetails.paymentInfo?.currency || ""
+        ),
       });
     }
   }, [
@@ -469,7 +483,7 @@ export function EditProfile({
           className="w-full"
           loading={loading}
         >
-          Submit Registration
+          Update
         </Button>
       </div>
     </div>

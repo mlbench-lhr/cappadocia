@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { LocationData } from "@/components/map";
 
 // Types matching your mongoose schema
 export interface Slot {
@@ -26,6 +27,7 @@ export interface ToursAndActivityState {
   durationStartTime: string;
   durationEndTime: string;
   slots: Slot[];
+  location?: LocationData;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   rating: { average: number | 0; total: number | 0 };
 }
@@ -46,6 +48,10 @@ const initialState: ToursAndActivityState = {
   duration: 0,
   durationStartTime: "",
   durationEndTime: "",
+  location: {
+    address: "",
+    coordinates: null,
+  },
   slots: [
     {
       startDate: new Date("2025-02-10"),

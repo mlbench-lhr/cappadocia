@@ -35,7 +35,11 @@ export const TourAndActivityCard = ({
             <div className="flex justify-start items-center gap-1">
               <ClockIcon color="white" />
               <span className="text-[10px] font-[400]">
-                {moment(item.slots?.[0]?.endDate).diff(moment(), "days")} Days
+                {moment(item.slots?.[0]?.endDate).diff(
+                  item.slots?.[0]?.startDate,
+                  "days"
+                )}{" "}
+                Days
               </span>
             </div>
             <div className="flex justify-start items-center gap-1">

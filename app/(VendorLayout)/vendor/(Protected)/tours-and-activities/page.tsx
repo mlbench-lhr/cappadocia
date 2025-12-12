@@ -114,43 +114,47 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap capitalize">
-          {["pending admin approval", "active", "rejected", "upcoming"].map(
-            (filter) => {
-              const isActive =
-                (filter === "all" && filters.includes("all")) ||
-                filters.includes(filter.toLowerCase());
+          {[
+            "all",
+            "pending admin approval",
+            "active",
+            "rejected",
+            "upcoming",
+          ].map((filter) => {
+            const isActive =
+              (filter === "all" && filters.includes("all")) ||
+              filters.includes(filter.toLowerCase());
 
-              const handleClick = () => {
-                if (filter === "all") {
-                  setFilters(["all"]);
-                } else {
-                  setFilters((prev) => {
-                    const withoutAll = prev.filter((f) => f !== "all");
-                    if (withoutAll.includes(filter.toLowerCase() as any)) {
-                      const updated = withoutAll.filter(
-                        (f) => f !== filter.toLowerCase()
-                      );
-                      return updated.length === 0 ? ["all"] : updated;
-                    } else {
-                      return [...withoutAll, filter.toLowerCase()];
-                    }
-                  });
-                }
-              };
+            const handleClick = () => {
+              if (filter === "all") {
+                setFilters(["all"]);
+              } else {
+                setFilters((prev) => {
+                  const withoutAll = prev.filter((f) => f !== "all");
+                  if (withoutAll.includes(filter.toLowerCase() as any)) {
+                    const updated = withoutAll.filter(
+                      (f) => f !== filter.toLowerCase()
+                    );
+                    return updated.length === 0 ? ["all"] : updated;
+                  } else {
+                    return [...withoutAll, filter.toLowerCase()];
+                  }
+                });
+              }
+            };
 
-              return (
-                <div
-                  key={filter}
-                  onClick={handleClick}
-                  className={`cursor-pointer ${
-                    isActive ? "bg-secondary text-primary" : "border"
-                  } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
-                >
-                  {filter}
-                </div>
-              );
-            }
-          )}
+            return (
+              <div
+                key={filter}
+                onClick={handleClick}
+                className={`cursor-pointer ${
+                  isActive ? "bg-secondary text-primary" : "border"
+                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
+              >
+                {filter}
+              </div>
+            );
+          })}
         </div>
 
         <BoxProviderWithName noBorder={true}>

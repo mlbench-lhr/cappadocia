@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
+import moment from "moment";
 
 export default function TourCard(item: ToursAndActivityWithVendor) {
   return (
@@ -59,7 +60,13 @@ export default function TourCard(item: ToursAndActivityWithVendor) {
                 fill="#B32053"
               />
             </svg>
-            <span className="text-sm text-gray-500">{4} Days</span>
+            <span className="text-sm text-gray-500">
+              {moment(item.slots?.[0]?.endDate).diff(
+                item.slots?.[0]?.startDate,
+                "days"
+              )}{" "}
+              Days
+            </span>
           </div>
           <Button
             variant={"green_secondary_button"}

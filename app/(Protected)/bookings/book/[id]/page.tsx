@@ -75,6 +75,10 @@ export default function BookingsPage() {
   console.log("bookingState:", bookingState, id);
   const [addPickupNow, setAddPickupNow] = useState(true);
   const userId = useAppSelector((s) => s.auth.user?.id);
+  const [radiusCenter, setRadiusCenter] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const {
     control,
     handleSubmit,
@@ -112,6 +116,33 @@ export default function BookingsPage() {
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
+  useEffect(() => {
+    const fetchActivity = async () => {
+      try {
+        const response = await axios.get(`/api/toursAndActivity/detail/${id}`);
+        const activity = response?.data?.data;
+        const tourCoords = activity?.location?.coordinates;
+        if (
+          tourCoords &&
+          typeof tourCoords.lat === "number" &&
+          typeof tourCoords.lng === "number"
+        ) {
+          setRadiusCenter({ lat: tourCoords.lat, lng: tourCoords.lng });
+        } else {
+          const vendorCoords =
+            activity?.vendor?.vendorDetails?.address?.coordinates;
+          if (
+            vendorCoords &&
+            typeof vendorCoords.lat === "number" &&
+            typeof vendorCoords.lng === "number"
+          ) {
+            setRadiusCenter({ lat: vendorCoords.lat, lng: vendorCoords.lng });
+          }
+        }
+      } catch (e) {}
+    };
+    fetchActivity();
+  }, [id]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -420,10 +451,11 @@ export default function BookingsPage() {
                     readOnly={false}
                     label="Location"
                     placeholder="Type address or click on map"
-                    radiusLimit={{
-                      center: { lat: 35.2271, lng: -80.8431 },
-                      radiusKm: 10,
-                    }}
+                    radiusLimit={
+                      radiusCenter
+                        ? { center: radiusCenter, radiusKm: 10 }
+                        : undefined
+                    }
                   />
                 )}
               />
