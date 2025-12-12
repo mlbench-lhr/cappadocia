@@ -16,11 +16,38 @@ import {
   TextInputComponent,
 } from "@/components/SmallComponents/InputComponents";
 
+const turkishBanks = [
+  "Ziraat Bankası",
+  "VakıfBank",
+  "Halkbank",
+  "Akbank",
+  "Garanti BBVA",
+  "Yapı Kredi",
+  "İşbank",
+  "DenizBank",
+  "QNB Finansbank",
+  "TEB",
+];
+const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+const turkishBanksNorm = turkishBanks.map(normalize);
+const isTurkishIBAN = (v: string) => /^TR\d{24}$/.test(v.toUpperCase());
+
 const step5Schema = z.object({
-  ibanNumber: z.string().min(15, "IBAN must be at least 15 characters"),
-  bankName: z.string().min(2, "Bank name is required"),
+  ibanNumber: z
+    .string()
+    .transform((v) => v.replace(/\s+/g, ""))
+    .refine((v) => isTurkishIBAN(v), {
+      message: "Invalid Turkish IBAN. Must start with TR and be 26 characters",
+    }),
+  bankName: z
+    .string()
+    .refine((v) => turkishBanksNorm.includes(normalize(v)), {
+      message: "Bank must be a recognized Turkish bank",
+    }),
   accountHolderName: z.string().min(2, "Account holder name is required"),
-  currency: z.string().min(1, "Currency selection is required"),
+  currency: z.string().refine((v) => v === "Turkish Lira (TRY)", {
+    message: "Currency must be Turkish Lira (TRY)",
+  }),
   agreedToTerms: z.boolean().refine((val) => val === true, {
     message: "You must agree to the terms",
   }),

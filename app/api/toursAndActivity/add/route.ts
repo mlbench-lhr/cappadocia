@@ -21,14 +21,13 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     console.log("body----", body.toursState);
 
-    const vendor = await User.findById(userId)
-      .select("isRoleVerified")
-      .lean();
+    const vendor = await User.findById(userId).select("isRoleVerified").lean();
 
     const created = await ToursAndActivity.create({
       ...body.toursState,
       vendor: userId,
       isVerified: !!vendor?.isRoleVerified,
+      status: vendor?.isRoleVerified ? "active" : "pending admin approval",
     });
 
     try {
