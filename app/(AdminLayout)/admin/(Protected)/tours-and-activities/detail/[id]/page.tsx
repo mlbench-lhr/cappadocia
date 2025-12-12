@@ -27,6 +27,7 @@ import { Button } from "@/components/ui/button";
 import UpdatableImageGallery from "@/components/UpdatableImageGallery";
 import { uploadMultipleFiles } from "@/lib/utils/upload";
 import ExplorePageSkeleton from "@/components/Skeletons/ExplorePageSkeleton";
+import { Switch } from "@/components/ui/switch";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -78,9 +79,7 @@ export default function BookingsPage() {
     getData();
   }, []);
 
-  const updateActivity = async (
-    data: { description: string } | { uploads: string[] }
-  ) => {
+  const updateActivity = async (data: Record<string, any>) => {
     try {
       setUpdateLoading(true);
       await axios.put(`/api/toursAndActivity/update/${id}`, data);
@@ -191,6 +190,30 @@ export default function BookingsPage() {
                   {description}
                 </span>
               )}
+            </BoxProviderWithName>
+            <BoxProviderWithName
+              name="Recommended by Cappadocia platform"
+              className="text-base mt-2"
+              rightSideComponent={
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={!!data?.recommended}
+                    onCheckedChange={(checked) => {
+                      updateActivity({ recommended: checked });
+                      setData((prev) =>
+                        prev ? { ...prev, recommended: checked } : prev
+                      );
+                    }}
+                  />
+                  <span className="text-sm">
+                    {data?.recommended ? "Marked as Recommended" : "Mark as Recommended"}
+                  </span>
+                </div>
+              }
+            >
+              <span className="text-[14px] fot-normal leading-[14px]">
+                Toggle to feature this activity on the home page under Recommended.
+              </span>
             </BoxProviderWithName>
             <BoxProviderWithName
               name="About this tour:"

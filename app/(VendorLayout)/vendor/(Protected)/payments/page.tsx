@@ -42,10 +42,7 @@ export interface VendorInvoice {
   amount: number;
   currency: string;
   date: string | null;
-  payoutStatus:
-    | "Eligible"
-    | "Not Eligible (Activity Tomorrow)"
-    | "Not Eligible (Activity not started yet)";
+  payoutStatus: "Eligible" | "Not Eligible" | "Not Eligible";
 }
 type StripeStatus = {
   connected: boolean;

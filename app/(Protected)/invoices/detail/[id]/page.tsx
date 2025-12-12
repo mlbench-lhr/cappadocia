@@ -13,6 +13,8 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { multiply } from "@/lib/helper/smallHelpers";
 import { InvoiceDetailSkeleton } from "@/components/Skeletons/InvoiceDetailSkeleton";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 export type InvoiceData = {
   invoice: {
     invoiceNumber: string;
@@ -164,7 +166,19 @@ export default function BookingsPage() {
   }, [data?.invoicesId]);
 
   return (
-    <BasicStructureWithName name="Invoice Details" showBackOption>
+    <BasicStructureWithName
+      name="Invoice Details"
+      showBackOption
+      rightSideComponent={
+        data?.booking?._id && (
+          <Button variant={"green_secondary_button"}>
+            <Link href={"/bookings/detail/" + data?.booking?._id}>
+              View Booking Details
+            </Link>
+          </Button>
+        )
+      }
+    >
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">

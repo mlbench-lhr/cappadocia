@@ -13,14 +13,17 @@ export default function Section2() {
   const [loading, setLoading] = useState<boolean>(true);
   const [popularLoading, setPopularLoading] = useState<boolean>(true);
   const [ratedLoading, setRatedLoading] = useState<boolean>(true);
+  const [recommendedLoading, setRecommendedLoading] = useState<boolean>(true);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [currentPopularSlide, setCurrentPopularSlide] = useState<number>(0);
   const [currentRatedSlide, setCurrentRatedSlide] = useState<number>(0);
+  const [currentRecommendedSlide, setCurrentRecommendedSlide] = useState<number>(0);
   const displayExploreItems = useAppSelector(
     (s) => s.general.displayExploreItems
   );
   const [popularItems, setPopularItems] = useState<any[]>([]);
   const [topRatedItems, setTopRatedItems] = useState<any[]>([]);
+  const [recommendedItems, setRecommendedItems] = useState<any[]>([]);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -64,9 +67,23 @@ export default function Section2() {
         setRatedLoading(false);
       }
     };
+    const getRecommended = async () => {
+      try {
+        setRecommendedLoading(true);
+        const resp = await axios.get(
+          `/api/toursAndActivity/getAll?limit=4&recommended=true`
+        );
+        if (resp.data?.data) setRecommendedItems(resp.data.data);
+      } catch (e) {
+        console.log("recommended err---", e);
+      } finally {
+        setRecommendedLoading(false);
+      }
+    };
     getData();
     getPopular();
     getTopRated();
+    getRecommended();
   }, []);
   const handleNext = () => {
     if (displayExploreItems && currentSlide < displayExploreItems.length - 1) {
@@ -98,6 +115,16 @@ export default function Section2() {
       setCurrentRatedSlide(currentRatedSlide - 1);
     }
   };
+  const handleNextRecommended = () => {
+    if (recommendedItems && currentRecommendedSlide < recommendedItems.length - 1) {
+      setCurrentRecommendedSlide(currentRecommendedSlide + 1);
+    }
+  };
+  const handlePrevRecommended = () => {
+    if (currentRecommendedSlide > 0) {
+      setCurrentRecommendedSlide(currentRecommendedSlide - 1);
+    }
+  };
 
   console.log("toursAndActivity---", displayExploreItems);
 
@@ -122,6 +149,12 @@ export default function Section2() {
           </div>
         </div>
         <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-base">Latest Tours</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
           <div className="relative">
             <div className="overflow-hidden">
               <div
@@ -288,14 +321,77 @@ export default function Section2() {
             </div>
           </div>
         </div>
-        <div className="hidden md:grid w-full grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-          {loading
-            ? [0, 1, 2, 3]?.map((item) => (
-                <LandingTourCardSkeleton key={item} />
-              ))
-            : displayExploreItems?.map((item, index) => (
-                <TourCard key={index} {...item} />
+        {/* Recommended by Cappadocia platform (Mobile) */}
+        <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-base">Recommended by Cappadocia platform</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{ transform: `translateX(-${currentRecommendedSlide * 100}%)` }}
+              >
+                {recommendedItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
+                ))}
+              </div>
+            </div>
+            {recommendedItems && recommendedItems.length > 0 && (
+              <>
+                <button
+                  onClick={handlePrevRecommended}
+                  disabled={currentRecommendedSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextRecommended}
+                  disabled={currentRecommendedSlide === recommendedItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
+            <div className="flex justify-center gap-2 mt-4">
+              {recommendedItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentRecommendedSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentRecommendedSlide ? "bg-gray-300 w-6" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
               ))}
+            </div>
+          </div>
+        </div>
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Latest Tours</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {loading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : displayExploreItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
         </div>
 
         {/* Most Popular */}
@@ -331,6 +427,24 @@ export default function Section2() {
                   <LandingTourCardSkeleton key={item} />
                 ))
               : topRatedItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
+        </div>
+        {/* Recommended by Cappadocia platform */}
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Recommended by Cappadocia platform</h2>
+            <Button variant={"outline"} asChild>
+              <Link href={"/explore/tours"}>View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {recommendedLoading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : recommendedItems?.map((item, index) => (
                   <TourCard key={index} {...item} />
                 ))}
           </div>
