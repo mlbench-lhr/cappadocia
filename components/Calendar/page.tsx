@@ -33,13 +33,13 @@ export default function CalendarGrid({
   readOnly,
   title,
 }: CalendarGridProps) {
-  const WINDOW_SIZE = 14;
+  const [windowSize, setWindowSize] = useState(14);
   const [startOffset, setStartOffset] = useState(0);
 
   const generateDates = () => {
     const items: { label: string; date: Date }[] = [];
     const base = new Date();
-    for (let i = 0; i < WINDOW_SIZE; i++) {
+    for (let i = 0; i < windowSize; i++) {
       const date = new Date(base);
       date.setDate(base.getDate() + startOffset + i);
       const day = date.getDate();
@@ -71,6 +71,19 @@ export default function CalendarGrid({
   const selectedRowRef = useRef<string | null>(null);
   const inputRefs = useRef<Record<string, HTMLInputElement | null>>({});
   const [dirty, setDirty] = useState<Set<string>>(new Set());
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    const compute = () => {
+      const w = window.innerWidth;
+      if (w < 640) setWindowSize(7);
+      else if (w < 1280) setWindowSize(14);
+      else setWindowSize(21);
+    };
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, []);
 
   useEffect(() => {
     setValues((prev) => {
@@ -85,7 +98,7 @@ export default function CalendarGrid({
       });
       return copy;
     });
-  }, [startOffset]);
+  }, [startOffset, windowSize]);
 
   useEffect(() => {
     if (!defaultSlots && !defaultStopBookingDates) return;
@@ -197,8 +210,67 @@ export default function CalendarGrid({
       }
     };
     window.addEventListener("mouseup", onMouseUp);
-    return () => window.removeEventListener("mouseup", onMouseUp);
+    const onTouchEnd = () => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      const first = selectedKeys.values().next();
+      if (!first.done) {
+        const ref = inputRefs.current[first.value as string];
+        if (ref && typeof ref.focus === "function") ref.focus();
+      }
+    };
+    window.addEventListener("touchend", onTouchEnd);
+    return () => {
+      window.removeEventListener("mouseup", onMouseUp);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
   }, [selectedKeys]);
+
+  const handleTouchStart = (
+    rowId: string,
+    dateLabel: string,
+    e?: React.TouchEvent
+  ) => {
+    if (readOnly) return;
+    if (windowSize <= 7) return;
+    const k = keyFor(rowId, dateLabel);
+    isDragging.current = true;
+    selectedRowRef.current = rowId;
+    setSelectedKeys(new Set([k]));
+    const t = e?.touches?.[0];
+    if (t) touchStartPos.current = { x: t.clientX, y: t.clientY };
+  };
+
+  const handleTouchMove: React.TouchEventHandler<HTMLTableCellElement> = (
+    e
+  ) => {
+    if (!isDragging.current) return;
+    if (readOnly) return;
+    if (windowSize <= 7) return;
+    const touch = e.touches[0];
+    if (touchStartPos.current) {
+      const dx = Math.abs(touch.clientX - touchStartPos.current.x);
+      const dy = Math.abs(touch.clientY - touchStartPos.current.y);
+      if (dx > 8 || dy > 8) {
+        isDragging.current = false;
+        return;
+      }
+    }
+    const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!elem) return;
+    const td = elem.closest("td") as HTMLTableCellElement | null;
+    if (!td) return;
+    const rid = td.getAttribute("data-rowid");
+    const label = td.getAttribute("data-label");
+    if (!rid || !label) return;
+    if (selectedRowRef.current && selectedRowRef.current !== rid) return;
+    const k = keyFor(rid, label);
+    setSelectedKeys((prev) => {
+      const next = new Set(prev);
+      next.add(k);
+      return next;
+    });
+  };
 
   const updateSelected = (val: string) => {
     setValues((prev) => {
@@ -366,15 +438,19 @@ export default function CalendarGrid({
           <Button
             variant="outline"
             onClick={() =>
-              setStartOffset((prev) => Math.max(0, prev - WINDOW_SIZE))
+              setStartOffset((prev) => Math.max(0, prev - windowSize))
             }
             disabled={startOffset === 0}
+            aria-label="Previous"
+            title="Previous"
           >
             <ChevronLeft className="size-4" />
           </Button>
           <Button
             variant="outline"
-            onClick={() => setStartOffset((prev) => prev + WINDOW_SIZE)}
+            onClick={() => setStartOffset((prev) => prev + windowSize)}
+            aria-label="Next"
+            title="Next"
           >
             <ChevronRight className="size-4" />
           </Button>
@@ -406,6 +482,8 @@ export default function CalendarGrid({
                 return next;
               });
             }}
+            aria-label="Reset defaults"
+            title="Reset defaults"
           >
             <RotateCcw className="size-4" />
           </Button>
@@ -414,60 +492,112 @@ export default function CalendarGrid({
           {dates[0].label} – {dates[dates.length - 1].label}
         </div>
       </div>
-      <table className="border-collapse w-full">
-        <thead>
-          <tr>
-            <th className="border border-gray-300 p-2 text-left bg-gray-200">
-              {title || "Availability"}
-            </th>
-            {dates.map((d) => (
-              <th
-                key={d.label}
-                className="border border-gray-300 p-2 bg-gray-200"
-              >
-                {d.label}
+      <div className="relative rounded-md border overflow-x-auto">
+        <table className="border-collapse min-w-[720px] w-full text-xs md:text-sm">
+          <thead>
+            <tr>
+              <th className="border border-gray-300 p-2 text-left bg-gray-200 sticky left-0 z-20">
+                {title || "Availability"}
               </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.id}>
-              <td className="border border-gray-300 p-2 bg-gray-50">
-                {row.name}
-              </td>
-              {dates.map((date) => {
-                const k = keyFor(row.id, date.label);
-                const isSelected = selectedKeys.has(k);
-                const isDirtyCell = dirty.has(k);
-                return (
-                  <td
-                    key={date.label}
-                    onMouseDown={(e) => handleMouseDown(row.id, date.label, e)}
-                    onMouseEnter={() => handleMouseEnter(row.id, date.label)}
-                    className={`border border-gray-300 p-0 w-24 ${
-                      isSelected
-                        ? "bg-blue-100"
-                        : isDirtyCell
-                        ? "bg-emerald-50"
-                        : "bg-white"
-                    }`}
-                  >
-                    {row.id === "stop" ? (
-                      <div className="flex items-center justify-center p-2">
+              {dates.map((d) => (
+                <th
+                  key={d.label}
+                  className="border border-gray-300 p-2 bg-gray-200 sticky top-0"
+                >
+                  {d.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.id}>
+                <td className="border border-gray-300 p-2 bg-gray-50 sticky left-0 z-10">
+                  {row.name}
+                </td>
+                {dates.map((date) => {
+                  const k = keyFor(row.id, date.label);
+                  const isSelected = selectedKeys.has(k);
+                  const isDirtyCell = dirty.has(k);
+                  return (
+                    <td
+                      key={date.label}
+                      data-rowid={row.id}
+                      data-label={date.label}
+                      onMouseDown={(e) =>
+                        handleMouseDown(row.id, date.label, e)
+                      }
+                      onMouseEnter={() => handleMouseEnter(row.id, date.label)}
+                      onTouchStart={() => handleTouchStart(row.id, date.label)}
+                      onTouchMove={handleTouchMove}
+                      className={`border border-gray-300 p-0 min-w-[72px] md:min-w-[96px] ${
+                        isSelected
+                          ? "bg-blue-100"
+                          : isDirtyCell
+                          ? "bg-emerald-50"
+                          : "bg-white"
+                      }`}
+                    >
+                      {row.id === "stop" ? (
+                        <div className="flex items-center justify-center p-2">
+                          <input
+                            type="checkbox"
+                            checked={
+                              String(values[row.id][date.label]) === "true"
+                            }
+                            disabled={!!readOnly}
+                            onChange={(e) => {
+                              const cellKey = keyFor(row.id, date.label);
+                              selectedRowRef.current = "stop";
+                              updateStopSelected(
+                                e.target.checked ? "true" : "false",
+                                cellKey
+                              );
+                            }}
+                            onFocus={() => {
+                              selectedRowRef.current = row.id;
+                              setSelectedKeys((prev) => {
+                                const next = new Set(prev);
+                                next.add(k);
+                                return next;
+                              });
+                            }}
+                            aria-label={`Stop Booking for ${date.label}`}
+                            title={`Stop Booking for ${date.label}`}
+                          />
+                        </div>
+                      ) : (
                         <input
-                          type="checkbox"
-                          checked={
-                            String(values[row.id][date.label]) === "true"
-                          }
+                          ref={(el) => {
+                            inputRefs.current[k] =
+                              el as HTMLInputElement | null;
+                          }}
+                          value={values[row.id][date.label]}
+                          type="number"
+                          min={0}
                           disabled={!!readOnly}
                           onChange={(e) => {
-                            const cellKey = keyFor(row.id, date.label);
-                            selectedRowRef.current = "stop";
-                            updateStopSelected(
-                              e.target.checked ? "true" : "false",
-                              cellKey
-                            );
+                            const raw = e.target.value;
+                            const num = Math.max(0, Number(raw) || 0);
+                            const newVal = String(num);
+                            if (selectedKeys.has(k)) {
+                              updateSelected(newVal);
+                            } else {
+                              setValues((prev) => ({
+                                ...prev,
+                                [row.id]: {
+                                  ...prev[row.id],
+                                  [date.label]: newVal,
+                                },
+                              }));
+                              setDirty((prev) => {
+                                const next = new Set(prev);
+                                const def = "0";
+                                if (newVal !== def) next.add(k);
+                                else next.delete(k);
+                                return next;
+                              });
+                            }
                           }}
                           onFocus={() => {
                             selectedRowRef.current = row.id;
@@ -477,58 +607,19 @@ export default function CalendarGrid({
                               return next;
                             });
                           }}
+                          aria-label={`${row.name} for ${date.label}`}
+                          title={`${row.name} for ${date.label}`}
+                          className="w-full p-2 border-none outline-none bg-transparent text-center"
                         />
-                      </div>
-                    ) : (
-                      <input
-                        ref={(el) => {
-                          inputRefs.current[k] = el as HTMLInputElement | null;
-                        }}
-                        value={values[row.id][date.label]}
-                        type="number"
-                        min={0}
-                        disabled={!!readOnly}
-                        onChange={(e) => {
-                          const raw = e.target.value;
-                          const num = Math.max(0, Number(raw) || 0);
-                          const newVal = String(num);
-                          if (selectedKeys.has(k)) {
-                            updateSelected(newVal);
-                          } else {
-                            setValues((prev) => ({
-                              ...prev,
-                              [row.id]: {
-                                ...prev[row.id],
-                                [date.label]: newVal,
-                              },
-                            }));
-                            setDirty((prev) => {
-                              const next = new Set(prev);
-                              const def = "0";
-                              if (newVal !== def) next.add(k);
-                              else next.delete(k);
-                              return next;
-                            });
-                          }
-                        }}
-                        onFocus={() => {
-                          selectedRowRef.current = row.id;
-                          setSelectedKeys((prev) => {
-                            const next = new Set(prev);
-                            next.add(k);
-                            return next;
-                          });
-                        }}
-                        className="w-full p-2 border-none outline-none bg-transparent text-center"
-                      />
-                    )}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                      )}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <div className="mt-4" />
     </div>
   );

@@ -986,7 +986,7 @@ export default function BookingsPage() {
           </>
         )}
         {step === 2 && (
-          <>
+          <div className="w-full overflow-auto">
             <CalendarGrid
               onDataChange={(data) => {
                 const cleanedSlots = data.slots.map((s) => ({
@@ -1045,7 +1045,7 @@ export default function BookingsPage() {
             {calendarError && (
               <div className="mt-2 text-red-600 text-sm">{calendarError}</div>
             )}
-          </>
+          </div>
         )}
         {step === 1 && (
           <div className="w-full md:w-[235px] mt-4">
