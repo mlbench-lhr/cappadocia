@@ -14,9 +14,25 @@ type CalendarGridProps = {
     }[];
     stopBookingDates: Date[];
   }) => void;
+  defaultSlots?: {
+    startDate: Date;
+    endDate: Date;
+    adultPrice: number;
+    childPrice: number;
+    seatsAvailable: number;
+  }[];
+  defaultStopBookingDates?: Date[];
+  readOnly?: boolean;
+  title?: string;
 };
 
-export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
+export default function CalendarGrid({
+  onDataChange,
+  defaultSlots,
+  defaultStopBookingDates,
+  readOnly,
+  title,
+}: CalendarGridProps) {
   const WINDOW_SIZE = 14;
   const [startOffset, setStartOffset] = useState(0);
 
@@ -71,6 +87,77 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
     });
   }, [startOffset]);
 
+  useEffect(() => {
+    if (!defaultSlots && !defaultStopBookingDates) return;
+    const nextValues: Record<string, Record<string, any>> = {} as any;
+    rows.forEach((r) => {
+      nextValues[r.id] = {} as Record<string, any>;
+      dates.forEach((d) => {
+        nextValues[r.id][d.label] = r.id === "stop" ? "false" : "0";
+      });
+    });
+
+    const toMid = (dt: Date) =>
+      new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()).getTime();
+
+    const slotDays: Map<
+      number,
+      { adultPrice: number; childPrice: number; seatsAvailable: number }
+    > = new Map();
+    if (defaultSlots && defaultSlots.length > 0) {
+      for (const s of defaultSlots) {
+        let cur = new Date(s.startDate);
+        const end = new Date(s.endDate);
+        const curMid = new Date(
+          cur.getFullYear(),
+          cur.getMonth(),
+          cur.getDate()
+        );
+        const endMid = new Date(
+          end.getFullYear(),
+          end.getMonth(),
+          end.getDate()
+        );
+        let p = curMid.getTime();
+        while (p <= endMid.getTime()) {
+          slotDays.set(p, {
+            adultPrice: s.adultPrice,
+            childPrice: s.childPrice,
+            seatsAvailable: s.seatsAvailable,
+          });
+          p = p + 24 * 60 * 60 * 1000;
+        }
+      }
+    }
+
+    const stopSet: Set<number> = new Set();
+    if (defaultStopBookingDates && defaultStopBookingDates.length > 0) {
+      for (const d of defaultStopBookingDates) stopSet.add(toMid(new Date(d)));
+    }
+
+    const nextDirty = new Set<string>();
+    dates.forEach((d) => {
+      const ms = toMid(d.date);
+      if (slotDays.has(ms)) {
+        const v = slotDays.get(ms)!;
+        nextValues["adult"][d.label] = String(v.adultPrice);
+        nextValues["child"][d.label] = String(v.childPrice);
+        nextValues["seats"][d.label] = String(v.seatsAvailable);
+        if (String(v.adultPrice) !== "0") nextDirty.add(`adult||${d.label}`);
+        if (String(v.childPrice) !== "0") nextDirty.add(`child||${d.label}`);
+        if (String(v.seatsAvailable) !== "0")
+          nextDirty.add(`seats||${d.label}`);
+      }
+      if (stopSet.has(ms)) {
+        nextValues["stop"][d.label] = "true";
+        nextDirty.add(`stop||${d.label}`);
+      }
+    });
+
+    setValues(nextValues);
+    setDirty(nextDirty);
+  }, [defaultSlots, defaultStopBookingDates, startOffset]);
+
   const keyFor = (rowId: string, dateLabel: string) => `${rowId}||${dateLabel}`;
 
   const handleMouseDown = (
@@ -79,6 +166,7 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
     e: React.MouseEvent
   ) => {
     e.preventDefault();
+    if (readOnly) return;
     const k = keyFor(rowId, dateLabel);
     isDragging.current = true;
     selectedRowRef.current = rowId;
@@ -87,6 +175,7 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
 
   const handleMouseEnter = (rowId: string, dateLabel: string) => {
     if (!isDragging.current) return;
+    if (readOnly) return;
     if (selectedRowRef.current && selectedRowRef.current !== rowId) return;
     const k = keyFor(rowId, dateLabel);
     setSelectedKeys((prev) => {
@@ -291,6 +380,7 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
           </Button>
           <Button
             variant="outline"
+            disabled={!!readOnly}
             onClick={() => {
               setValues((prev) => {
                 const copy = { ...prev } as Record<string, Record<string, any>>;
@@ -328,7 +418,7 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
         <thead>
           <tr>
             <th className="border border-gray-300 p-2 text-left bg-gray-200">
-              Hot Air Balloon Sunrise
+              {title || "Availability"}
             </th>
             {dates.map((d) => (
               <th
@@ -370,6 +460,7 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
                           checked={
                             String(values[row.id][date.label]) === "true"
                           }
+                          disabled={!!readOnly}
                           onChange={(e) => {
                             const cellKey = keyFor(row.id, date.label);
                             selectedRowRef.current = "stop";
@@ -396,6 +487,7 @@ export default function CalendarGrid({ onDataChange }: CalendarGridProps) {
                         value={values[row.id][date.label]}
                         type="number"
                         min={0}
+                        disabled={!!readOnly}
                         onChange={(e) => {
                           const raw = e.target.value;
                           const num = Math.max(0, Number(raw) || 0);
