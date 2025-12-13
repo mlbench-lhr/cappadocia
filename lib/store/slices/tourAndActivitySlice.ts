@@ -27,6 +27,7 @@ export interface ToursAndActivityState {
   durationStartTime: string;
   durationEndTime: string;
   slots: Slot[];
+  stopBookingDates: Date[];
   location?: LocationData;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   rating: { average: number | 0; total: number | 0 };
@@ -61,6 +62,7 @@ const initialState: ToursAndActivityState = {
       seatsAvailable: 40,
     },
   ],
+  stopBookingDates: [],
   rating: { average: 0, total: 0 },
 };
 
