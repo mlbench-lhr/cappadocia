@@ -15,6 +15,7 @@ import { SettingProvider } from "./SettingProvider";
 import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
 import { Promotions } from "./Promotions/page";
+import NotificationSettings from "@/components/NotificationSettings";
 
 // Edit Profile comp
 
@@ -198,17 +199,19 @@ export default function App() {
 
   const options: {
     icons: any;
-    name: "Profile" | "Change Password" | "Promotions" | "Payment Management";
+    name: "Profile" | "Change Password" | "Promotions" | "Payment Management" | "Notifications";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
     { icons: Bell, name: "Promotions" },
+    { icons: Bell, name: "Notifications" },
     { icons: DollarSign, name: "Payment Management" },
   ];
   const components = {
     Profile: <AdminEditProfile />,
     "Change Password": <ChangePass />,
     Promotions: <Promotions />,
+    Notifications: <NotificationSettings />,
     "Payment Management": <Terms />,
   };
 

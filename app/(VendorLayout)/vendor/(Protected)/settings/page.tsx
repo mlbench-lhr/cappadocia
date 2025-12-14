@@ -18,6 +18,7 @@ import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
 import DeleteAccountDialog from "@/components/DeleteAccountDialog";
 import { EditProfile } from "./EditProfile/page";
+import NotificationSettings from "@/components/NotificationSettings";
 
 export default function App() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -38,7 +39,7 @@ export default function App() {
   const components = {
     Profile: <EditProfile />,
     "Change Password": <ChangePass />,
-    Notifications: <ChangePass />,
+    Notifications: <NotificationSettings />,
     "Terms & Conditions": <Terms />,
   };
 
@@ -72,13 +73,10 @@ export default function App() {
                     <div
                       key={index}
                       className={`w-fit lg:w-full flex justify-between items-center ${
-                        item.name === "Notifications"
-                          ? "cursor-not-allowed"
-                          : "cursor-pointer"
+                        "cursor-pointer"
                       }`}
                       onClick={() => {
-                        item.name !== "Notifications" &&
-                          setActiveComp(item.name);
+                        setActiveComp(item.name);
                       }}
                     >
                       <div
