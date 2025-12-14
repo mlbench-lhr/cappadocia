@@ -12,6 +12,7 @@ import { useMediaQuery } from "react-responsive";
 import axios from "axios";
 import { useAppSelector } from "@/lib/store/hooks";
 import { pusherClient } from "@/lib/pusher/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Messages = () => {
   const router = useRouter();
@@ -25,6 +26,8 @@ const Messages = () => {
   >(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [inputText, setInputText] = useState<string>("");
+  const [loadingConversations, setLoadingConversations] = useState(true);
+  const [loadingMessages, setLoadingMessages] = useState(false);
   const convChannelName = useRef<string | null>(null);
   const msgChannelName = useRef<string | null>(null);
   const selectedConversation = useMemo(
@@ -44,6 +47,7 @@ const Messages = () => {
   useEffect(() => {
     const run = async () => {
       if (!currentUserId) return;
+      setLoadingConversations(true);
       const res = await axios.get("/api/messages/conversations");
       const items = res.data?.conversations || [];
       setConversations(items);
@@ -63,6 +67,7 @@ const Messages = () => {
       } else if (items[0]?._id) {
         setSelectedConversationId(items[0]._id);
       }
+      setLoadingConversations(false);
     };
     run();
   }, [currentUserId, sender]);
@@ -108,10 +113,12 @@ const Messages = () => {
   useEffect(() => {
     if (!selectedConversationId) return;
     const load = async () => {
+      setLoadingMessages(true);
       const res = await axios.get(
         `/api/messages/conversations/${selectedConversationId}/messages`
       );
       setMessages(res.data?.messages || []);
+      setLoadingMessages(false);
     };
     load();
     if (msgChannelName.current) {
@@ -203,59 +210,77 @@ const Messages = () => {
           </div>
           <div className="h-[calc(100%-150px)]  w-full overflow-auto">
             <div className="h-fit w-full">
-              {filteredConversations.map((c: any) => {
-                const other = (c.participants || []).find(
-                  (u: any) => u._id !== currentUserId
-                );
-                return (
-                  <button
-                    key={c._id}
-                    onClick={() => {
-                      setSelectedConversationId(c._id);
-                      router.push(`messages?sender=${other?._id}`);
-                    }}
-                    className={`w-full text-left flex justify-between items-start gap-[15px] px-2 lg:px-4 xl:px-6 py-4 border-b ${
-                      selectedConversationId === c._id
-                        ? "bg-[#F1F4FF]"
-                        : "bg-white"
-                    }`}
+              {loadingConversations ? (
+                Array.from({ length: 7 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="w-full text-left flex justify-between items-start gap-[15px] px-2 lg:px-4 xl:px-6 py-4 border-b"
                   >
-                    <Image
-                      alt=""
-                      src={
-                        other?.role === "admin"
-                          ? "/smallLogo.png"
-                          : other?.avatar || "/placeholderDp.png"
-                      }
-                      width={35}
-                      height={35}
-                      className={`rounded-[8px] ${
-                        other?.role === "admin"
-                          ? "object-contain"
-                          : "object-cover"
-                      } w-[35px] h-[35px]`}
-                    />
+                    <Skeleton className="w-[35px] h-[35px] rounded-[8px]" />
                     <div className="w-[calc(100%-50px)] flex flex-col justify-between items-start">
                       <div className="w-full flex justify-between items-center">
-                        <h1 className="text-base font-semibold">
-                          {other?.role === "admin"
-                            ? "Cappadocia Platform"
-                            : other?.fullName || "User"}
-                        </h1>
-                        <span className="text-sm font-normal text-black/70">
-                          {new Date(c.latestMessageAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
+                        <Skeleton className="h-4 w-32" />
+                        <Skeleton className="h-3 w-12" />
+                      </div>
+                      <Skeleton className="h-3 w-3/4" />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                filteredConversations.map((c: any) => {
+                  const other = (c.participants || []).find(
+                    (u: any) => u._id !== currentUserId
+                  );
+                  return (
+                    <button
+                      key={c._id}
+                      onClick={() => {
+                        setSelectedConversationId(c._id);
+                        router.push(`messages?sender=${other?._id}`);
+                      }}
+                      className={`w-full text-left flex justify-between items-start gap-[15px] px-2 lg:px-4 xl:px-6 py-4 border-b ${
+                        selectedConversationId === c._id
+                          ? "bg-[#F1F4FF]"
+                          : "bg-white"
+                      }`}
+                    >
+                      <Image
+                        alt=""
+                        src={
+                          other?.role === "admin"
+                            ? "/smallLogo.png"
+                            : other?.avatar || "/placeholderDp.png"
+                        }
+                        width={35}
+                        height={35}
+                        className={`rounded-[8px] ${
+                          other?.role === "admin"
+                            ? "object-contain"
+                            : "object-cover"
+                        } w-[35px] h-[35px]`}
+                      />
+                      <div className="w-[calc(100%-50px)] flex flex-col justify-between items-start">
+                        <div className="w-full flex justify-between items-center">
+                          <h1 className="text-base font-semibold">
+                            {other?.role === "admin"
+                              ? "Cappadocia Platform"
+                              : other?.fullName || "User"}
+                          </h1>
+                          <span className="text-sm font-normal text-black/70">
+                            {new Date(c.latestMessageAt).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                        </div>
+                        <span className="text-[12px] font-normal text-black/70">
+                          {c.lastMessage?.text || ""}
                         </span>
                       </div>
-                      <span className="text-[12px] font-normal text-black/70">
-                        {c.lastMessage?.text || ""}
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
         </div>
@@ -266,78 +291,110 @@ const Messages = () => {
         >
           <div className="w-full h-[100px] flex flex-col justify-start items-start ">
             <div className="w-full border-b px-2 lg:px-4 xl:px-6 py-4 text-sm font-semibold flex justify-start items-center gap-2">
-              <Image
-                alt=""
-                src={
-                  selectedOther?.role === "admin"
-                    ? "/smallLogo.png"
-                    : selectedOther?.avatar || "/placeholderDp.png"
-                }
-                width={35}
-                height={35}
-                className={`rounded-[8px] ${
-                  selectedOther?.role === "admin"
-                    ? "object-contain"
-                    : "object-cover"
-                } w-[35px] h-[35px]`}
-              />
-              <span className="text-sm font-semibold">
-                {selectedOther?.role === "admin"
-                  ? "Cappadocia Platform"
-                  : selectedOther?.fullName || "Messages"}
-              </span>
+              {loadingMessages || !selectedOther ? (
+                <>
+                  <Skeleton className="w-[35px] h-[35px] rounded-[8px]" />
+                  <Skeleton className="h-4 w-40" />
+                </>
+              ) : (
+                <>
+                  <Image
+                    alt=""
+                    src={
+                      selectedOther?.role === "admin"
+                        ? "/smallLogo.png"
+                        : selectedOther?.avatar || "/placeholderDp.png"
+                    }
+                    width={35}
+                    height={35}
+                    className={`rounded-[8px] ${
+                      selectedOther?.role === "admin"
+                        ? "object-contain"
+                        : "object-cover"
+                    } w-[35px] h-[35px]`}
+                  />
+                  <span className="text-sm font-semibold">
+                    {selectedOther?.role === "admin"
+                      ? "Cappadocia Platform"
+                      : selectedOther?.fullName || "Messages"}
+                  </span>
+                </>
+              )}
             </div>
           </div>
           <div className="h-[calc(100%-180px)] w-full overflow-auto scrollbar-hide">
             <div className="min-h-full max-h-fit w-full flex justify-end items-start flex-col gap-3 md:gap-6 px-0 md:px-10">
-              {messages.map((item: any, index: number) => (
-                <div
-                  key={index}
-                  className={`w-full flex justify-between flex-col gap-1`}
-                >
-                  <div
-                    className={`w-fit h-fit text-[12px] font-normal px-2 md:px-6 py-4 leading-normal rounded-t-2xl md:rounded-t-[32px] ${
-                      item.sender === currentUserId
-                        ? "bg-primary text-white self-end rounded-bl-2xl md:rounded-bl-[32px]"
-                        : "bg-secondary rounded-br-2xl md:rounded-br-[32px]"
-                    }`}
-                  >
-                    {item.text}
+              {loadingMessages ? (
+                Array.from({ length: 8 }).map((_, i) => (
+                  <div key={i} className="w-full flex flex-col gap-1">
+                    <div className={`${i % 2 === 0 ? "self-start" : "self-end"}`}>
+                      <Skeleton className={`${i % 2 === 0 ? "w-2/3" : "w-1/2"} h-10 rounded-2xl`} />
+                    </div>
+                    <div className={`${i % 2 === 0 ? "self-start" : "self-end"}`}>
+                      <Skeleton className="w-12 h-3" />
+                    </div>
                   </div>
-                  <span
-                    className={`text-[12px] font-normal text-black/70 ${
-                      item.sender === currentUserId && "self-end"
-                    }`}
-                  >
-                    {new Date(item.createdAt).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
+                ))
+              ) : (
+                <>
+                  {messages.map((item: any, index: number) => (
+                    <div
+                      key={index}
+                      className={`w-full flex justify-between flex-col gap-1`}
+                    >
+                      <div
+                        className={`w-fit h-fit text-[12px] font-normal px-2 md:px-6 py-4 leading-normal rounded-t-2xl md:rounded-t-[32px] ${
+                          item.sender === currentUserId
+                            ? "bg-primary text-white self-end rounded-bl-2xl md:rounded-bl-[32px]"
+                            : "bg-secondary rounded-br-2xl md:rounded-br-[32px]"
+                        }`}
+                      >
+                        {item.text}
+                      </div>
+                      <span
+                        className={`text-[12px] font-normal text-black/70 ${
+                          item.sender === currentUserId && "self-end"
+                        }`}
+                      >
+                        {new Date(item.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </>
+              )}
             </div>
           </div>
           <div className="w-full h-[75px] pt-3 flex flex-col justify-start items-start px-0 md:px-10">
             <div className="w-full h-full text-sm font-semibold flex justify-start items-center gap-2">
               <div className="w-[calc(100%-68px)] h-[60px] flex justify-center items-center rounded-[10px]">
-                <Input
-                  placeholder="Say Something...."
-                  className="h-full"
-                  value={inputText}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      send();
-                    }
-                  }}
-                  onChange={(e) => setInputText(e.target.value)}
-                />
+                {loadingMessages ? (
+                  <Skeleton className="w-full h-full rounded-[10px]" />
+                ) : (
+                  <Input
+                    placeholder="Say Something...."
+                    className="h-full"
+                    value={inputText}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        send();
+                      }
+                    }}
+                    onChange={(e) => setInputText(e.target.value)}
+                  />
+                )}
               </div>
               <div className="w-[60px] h-[60px] flex justify-center items-center border-2 rounded-[10px]">
-                <button onClick={send}>
-                  <SendIcon />
-                </button>
+                {loadingMessages ? (
+                  <Skeleton className="w-6 h-6 rounded-md" />
+                ) : (
+                  <button onClick={send}>
+                    <SendIcon />
+                  </button>
+                )}
               </div>
             </div>
           </div>
