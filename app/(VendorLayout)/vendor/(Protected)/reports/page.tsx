@@ -31,7 +31,7 @@ export default function DashboardPage() {
     },
     {
       title: 0,
-      description: "Total Bookings",
+      description: "Completed Bookings",
       progress: { value: 18.0, increment: true },
     },
     {
@@ -116,18 +116,21 @@ export default function DashboardPage() {
                   </div>
                 ))}
           </div>
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-2 h-[320px] overflow-hidden">
+          <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
+            <div className="col-span-1 h-[470px] overflow-hidden">
               <ChartAreaGradient className=" h-full " />
             </div>
-            <div className="col-span-1 h-[320px]">
+            {/* <div className="col-span-1 h-[320px]">
               <RatingBreakdown />
+            </div> */}
+            <div className="col-span-1 h-[470px]">
+              <ChartBarGradient />
             </div>
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="col-span-2 h-[470px]">
+            {/* <div className="col-span-2 h-[470px]">
               <ChartBarGradient />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
