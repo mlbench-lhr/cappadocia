@@ -10,7 +10,7 @@ export const sendPasswordResetEmail = async (email: string, otp: string) => {
     const htmlContent = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
-      <img src="https://res.cloudinary.com/sage-media/image/upload/v1761809447/logo_olblxe.png" alt="Cappadocia Logo" 
+      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1765807035/logo_xlwtpm.png" alt="Cappadocia Logo" 
            style="max-width: 120px; margin-bottom: 10px;" />
     </div>
     <h2 style="color: #333;">Password Reset Request</h2>
@@ -48,7 +48,7 @@ export const sendVerificationEmail = async (email: string, otp: string) => {
     const htmlContent = `
   <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
     <div style="text-align: center; margin-bottom: 20px; display:flex; justify-content:start; gap:10px; align-items:center">
-      <img src="https://res.cloudinary.com/sage-media/image/upload/v1761809447/logo_olblxe.png" alt="Cappadocia Logo" 
+      <img src="https://res.cloudinary.com/dcdynkm5d/image/upload/v1765807035/logo_xlwtpm.png" alt="Cappadocia Logo" 
            style="max-width: 120px; margin-bottom: 10px;" />
     </div>
     <h2 style="color: #333;">Welcome! Please Verify Your Email</h2>

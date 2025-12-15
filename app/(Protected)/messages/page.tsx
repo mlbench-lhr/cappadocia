@@ -236,7 +236,7 @@ const Messages = () => {
                       key={c._id}
                       onClick={() => {
                         setSelectedConversationId(c._id);
-                        router.push(`messages?sender=${other?._id}`);
+                        router.push(`?sender=${other?._id}`);
                       }}
                       className={`w-full text-left flex justify-between items-start gap-[15px] px-2 lg:px-4 xl:px-6 py-4 border-b ${
                         selectedConversationId === c._id

@@ -212,7 +212,7 @@ const ReservationDetails: React.FC = () => {
                     className="w-full"
                     asChild
                   >
-                    <Link href={`/messages?sender=${data.vendor._id}`}>
+                    <Link href={`/admin/messages?sender=${data.vendor._id}`}>
                       Chat
                     </Link>
                   </Button>
