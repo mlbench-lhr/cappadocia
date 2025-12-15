@@ -32,8 +32,25 @@ export default function BookingsPage() {
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshData, setRefreshData] = useState(0);
+  const [stats, setStats] = useState<{
+    totalRevenue: { amount: number; percentageChange: number; incremented: boolean } | null;
+    platformCommission: { amount: number; percentageChange: number; incremented: boolean } | null;
+    vendorNet: { amount: number; percentageChange: number; incremented: boolean } | null;
+  }>({ totalRevenue: null, platformCommission: null, vendorNet: null });
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/admin/payments/stats");
+        const json = await res.json();
+        if (res.ok && json?.success) {
+          setStats(json.data);
+        }
+      } catch {}
+    })();
   }, []);
 
   const columns: Column[] = [
@@ -129,10 +146,12 @@ export default function BookingsPage() {
                   Total Revenue
                 </h2>
                 <span className="text-2xl md:text-[37px] font-semibold">
-                  €485,200
+                  €{(stats.totalRevenue?.amount ?? 0).toLocaleString()}
                 </span>
-                <span className="text-sm md:text-base font-medium text-[#51C058]">
-                  ↑ 18% from last month
+                <span className={`text-sm md:text-base font-medium ${
+                  stats.totalRevenue?.incremented ? "text-[#51C058]" : "text-red-500"
+                }`}>
+                  {stats.totalRevenue?.incremented ? "↑" : "↓"} {(stats.totalRevenue?.percentageChange ?? 0).toFixed(0)}% from last month
                 </span>
               </div>
             </BoxProviderWithName>
@@ -142,10 +161,12 @@ export default function BookingsPage() {
                   Platform Commission
                 </h2>
                 <span className="text-2xl md:text-[37px] font-semibold">
-                  €48,520
+                  €{(stats.platformCommission?.amount ?? 0).toLocaleString()}
                 </span>
-                <span className="text-sm md:text-base font-medium text-[#51C058]">
-                  ↑ 18% from last month
+                <span className={`text-sm md:text-base font-medium ${
+                  stats.platformCommission?.incremented ? "text-[#51C058]" : "text-red-500"
+                }`}>
+                  {stats.platformCommission?.incremented ? "↑" : "↓"} {(stats.platformCommission?.percentageChange ?? 0).toFixed(0)}% from last month
                 </span>
               </div>
             </BoxProviderWithName>
@@ -155,10 +176,12 @@ export default function BookingsPage() {
                   Vendor Net Earnings
                 </h2>
                 <span className="text-2xl md:text-[37px] font-semibold">
-                  €485,200
+                  €{(stats.vendorNet?.amount ?? 0).toLocaleString()}
                 </span>
-                <span className="text-sm md:text-base font-medium text-[#51C058]">
-                  ↑ 18% from last month
+                <span className={`text-sm md:text-base font-medium ${
+                  stats.vendorNet?.incremented ? "text-[#51C058]" : "text-red-500"
+                }`}>
+                  {stats.vendorNet?.incremented ? "↑" : "↓"} {(stats.vendorNet?.percentageChange ?? 0).toFixed(0)}% from last month
                 </span>
               </div>
             </BoxProviderWithName>
