@@ -15,6 +15,7 @@ import { ReviewWithPopulatedData } from "@/lib/types/review";
 import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { PayoutDetailsModal } from "@/components/SmallComponents/PayoutDetailsModal";
+import { percentage } from "@/lib/helper/smallHelpers";
 
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
@@ -97,21 +98,21 @@ export default function BookingsPage() {
       render: (item: ReviewWithPopulatedData) => {
         console.log("item------", item);
 
-        const totalAmount = item?.booking?.paymentDetails?.amount || 0;
-        const vendorPayable = totalAmount * 0.85;
         return (
           <PayoutDetailsModal
-            iban={item?.vendor?.vendorDetails?.paymentInfo?.ibanNumber}
-            bankName={item?.vendor?.vendorDetails?.paymentInfo?.bankName}
-            accountHolderName={item?.vendor?.vendorDetails?.paymentInfo?.accountHolderName}
-            currency={item?.vendor?.vendorDetails?.paymentInfo?.currency}
+            stripeAccountId={item?.vendor?.vendorDetails?.stripeAccountId}
             data={{
               _id: item?._id,
-              activity: { title: item?.activity?.title },
+              activity: {
+                title: item?.activity?.title,
+              },
               booking: {
                 paymentDetails: {
-                  totalAmount: totalAmount,
-                  vendorPayable: vendorPayable,
+                  totalAmount: item?.booking?.paymentDetails?.amount,
+                  vendorPayable: percentage(
+                    85,
+                    item?.booking?.paymentDetails?.amount
+                  ),
                   commission: 15,
                 },
               },

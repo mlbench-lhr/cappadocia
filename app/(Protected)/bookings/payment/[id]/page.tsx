@@ -57,36 +57,43 @@ export default function BookingsPage() {
     getData();
   }, []);
 
-  const startZiraatPayment = async () => {
+  const startStripeCheckout = async () => {
     try {
-      const payload = {
+      // DUMMY TEST DATA
+      const dummyPayload = {
+        items: [
+          {
+            id: data?._id,
+            name: data?.activity.title,
+            quantity: 1,
+            price: data?.paymentDetails?.amount,
+          },
+        ],
         bookingId: data?.bookingId,
-        amount: data?.paymentDetails?.amount,
-        currency: "TRY",
+        customerEmail: data?.user?.email,
+        currency: data?.paymentDetails?.currency,
+        total: data?.paymentDetails?.amount,
       };
-      const res = await fetch("/api/payments/ziraat/init", {
+      console.log("dummyPayload--------", dummyPayload);
+
+      const res = await fetch("/api/checkout/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify(payload),
+        body: JSON.stringify(dummyPayload),
       });
+
       const response = await res.json();
+
       if (!res.ok) {
-        throw new Error(response?.error || "Failed to start payment");
+        throw new Error(response?.error || "Failed to start checkout");
       }
-      const { formAction, fields } = response;
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = formAction;
-      Object.entries(fields).forEach(([k, v]) => {
-        const input = document.createElement("input");
-        input.type = "hidden";
-        input.name = k;
-        input.value = String(v);
-        form.appendChild(input);
-      });
-      document.body.appendChild(form);
-      form.submit();
+
+      if (response.url) {
+        window.location.href = response.url;
+      } else {
+        throw new Error("Stripe checkout URL not available");
+      }
     } catch (err: any) {
       console.log("err-------", err);
     }
@@ -255,7 +262,7 @@ export default function BookingsPage() {
             <Button
               variant={"main_green_button"}
               className="w-full"
-              onClick={startZiraatPayment}
+              onClick={startStripeCheckout}
               disabled={loading}
             >
               Pay Now & Confirm Booking

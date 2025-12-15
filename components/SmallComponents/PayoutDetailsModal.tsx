@@ -25,13 +25,15 @@ interface ReviewButtonProps {
   };
   triggerComponent?: React.ReactNode | React.ComponentType<any>;
   onSuccess?: () => void;
-  iban: string;
-  bankName?: string;
-  accountHolderName?: string;
-  currency?: string;
+  stripeAccountId: string;
 }
 
-export const PayoutDetailsModal = ({ iban, bankName, accountHolderName, currency, data, triggerComponent, onSuccess }: ReviewButtonProps) => {
+export const PayoutDetailsModal = ({
+  stripeAccountId,
+  data,
+  triggerComponent,
+  onSuccess,
+}: ReviewButtonProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const TriggerComponent = triggerComponent || (
@@ -43,24 +45,21 @@ export const PayoutDetailsModal = ({ iban, bankName, accountHolderName, currency
   async function sendPayout() {
     try {
       setLoading(true);
-      const res = await fetch("/api/payments/manualPayout", {
+      const res = await fetch("/api/payments/sendVendorCommission", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           payment_id: data._id,
-          iban,
-          bankName: bankName || "",
-          accountHolderName: accountHolderName || "",
-          amount: data.booking.paymentDetails.vendorPayable,
-          currency: currency || "TRY",
-          reference: `MANUAL-${Date.now()}`,
+          stripeAccountId,
+          amount: 10,
+          currency: "eur",
         }),
       });
 
       const respData = await res.json();
       setOpen(false);
       onSuccess && onSuccess();
-      if (!res.ok) throw new Error(respData.error || "Failed to record payout");
+      if (!res.ok) throw new Error(respData.error || "Failed to send payout");
     } catch (err: any) {
       console.log("Error sending payout: " + err.message);
     } finally {
