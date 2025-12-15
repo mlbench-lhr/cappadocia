@@ -41,10 +41,7 @@ const initialState: VendorState = {
     tursabNumber: "",
     address: {
       address: "",
-      coordinates: {
-        lat: 0,
-        lng: 0,
-      },
+      coordinates: null,
     },
     documents: [],
     aboutUs: "",

@@ -12,6 +12,7 @@ import ReviewSkeleton from "@/components/Skeletons/ReviewSkeleton";
 import Rating from "@/components/SmallComponents/RatingField";
 import { ReviewWithPopulatedData } from "@/lib/types/review";
 import Image from "next/image";
+import moment from "moment";
 
 export interface ReviewsApiResponse {
   averageRating: number;
@@ -77,58 +78,58 @@ export default function ReviewSection({
     return <ReviewSkeleton />;
   }
   return (
-    <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
+    <div className="flex flex-col justify-start items-start w-full md:w-3/4 gap-3 h-fit pb-8">
       <BoxProviderWithName name="Reviews" noBorder={true} className="!p-0 mt-4">
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border flex flex-col justify-between items-start">
+        <div className="w-full flex justify-start items-center gap-3">
+          <div className="w-[calc(100%-238px)] rounded-2xl px-2 md:px-3.5 py-3 flex flex-col justify-between items-start">
             <div className="flex justify-start items-center w-full gap-3">
-              <span className="text-[14px] font-medium text-primary">5</span>
-              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
+              <span className="text-[14px] font-medium text-[#9e9e9e]">5</span>
+              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#3c4043]/40">
                 <div
-                  className="relative rounded-full overflow-hidden h-[8px] bg-primary"
-                  style={{ width: data.ratingBreakdown[1] + "%" }}
+                  className="relative rounded-full overflow-hidden h-[8px] bg-[#F8C65B]"
+                  style={{ width: data.ratingBreakdown[5] + "%" }}
                 ></div>{" "}
               </div>
             </div>
             <div className="flex justify-start items-center w-full gap-3">
-              <span className="text-[14px] font-medium text-primary">4</span>
-              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
+              <span className="text-[14px] font-medium text-[#9e9e9e]">4</span>
+              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#3c4043]/40">
                 <div
-                  className="relative rounded-full overflow-hidden h-[8px] bg-primary"
-                  style={{ width: data.ratingBreakdown[2] + "%" }}
+                  className="relative rounded-full overflow-hidden h-[8px] bg-[#F8C65B]"
+                  style={{ width: data.ratingBreakdown[4] + "%" }}
                 ></div>{" "}
               </div>
             </div>
             <div className="flex justify-start items-center w-full gap-3">
-              <span className="text-[14px] font-medium text-primary">3</span>
-              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
+              <span className="text-[14px] font-medium text-[#9e9e9e]">3</span>
+              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#3c4043]/40">
                 <div
-                  className="relative rounded-full overflow-hidden h-[8px] bg-primary"
+                  className="relative rounded-full overflow-hidden h-[8px] bg-[#F8C65B]"
                   style={{ width: data.ratingBreakdown[3] + "%" }}
                 ></div>
               </div>
             </div>
             <div className="flex justify-start items-center w-full gap-3">
-              <span className="text-[14px] font-medium text-primary">2</span>
-              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
+              <span className="text-[14px] font-medium text-[#9e9e9e]">2</span>
+              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#3c4043]/40">
                 <div
-                  className="relative rounded-full overflow-hidden h-[8px] bg-primary"
-                  style={{ width: data.ratingBreakdown[4] + "%" }}
+                  className="relative rounded-full overflow-hidden h-[8px] bg-[#F8C65B]"
+                  style={{ width: data.ratingBreakdown[2] + "%" }}
                 ></div>
               </div>
             </div>
             <div className="flex justify-start items-center w-full gap-3">
-              <span className="text-[14px] font-medium text-primary">1</span>
-              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#E8D3D3]">
+              <span className="text-[14px] font-medium text-[#9e9e9e]">1</span>
+              <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#3c4043]/40">
                 <div
-                  className="relative rounded-full overflow-hidden h-[8px] bg-primary"
-                  style={{ width: data.ratingBreakdown[5] + "%" }}
+                  className="relative rounded-full overflow-hidden h-[8px] bg-[#F8C65B]"
+                  style={{ width: data.ratingBreakdown[1] + "%" }}
                 ></div>
               </div>
             </div>
           </div>
-          <div className="col-span-1 rounded-2xl px-2 md:px-3.5 py-3 bg-secondary border flex flex-col justify-center items-center gap-2">
-            <h1 className="text-4xl md:text-[56px] font-semibold text-primary">
+          <div className="w-[200px] rounded-2xl px-2 md:px-3.5 py-3 flex flex-col justify-center items-center gap-2">
+            <h1 className="text-4xl md:text-[56px] font-semibold text-[#9e9e9e]">
               {Math.floor(data.averageRating)}
             </h1>
             <div className="w-fit flex justify-start items-center gap-1">
@@ -150,9 +151,9 @@ export default function ReviewSection({
             {reviews?.map((item, index) => (
               <div
                 key={index}
-                className="w-full rounded-2xl px-2 md:px-3.5 py-3 border flex flex-col justify-center items-start gap-2"
+                className="w-full py-3 flex flex-col justify-center items-start gap-2"
               >
-                <div className="w-full flex justify-between items-center">
+                <div className="w-full flex flex-col justify-between items-start gap-3 ">
                   <ProfileBadge
                     size="medium"
                     title={item.user.fullName}
@@ -162,20 +163,26 @@ export default function ReviewSection({
                   <div className="w-fit flex justify-start items-center gap-1">
                     <Rating value={item.rating} iconsSize="18" />
                     <span className="text-[12px] font-medium text-black/60">
-                      {item.rating}
+                      {moment(item.createdAt).fromNow()}
                     </span>
                   </div>
                 </div>
                 {item.review.map((item2, index) => (
                   <div
                     key={index}
-                    className="w-full flex flex-col justify-start items-start"
+                    className={`w-full flex flex-col justify-start items-start mt-3 ${
+                      item2.addedBy === "vendor"
+                        ? "ps-2 md:ps-6 border-l-2"
+                        : ""
+                    }`}
                   >
                     {item2.addedBy === "vendor" && (
                       <div className="w-full mb-2">
                         <ProfileBadge
                           size="medium"
-                          title={item.vendor.vendorDetails.companyName}
+                          title={
+                            item.vendor.vendorDetails.companyName + " (Vendor)"
+                          }
                           subTitle={
                             "TÜRSAB Number: " +
                             item.vendor.vendorDetails.tursabNumber
@@ -188,7 +195,7 @@ export default function ReviewSection({
                       {item2.text}
                     </span>
                     {item2.uploads && (
-                      <div className="w-full grid-cols-3 gap-2">
+                      <div className="w-full grid-cols-3 gap-2 mt-2">
                         {item2.uploads.map((image, index2) => (
                           <Image
                             src={image}
@@ -208,7 +215,7 @@ export default function ReviewSection({
             {data.totalReviews > 2 && (
               <Button
                 variant={"outline"}
-                className="text-primary"
+                className="text-[#9e9e9e]"
                 onClick={() => {
                   setLimit(limit + 3);
                 }}

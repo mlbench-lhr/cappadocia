@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, JSX } from "react";
 import { Locate } from "lucide-react";
 import Swal from "sweetalert2";
-import { useAppSelector } from "@/lib/store/hooks";
 
 // Extend Window interface to include google
 declare global {
@@ -170,9 +169,11 @@ export default function AddressLocationSelector({
   className = " w-full h-[490px] rounded-xl ",
   radiusLimit, // New prop
 }: AddressLocationSelectorProps): JSX.Element {
-  const [mapCenter, setMapCenter] = useState<LatLng>(
-    value.coordinates || { lat: 35.2271, lng: -80.8431 }
-  );
+  const [mapCenter, setMapCenter] = useState<LatLng>(() => {
+    if (radiusLimit?.center) return radiusLimit.center;
+    if (value.coordinates) return value.coordinates;
+    return { lat: 38.6431, lng: 34.852 };
+  });
   const [isMapLoaded, setIsMapLoaded] = useState<boolean>(false);
   const mapRef = useRef<MapInstance>({
     map: null,
@@ -180,9 +181,8 @@ export default function AddressLocationSelector({
     autocomplete: null,
     radiusCircle: null,
   });
-  const vendorCoords = useAppSelector(
-    (s) => s.auth.user?.vendorDetails?.address?.coordinates
-  );
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const addressInputRef = useRef<HTMLInputElement | null>(null);
   const calculateDistance = (point1: LatLng, point2: LatLng): number => {
     const R = 6371; // Earth's radius in kilometers
     const dLat = ((point2.lat - point1.lat) * Math.PI) / 180;
@@ -205,9 +205,15 @@ export default function AddressLocationSelector({
   };
 
   useEffect(() => {
-    // Load Google Maps script
+    if (typeof window !== "undefined" && (window as any).google?.maps) {
+      setIsMapLoaded(true);
+      return;
+    }
+    const apiKey =
+      process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ||
+      "AIzaSyA7sg-dUaG5v6JWizJoU_0E608O2ePDxz0";
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyA7sg-dUaG5v6JWizJoU_0E608O2ePDxz0&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
     script.async = true;
     script.defer = true;
     script.onload = () => setIsMapLoaded(true);
@@ -244,7 +250,9 @@ export default function AddressLocationSelector({
         clickable: false,
       });
       mapRef.current.radiusCircle = circle;
-      mapRef.current.map.fitBounds(circle.getBounds()!);
+      const b = circle.getBounds?.();
+      if (b) mapRef.current.map.fitBounds(b as any);
+      mapRef.current.map.setCenter(radiusLimit.center);
     } else {
       if (mapRef.current.radiusCircle) {
         mapRef.current.radiusCircle.setMap(null);
@@ -263,7 +271,7 @@ export default function AddressLocationSelector({
   }, [value.coordinates]);
 
   const initializeMap = (): void => {
-    const mapElement = document.getElementById("map");
+    const mapElement = mapContainerRef.current;
     if (!mapElement) return;
     const initialCenter = radiusLimit ? radiusLimit.center : mapCenter;
 
@@ -293,7 +301,8 @@ export default function AddressLocationSelector({
       mapRef.current.radiusCircle = circle;
 
       // Fit map to show the entire circle
-      map.fitBounds(circle.getBounds()!);
+      const b = circle.getBounds?.();
+      if (b) map.fitBounds(b as any);
     }
 
     // Add marker
@@ -353,9 +362,7 @@ export default function AddressLocationSelector({
       });
 
       // Initialize autocomplete
-      const input = document.getElementById(
-        "address-input"
-      ) as HTMLInputElement;
+      const input = addressInputRef.current as HTMLInputElement | null;
       if (input) {
         const autocomplete = new google.maps.places.Autocomplete(input);
         autocomplete.bindTo("bounds", map);
@@ -472,10 +479,7 @@ export default function AddressLocationSelector({
       <div className="space-y-6 w-full">
         {!readOnly && (
           <div className="space-y-1">
-            <Label
-              htmlFor="address-input"
-              className="text-[14px] font-semibold"
-            >
+            <Label className="text-[14px] font-semibold">
               {label}
               {radiusLimit && (
                 <span className="ml-2 text-xs text-blue-600 font-normal">
@@ -486,7 +490,6 @@ export default function AddressLocationSelector({
 
             <div className="relative">
               <Input
-                id="address-input"
                 type="text"
                 value={value.address}
                 onChange={handleAddressChange}
@@ -494,6 +497,7 @@ export default function AddressLocationSelector({
                 readOnly={readOnly}
                 disabled={readOnly}
                 className="h-[44px] bg-white w-full pe-10"
+                ref={addressInputRef}
               />
               {!readOnly && (
                 <button
@@ -517,14 +521,10 @@ export default function AddressLocationSelector({
               <div className="text-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading map...</p>
-                <p className="text-sm text-gray-500 mt-2 px-4">
-                  Note: This demo uses a placeholder API key. Add your Google
-                  Maps API key to enable full functionality.
-                </p>
               </div>
             </div>
           ) : null}
-          <div id="map" className={className}></div>
+          <div ref={mapContainerRef} className={className}></div>
         </div>
       </div>
     </div>

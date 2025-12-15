@@ -457,34 +457,34 @@ export default function BookingsPage() {
           </BoxProviderWithName>
           {addPickupNow && (
             <div className="w-full lg:w-2/3 mt-4">
-              <Controller
-                name="pickupLocation"
-                control={control}
-                render={({ field }) => (
-                  <AddressLocationSelector
-                    value={
-                      field.value || {
-                        address: "",
-                        coordinates: null,
+              {radiusCenter ? (
+                <Controller
+                  name="pickupLocation"
+                  control={control}
+                  render={({ field }) => (
+                    <AddressLocationSelector
+                      value={
+                        field.value || {
+                          address: "",
+                          coordinates: null,
+                        }
                       }
-                    }
-                    onChange={(data) => {
-                      field.onChange(data);
-                      dispatch(
-                        setField({ field: "pickupLocation", value: data })
-                      );
-                    }}
-                    readOnly={false}
-                    label="Location"
-                    placeholder="Type address or click on map"
-                    radiusLimit={
-                      radiusCenter
-                        ? { center: radiusCenter, radiusKm: 10 }
-                        : undefined
-                    }
-                  />
-                )}
-              />
+                      onChange={(data) => {
+                        field.onChange(data);
+                        dispatch(
+                          setField({ field: "pickupLocation", value: data })
+                        );
+                      }}
+                      readOnly={false}
+                      label="Location"
+                      placeholder="Type address or click on map"
+                      radiusLimit={{ center: radiusCenter, radiusKm: 10 }}
+                    />
+                  )}
+                />
+              ) : (
+                <div className="text-sm text-gray-600">Loading location constraints...</div>
+              )}
               {errors.pickupLocation?.coordinates?.message && (
                 <p className="text-sm text-red-500 mt-1">
                   {errors.pickupLocation?.coordinates?.message}
