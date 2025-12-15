@@ -199,33 +199,22 @@ export default function App() {
 
   const options: {
     icons: any;
-    name:
-      | "Profile"
-      | "Change Password"
-      | "Promotions"
-      | "Payment Management"
-      | "Notifications";
+    name: "Profile" | "Change Password" | "Promotions" | "Notifications";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
     { icons: Bell, name: "Promotions" },
     { icons: Bell, name: "Notifications" },
-    { icons: DollarSign, name: "Payment Management" },
   ];
   const components = {
     Profile: <AdminEditProfile />,
     "Change Password": <ChangePass />,
     Promotions: <Promotions />,
     Notifications: <NotificationSettings />,
-    "Payment Management": <Terms />,
   };
 
   const [activeComp, setActiveComp] = useState<
-    | "Profile"
-    | "Change Password"
-    | "Promotions"
-    | "Payment Management"
-    | "Notifications"
+    "Profile" | "Change Password" | "Promotions" | "Notifications"
   >("Profile");
 
   return (
@@ -253,14 +242,9 @@ export default function App() {
                   return (
                     <div
                       key={index}
-                      className={`w-fit lg:w-full flex justify-between items-center shrink-0 snap-start ${
-                        item.name === "Payment Management"
-                          ? "cursor-not-allowed"
-                          : "cursor-pointer"
-                      }`}
+                      className={`w-fit lg:w-full flex justify-between items-center shrink-0 snap-start cursor-pointer`}
                       onClick={() => {
-                        item.name !== "Payment Management" &&
-                          setActiveComp(item.name);
+                        setActiveComp(item.name);
                       }}
                     >
                       <div
