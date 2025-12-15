@@ -37,6 +37,13 @@ export default function BookingsPage() {
   const router = useRouter();
   const [data, setData] = useState<BookingWithPopulatedData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [discountInfo, setDiscountInfo] = useState<{
+    percentage: number;
+    text: string;
+    startDate: string;
+    endDate: string;
+    image?: string;
+  } | null>(null);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -55,6 +62,17 @@ export default function BookingsPage() {
       }
     };
     getData();
+  }, []);
+
+  useEffect(() => {
+    const fetchDiscount = async () => {
+      try {
+        const res = await axios.get("/api/discount");
+        const d = res.data?.data;
+        if (d) setDiscountInfo(d);
+      } catch (err) {}
+    };
+    fetchDiscount();
   }, []);
 
   const startStripeCheckout = async () => {
@@ -210,18 +228,19 @@ export default function BookingsPage() {
                 </div>
                 <div className="w-full flex justify-between items-center mt-4 gap-2">
                   <Image
-                    src={"/userDashboard/img30.png"}
+                    src={data?.activity?.uploads[0]}
                     alt=""
                     width={80}
                     height={80}
-                    className="rounded-[9px]"
+                    className="rounded-[9px] object-cover object-center w-[80px] h-[80px]"
                   />
                   <div className="w-full flex justify-center items-start flex-col">
                     <h2 className="text-base font-semibold">
                       {data.activity.title}
                     </h2>
                     <h3 className="text-sm font-normal">
-                      Duration: {getPartOfDay(data.selectDate)} ({data.activity.duration} hours)
+                      Duration: {getPartOfDay(data.selectDate)} (
+                      {data.activity.duration} hours)
                     </h3>
                     <h4 className="text-sm font-normal">
                       {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
@@ -247,11 +266,60 @@ export default function BookingsPage() {
                     text="Free cancellation up to 24 hours before tour."
                   />
                 </div>
+                {(() => {
+                  const slot =
+                    data.activity.slots.find(
+                      (s) => String(s._id) === String(data.slotId)
+                    ) || data.activity.slots?.[0];
+                  const currency = data.paymentDetails.currency || "$";
+                  const baseAdult =
+                    (data.adultsCount || 0) * (slot?.adultPrice || 0);
+                  const baseChild =
+                    (data.childrenCount || 0) * (slot?.childPrice || 0);
+                  const baseTotal = baseAdult + baseChild;
+                  const finalTotal = data.paymentDetails.amount || 0;
+                  const discountAmount =
+                    baseTotal > finalTotal
+                      ? Number((baseTotal - finalTotal).toFixed(2))
+                      : 0;
+                  const derivedPct =
+                    baseTotal > 0
+                      ? Math.round((discountAmount / baseTotal) * 100)
+                      : 0;
+                  return (
+                    <div className="w-full pt-3.5 border-t mt-3.5 space-y-2">
+                      <div className="w-full flex justify-between items-center">
+                        <span className="text-xs font-normal">Base Price</span>
+                        <span className="text-sm font-medium">
+                          {currency} {baseTotal}
+                        </span>
+                      </div>
+                      {discountAmount > 0 && (
+                        <>
+                          <div className="w-full flex justify-between items-center">
+                            <span className="text-xs font-normal">
+                              Discount
+                              {derivedPct ? ` (${derivedPct}% Off)` : ""}
+                            </span>
+                            <span className="text-sm font-medium text-[#51C058]">
+                              -{currency} {discountAmount}
+                            </span>
+                          </div>
+                          {discountInfo?.text && (
+                            <div className="w-full text-xs font-normal text-[#51C058]">
+                              {discountInfo.text}
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  );
+                })()}
               </div>
               <div className="w-[calc(100%+28px)] flex justify-between items-center mt-4 bg-secondary -ms-3.5 -mb-3 rounded-b-2xl px-3.5 py-2">
                 <span className="text-lg font-semibold">Total</span>
                 <span className="text-lg font-semibold">
-                  ${data.paymentDetails.amount}
+                  {data.paymentDetails.currency} {data.paymentDetails.amount}
                 </span>
               </div>
             </BoxProviderWithName>
