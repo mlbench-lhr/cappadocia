@@ -125,7 +125,7 @@ export function Sidebar() {
           <div className="flex items-center justify-between font-semibold w-full">
             <Link href={"/vendor/dashboard"}>
               <Image
-                src={logo.src}
+                src={"/smallLogo.png"}
                 alt=""
                 width={59}
                 height={32}
@@ -182,7 +182,7 @@ export function Sidebar() {
           >
             <div className="flex items-start justify-between font-semibold w-full">
               <Link href={"/vendor/dashboard"}>
-                <Image src={logo.src} alt="" width={59} height={32} />
+                <Image src={"/smallLogo.png"} alt="" width={59} height={32} />
               </Link>
               <button
                 onClick={() => dispatch(toggleCollapse())}
