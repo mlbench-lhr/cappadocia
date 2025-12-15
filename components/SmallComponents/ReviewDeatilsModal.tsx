@@ -15,6 +15,7 @@ import { StarIcon } from "@/public/allIcons/page";
 import { ReviewModal } from "./ReviewModal";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { getPartOfDay } from "@/lib/helper/timeFunctions";
 
 interface ReviewButtonProps {
   data: ReviewWithPopulatedData;
@@ -56,7 +57,7 @@ export const ReviewDetailsModal = ({
                   {data.activity.title}
                 </h2>
                 <h3 className="text-sm font-normal">
-                  Duration: Full Day ({data.activity.duration} hours)
+                  Duration: {getPartOfDay(data.booking.selectDate)} ({data.activity.duration} hours)
                 </h3>
                 <h4 className="text-sm font-normal">
                   {`From : ${data.booking.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.booking.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}

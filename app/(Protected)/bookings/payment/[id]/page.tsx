@@ -17,6 +17,7 @@ import { useParams, useRouter } from "next/navigation";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import axios from "axios";
 import moment from "moment";
+import { getPartOfDay } from "@/lib/helper/timeFunctions";
 import BookingPaymentPageSkeleton from "@/components/Skeletons/BookingPaymentPageSkeleton";
 
 export type DashboardCardProps = {
@@ -220,7 +221,7 @@ export default function BookingsPage() {
                       {data.activity.title}
                     </h2>
                     <h3 className="text-sm font-normal">
-                      Duration: Full Day ({data.activity.duration} hours)
+                      Duration: {getPartOfDay(data.selectDate)} ({data.activity.duration} hours)
                     </h3>
                     <h4 className="text-sm font-normal">
                       {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
