@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import moment from "moment";
 import ToursAndActivity from "@/lib/mongodb/models/ToursAndActivity";
+import AdminSettings from "@/lib/mongodb/models/AdminSettings";
 import Booking from "@/lib/mongodb/models/booking";
 import { Slot } from "@/lib/store/slices/tourAndActivitySlice";
 import { sendNotification } from "@/lib/pusher/notify";
@@ -136,7 +137,25 @@ export async function POST(req: NextRequest) {
     // Calculate total amount
     const adultTotal = adults * matchingSlot.adultPrice;
     const childTotal = children * matchingSlot.childPrice;
-    const totalAmount = adultTotal + childTotal;
+    let totalAmount = adultTotal + childTotal;
+
+    // Apply active global discount if available
+    const settings = await AdminSettings.findOne().session(session);
+    const discount = settings?.discount;
+    if (discount) {
+      const now = new Date();
+      const start = new Date(discount.startDate);
+      const end = new Date(discount.endDate);
+      const within =
+        Number.isFinite(start.getTime()) &&
+        Number.isFinite(end.getTime()) &&
+        start <= now &&
+        now <= end;
+      if (within && typeof discount.percentage === "number") {
+        const pct = Math.min(Math.max(discount.percentage, 0), 100);
+        totalAmount = Number((totalAmount * (1 - pct / 100)).toFixed(2));
+      }
+    }
 
     // Generate unique booking ID
     const bookingId = generateBookingId();
