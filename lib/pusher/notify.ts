@@ -1,5 +1,6 @@
 import { pusherServer } from "./server";
 import Notification from "@/lib/mongodb/models/Notification";
+import User from "@/lib/mongodb/models/User";
 import { Types } from "mongoose";
 
 export type SendNotificationPayload = {
@@ -14,6 +15,14 @@ export type SendNotificationPayload = {
 };
 
 export async function sendNotification(payload: SendNotificationPayload) {
+  try {
+    const user = await User.findById(payload.recipientId).select(
+      "notificationPreferences"
+    );
+    const prefVal = user?.notificationPreferences?.get?.(payload.type);
+    if (prefVal === false) return null;
+  } catch {}
+
   const doc = await Notification.create({
     userId: new Types.ObjectId(payload.recipientId),
     name: payload.name,
@@ -38,7 +47,11 @@ export async function sendNotification(payload: SendNotificationPayload) {
     createdAt: doc.createdAt,
   };
 
-  await pusherServer.trigger(`notification-user-${event.userId}`, "notification-new", event);
+  await pusherServer.trigger(
+    `notification-user-${event.userId}`,
+    "notification-new",
+    event
+  );
 
   return event;
 }

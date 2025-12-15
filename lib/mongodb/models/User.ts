@@ -52,6 +52,7 @@ export interface IUser extends Document {
   profileUpdated: Boolean;
   vendorDetails: VendorDetails;
   favorites: string[];
+  notificationPreferences?: Record<string, boolean>;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -76,6 +77,7 @@ const UserSchema = new Schema<IUser>(
         required: true,
       },
     ],
+    notificationPreferences: { type: Map, of: Boolean, default: {} },
     fullName: { type: String, required: false, trim: true },
     firstName: { type: String, required: false, trim: true },
     phoneNumber: { type: String, trim: true },

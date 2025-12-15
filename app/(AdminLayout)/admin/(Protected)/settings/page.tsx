@@ -15,6 +15,7 @@ import { SettingProvider } from "./SettingProvider";
 import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
 import { Promotions } from "./Promotions/page";
+import NotificationSettings from "@/components/NotificationSettings";
 
 // Edit Profile comp
 
@@ -198,29 +199,29 @@ export default function App() {
 
   const options: {
     icons: any;
-    name: "Profile" | "Change Password" | "Promotions" | "Payment Management";
+    name: "Profile" | "Change Password" | "Promotions" | "Notifications";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
     { icons: Bell, name: "Promotions" },
-    { icons: DollarSign, name: "Payment Management" },
+    { icons: Bell, name: "Notifications" },
   ];
   const components = {
     Profile: <AdminEditProfile />,
     "Change Password": <ChangePass />,
     Promotions: <Promotions />,
-    "Payment Management": <Terms />,
+    Notifications: <NotificationSettings />,
   };
 
   const [activeComp, setActiveComp] = useState<
-    "Profile" | "Change Password" | "Promotions" | "Payment Management"
+    "Profile" | "Change Password" | "Promotions" | "Notifications"
   >("Profile");
 
   return (
     <div className="flex flex-col gap-[32px] justify-start items-start w-full h-fit lg:h-[calc(100vh-120px)]">
       <div className="p-4 lg:p-6 bg-white rounded-[24px] w-full relative h-fit lg:h-full border-2">
         <div className="w-full mx-auto grid grid-cols-3 h-fit lg:h-full">
-          <div className="col-span-3 lg:col-span-1 border-r-none lg:border-r-2 pe-0 lg:pe-6 pb-8 lg:pb-0 pt-0 lg:pt-10 h-fit lg:h-full">
+          <div className="col-span-3 lg:col-span-1 border-r-none lg:border-r-2 pe-0 lg:pe-6 pb-8 lg:pb-0 pt-0 lg:pt-10 h-fit lg:h-full lg:sticky lg:top-0">
             <div className="w-full flex flex-col border-b-2 pb-4 justify-center items-center">
               <Image
                 src={userData?.avatar || "/placeholderDp.png"}
@@ -235,20 +236,15 @@ export default function App() {
               <h3 className="text-sm font-normal">{userData?.email}</h3>
             </div>
             <div className="w-full overflow-auto flex justify-start items-center">
-              <div className="w-fit lg:w-full flex flex-row lg:flex-col justify-start items-start gap-4 pt-4">
+              <div className="w-fit lg:w-full flex flex-row lg:flex-col justify-start items-start gap-3 pt-4 snap-x snap-mandatory">
                 {options.map((item, index) => {
                   let Icon = item.icons;
                   return (
                     <div
                       key={index}
-                      className={`w-fit lg:w-full flex justify-between items-center ${
-                        item.name === "Payment Management"
-                          ? "cursor-not-allowed"
-                          : "cursor-pointer"
-                      }`}
+                      className={`w-fit lg:w-full flex justify-between items-center shrink-0 snap-start cursor-pointer`}
                       onClick={() => {
-                        item.name !== "Payment Management" &&
-                          setActiveComp(item.name);
+                        setActiveComp(item.name);
                       }}
                     >
                       <div

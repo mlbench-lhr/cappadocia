@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     // Get total bookings count
     const totalBookings = await Booking.countDocuments({
       vendor: userId,
-      status: { $in: ["upcoming", "completed"] },
+      status: { $in: ["completed"] },
     });
 
     // Get average rating from reviews
