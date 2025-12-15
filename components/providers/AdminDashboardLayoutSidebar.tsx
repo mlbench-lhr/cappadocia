@@ -111,13 +111,23 @@ export function Sidebar() {
         >
           <div className="flex items-center justify-between font-semibold w-full">
             <Link href={"/admin/dashboard"}>
-              <Image
-                src={logo.src}
-                alt=""
-                width={59}
-                height={32}
-                className="w-[140px] h-auto"
-              />
+              {isCollapsed ? (
+                <Image
+                  src={"/smallLogo.png"}
+                  alt=""
+                  width={59}
+                  height={32}
+                  className="w-auto h-[32px] ms-2 mt-2"
+                />
+              ) : (
+                <Image
+                  src={logo.src}
+                  alt=""
+                  width={59}
+                  height={32}
+                  className="w-[140px] h-auto"
+                />
+              )}
             </Link>
             <button
               onClick={() => dispatch(toggleCollapse())}
@@ -168,7 +178,23 @@ export function Sidebar() {
           >
             <div className="flex items-start justify-between font-semibold w-full">
               <Link href={"/admin/dashboard"}>
-                <Image src={logo.src} alt="" width={59} height={32} />
+                {isCollapsed ? (
+                  <Image
+                    src={"/smallLogo.png"}
+                    alt=""
+                    width={59}
+                    height={32}
+                    className="w-auto h-[32px] ms-2 mt-2"
+                  />
+                ) : (
+                  <Image
+                    src={logo.src}
+                    alt=""
+                    width={59}
+                    height={32}
+                    className="w-[140px] h-auto"
+                  />
+                )}
               </Link>
               <button
                 onClick={() => dispatch(toggleCollapse())}

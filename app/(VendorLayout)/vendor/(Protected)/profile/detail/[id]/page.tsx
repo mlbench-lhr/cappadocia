@@ -15,6 +15,7 @@ import { useParams } from "next/navigation";
 import moment from "moment";
 import { percentage } from "@/lib/helper/smallHelpers";
 import ReservationPageSkeleton from "@/components/Skeletons/ReservationPageSkeleton";
+import { getPartOfDay } from "@/lib/helper/timeFunctions";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -87,7 +88,7 @@ export default function BookingsPage() {
                           {data.activity.title}
                         </h2>
                         <h3 className="text-sm font-normal">
-                          Duration: Full Day ({data.activity.duration} hours)
+                          Duration: {getPartOfDay(data.selectDate)} ({data.activity.duration} hours)
                         </h3>
                         <h4 className="text-sm font-normal">
                           {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}

@@ -18,7 +18,19 @@ import {
 } from "@/public/allIcons/page";
 import { IconAndTextTab2 } from "@/components/SmallComponents/IconAndTextTab";
 import AddressLocationSelector, { LocationData } from "@/components/map";
-import ImageGallery from "@/app/(Protected)/explore/detail/[id]/ImageGallery";
+import UpdatableImageGallery from "@/components/UpdatableImageGallery";
+import { TextAreaInputComponent } from "@/components/SmallComponents/InputComponents";
+import { Pencil, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { uploadMultipleFiles } from "@/lib/utils/upload";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
 import { VendorDetails } from "@/lib/mongodb/models/User";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -77,6 +89,17 @@ export default function BookingsPage() {
 
   const [data, setData] = useState<ToursAndActivityWithVendor | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [updateLoading, setUpdateLoading] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [editTitle, setEditTitle] = useState<boolean>(false);
+  const [category, setCategory] = useState<string>("");
+  const [editCategory, setEditCategory] = useState<boolean>(false);
+  const [description, setDescription] = useState<string>("");
+  const [editDescription, setEditDescription] = useState<boolean>(false);
+  const [uploads, setUploads] = useState<string[]>([]);
+  const [editUploads, setEditUploads] = useState<boolean>(false);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -88,6 +111,10 @@ export default function BookingsPage() {
 
         if (response.data?.data) {
           setData(response.data?.data);
+          setTitle(response.data?.data?.title || "");
+          setCategory(response.data?.data?.category || "");
+          setDescription(response.data?.data?.description || "");
+          setUploads(response.data?.data?.uploads || []);
         }
         setLoading(false);
       } catch (error) {
@@ -96,6 +123,20 @@ export default function BookingsPage() {
     };
     getData();
   }, []);
+
+  const updateActivity = async (payload: Record<string, any>) => {
+    try {
+      setUpdateLoading(true);
+      await axios.put(`/api/toursAndActivity/update/${id}`, payload);
+      setUpdateLoading(false);
+      setEditTitle(false);
+      setEditCategory(false);
+      setEditDescription(false);
+    } catch (error) {
+      console.log("err---", error);
+      setUpdateLoading(false);
+    }
+  };
 
   if (loading) {
     return <BookingPageSkeleton />;
@@ -106,17 +147,200 @@ export default function BookingsPage() {
       <div className="flex flex-col justify-start items-start w-full gap-3 h-fit pb-8">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
-            <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
-              {data?.title}
-            </h1>
-            <ImageGallery imagesParam={data?.uploads || []} />
+            <div className="w-full flex justify-between items-center">
+              {editTitle ? (
+                <div className="flex items-center gap-2 w-full max-w-lg">
+                  <Input
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Edit tour title"
+                  />
+                  <Button
+                    variant={"main_green_button"}
+                    size={"sm"}
+                    onClick={() => updateActivity({ title })}
+                    loading={updateLoading}
+                  >
+                    Save
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 w-full">
+                  <h1 className="text-[20px] md:text-[26px] font-semibold mt-2 flex-1">
+                    {title}
+                  </h1>
+                  <Pencil
+                    className="cursor-pointer"
+                    size={14}
+                    onClick={() => setEditTitle(true)}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="w-full flex items-center gap-3 mt-1">
+              <BoxProviderWithName
+                name="Category"
+                className="text-base"
+                rightSideComponent={
+                  editCategory ? (
+                    <Button
+                      variant={"main_green_button"}
+                      size={"sm"}
+                      onClick={() => updateActivity({ category })}
+                      loading={updateLoading}
+                    >
+                      Save
+                    </Button>
+                  ) : (
+                    <Pencil
+                      className="cursor-pointer"
+                      size={14}
+                      onClick={() => setEditCategory(true)}
+                    />
+                  )
+                }
+              >
+                {editCategory ? (
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Tour">Tour</SelectItem>
+                      <SelectItem value="Activity">Activity</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <span className="text-[14px] font-normal leading-[14px]">
+                    {category}
+                  </span>
+                )}
+              </BoxProviderWithName>
+            </div>
+            <div className="w-full flex flex-col gap-2 mt-2">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    className="text-sm inline-flex items-center gap-1"
+                    onClick={() => setEditUploads((p) => !p)}
+                  >
+                    <Pencil className="cursor-pointer" size={14} />
+                    <span>{editUploads ? "Done" : "Edit"}</span>
+                  </button>
+                  <label
+                    htmlFor="document-upload"
+                    className="cursor-pointer inline-flex items-center gap-1"
+                  >
+                    {isUploading ? (
+                      <span>Uploading...</span>
+                    ) : (
+                      <>
+                        <Plus className="h-4 w-4" />
+                        <span>Add Images</span>
+                      </>
+                    )}
+                  </label>
+                </div>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png,.svg"
+                  onChange={async (e) => {
+                    const files = e.target.files;
+                    if (!files) return;
+                    if (uploads.length + files.length > 10) {
+                      setUploadError("Images must be between 4–10.");
+                      return;
+                    }
+                    for (const file of Array.from(files)) {
+                      if (file.size > 5 * 1024 * 1024) {
+                        setUploadError("Image size should be less than 5MB.");
+                        return;
+                      }
+                    }
+                    setIsUploading(true);
+                    setUploadError("");
+                    try {
+                      const urls = await uploadMultipleFiles(
+                        Array.from(files),
+                        "uploads"
+                      );
+                      const combined = [...uploads, ...urls];
+                      if (combined.length < 4 || combined.length > 10) {
+                        setUploadError("Images must be between 4–10.");
+                        setIsUploading(false);
+                        return;
+                      }
+                      setUploads(combined);
+                      await updateActivity({ uploads: combined });
+                    } catch (error) {
+                      setUploadError("Upload failed. Please try again.");
+                    } finally {
+                      setIsUploading(false);
+                    }
+                  }}
+                  disabled={isUploading || uploads.length >= 10}
+                  className="hidden"
+                  id="document-upload"
+                  multiple
+                />
+              </div>
+              {uploadError && (
+                <span className="text-xs text-red-500">{uploadError}</span>
+              )}
+            </div>
+            <UpdatableImageGallery
+              imagesParam={uploads}
+              isUploading={isUploading}
+              editable={editUploads}
+              onRemove={async (index) => {
+                const filtered = uploads.filter((_, i) => i !== index);
+                if (filtered.length < 4) {
+                  setUploadError("Images must be between 4–10.");
+                  return;
+                }
+                try {
+                  setUploads(filtered);
+                  await updateActivity({ uploads: filtered });
+                } catch {
+                  setUploadError("Failed to update images.");
+                }
+              }}
+            />
             <BoxProviderWithName
               name="Trip Description:"
               className="text-base mt-2"
+              rightSideComponent={
+                editDescription ? (
+                  <Button
+                    variant={"main_green_button"}
+                    size={"sm"}
+                    onClick={() => updateActivity({ description })}
+                    loading={updateLoading}
+                  >
+                    Save
+                  </Button>
+                ) : (
+                  <Pencil
+                    className="cursor-pointer"
+                    size={14}
+                    onClick={() => setEditDescription(true)}
+                  />
+                )
+              }
             >
-              <span className="text-[14px] fot-normal leading-[14px]">
-                {data?.description}
-              </span>
+              {editDescription ? (
+                <TextAreaInputComponent
+                  label={""}
+                  placeholder={"Edit the description"}
+                  value={description}
+                  onChange={setDescription}
+                />
+              ) : (
+                <span className="text-[14px] fot-normal leading-[14px]">
+                  {description}
+                </span>
+              )}
             </BoxProviderWithName>
             <BoxProviderWithName
               name="About this tour:"

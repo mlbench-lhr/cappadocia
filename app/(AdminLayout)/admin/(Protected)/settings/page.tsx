@@ -16,6 +16,7 @@ import { Terms } from "./Terms-and-conditions/page";
 import LogoutDialog from "@/components/LogoutDialog";
 import { Promotions } from "./Promotions/page";
 import NotificationSettings from "@/components/NotificationSettings";
+import { Discounts } from "./Discounts/page";
 
 // Edit Profile comp
 
@@ -199,22 +200,33 @@ export default function App() {
 
   const options: {
     icons: any;
-    name: "Profile" | "Change Password" | "Promotions" | "Notifications";
+    name:
+      | "Profile"
+      | "Change Password"
+      | "Promotions"
+      | "Notifications"
+      | "Discounts";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
     { icons: Bell, name: "Promotions" },
+    { icons: DollarSign, name: "Discounts" },
     { icons: Bell, name: "Notifications" },
   ];
   const components = {
     Profile: <AdminEditProfile />,
     "Change Password": <ChangePass />,
     Promotions: <Promotions />,
+    Discounts: <Discounts />,
     Notifications: <NotificationSettings />,
   };
 
   const [activeComp, setActiveComp] = useState<
-    "Profile" | "Change Password" | "Promotions" | "Notifications"
+    | "Profile"
+    | "Change Password"
+    | "Promotions"
+    | "Notifications"
+    | "Discounts"
   >("Profile");
 
   return (

@@ -208,13 +208,13 @@ export default function BookingsPage() {
                   TÜRSAB Number: {data.vendorDetails.tursabNumber}
                 </h2>
               </div>
-              <Button
+              {/* <Button
                 variant={"main_green_button"}
                 className="w-full md:w-[160px]"
                 asChild
               >
                 <Link href={`/messages?sender=${data._id}`}>Chat</Link>
-              </Button>
+              </Button> */}
             </div>
             <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3.5">
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">

@@ -36,6 +36,7 @@ import AddressLocationSelector, {
   LocationData as MapLocationData,
 } from "@/components/map";
 import type { LatLng } from "@/lib/store/slices/addbooking";
+import { getPartOfDay } from "@/lib/helper/timeFunctions";
 
 const LatLngSchema = z.object({
   lat: z.number(),
@@ -838,6 +839,18 @@ export default function BookingsPage() {
                     setValue("pickupAvailable", isAvailable);
                   }}
                 />
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-[12px] text-black/60">Estimated time of day</span>
+                <span
+                  className={`px-2 py-1 rounded-full text-[12px] font-medium ${
+                    getPartOfDay(startTime)
+                      ? "bg-[#F5FBF5] text-black"
+                      : "bg-gray-100 text-gray-500"
+                  }`}
+                >
+                  {getPartOfDay(startTime) || "—"}
+                </span>
               </div>
             </BoxProviderWithName>
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">

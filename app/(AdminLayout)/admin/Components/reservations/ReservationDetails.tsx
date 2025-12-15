@@ -241,7 +241,7 @@ const ReservationDetails: React.FC = () => {
                   />
                   {data.pickupLocation && (
                     <AddressLocationSelector
-                      value={data.pickupLocation as LocationData}
+                      value={data?.vendor?.vendorDetails?.address}
                       readOnly={true}
                       label="Enter Your Business Address"
                       className=" w-full h-[188px] rounded-xl "
