@@ -28,7 +28,12 @@ const turkishBanks = [
   "QNB Finansbank",
   "TEB",
 ];
-const normalize = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+const normalize = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
 const turkishBanksNorm = turkishBanks.map(normalize);
 const isTurkishIBAN = (v: string) => /^TR\d{24}$/.test(v.toUpperCase());
 
@@ -39,15 +44,11 @@ const step5Schema = z.object({
     .refine((v) => isTurkishIBAN(v), {
       message: "Invalid Turkish IBAN. Must start with TR and be 26 characters",
     }),
-  bankName: z
-    .string()
-    .refine((v) => turkishBanksNorm.includes(normalize(v)), {
-      message: "Bank must be a recognized Turkish bank",
-    }),
-  accountHolderName: z.string().min(2, "Account holder name is required"),
-  currency: z.string().refine((v) => v === "Turkish Lira (TRY)", {
-    message: "Currency must be Turkish Lira (TRY)",
+  bankName: z.string().refine((v) => turkishBanksNorm.includes(normalize(v)), {
+    message: "Bank must be a recognized Turkish bank",
   }),
+  accountHolderName: z.string().min(2, "Account holder name is required"),
+  currency: z.string(),
   agreedToTerms: z.boolean().refine((val) => val === true, {
     message: "You must agree to the terms",
   }),
@@ -57,9 +58,21 @@ type Step5FormData = z.infer<typeof step5Schema>;
 
 const currencyOptions = ["Euro (EUR)", "US Dollar (USD)", "Turkish Lira (TRY)"];
 const labelToSymbol = (v: string) =>
-  v.includes("USD") ? "$" : v.includes("EUR") ? "€" : v.includes("TRY") ? "₺" : v;
+  v.includes("USD")
+    ? "$"
+    : v.includes("EUR")
+    ? "€"
+    : v.includes("TRY")
+    ? "₺"
+    : v;
 const symbolToLabel = (s: string) =>
-  s === "$" ? "US Dollar (USD)" : s === "€" ? "Euro (EUR)" : s === "₺" ? "Turkish Lira (TRY)" : "";
+  s === "$"
+    ? "US Dollar (USD)"
+    : s === "€"
+    ? "Euro (EUR)"
+    : s === "₺"
+    ? "Turkish Lira (TRY)"
+    : "";
 
 interface VendorSignupStep5Props {
   onNext?: () => void;

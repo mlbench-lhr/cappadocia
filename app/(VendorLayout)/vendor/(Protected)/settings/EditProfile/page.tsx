@@ -78,9 +78,7 @@ const completeFormSchema = z.object({
     message: "Bank must be a recognized Turkish bank",
   }),
   accountHolderName: z.string().min(2, "Account holder name is required"),
-  currency: z.string().refine((v) => v === "Turkish Lira (TRY)", {
-    message: "Currency must be Turkish Lira (TRY)",
-  }),
+  currency: z.string(),
 });
 
 type CompleteFormData = z.infer<typeof completeFormSchema>;
@@ -115,6 +113,10 @@ export function EditProfile({
   const dispatch = useAppDispatch();
   const vendorState = useAppSelector((s) => s.vendor.vendorDetails);
   const userData = useAppSelector((state) => state.auth.user);
+  const cappadociaRadius = {
+    center: { lat: 38.6431, lng: 34.852 },
+    radiusKm: 100,
+  };
 
   const {
     control,
@@ -448,6 +450,7 @@ export function EditProfile({
               label="Registered Business Address"
               className="w-full h-[250px] rounded-xl"
               placeholder="Enter your business address"
+              radiusLimit={cappadociaRadius}
             />
           )}
         />

@@ -8,6 +8,7 @@ export interface ReviewWithPopulatedData {
   booking: BookingDocument;
   activity: ToursAndActivityDocument;
   rating: number;
+  createdAt: Date;
   review: {
     addedBy: "user" | "vendor";
     text: string;

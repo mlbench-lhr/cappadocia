@@ -564,31 +564,41 @@ export default function BookingsPage() {
               textClasses=" text-[18px] font-semibold "
             >
               <div className="w-full lg:w-1/2 mt-2">
-                <Controller
-                  name="location"
-                  control={control}
-                  render={({ field }) => (
-                    <AddressLocationSelector
-                      value={
-                        (field.value as unknown as MapLocationData) || {
-                          address: "",
-                          coordinates: null,
+                {vendorCoords &&
+                typeof (vendorCoords as any)?.lat === "number" &&
+                typeof (vendorCoords as any)?.lng === "number" ? (
+                  <Controller
+                    name="location"
+                    control={control}
+                    render={({ field }) => (
+                      <AddressLocationSelector
+                        value={
+                          (field.value as unknown as MapLocationData) || {
+                            address: "",
+                            coordinates: null,
+                          }
                         }
-                      }
-                      onChange={(data) => {
-                        field.onChange(data as any);
-                        dispatch(setField({ field: "location", value: data }));
-                      }}
-                      readOnly={false}
-                      label="Tour Address & Location"
-                      placeholder="Enter tour location"
-                      radiusLimit={{
-                        center: (vendorCoords as LatLng) || { lat: 0, lng: 0 },
-                        radiusKm: 10,
-                      }}
-                    />
-                  )}
-                />
+                        onChange={(data) => {
+                          field.onChange(data as any);
+                          dispatch(
+                            setField({ field: "location", value: data })
+                          );
+                        }}
+                        readOnly={false}
+                        label="Tour Address & Location"
+                        placeholder="Enter tour location"
+                        radiusLimit={{
+                          center: vendorCoords as any,
+                          radiusKm: 10,
+                        }}
+                      />
+                    )}
+                  />
+                ) : (
+                  <div className="text-sm text-red-500">
+                    Set vendor business address to enable location selection.
+                  </div>
+                )}
               </div>
             </BoxProviderWithName>
             <BoxProviderWithName
