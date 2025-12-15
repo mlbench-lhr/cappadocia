@@ -14,6 +14,16 @@ export interface Payments {
   vendorPayment: number;
   commission: number;
   paymentStatus: "pending" | "paid" | "rejected";
+  payout?: {
+    method: string;
+    iban: string;
+    bankName?: string;
+    accountHolderName?: string;
+    amount: number;
+    currency: string;
+    reference?: string;
+    processedAt: Date;
+  };
   rejected: {
     isRejected: boolean;
     reason?: string;

@@ -27,6 +27,16 @@ const PaymentsSchema = new Schema<Payments>(
       default: "pending",
       enum: ["pending", "paid", "rejected"],
     },
+    payout: {
+      method: { type: String },
+      iban: { type: String },
+      bankName: { type: String },
+      accountHolderName: { type: String },
+      amount: { type: Number },
+      currency: { type: String },
+      reference: { type: String },
+      processedAt: { type: Date },
+    },
     rejected: {
       isRejected: { type: Boolean, default: false },
       reason: { type: String },
