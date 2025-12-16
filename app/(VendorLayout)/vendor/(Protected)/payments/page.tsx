@@ -196,13 +196,13 @@ export default function PaymentsPage() {
     <BasicStructureWithName name="">
       <div className="flex flex-col justify-start items-start w-full gap-0 h-fit">
         <BoxProviderWithName noBorder={true} name="Payments">
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <BoxProviderWithName name="" className="col-span-1">
-              <div className="flex flex-col justify-start items-start gap-2 w-full">
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-4">
+            <BoxProviderWithName name="" className="col-span-1 !py-1 md:!py-3">
+              <div className="flex flex-col justify-start items-start gap-0 md:gap-2 w-full">
                 <h2 className="text-sm md:text-base font-semibold">
                   Total Sales (Gross)
                 </h2>
-                <span className="text-2xl md:text-[37px] font-semibold text-[#20B322]">
+                <span className="text-lg md:text-[32px] font-semibold text-[#20B322]">
                   $1,450
                 </span>
                 <span className="text-sm md:text-base font-medium text-black/60">
@@ -210,12 +210,12 @@ export default function PaymentsPage() {
                 </span>
               </div>
             </BoxProviderWithName>
-            <BoxProviderWithName name="" className="col-span-1">
-              <div className="flex flex-col justify-start items-start gap-2 w-full">
+            <BoxProviderWithName name="" className="col-span-1 !py-1 md:!py-3">
+              <div className="flex flex-col justify-start items-start gap-0 md:gap-2 w-full">
                 <h2 className="text-sm md:text-base font-semibold">
                   Pending Earnings
                 </h2>
-                <span className="text-2xl md:text-[37px] font-semibold text-[#FE9F10]">
+                <span className="text-lg md:text-[32px] font-semibold text-[#FE9F10]">
                   $320
                 </span>
                 <span className="text-sm md:text-base font-medium text-black/60">
@@ -223,12 +223,12 @@ export default function PaymentsPage() {
                 </span>
               </div>
             </BoxProviderWithName>
-            <BoxProviderWithName name="" className="col-span-1">
-              <div className="flex flex-col justify-start items-start gap-2 w-full">
+            <BoxProviderWithName name="" className="col-span-1 !py-1 md:!py-3">
+              <div className="flex flex-col justify-start items-start gap-0 md:gap-2 w-full">
                 <h2 className="text-sm md:text-base font-semibold">
                   Total Paid Out
                 </h2>
-                <span className="text-2xl md:text-[37px] font-semibold">
+                <span className="text-lg md:text-[32px] font-semibold">
                   $2,592
                 </span>
                 <span className="text-sm md:text-base font-medium text-black/60">
@@ -242,11 +242,11 @@ export default function PaymentsPage() {
           noBorder={true}
           textClasses=" text-[18px] font-semibold "
         >
-          <div className="w-full flex justify-between items-center">
+          <div className="w-full flex flex-wrap gapy-2 justify-between items-center">
             <div className="bg-[#FFF5DF] w-full md:w-[550px] flex px-3 py-2 rounded-lg justify-between items-center">
               <IconAndTextTab2
                 alignClass=" items-center !gap-3"
-                textClasses=" text-black/80 text-[14px] font-medium "
+                textClasses=" text-black/80 text-xs md:text-[14px] font-medium "
                 text="You can request payout 1 day after the activity has been completed."
                 icon={
                   <svg
@@ -274,12 +274,12 @@ export default function PaymentsPage() {
                   Connect Bank Account
                 </Button>
               ) : (
-                <>
-                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-md text-sm">
+                <div className="flex justify-start items-center gap-2 mt-3 md:mt-0 flex-wrap">
+                  <span className="px-3 py-1 bg-green-100 text-green-700 rounded-md text-xs md:text-sm">
                     Connected
                   </span>
                   <span
-                    className={`px-3 py-1 rounded-md text-sm ${
+                    className={`px-3 py-1 rounded-md text-xs md:text-sm ${
                       status?.payouts_enabled
                         ? "bg-green-100 text-green-700"
                         : "bg-yellow-100 text-yellow-800"
@@ -290,7 +290,7 @@ export default function PaymentsPage() {
                       : "Payouts Pending"}
                   </span>
                   <span
-                    className={`px-3 py-1 rounded-md text-sm ${
+                    className={`px-3 py-1 rounded-md text-xs md:text-sm ${
                       status?.details_submitted
                         ? "bg-green-100 text-green-700"
                         : "bg-gray-100 text-gray-700"
@@ -308,7 +308,7 @@ export default function PaymentsPage() {
                       Details Missing
                     </button>
                   )}
-                </>
+                </div>
               )}
             </div>
           </div>

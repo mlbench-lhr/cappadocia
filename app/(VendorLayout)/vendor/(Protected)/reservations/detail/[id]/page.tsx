@@ -122,7 +122,7 @@ export default function BookingsPage() {
                         alt=""
                         width={200}
                         height={200}
-                        className="w-full md:w-[100px] h-auto md:h-[100px] object-cover object-center rounded-2xl"
+                        className="w-full md:w-[100px] h-[150px] md:h-[100px] object-cover object-center rounded-2xl"
                       />
                       <div className="w-[calc(100%-110px)] flex justify-center items-start flex-col ">
                         <h2 className="text-base font-semibold">
@@ -151,7 +151,7 @@ export default function BookingsPage() {
                         {data.adultsCount} Adults, {data.childrenCount} Children{" "}
                       </span>
                     </div>
-                    <div className="w-full flex justify-start items-center gap-8">
+                    <div className="w-full flex justify-between md:justify-start items-center gap-8">
                       <span className="text-xs font-normal">
                         Booking status:
                       </span>
@@ -198,7 +198,7 @@ export default function BookingsPage() {
               <BoxProviderWithName className="text-base" name="Price Breakdown">
                 <div className="w-full flex-col flex justify-start items-start gap-1">
                   <div className="w-full flex justify-start items-center gap-8">
-                    <span className="text-base font-normal">
+                    <span className="text-sm md:text-base font-normal">
                       Payment status:
                     </span>
                     <StatusBadge status={data.paymentStatus} />

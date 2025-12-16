@@ -97,8 +97,8 @@ export default function BookingsPage() {
     <BasicStructureWithName
       name="Tours & Activities"
       rightSideComponent={
-        <div className="flex justify-start items-center gap-2">
-          <Button className="" variant={"main_green_button"}>
+        <div className="w-full md:w-fit flex-wrap flex justify-start items-center gap-2">
+          <Button className="w-full md:w-auto" variant={"main_green_button"}>
             <Link href={`/vendor/tours-and-activities/add`}>
               Add Tour/Activity
             </Link>

@@ -44,8 +44,10 @@ export const UpcomingReservations = () => {
         <BoxProviderWithName
           leftSideComponent={
             <div className="flex justify-start items-center gap-2">
-              <span className="text-base font-semibold">Reservations</span>
-              <Select>
+              <span className="text-sm md:text-base font-semibold">
+                Reservations
+              </span>
+              {/* <Select>
                 <SelectTrigger className="w-full" style={{ height: "30px" }}>
                   Today
                 </SelectTrigger>
@@ -56,7 +58,7 @@ export const UpcomingReservations = () => {
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select> */}
             </div>
           }
         >

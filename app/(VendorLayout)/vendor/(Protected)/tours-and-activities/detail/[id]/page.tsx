@@ -198,7 +198,7 @@ export default function BookingsPage() {
                 </div>
               ) : (
                 <div className="flex items-center gap-2 w-full">
-                  <h1 className="text-[20px] md:text-[26px] font-semibold mt-2 flex-1">
+                  <h1 className="text-sm md:text-[26px] font-semibold mt-2 flex-1">
                     {title}
                   </h1>
                   <Pencil

@@ -106,7 +106,11 @@ export function Sidebar() {
   const desktopWidth = isCollapsed ? "w-20" : "w-[260px]";
   const userData = useAppSelector((state) => state.auth.user);
   const pathname = usePathname(); // ✅ current route
+  console.log("pathname----", pathname);
 
+  useEffect(() => {
+    if (pathname) dispatch(closeSidebar());
+  }, [pathname]);
   const isMiddleScreen = useMediaQuery({ maxWidth: 1350 }); // below 1200px
 
   useEffect(() => {
@@ -265,7 +269,7 @@ export function Sidebar() {
         } transform transition-transform duration-200`}
       >
         <div className="min-w-[335px] bg-white h-full shadow-xl flex flex-col">
-          <div className="pt-[40px] pb-[16px] px-[20px] flex items-start justify-between border-b flex-col gap-[12px] w-full">
+          <div className="pt-4 md:pt-[40px] pb-[16px] px-[20px] flex items-start justify-between border-b flex-col gap-[12px] w-full">
             <div className="flex justify-between items-start w-full">
               {userData?.avatar ? (
                 <Image
@@ -287,8 +291,12 @@ export function Sidebar() {
               </button>
             </div>
             <div>
-              <div className="text-md font-medium">{userData?.email}</div>
-              <div className="text-sm font-normal">{userData?.fullName}</div>
+              <div className="text-sm md:text-md font-medium">
+                {userData?.email}
+              </div>
+              <div className="text-xs md:text-sm font-normal">
+                {userData?.fullName}
+              </div>
             </div>
           </div>
 
@@ -313,17 +321,7 @@ export function Sidebar() {
                 </Link>
               );
             })}
-            <Link
-              href={"/Notifications"}
-              className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                pathname.includes("Notifications")
-                  ? "text-primary bg-secondary"
-                  : "hover:bg-secondary"
-              }`}
-            >
-              <Image src={bell.src} alt="" width={16} height={16} />
-              Notifications
-            </Link>
+
             {/* <Link
               href={"/update-profile"}
               className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2"

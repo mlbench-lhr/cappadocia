@@ -81,7 +81,7 @@ export default function DashboardPage() {
                     key={index}
                   >
                     <div className="w-full flex justify-between items-center">
-                      <Skeleton className="text-4xl font-semibold line-clamp-1 text-transparent">
+                      <Skeleton className="text-2xl md:text-4xl font-semibold line-clamp-1 text-transparent">
                         {item.title}
                       </Skeleton>
                       <Skeleton className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
@@ -95,18 +95,18 @@ export default function DashboardPage() {
                 ))
               : reportsCardData.map((item, index) => (
                   <div
-                    className="border rounded-2xl py-3 px-4.5 flex flex-col gap-2 justify-between items-start line-clamp-1"
+                    className="border rounded-2xl py-1.5 md:py-3 px-2 md:px-4.5 flex flex-col gap-2 justify-between items-start line-clamp-1"
                     key={index}
                   >
                     <div className="w-full flex justify-between items-center">
                       <span className="text-sm md:text-base font-semibold">
                         {item.description}
                       </span>
-                      <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
+                      <div className="flex justify-center items-center w-[30px] md:w-[36px] h-[30px] md:h-[36px] rounded-full bg-primary">
                         {images[index]}
                       </div>
                     </div>
-                    <span className="text-4xl font-semibold line-clamp-1 leading-none">
+                    <span className="text-xl md:text-4xl font-semibold line-clamp-1 leading-none">
                       {item.title}
                     </span>
                     <span className="text-base font-medium line-clamp-1 text-primary">
@@ -117,13 +117,13 @@ export default function DashboardPage() {
                 ))}
           </div>
           <div className="w-full grid grid-cols-1 xl:grid-cols-2 gap-4">
-            <div className="col-span-1 h-[470px] overflow-hidden">
+            <div className="col-span-1 h-[300px] md:h-[470px] overflow-hidden">
               <ChartAreaGradient className=" h-full " />
             </div>
             {/* <div className="col-span-1 h-[320px]">
               <RatingBreakdown />
             </div> */}
-            <div className="col-span-1 h-[470px]">
+            <div className="col-span-1 h-[300px] md:h-[470px]">
               <ChartBarGradient />
             </div>
           </div>
