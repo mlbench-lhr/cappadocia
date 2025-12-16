@@ -99,35 +99,35 @@ export default function VendorDetailPage() {
               </div>
             </div>
             <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3.5">
-              <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">
+              <div className="flex flex-col justify-center items-center border rounded-2xl h-[80px] md:h-[130px]">
+                <h2 className="text-xl md:text-2xl md:text-[37px] font-medium ">
                   {data.activeTours}
                 </h2>
-                <h2 className="text-sm md:text-base font-medium ">
+                <h2 className="text-xs md:text-base font-medium ">
                   active Tours
                 </h2>
               </div>
-              <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">
+              <div className="flex flex-col justify-center items-center border rounded-2xl h-[80px] md:h-[130px]">
+                <h2 className="text-xl md:text-2xl md:text-[37px] font-medium ">
                   {data.totalBookings}
                 </h2>
-                <h2 className="text-sm md:text-base font-medium ">
+                <h2 className="text-xs md:text-base font-medium ">
                   Total Bookings
                 </h2>
               </div>
-              <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">
+              <div className="flex flex-col justify-center items-center border rounded-2xl h-[80px] md:h-[130px]">
+                <h2 className="text-xl md:text-2xl md:text-[37px] font-medium ">
                   {data.vendorDetails.rating?.average?.toFixed(1)}
                 </h2>
-                <h2 className="text-sm md:text-base font-medium ">
+                <h2 className="text-xs md:text-base font-medium ">
                   Average Rating
                 </h2>
               </div>
-              <div className="flex flex-col justify-center items-center border rounded-2xl h-[100px] md:h-[130px]">
-                <h2 className="text-2xl md:text-[37px] font-medium ">
+              <div className="flex flex-col justify-center items-center border rounded-2xl h-[80px] md:h-[130px]">
+                <h2 className="text-xl md:text-2xl md:text-[37px] font-medium ">
                   {timeSince(data.createdAt).value}
                 </h2>
-                <h2 className="text-sm md:text-base font-medium ">
+                <h2 className="text-xs md:text-base font-medium ">
                   {timeSince(data.createdAt).unit} active
                 </h2>
               </div>

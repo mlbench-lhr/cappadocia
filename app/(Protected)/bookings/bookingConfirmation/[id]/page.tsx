@@ -99,7 +99,7 @@ export default function BookingsPage() {
       showBackOption
       rightSideComponent={<DownloadInvoiceButton />}
     >
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
           <BoxProviderWithName noBorder={true} className="">
             <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
@@ -187,8 +187,14 @@ export default function BookingsPage() {
                             />
                           </div>
                         </div>
-                        <Button variant={"main_green_button"} className="w-full" asChild>
-                          <Link href={`/messages?sender=${data?.vendor._id}`}>Chat</Link>
+                        <Button
+                          variant={"main_green_button"}
+                          className="w-full"
+                          asChild
+                        >
+                          <Link href={`/messages?sender=${data?.vendor._id}`}>
+                            Chat
+                          </Link>
                         </Button>
                       </div>
                       <div className="flex flex-col justify-start items-start gap-2 mt-3">

@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 import { ChevronDown } from "lucide-react";
 import { SearchComponent } from "@/components/SmallComponents/SearchComponent";
-import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,8 +63,13 @@ export default function ExplorePage({
   const applyDurationFilter = (from: Date | null, to: Date | null) => {
     removeFilterKind("duration");
     if (from || to) {
-      setFilters((p) => [...p.filter((x) => x !== "all"), { duration: { from, to } }]);
-      setFilters((p) => p.filter((x, i, arr) => !(x === "all" && arr.length > 1)));
+      setFilters((p) => [
+        ...p.filter((x) => x !== "all"),
+        { duration: { from, to } },
+      ]);
+      setFilters((p) =>
+        p.filter((x, i, arr) => !(x === "all" && arr.length > 1))
+      );
     } else {
       setFilters(["all"]);
     }
@@ -68,8 +77,13 @@ export default function ExplorePage({
   const applyPriceFilter = (min: number | null, max: number | null) => {
     removeFilterKind("priceRange");
     if (min != null || max != null) {
-      setFilters((p) => [...p.filter((x) => x !== "all"), { priceRange: { min, max } }]);
-      setFilters((p) => p.filter((x, i, arr) => !(x === "all" && arr.length > 1)));
+      setFilters((p) => [
+        ...p.filter((x) => x !== "all"),
+        { priceRange: { min, max } },
+      ]);
+      setFilters((p) =>
+        p.filter((x, i, arr) => !(x === "all" && arr.length > 1))
+      );
     } else {
       if (filters.length === 0) setFilters(["all"]);
     }
@@ -78,7 +92,9 @@ export default function ExplorePage({
     removeFilterKind("rating");
     if (rating != null) {
       setFilters((p) => [...p.filter((x) => x !== "all"), { rating }]);
-      setFilters((p) => p.filter((x, i, arr) => !(x === "all" && arr.length > 1)));
+      setFilters((p) =>
+        p.filter((x, i, arr) => !(x === "all" && arr.length > 1))
+      );
     } else {
       if (filters.length === 0) setFilters(["all"]);
     }
@@ -93,23 +109,36 @@ export default function ExplorePage({
   };
 
   const isAllActive = filters.includes("all");
-  const isDurationActive = filters.some((f) => typeof f === "object" && "duration" in (f as any));
-  const isPriceActive = filters.some((f) => typeof f === "object" && "priceRange" in (f as any));
-  const isRatingActive = filters.some((f) => typeof f === "object" && "rating" in (f as any));
+  const isDurationActive = filters.some(
+    (f) => typeof f === "object" && "duration" in (f as any)
+  );
+  const isPriceActive = filters.some(
+    (f) => typeof f === "object" && "priceRange" in (f as any)
+  );
+  const isRatingActive = filters.some(
+    (f) => typeof f === "object" && "rating" in (f as any)
+  );
 
   return (
     <BasicStructureWithName
-      name={type === "both" ? "Explore Cappadocia" : "Explore Cappadocia " + type}
+      name={
+        type === "both" ? "Explore Cappadocia" : "Explore Cappadocia " + type
+      }
       showBackOption
       rightSideComponent={
-        <SearchComponent searchQuery={searchQuery} onChangeFunc={setSearchQuery} />
+        <SearchComponent
+          searchQuery={searchQuery}
+          onChangeFunc={setSearchQuery}
+        />
       }
     >
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
           <div
             onClick={() => clearAllFilters()}
-            className={`cursor-pointer ${isAllActive ? " bg-secondary text-primary" : "border"} px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
+            className={`cursor-pointer ${
+              isAllActive ? " bg-secondary text-primary" : "border"
+            } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium`}
           >
             All
           </div>
@@ -117,7 +146,9 @@ export default function ExplorePage({
           <Popover open={durationOpen} onOpenChange={setDurationOpen}>
             <PopoverTrigger asChild>
               <div
-                className={`cursor-pointer ${isDurationActive ? " bg-secondary text-primary" : "border"} px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
+                className={`cursor-pointer ${
+                  isDurationActive ? " bg-secondary text-primary" : "border"
+                } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
               >
                 Duration
                 <ChevronDown size={16} />
@@ -151,7 +182,9 @@ export default function ExplorePage({
           <Popover open={priceOpen} onOpenChange={setPriceOpen}>
             <PopoverTrigger asChild>
               <div
-                className={`cursor-pointer ${isPriceActive ? " bg-secondary text-primary" : "border"} px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
+                className={`cursor-pointer ${
+                  isPriceActive ? " bg-secondary text-primary" : "border"
+                } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
               >
                 Price Range
                 <ChevronDown size={16} />
@@ -191,8 +224,10 @@ export default function ExplorePage({
                 <div className="flex justify-end gap-2">
                   <Button
                     onClick={() => {
-                      const min = tempMinPrice === "" ? null : Number(tempMinPrice);
-                      const max = tempMaxPrice === "" ? null : Number(tempMaxPrice);
+                      const min =
+                        tempMinPrice === "" ? null : Number(tempMinPrice);
+                      const max =
+                        tempMaxPrice === "" ? null : Number(tempMaxPrice);
                       applyPriceFilter(min, max);
                       setPriceOpen(false);
                       setFilters((p) => p.filter((x) => x !== "all"));
@@ -208,7 +243,9 @@ export default function ExplorePage({
           <Popover open={ratingOpen} onOpenChange={setRatingOpen}>
             <PopoverTrigger asChild>
               <div
-                className={`cursor-pointer ${isRatingActive ? " bg-secondary text-primary" : "border"} px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
+                className={`cursor-pointer ${
+                  isRatingActive ? " bg-secondary text-primary" : "border"
+                } px-2.5 sm:px-4 py-1.5 sm:py-3 leading-tight rounded-[14px] text-[12px] font-medium flex justify-between items-center gap-2`}
               >
                 Rating
                 <ChevronDown size={16} />
@@ -250,10 +287,18 @@ export default function ExplorePage({
         <BoxProviderWithName className="">
           <div className="w-full space-y-4">
             {(type === "both" || type === "Tour") && (
-              <ExploreTours type={type} filters={JSON.stringify(filters)} searchQuery={searchQuery} />
+              <ExploreTours
+                type={type}
+                filters={JSON.stringify(filters)}
+                searchQuery={searchQuery}
+              />
             )}
             {(type === "both" || type === "Activity") && (
-              <ExploreActivities type={type} filters={JSON.stringify(filters)} searchQuery={searchQuery} />
+              <ExploreActivities
+                type={type}
+                filters={JSON.stringify(filters)}
+                searchQuery={searchQuery}
+              />
             )}
           </div>
         </BoxProviderWithName>

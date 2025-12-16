@@ -11,7 +11,7 @@ const variants: any = {
 export const StatusText = ({ status }: { status: string }) => {
   return (
     <div
-      className={`leading-tight text-base font-normal capitalize`}
+      className={`leading-tight text-xs md:text-base font-normal capitalize`}
       style={{
         color: variants[status]?.text,
       }}

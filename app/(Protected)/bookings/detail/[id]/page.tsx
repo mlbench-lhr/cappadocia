@@ -178,7 +178,7 @@ export default function BookingsPage() {
         </div>
       }
     >
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <BoxProviderWithName
           name={"Booking Information / #" + data?.bookingId}
           rightSideComponent={
@@ -196,7 +196,7 @@ export default function BookingsPage() {
                     src={data?.activity?.uploads?.[0]}
                     width={200}
                     height={200}
-                    className="w-full md:w-[200px] h-auto md:h-[200px] object-cover object-center rounded-2xl"
+                    className="w-full md:w-[200px] h-[200px] object-cover object-center rounded-2xl"
                   />
                   <div className="grid grid-cols-2 gap-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
                     <h1 className="col-span-2 text-base font-semibold text-black leading-tight line-clamp-1">
@@ -261,7 +261,7 @@ export default function BookingsPage() {
                 <div className="w-full grid grid-cols-12">
                   <div className="col-span-12 md:col-span-6 flex flex-col gap-2 items-start justify-start">
                     <div className="flex gap-2 items-center justify-start">
-                      <span className="text-base font-normal">
+                      <span className="text-sm md:text-base font-normal">
                         Payment Status:
                       </span>
                       <StatusBadge status={data.paymentStatus} />
@@ -345,28 +345,28 @@ export default function BookingsPage() {
                           </Button>
                         </div>
                         <div className="flex flex-col justify-start items-start gap-2 mt-3">
-                          <span className="text-base font-semibold">
+                          <span className="text-sm md:text-base font-semibold">
                             Contact Information
                           </span>
                           <IconAndTextTab2
                             icon={<PhoneIcon />}
                             text={data.vendor.vendorDetails.contactPhoneNumber}
-                            textClasses="text-black/70"
+                            textClasses=" text-[12px] font-medium leading-[10px] text-black/70"
                           />
                           <IconAndTextTab2
                             icon={<MailIcon />}
                             text={data.vendor.vendorDetails.businessEmail}
-                            textClasses="text-black/70"
+                            textClasses=" text-[12px] font-medium leading-[10px] text-black/70"
                           />
                         </div>
                         <div className="flex flex-col justify-start items-start gap-2 mt-3">
-                          <span className="text-base font-semibold">
+                          <span className="text-sm md:text-base font-semibold">
                             Location
                           </span>
                           <IconAndTextTab2
                             icon={<LocationIcon />}
                             text={`Location: ${data.vendor.vendorDetails.address.address}`}
-                            textClasses="text-black/70"
+                            textClasses=" text-[12px] font-medium leading-[10px] text-black/70"
                           />
                           {data.pickupLocation && (
                             <AddressLocationSelector
@@ -383,7 +383,7 @@ export default function BookingsPage() {
                                 <>
                                   <div className="w-full flex flex-col justify-start items-start gap-2">
                                     <div className="w-full flex justify-between items-center">
-                                      <h3 className="text-base font-semibold">
+                                      <h3 className="text-sm md:text-base font-semibold">
                                         Your Feedback
                                       </h3>
                                       <div className="w-fit flex justify-start items-center gap-1">
@@ -399,7 +399,7 @@ export default function BookingsPage() {
                                         className="w-full flex flex-col justify-start items-start"
                                       >
                                         {item.addedBy === "vendor" && (
-                                          <h3 className="text-base font-semibold">
+                                          <h3 className="text-sm md:text-base font-semibold">
                                             Vendor Reply
                                           </h3>
                                         )}

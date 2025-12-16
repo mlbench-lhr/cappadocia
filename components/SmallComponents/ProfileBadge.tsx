@@ -4,15 +4,15 @@ import Image from "next/image";
 const imageSizes: Record<string, string> = {
   small: " w-[30px] h-[30px] ",
   medium: " w-[40px] h-[40px] ",
-  large: " w-[60px] h-[60px] ",
-  custom: " w-[70px] h-[70px] ",
+  large: " w-[40px] h-[40px] md:w-[60px] md:h-[60px] ",
+  custom: " w-[40px] h-[40px] md:w-[70px] md:h-[70px] ",
 };
 
 const headingTextSize: Record<string, string> = {
   small: " text-[10px] ",
   medium: " text-[13px] ",
-  large: " text-[18px] ",
-  custom: " text-[16px] ",
+  large: " text-sm md:text-[18px] ",
+  custom: " text-sm md:text-[16px] ",
 };
 
 const descTextSize: Record<string, string> = {
