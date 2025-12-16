@@ -22,18 +22,18 @@ export default function BookingsPage() {
 
   return (
     <BasicStructureWithName name="Reviews" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <BoxProviderWithName
           noBorder={true}
           leftSideComponent={
             <div className="w-fit flex justify-start items-center gap-2">
               <div className=" flex justify-start items-center gap-2">
                 <Button
-                  className={`h-[44px] ${
+                  className={`h-[36px] md:h-[44px] ${
                     activeTab === "reviews"
                       ? "bg-secondary text-primary hover:bg-secondary"
                       : "bg-white text-black/70 border hover:bg-white"
-                  } font-semibold !rounded-2xl `}
+                  } font-semibold  text-xs md:text-base !rounded-2xl `}
                   onClick={() => {
                     setActiveTab("reviews");
                   }}
@@ -41,11 +41,11 @@ export default function BookingsPage() {
                   Submitted Reviews
                 </Button>
                 <Button
-                  className={`h-[44px]  ${
+                  className={`h-[36px] md:h-[44px]  ${
                     activeTab === "bookings"
                       ? "bg-secondary text-primary hover:bg-secondary"
                       : "bg-white text-black/70 border hover:bg-white"
-                  } font-semibold !rounded-2xl `}
+                  } font-semibold  text-xs md:text-base !rounded-2xl `}
                   onClick={() => {
                     setActiveTab("bookings");
                   }}
@@ -62,6 +62,7 @@ export default function BookingsPage() {
                   ? "Search by invoice id..."
                   : "Search by title..."
               }
+              width=" w-full md:w-[325px] "
               searchQuery={searchQuery}
               onChangeFunc={setSearchQuery}
             />

@@ -23,7 +23,7 @@ import axios from "axios";
 import { VendorDetailsType } from "@/lib/types/vendor";
 import { timeSince } from "@/lib/helper/timeFunctions";
 import VendorProfileSkeleton from "@/components/Skeletons/VendorProfileSkeleton";
-import ReviewSection from "../../../detail/[id]/ReviewSection";
+import ReviewSection from "@/app/(Protected)/explore/detail/[id]/ReviewSection";
 
 export default function VendorDetailPage() {
   const dispatch = useAppDispatch();
@@ -97,13 +97,6 @@ export default function VendorDetailPage() {
                   TÜRSAB Number: {data.vendorDetails.tursabNumber}
                 </h2>
               </div>
-              <Button
-                variant={"main_green_button"}
-                className="w-full md:w-[160px]"
-                asChild
-              >
-                <Link href={`/messages?sender=${data._id}`}>Chat</Link>
-              </Button>
             </div>
             <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3.5">
               <div className="flex flex-col justify-center items-center border rounded-2xl h-[80px] md:h-[130px]">

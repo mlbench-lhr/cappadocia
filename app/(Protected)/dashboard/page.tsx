@@ -87,7 +87,7 @@ export default function DashboardPage() {
 
   return (
     <BasicStructureWithName name="Dashboard">
-      <div className="grid grid-cols-16 w-full border px-4 py-5.5 rounded-[12px] gap-3 h-fit">
+      <div className="grid grid-cols-16 w-full md:border px-0 md:px-4 py-0 md:py-5.5 rounded-[12px] gap-3 h-fit">
         <div className="col-span-16 h-fit xl:h-full flex-1 xl:col-span-9 flex flex-col justify-start xl:justify-between items-start gap-4">
           {(() => {
             const active = (() => {
@@ -111,25 +111,25 @@ export default function DashboardPage() {
             const e = discount ? new Date(discount.endDate) : null;
             if (active && discount && s && e) {
               return (
-                <div className="h-[225px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
+                <div className="h-fit md:h-[225px] flex flex-col justify-center items-start gap-2 md:gap-4 relative w-full p-4 md:p-7 overflow-hidden rounded-2xl">
                   <Image
                     alt=""
                     src={discount.image || "/userDashboard/img.png"}
                     width={0}
                     height={225}
-                    className="w-full h-[225px] absolute top-0 left-0 object-cover object-center"
+                    className="w-full h-full md:h-[225px] absolute top-0 left-0 object-cover object-center"
                   />
                   <div className="h-fit flex flex-col justify-center items-start gap-1 relative w-full text-white">
-                    <h1 className="text-4xl font-semibold">
+                    <h1 className="text-2xl md:text-4xl font-semibold">
                       {discount.percentage}% Off
                     </h1>
-                    <h2 className="text-base font-semibold text-white/80">
+                    <h2 className="text-sm md:text-base font-semibold text-white/80">
                       {discount.text}
                     </h2>
                     <h3 className="text-sm font-semibold text-white/80 mt-0.5">
                       {fmt(s)} - {fmt(e)}
                     </h3>
-                    <Button className="h-[32px] w-[110px] flex justify-center mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
+                    <Button className="h-[32px] w-[110px] flex justify-center mt-1 md:mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
                       <Link href={"/explore"}>Book now</Link>
                     </Button>
                   </div>
@@ -137,40 +137,42 @@ export default function DashboardPage() {
               );
             }
             return (
-              <div className="h-[225px] flex flex-col justify-center items-start gap-4 relative w-full p-7 overflow-hidden rounded-2xl">
+              <div className="h-fit md:h-[225px] flex flex-col justify-center items-start gap-2 md:gap-4 relative w-full p-4 md:p-7 overflow-hidden rounded-2xl">
                 <Image
                   alt=""
                   src={"/userDashboard/img.png"}
                   width={0}
                   height={225}
-                  className="w-full h-[225px] absolute top-0 left-0 object-cover object-center"
+                  className="w-full h-full md:h-[225px] absolute top-0 left-0 object-cover object-center"
                 />
                 <div className="h-fit flex flex-col justify-center items-start gap-1 relative w-full text-white">
-                  <h1 className="text-4xl font-semibold">10% Off</h1>
-                  <h2 className="text-base font-semibold text-white/80">
+                  <h1 className="text-2xl md:text-4xl font-semibold">
+                    10% Off
+                  </h1>
+                  <h2 className="text-sm md:text-base font-semibold text-white/80">
                     Get 10% off Cappadocia Hot Air Balloon Rides this weekend!
                   </h2>
                   <h3 className="text-sm font-semibold text-white/80 mt-0.5">
                     Apr 10 - Apr 14
                   </h3>
-                  <Button className="h-[32px] w-[110px] flex justify-center mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
+                  <Button className="h-[32px] w-[110px] flex justify-center mt-1 md:mt-3.5 items-center text-base font-medium bg-white text-primary hover:bg-white">
                     <Link href={"/explore"}>Book now</Link>
                   </Button>
                 </div>
               </div>
             );
           })()}
-          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
             {dashboardCardData.map((item, index) => (
               <div
-                className="bg-secondary border h-[120px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
+                className="bg-secondary border gap-3 md:gap-0 h-fit md:h-[120px] rounded-2xl py-2 md:py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
                 key={index}
               >
                 <div className="w-full flex justify-between items-center">
-                  <h1 className="text-4xl font-semibold line-clamp-1">
+                  <h1 className="text-2xl md:text-4xl font-semibold line-clamp-1">
                     {item.title}
                   </h1>
-                  <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
+                  <div className="flex justify-center items-center w-[30px] md:w-[36px] h-[30px] md:h-[36px] rounded-full bg-primary">
                     {item.image}
                   </div>
                 </div>

@@ -79,7 +79,8 @@ export default function PublicExploreDetailPage() {
                   size="medium"
                   title={data?.vendor?.vendorDetails?.companyName}
                   subTitle={
-                    "TÜRSAB Number: " + data?.vendor?.vendorDetails?.tursabNumber
+                    "TÜRSAB Number: " +
+                    data?.vendor?.vendorDetails?.tursabNumber
                   }
                   image={data?.vendor?.avatar || "/placeholderDp.png"}
                 />
@@ -92,12 +93,19 @@ export default function PublicExploreDetailPage() {
               {data.title}
             </h1>
             <ImageGallery imagesParam={data?.uploads} />
-            <BoxProviderWithName name="Trip Description:" className="text-base mt-2">
+            <BoxProviderWithName
+              name="Trip Description:"
+              className="text-base mt-2"
+            >
               <span className="text-[14px] fot-normal leading-[14px]">
                 {data?.description}
               </span>
             </BoxProviderWithName>
-            <BoxProviderWithName name="About this tour:" className="text-base !p-0 mt-2" noBorder={true}>
+            <BoxProviderWithName
+              name="About this tour:"
+              className="text-base !p-0 mt-2"
+              noBorder={true}
+            >
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 <BoxProviderWithName className="text-base">
                   <div className="w-full flex-col flex justify-start items-start gap-5">
@@ -105,7 +113,8 @@ export default function PublicExploreDetailPage() {
                       size="custom"
                       title={data?.vendor?.vendorDetails?.companyName || ""}
                       subTitle={
-                        "TÜRSAB Number: " + data?.vendor?.vendorDetails?.tursabNumber
+                        "TÜRSAB Number: " +
+                        data?.vendor?.vendorDetails?.tursabNumber
                       }
                       icon={<CancellationPolicyIcon />}
                     />
@@ -141,11 +150,15 @@ export default function PublicExploreDetailPage() {
                 </BoxProviderWithName>
                 <BoxProviderWithName className="text-base !p-0" noBorder={true}>
                   <div className="w-full bg-secondary rounded-2xl border px-2 md:px-3.5 py-3 flex flex-col justify-start items-start gap-0 h-fit">
-                    <span className="text-[12px] font-normal text-[#6E7070]">From</span>
+                    <span className="text-[12px] font-normal text-[#6E7070]">
+                      From
+                    </span>
                     <span className="text-[20px] md:text-[26px] font-semibold text-primary">
                       ${data?.slots?.[0]?.adultPrice}
                     </span>
-                    <span className="text-[12px] font-normal text-[#6E7070]">/Person</span>
+                    <span className="text-[12px] font-normal text-[#6E7070]">
+                      /Person
+                    </span>
                     <Button
                       variant={"main_green_button"}
                       className="mt-4"
@@ -154,7 +167,9 @@ export default function PublicExploreDetailPage() {
                       }}
                       asChild
                     >
-                      <Link href={"#checkAvailabilityToggle"}>Check availability</Link>
+                      <Link href={"#checkAvailabilityToggle"}>
+                        Check availability
+                      </Link>
                     </Button>
                   </div>
                 </BoxProviderWithName>
@@ -164,19 +179,36 @@ export default function PublicExploreDetailPage() {
               <BoxProviderWithName name="What’s Included" className="text-base">
                 <div className="w-full flex-col flex justify-start items-start gap-5">
                   {data?.included?.map((item, index) => (
-                    <IconAndTextTab2 key={index} icon={<CheckIcon />} text={item} textClasses="text-black text-[14px] font-normal" />
+                    <IconAndTextTab2
+                      key={index}
+                      icon={<CheckIcon />}
+                      text={item}
+                      textClasses="text-black text-[14px] font-normal"
+                    />
                   ))}
                 </div>
               </BoxProviderWithName>
-              <BoxProviderWithName name="Not Included in the Package:" className="text-base">
+              <BoxProviderWithName
+                name="Not Included in the Package:"
+                className="text-base"
+              >
                 <div className="w-full flex-col flex justify-start items-start gap-5">
                   {data?.notIncluded?.map((item, index) => (
-                    <IconAndTextTab2 key={index} icon={<CrossIcon />} text={item} textClasses="text-black text-[14px] font-normal" />
+                    <IconAndTextTab2
+                      key={index}
+                      icon={<CrossIcon />}
+                      text={item}
+                      textClasses="text-black text-[14px] font-normal"
+                    />
                   ))}
                 </div>
               </BoxProviderWithName>
             </div>
-            <BoxProviderWithName name="Itinerary" noBorder={true} className="!p-0 mt-4">
+            <BoxProviderWithName
+              name="Itinerary"
+              noBorder={true}
+              className="!p-0 mt-4"
+            >
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3.5">
                 <div className="relative w-full h-[490px] bg-red-00 flex flex-col justify-between items-start">
                   <div className="absolute left-2.5 border-[1px] top-3 h-[90%] border-black/70 border-dashed"></div>

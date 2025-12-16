@@ -59,7 +59,7 @@ export const TourAndActivityCard = ({
             />
             <Link
               href={`/explore/detail/${item._id}`}
-              className="text-base font-semibold text-black line-clamp-1 hover:underline"
+              className="text-sm md:text-base font-semibold text-black line-clamp-1 hover:underline"
             >
               {item.title}
             </Link>

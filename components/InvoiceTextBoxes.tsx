@@ -32,10 +32,10 @@ export const InvoiceTextBoxes = ({
     : Object.entries(textList).map(([key, value]) => formatValue(key, value));
 
   return (
-    <div className="flex flex-col gap-1 justify-start items-start w-full md:w-1/2">
-      <h3 className="text-base font-semibold">{titles[heading]}</h3>
+    <div className="flex flex-col gap-0 md:gap-1 justify-start items-start w-full md:w-1/2">
+      <h3 className="text-sm md:text-base font-semibold">{titles[heading]}</h3>
       {items.map((item, index) => (
-        <span className="text-base font-[400]" key={index}>
+        <span className="text-xs md:text-base font-[400]" key={index}>
           {item}
         </span>
       ))}

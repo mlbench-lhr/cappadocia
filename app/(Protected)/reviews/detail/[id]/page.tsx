@@ -164,7 +164,7 @@ export default function BookingsPage() {
 
   return (
     <BasicStructureWithName name="Invoice Details" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-4 md:gap-6">
             <div className="w-full flex flex-col justify-start items-start gap-y-7 md:gap-y-7 h-fit md:h-[550px] flex-nowrap md:flex-wrap">

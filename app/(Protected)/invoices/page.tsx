@@ -20,9 +20,9 @@ import { InvoicePopulated } from "@/lib/types/invoices";
 
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
-  <div className="w-full space-y-4 animate-pulse">
+  <div className="w-full space-y-2 md:space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
-      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+      <div key={i} className="h-10 md:h-16 bg-gray-200 rounded-lg" />
     ))}
   </div>
 );
@@ -67,8 +67,8 @@ export default function BookingsPage() {
       render: (item) => (
         <StatusBadge
           status={item.booking.paymentStatus}
-          textClasses="text-base font-normal"
-          widthClasses="w-[93px]"
+          textClasses="text-xs md:text-base font-normal"
+          widthClasses="w-fit md:w-[93px]"
         />
       ),
     },
@@ -114,7 +114,7 @@ export default function BookingsPage() {
         />
       }
     >
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<InvoicePopulated>

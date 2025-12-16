@@ -52,7 +52,7 @@ export const UpcomingReservations = () => {
                     src={item.activity.uploads?.[0]}
                     width={120}
                     height={120}
-                    className="w-full md:w-[120px] h-auto md:h-[120px] object-cover object-center rounded-xl"
+                    className="w-full md:w-[120px] h-[120px] object-cover object-center rounded-xl"
                   />
                   <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
                     <h1 className="text-base font-semibold text-black leading-tight line-clamp-1">

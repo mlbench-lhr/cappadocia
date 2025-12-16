@@ -228,7 +228,10 @@ export function Navbar() {
                   className="relative cursor-pointer bg-secondary w-[38px] h-[38px] flex justify-center items-center rounded-full"
                   aria-label="Notifications"
                 >
-                  <NotificationIcon color="#B32053" />
+                  <NotificationIcon
+                    color="#B32053"
+                    className="size-4 md:size-5.5"
+                  />
                   {hasNew && (
                     <span className="absolute -top-1 -right-1 block h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
                   )}
@@ -260,7 +263,11 @@ export function Navbar() {
                             />
                           ) : (
                             <div className="rounded-full w-[35px] h-[35px] bg-[#B32053] flex justify-center items-center">
-                              <NotificationIcon color="white" size="18" />
+                              <NotificationIcon
+                                color="white"
+                                size="18"
+                                className="size-4 md:size-5.5"
+                              />
                             </div>
                           )}
                           <div className="flex flex-col gap-1 w-[calc(100%-47px)]">

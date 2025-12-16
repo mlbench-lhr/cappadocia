@@ -34,11 +34,7 @@ const BookingsLoadingSkeleton = () => (
 );
 
 // No data component
-const NoBookingsFound = () => (
-  <NoDataComponent
-    text="No Data Found"
-  />
-);
+const NoBookingsFound = () => <NoDataComponent text="No Data Found" />;
 
 export default function SubmittedReviews({
   searchQuery = "",
@@ -154,7 +150,7 @@ export default function SubmittedReviews({
   };
   return (
     <BasicStructureWithName name="">
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
         <BoxProviderWithName noBorder={true}>
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<Booking>

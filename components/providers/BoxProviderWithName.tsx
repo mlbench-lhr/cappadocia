@@ -34,7 +34,7 @@ export const BoxProviderWithName = ({
       } rounded-2xl px-0 md:px-3.5 py-3`}
     >
       {(name || rightSideLink || leftSideComponent || rightSideComponent) && (
-        <div className="flex justify-between w-full items-start">
+        <div className="flex justify-between w-full gap-y-2 flex-wrap-reverse items-start">
           {name && <h1 className={`${textClasses} leading-tight `}>{name}</h1>}
 
           {LeftSideComponent &&

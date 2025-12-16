@@ -36,6 +36,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
+import Swal from "sweetalert2";
 
 export interface UserResponse {
   id: string;
@@ -100,6 +101,8 @@ export default function BookingsPage() {
   const [editDescription, setEditDescription] = useState<boolean>(false);
   const [uploads, setUploads] = useState<string[]>([]);
   const [editUploads, setEditUploads] = useState<boolean>(false);
+  const [actionLoading, setActionLoading] = useState<boolean>(false);
+  const [refreshData, setRefreshData] = useState<number>(0);
 
   const { id }: { id: string } = useParams();
   useEffect(() => {
@@ -122,8 +125,37 @@ export default function BookingsPage() {
       }
     };
     getData();
-  }, []);
+  }, [refreshData]);
+  const handleDelete = async (id: string) => {
+    Swal.fire({
+      title: "Delete Activity",
+      text: "Are you sure you want to delete this Activity?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#B32053",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Delete",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await fetch(`/api/toursAndActivity/delete/${id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          });
 
+          if (res.ok) {
+            console.log(`Milestone ${id} marked as skipped`);
+          } else {
+            console.error("Failed to skip milestone");
+          }
+        } catch (err) {
+          console.error("Error skipping milestone:", err);
+        } finally {
+          setRefreshData(refreshData + 1);
+        }
+      }
+    });
+  };
   const updateActivity = async (payload: Record<string, any>) => {
     try {
       setUpdateLoading(true);
@@ -452,6 +484,15 @@ export default function BookingsPage() {
               </div>
             </BoxProviderWithName>
           </div>
+          {/* <div className="flex gap-3">
+            <button
+              onClick={() => data?._id && handleDelete(data?._id)}
+              disabled={actionLoading}
+              className="bg-red-600 hover:bg-red-700 py-1 text-sm text-white px-8 rounded-lg font-semibold"
+            >
+              {actionLoading ? "Deleting" : `Delete This ${data?.category}`}
+            </button>
+          </div> */}
         </BoxProviderWithName>
       </div>
     </BasicStructureWithName>

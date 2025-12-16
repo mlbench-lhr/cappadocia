@@ -56,7 +56,7 @@ export default function BookingsPage() {
 
   const RightSideActions = () => {
     return (
-      <div className="flex justify-start items-center gap-2">
+      <div className="flex justify-start items-center gap-2 w-full md:w-fit">
         <SearchComponent
           searchQuery={searchQuery}
           onChangeFunc={setSearchQuery}
@@ -74,7 +74,7 @@ export default function BookingsPage() {
       showBackOption
       rightSideComponent={RightSideActions}
     >
-      <div className="flex flex-col justify-start items-start w-full gap-3 h-fit">
+      <div className="flex flex-col justify-start items-start w-full gap-2 md:gap-3 h-fit">
         {/* Filter buttons */}
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap capitalize">
           {["all", "Tour", "Activity"].map((filter) => {
@@ -106,7 +106,7 @@ export default function BookingsPage() {
                 onClick={handleClick}
                 className={`cursor-pointer ${
                   isActive ? "bg-secondary text-primary" : "border"
-                } px-4 py-3 leading-tight rounded-[14px] text-[12px] font-medium transition`}
+                } px-2 md:px-4 py-1 md:py-3 leading-tight rounded-[14px] text-xs md:text-[12px] font-medium transition`}
               >
                 {filter}
               </div>

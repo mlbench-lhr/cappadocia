@@ -81,7 +81,7 @@ export default function ReviewSection({
     <div className="flex flex-col justify-start items-start w-full md:w-3/4 gap-3 h-fit pb-8">
       <BoxProviderWithName name="Reviews" noBorder={true} className="!p-0 mt-4">
         <div className="w-full flex justify-start items-center gap-3">
-          <div className="w-[calc(100%-238px)] rounded-2xl px-2 md:px-3.5 py-3 flex flex-col justify-between items-start">
+          <div className="w-[calc(100%-112px)] md:w-[calc(100%-238px)] rounded-2xl px-2 md:px-3.5 py-3 flex flex-col justify-between items-start">
             <div className="flex justify-start items-center w-full gap-3">
               <span className="text-[14px] font-medium text-[#9e9e9e]">5</span>
               <div className="w-[calc(100%-22px)] relative rounded-full overflow-hidden h-[8px] bg-[#3c4043]/40">
@@ -128,12 +128,12 @@ export default function ReviewSection({
               </div>
             </div>
           </div>
-          <div className="w-[200px] rounded-2xl px-2 md:px-3.5 py-3 flex flex-col justify-center items-center gap-2">
+          <div className="w-[100px] md:w-[200px] rounded-2xl px-2 md:px-3.5 py-3 flex flex-col justify-center items-center gap-2">
             <h1 className="text-4xl md:text-[56px] font-semibold text-[#9e9e9e]">
               {Math.floor(data.averageRating)}
             </h1>
-            <div className="w-fit flex justify-start items-center gap-1">
-              <Rating value={data.averageRating} />
+            <div className="w-fit flex justify-start items-center gap-0.5 md:gap-1">
+              <Rating iconsSize="16" value={data.averageRating} />
             </div>
             <span className="text-[14px] font-normal text-black/70">
               {data.totalReviews} reviews

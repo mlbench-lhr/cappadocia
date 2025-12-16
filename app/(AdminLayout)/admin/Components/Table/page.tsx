@@ -133,15 +133,15 @@ export function DynamicTable({
   }
 
   return (
-    <div className={`space-y-4 w-full ${className}`}>
-      <Table className="border-separate border-spacing-y-3">
+    <div className={`space-y-2 md:space-y-4 w-full ${className}`}>
+      <Table className="border-separate md:border-spacing-y-3">
         {caption && <TableCaption>{caption}</TableCaption>}
         <TableHeader>
           <TableRow>
             {columns.map((column, i) => (
               <TableHead
                 key={i}
-                className={"text-[20px] font-[500]"}
+                className={"text-sm md:text-[20px] font-[500]"}
                 style={{ width: column.width }}
               >
                 {column.header}
@@ -153,7 +153,7 @@ export function DynamicTable({
           {currentData.map((item, i) => (
             <TableRow
               key={i}
-              className={`border-none rounded-[35px] border-b-2 custom-table-row h-[75px] text-[14px] font-[400] ${rowClassName} ${
+              className={`border-none rounded-[35px] border-b-2 custom-table-row h-fit md:h-[75px] text-xs md:text-[14px] font-[400] ${rowClassName} ${
                 onRowClick ? "hover:bg-transparent" : ""
               }`}
               onClick={() => onRowClick?.(item)}
@@ -376,7 +376,7 @@ const RenderCellContent = ({
         )}
         <div className="flex flex-col justify-start items-start w-full truncate">
           {nameValue && (
-            <span className="text-[16px] lg:text-[18px] font-semibold w-full truncate">
+            <span className="text-sm md:text-[16px] lg:text-[18px] font-semibold w-full truncate">
               {nameValue}
             </span>
           )}
