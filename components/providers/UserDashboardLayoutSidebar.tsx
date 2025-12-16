@@ -94,6 +94,9 @@ export function Sidebar() {
   const pathname = usePathname(); // ✅ current route
 
   const isMiddleScreen = useMediaQuery({ maxWidth: 1350 }); // below 1200px
+  useEffect(() => {
+    if (pathname) dispatch(closeSidebar());
+  }, [pathname]);
 
   useEffect(() => {
     if (isMiddleScreen) {
@@ -300,25 +303,6 @@ export function Sidebar() {
                 </Link>
               );
             })}
-            <Link
-              href={"/Notifications"}
-              className={`w-full text-start px-3 py-2 rounded-md h-[36px] cursor-pointer flex justify-start items-center gap-2 ${
-                pathname.includes("Notifications")
-                  ? "text-primary bg-secondary"
-                  : "hover:bg-secondary"
-              }`}
-            >
-              <Image src={bell.src} alt="" width={16} height={16} />
-              Notifications
-            </Link>
-            {/* <Link
-              href={"/update-profile"}
-              className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2"
-            >
-              <Image src={pencil.src} alt="" width={16} height={16} />
-              Update Profile
-            </Link>
-             */}
             <Link
               href={"/settings/changePassword"}
               className="w-full text-start px-3 py-2 rounded-md hover:bg-secondary h-[36px] cursor-pointer flex justify-start items-center gap-2"

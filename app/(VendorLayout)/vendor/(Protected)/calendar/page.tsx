@@ -31,7 +31,7 @@ export default function CalendarPage() {
 
   return (
     <BasicStructureWithName name="Vendor Calendar" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
+      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit">
         {tours.map((t, idx) => {
           const slots: Slot[] = Array.isArray(t.slots)
             ? t.slots.map((s: any) => ({

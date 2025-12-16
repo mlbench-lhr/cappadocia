@@ -20,7 +20,7 @@ import { percentage } from "@/lib/helper/smallHelpers";
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
-      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+      <div key={i} className="h-10 md:h-16 bg-gray-200 rounded-lg" />
     ))}
   </div>
 );
@@ -33,9 +33,21 @@ export default function BookingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshData, setRefreshData] = useState(0);
   const [stats, setStats] = useState<{
-    totalRevenue: { amount: number; percentageChange: number; incremented: boolean } | null;
-    platformCommission: { amount: number; percentageChange: number; incremented: boolean } | null;
-    vendorNet: { amount: number; percentageChange: number; incremented: boolean } | null;
+    totalRevenue: {
+      amount: number;
+      percentageChange: number;
+      incremented: boolean;
+    } | null;
+    platformCommission: {
+      amount: number;
+      percentageChange: number;
+      incremented: boolean;
+    } | null;
+    vendorNet: {
+      amount: number;
+      percentageChange: number;
+      incremented: boolean;
+    } | null;
   }>({ totalRevenue: null, platformCommission: null, vendorNet: null });
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
@@ -139,49 +151,67 @@ export default function BookingsPage() {
     <BasicStructureWithName name="">
       <div className="flex flex-col justify-start items-start w-full gap-0 h-fit">
         <BoxProviderWithName noBorder={true} name="Payments">
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <BoxProviderWithName name="" className="col-span-1">
-              <div className="flex flex-col justify-start items-start gap-2 w-full">
+          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
+            <BoxProviderWithName name="" className="col-span-1 !py-1 md:!py-3">
+              <div className="flex flex-col justify-start items-start gap-0 md:gap-2 w-full">
                 <h2 className="text-sm md:text-base font-semibold">
                   Total Revenue
                 </h2>
-                <span className="text-2xl md:text-[37px] font-semibold">
+                <span className="text-lg md:text-[37px] font-semibold">
                   €{(stats.totalRevenue?.amount ?? 0).toLocaleString()}
                 </span>
-                <span className={`text-sm md:text-base font-medium ${
-                  stats.totalRevenue?.incremented ? "text-[#51C058]" : "text-red-500"
-                }`}>
-                  {stats.totalRevenue?.incremented ? "↑" : "↓"} {(stats.totalRevenue?.percentageChange ?? 0).toFixed(0)}% from last month
+                <span
+                  className={`text-xs md:text-base font-medium ${
+                    stats.totalRevenue?.incremented
+                      ? "text-[#51C058]"
+                      : "text-red-500"
+                  }`}
+                >
+                  {stats.totalRevenue?.incremented ? "↑" : "↓"} 
+                  {(stats.totalRevenue?.percentageChange ?? 0).toFixed(0)}% from
+                  last month
                 </span>
               </div>
             </BoxProviderWithName>
-            <BoxProviderWithName name="" className="col-span-1">
-              <div className="flex flex-col justify-start items-start gap-2 w-full">
+            <BoxProviderWithName name="" className="col-span-1 !py-1 md:!py-3">
+              <div className="flex flex-col justify-start items-start gap-0 md:gap-2 w-full">
                 <h2 className="text-sm md:text-base font-semibold">
                   Platform Commission
                 </h2>
-                <span className="text-2xl md:text-[37px] font-semibold">
+                <span className="text-lg md:text-[37px] font-semibold">
                   €{(stats.platformCommission?.amount ?? 0).toLocaleString()}
                 </span>
-                <span className={`text-sm md:text-base font-medium ${
-                  stats.platformCommission?.incremented ? "text-[#51C058]" : "text-red-500"
-                }`}>
-                  {stats.platformCommission?.incremented ? "↑" : "↓"} {(stats.platformCommission?.percentageChange ?? 0).toFixed(0)}% from last month
+                <span
+                  className={`text-xs md:text-base font-medium ${
+                    stats.platformCommission?.incremented
+                      ? "text-[#51C058]"
+                      : "text-red-500"
+                  }`}
+                >
+                  {stats.platformCommission?.incremented ? "↑" : "↓"} 
+                  {(stats.platformCommission?.percentageChange ?? 0).toFixed(0)}
+                  % from last month
                 </span>
               </div>
             </BoxProviderWithName>
-            <BoxProviderWithName name="" className="col-span-1">
-              <div className="flex flex-col justify-start items-start gap-2 w-full">
+            <BoxProviderWithName name="" className="col-span-1 !py-1 md:!py-3">
+              <div className="flex flex-col justify-start items-start gap-0 md:gap-2 w-full">
                 <h2 className="text-sm md:text-base font-semibold">
                   Vendor Net Earnings
                 </h2>
-                <span className="text-2xl md:text-[37px] font-semibold">
+                <span className="text-lg md:text-[37px] font-semibold">
                   €{(stats.vendorNet?.amount ?? 0).toLocaleString()}
                 </span>
-                <span className={`text-sm md:text-base font-medium ${
-                  stats.vendorNet?.incremented ? "text-[#51C058]" : "text-red-500"
-                }`}>
-                  {stats.vendorNet?.incremented ? "↑" : "↓"} {(stats.vendorNet?.percentageChange ?? 0).toFixed(0)}% from last month
+                <span
+                  className={`text-xs md:text-base font-medium ${
+                    stats.vendorNet?.incremented
+                      ? "text-[#51C058]"
+                      : "text-red-500"
+                  }`}
+                >
+                  {stats.vendorNet?.incremented ? "↑" : "↓"} 
+                  {(stats.vendorNet?.percentageChange ?? 0).toFixed(0)}% from
+                  last month
                 </span>
               </div>
             </BoxProviderWithName>

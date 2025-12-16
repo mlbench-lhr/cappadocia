@@ -35,7 +35,9 @@ export const BasicStructureWithName = ({
             <h1 className="text-base md:text-[22px] font-[600] capitalize">
               {name}
             </h1>
-            <span>{subHeading}</span>
+            <span className="text-xs md:text-base font-[400] capitalize">
+              {subHeading}
+            </span>
           </div>
         </div>
         {RightSideComponent &&

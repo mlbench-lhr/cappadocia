@@ -67,9 +67,13 @@ export default function ReviewCard({
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-2 h-fit">
-        <h3 className="text-base font-semibold">{item.activity.title}</h3>
+        <h3 className="text-sm md:text-base font-semibold">
+          {item.activity.title}
+        </h3>
         <div className="flex justify-between items-center w-full gap-3 h-fit">
-          <h4 className="text-base font-normal text-black/60 ">Comment</h4>
+          <h4 className="text-sm md:text-base font-normal text-black/60 ">
+            Comment
+          </h4>
           <div className="flex justify-start items-center gap-1 h-fit">
             <Rating value={item.rating} iconsSize="16" />
             <span className="text-sm font-normal text-black/60">
@@ -83,11 +87,13 @@ export default function ReviewCard({
             className="w-full flex flex-col justify-start items-start"
           >
             {item2.addedBy === "vendor" && (
-              <h4 className="text-base font-normal text-black/60 ">
+              <h4 className="text-sm md:text-base font-normal text-black/60 ">
                 Your Reply
               </h4>
             )}
-            <span className="text-base font-normal">{item2.text}</span>
+            <span className="text-sm md:text-base font-normal">
+              {item2.text}
+            </span>
             {item2.uploads && (
               <div className="w-full grid-cols-3 gap-2">
                 {item2.uploads.map((image, index2) => (

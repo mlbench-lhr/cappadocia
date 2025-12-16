@@ -459,7 +459,7 @@ export default function BookingsPage() {
       }
       showBackOption
     >
-      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit p-4">
+      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit">
         {step === 1 && (
           <>
             <BoxProviderWithName
@@ -597,7 +597,7 @@ export default function BookingsPage() {
                   />
                 ) : (
                   <div className="text-sm text-red-500">
-                    Set vendor business address to enable location selection.
+                    {/* Set vendor business address to enable location selection. */}
                   </div>
                 )}
               </div>
@@ -841,7 +841,9 @@ export default function BookingsPage() {
                 />
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <span className="text-[12px] text-black/60">Estimated time of day</span>
+                <span className="text-[12px] text-black/60">
+                  Estimated time of day
+                </span>
                 <span
                   className={`px-2 py-1 rounded-full text-[12px] font-medium ${
                     getPartOfDay(startTime)

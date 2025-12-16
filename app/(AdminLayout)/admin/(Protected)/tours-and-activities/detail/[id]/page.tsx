@@ -126,7 +126,7 @@ export default function BookingsPage() {
         <BoxProviderWithName noBorder={true}>
           <div className="w-full flex flex-col justify-start items-start gap-2">
             <div className="w-full flex justify-between items-center">
-              <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
+              <h1 className="text-sm md:text-[20px] font-semibold mt-2">
                 {data?.title}
               </h1>
               <label htmlFor="document-upload">
@@ -186,14 +186,14 @@ export default function BookingsPage() {
                   onChange={setDescription}
                 />
               ) : (
-                <span className="text-[14px] fot-normal leading-[14px]">
+                <span className="text-xs md:text-[14px] fot-normal leading-normal md:leading-[14px]">
                   {description}
                 </span>
               )}
             </BoxProviderWithName>
             <BoxProviderWithName
               name="Recommended by Cappadocia platform"
-              className="text-base mt-2"
+              className="text-base mt-0 md:mt-2"
               rightSideComponent={
                 <div className="flex items-center gap-2">
                   <Switch
@@ -206,23 +206,26 @@ export default function BookingsPage() {
                     }}
                   />
                   <span className="text-sm">
-                    {data?.recommended ? "Marked as Recommended" : "Mark as Recommended"}
+                    {data?.recommended
+                      ? "Marked as Recommended"
+                      : "Mark as Recommended"}
                   </span>
                 </div>
               }
             >
-              <span className="text-[14px] fot-normal leading-[14px]">
-                Toggle to feature this activity on the home page under Recommended.
+              <span className="text-xs md:text-[14px] -mt-2 md:mt-0 fot-normal leading-normal md:leading-[14px]">
+                Toggle to feature this activity on the home page under
+                Recommended.
               </span>
             </BoxProviderWithName>
             <BoxProviderWithName
               name="About this tour:"
-              className="text-base !p-0 mt-2"
+              className="text-base !p-0 mt-0 md:mt-2"
               noBorder={true}
             >
-              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3.5">
                 <BoxProviderWithName className="text-base">
-                  <div className="w-full flex-col flex justify-start items-start gap-5">
+                  <div className="w-full flex-col flex justify-start items-start gap-2 md:gap-5">
                     <ProfileBadge
                       size="custom"
                       title={data?.vendor?.vendorDetails?.companyName || ""}
@@ -266,13 +269,13 @@ export default function BookingsPage() {
             </BoxProviderWithName>
             <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-2">
               <BoxProviderWithName name="What’s Included" className="text-base">
-                <div className="w-full flex-col flex justify-start items-start gap-5">
+                <div className="w-full flex-col flex justify-start items-start gap-2 md:gap-5">
                   {data?.included.map((item, index) => (
                     <IconAndTextTab2
                       key={index}
                       icon={<CheckIcon />}
                       text={item}
-                      textClasses="text-black text-[14px] font-normal"
+                      textClasses="text-black text-xs md:text-[14px] font-normal"
                     />
                   ))}
                 </div>
@@ -287,7 +290,7 @@ export default function BookingsPage() {
                       key={index}
                       icon={<CrossIcon />}
                       text={item}
-                      textClasses="text-black text-[14px] font-normal"
+                      textClasses="text-black text-xs md:text-[14px] font-normal"
                     />
                   ))}
                 </div>
@@ -299,7 +302,7 @@ export default function BookingsPage() {
               className="!p-0 mt-4"
             >
               <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                <div className="relative w-full h-[490px] bg-red-00 flex flex-col justify-between items-start">
+                <div className="relative w-full h-[250px] md:h-[490px] bg-red-00 flex flex-col justify-between items-start">
                   <div className="absolute left-2.5 border-[1px] top-3 h-[90%] border-black/70 border-dashed"></div>
                   <div className="relative w-full h-full bg-red-00 flex flex-col justify-between items-start">
                     {data?.itinerary.map((item, index) => (
@@ -307,7 +310,7 @@ export default function BookingsPage() {
                         key={index}
                         icon={<LocationIconWithPadding />}
                         text={item}
-                        textClasses="text-black text-[14px] font-normal pt-2"
+                        textClasses="text-black text-xs md:text-[14px] font-normal pt-2"
                         alignClass=" items-start "
                       />
                     ))}

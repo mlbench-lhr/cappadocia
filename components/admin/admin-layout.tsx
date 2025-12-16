@@ -194,7 +194,7 @@ export function Navbar() {
               alt=""
               width={59}
               height={32}
-              className="flex md:hidden"
+              className="flex md:hidden w-[140px] h-auto"
             />
 
             <button
@@ -215,11 +215,11 @@ export function Navbar() {
               <IconMenu className="h-5 w-5" />
             </button>
           </div>
-          <div className="hidden md:flex items-center w-fit justify-start gap-2">
-            <span className="text-base font-semibold w-fit">
+          <div className="flex items-center w-fit justify-start gap-2">
+            <span className="hidden md:text-base font-semibold w-fit">
               {userData?.fullName}
             </span>
-            <div className="relative cursor-pointer">
+            <div className="relative hidden md:block cursor-pointer">
               <ProfileMenu />
             </div>
             <Drawer direction="right" open={open} onOpenChange={setOpen}>
@@ -259,10 +259,10 @@ export function Navbar() {
                               alt=""
                               width={35}
                               height={35}
-                              className="rounded-full w-[35px] h-[35px] object-cover"
+                              className="rounded-full w-[25px] md:w-[35px] h-[25px] md:h-[35px] object-cover"
                             />
                           ) : (
-                            <div className="rounded-full w-[35px] h-[35px] bg-[#B32053] flex justify-center items-center">
+                            <div className="rounded-full w-[25px] md:w-[35px] h-[25px] md:h-[35px] bg-[#B32053] flex justify-center items-center">
                               <NotificationIcon
                                 color="white"
                                 size="18"
@@ -270,15 +270,17 @@ export function Navbar() {
                               />
                             </div>
                           )}
-                          <div className="flex flex-col gap-1 w-[calc(100%-47px)]">
+                          <div className="flex flex-col gap-0 md:gap-1 w-[calc(100%-47px)]">
                             {n.type === "chat" ? (
-                              <span className="text-sm">
+                              <span className="text-xs md:text-sm">
                                 New message{n.message ? `: ${n.message}` : ""}
                               </span>
                             ) : (
-                              <span className="text-sm">{n.name}</span>
+                              <span className="text-xs md:text-sm">
+                                {n.name}
+                              </span>
                             )}
-                            <span className="text-xs text-black/60">
+                            <span className="text-[10px] md:text-xs text-black/60">
                               {moment(n.createdAt).format("MMM DD, YYYY")}
                             </span>
                           </div>

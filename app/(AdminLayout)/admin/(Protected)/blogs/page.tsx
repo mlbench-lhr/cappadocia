@@ -10,6 +10,7 @@ import axios from "axios";
 import moment from "moment";
 import Link from "next/link";
 import AddDialog from "./AddDialog/page";
+import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 
 export default function AllBlogs() {
   const [loading, setLoading] = useState(true);
@@ -93,44 +94,38 @@ export default function AllBlogs() {
   ];
 
   return (
-      <div className="w-full">
-        <div className="w-full mx-auto">
-          <div className="w-full mb-4 flex justify-between items-center flex-wrap gap-y-2">
-            <div className="w-full md:w-fit mb-0 space-y-[5px]">
-              <h1 className="title-heading">Blogs</h1>
-              <h1 className="text-lg md:text-xl font-semibold text-[#51606E]">
-                Total Blogs: {data.total}
-              </h1>
+    <BasicStructureWithName name="Blogs" showBackOption>
+      <div className="w-full mx-auto">
+        <div className="w-full mb-4 flex justify-between items-center flex-wrap gap-y-2">
+          <div className="flex justify-start items-center md:gap-x-4 gap-y-2 flex-wrap w-fit">
+            <div className="relative w-full md:w-[325px] h-[50px]">
+              <Search className="absolute left-3 top-[17px] h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                className="pl-10 w-[325px] h-[50px] rounded-[10px]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
-            <div className="flex justify-start items-center md:gap-x-4 gap-y-2 flex-wrap w-fit">
-              <div className="relative w-full md:w-[325px] h-[50px]">
-                <Search className="absolute left-3 top-[17px] h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search..."
-                  className="pl-10 w-[325px] h-[50px] rounded-[10px]"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <AddDialog setRefreshData={setRefreshData} />
-            </div>
+            <AddDialog setRefreshData={setRefreshData} />
           </div>
-          <DynamicTable
-            data={data.blogs}
-            columns={columns}
-            itemsPerPage={7}
-            onRowClick={(item) => console.log("Clicked:", item)}
-            isLoading={loading}
-            showImage
-            // Server-side pagination props
-            serverPagination={{
-              currentPage: currentPage,
-              totalPages: data.totalPages,
-              onPageChange: setCurrentPage,
-            }}
-            type="Blogs"
-          />
         </div>
+        <DynamicTable
+          data={data.blogs}
+          columns={columns}
+          itemsPerPage={7}
+          onRowClick={(item) => console.log("Clicked:", item)}
+          isLoading={loading}
+          showImage
+          // Server-side pagination props
+          serverPagination={{
+            currentPage: currentPage,
+            totalPages: data.totalPages,
+            onPageChange: setCurrentPage,
+          }}
+          type="Blogs"
+        />
       </div>
+    </BasicStructureWithName>
   );
 }

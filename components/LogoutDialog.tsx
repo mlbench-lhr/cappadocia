@@ -59,7 +59,9 @@ export default function LogoutDialog({
           ) : (
             <div className="flex gap-1">
               <Image src={logOutIcon.src} alt="" width={16} height={16} />
-              <button className="block px-4 py-2 text-sm">Logout</button>
+              <button className="block px-1.5 md:px-4 py-2 text-sm">
+                Logout
+              </button>
             </div>
           )}
         </DialogTrigger>

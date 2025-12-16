@@ -22,7 +22,7 @@ import { BookingWithPopulatedData } from "@/lib/types/booking";
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
-      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+      <div key={i} className="h-10 md:h-16 bg-gray-200 rounded-lg" />
     ))}
   </div>
 );
@@ -95,7 +95,7 @@ export default function BookingsPage() {
       name="Tours & Activities"
       subHeading={"Total Applications: " + totalItems}
       rightSideComponent={
-        <div className="flex justify-start items-center gap-2">
+        <div className="w-full flex justify-start items-center gap-2">
           <SearchComponent
             searchQuery={searchQuery}
             onChangeFunc={setSearchQuery}

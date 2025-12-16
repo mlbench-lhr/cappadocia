@@ -85,14 +85,14 @@ export default function DashboardPage() {
             {loading
               ? dashboardCardData.map((item, index) => (
                   <div
-                    className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
+                    className="bg-secondary border gap-3 md:gap-0 h-fit md:h-[120px] rounded-2xl py-2 md:py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
                     key={index}
                   >
                     <div className="w-full flex justify-between items-center">
-                      <Skeleton className="text-4xl font-semibold line-clamp-1 text-transparent">
+                      <Skeleton className="text-2xl md:text-4xl font-semibold line-clamp-1 text-transparent">
                         {item?.title}
                       </Skeleton>
-                      <Skeleton className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
+                      <Skeleton className="flex justify-center items-center w-[30px] md:w-[36px] h-[30px] md:h-[36px] rounded-full bg-primary">
                         {item?.image}
                       </Skeleton>
                     </div>
@@ -103,14 +103,14 @@ export default function DashboardPage() {
                 ))
               : dashboardCardData.map((item, index) => (
                   <div
-                    className="bg-secondary border h-[110px] rounded-2xl py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
+                    className="bg-secondary border gap-3 md:gap-0 h-fit md:h-[120px] rounded-2xl py-2 md:py-3 px-4.5 text-primary flex flex-col justify-between items-start line-clamp-1"
                     key={index}
                   >
                     <div className="w-full flex justify-between items-center">
-                      <h1 className="text-4xl font-semibold line-clamp-1">
+                      <h1 className="text-2xl md:text-4xl font-semibold line-clamp-1">
                         {item?.title}
                       </h1>
-                      <div className="flex justify-center items-center w-[36px] h-[36px] rounded-full bg-primary">
+                      <div className="flex justify-center items-center w-[30px] md:w-[36px] h-[30px] md:h-[36px] rounded-full bg-primary">
                         {item?.image}
                       </div>
                     </div>

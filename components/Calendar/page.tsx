@@ -432,7 +432,7 @@ export default function CalendarGrid({
   }, [values, dirty]);
 
   return (
-    <div className="p-3 select-none">
+    <div className="select-none">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Button
@@ -488,7 +488,7 @@ export default function CalendarGrid({
             <RotateCcw className="size-4" />
           </Button>
         </div>
-        <div className="text-sm text-muted-foreground">
+        <div className="text-xs text-muted-foreground">
           {dates[0].label} – {dates[dates.length - 1].label}
         </div>
       </div>
