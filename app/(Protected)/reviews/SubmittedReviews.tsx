@@ -28,7 +28,7 @@ import { ReviewDetailsModal } from "@/components/SmallComponents/ReviewDeatilsMo
 const BookingsLoadingSkeleton = () => (
   <div className="w-full space-y-4 animate-pulse">
     {[...Array(7)].map((_, i) => (
-      <div key={i} className="h-16 bg-gray-200 rounded-lg" />
+      <div key={i} className="h-10 md:h-16 bg-gray-200 rounded-lg" />
     ))}
   </div>
 );

@@ -94,6 +94,9 @@ export function Sidebar() {
   const pathname = usePathname(); // ✅ current route
 
   const isMiddleScreen = useMediaQuery({ maxWidth: 1350 }); // below 1200px
+  useEffect(() => {
+    if (pathname) dispatch(closeSidebar());
+  }, [pathname]);
 
   useEffect(() => {
     if (isMiddleScreen) {

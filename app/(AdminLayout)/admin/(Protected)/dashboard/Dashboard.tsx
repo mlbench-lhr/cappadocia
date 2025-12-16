@@ -36,6 +36,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setBlogsCompletion, setOverview } from "@/lib/store/slices/adminSlice";
 import moment from "moment";
 import { SimpleBarChart } from "./SimpleBarChart";
+import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 
 /** Simple sparkline (no external libs). Stroke uses currentColor. */
 
@@ -156,25 +157,25 @@ const StatCard: React.FC<StatCardProps> = ({
 
   return (
     <div
-      className="w-full flex justify-between items-end p-5 md:p-[16px] border rounded-2xl bg-whit hover:shadow-md transition-shadow"
+      className="w-full flex justify-between items-end p-2 md:p-[16px] border rounded-2xl bg-whit hover:shadow-md transition-shadow"
       style={{
         borderColor: "rgba(0,0,0,0.06)",
       }}
     >
       {/* LEFT: icon + text */}
       <div className="pr-4 w-fit">
-        <div className="flex justify-center items-center rounded-full w-10 h-10">
+        <div className="flex justify-center items-center rounded-full w-fit md:w-10 h-fit md:h-10">
           <div className="text-primary">{icon}</div>
         </div>
 
         <div className="w-full ">
-          <div className="mt-[17px] text-[14.7px] font-medium w-full flex justify-between items-end">
+          <div className="mt-2 md:mt-[17px] text-xs md:text-[14.7px] font-medium w-full flex justify-between items-end">
             <span>{title}</span>
           </div>
-          <div className="mt-[8px] font-[600] text-[34px] leading-[34px]">
+          <div className="mt-1 md:mt-[8px] font-[600] text-2xl md:text-[34px] leading-[34px]">
             {value}
           </div>
-          <div className="mt-[12px] text-[14px] text-gray-400">
+          <div className="mt-1 md:mt-[12px] text-xs md:text-[14px] text-gray-400">
             {sinceLabel}
           </div>
         </div>
@@ -199,7 +200,7 @@ const StatCard: React.FC<StatCardProps> = ({
           />
         )}
         <div
-          className="flex items-center mt-2 text-sm font-semibold justify-start"
+          className="flex items-center mt-2 text-xs md:text-sm font-semibold justify-start"
           style={{ color: trendColorVar }}
         >
           <span>{trend}%</span>
@@ -334,15 +335,12 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="w-full">
+    <BasicStructureWithName name="Dashboard">
       <div className="w-full mx-auto">
         {/* Header */}
-        <div className="mb-4">
-          <h1 className="title-heading">Dashboard</h1>
-        </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:gap-4 mb-4">
           <StatCard
             icon={<Newspaper color="#B32053" />}
             title="Total Blogs"
@@ -428,13 +426,13 @@ const Dashboard: React.FC = () => {
           />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-          <div className="lg:col-span-2 bg-white h-full rounded-xl border border-gray-200 p-6">
+          <div className="lg:col-span-2 bg-white h-full rounded-xl border border-gray-200 p-3 md:p-6">
             {loading2 ? (
               <ChartSkeleton />
             ) : (
               <>
                 <div className="flex items-center justify-between h-[85px] border-b border-gray-300 pb-[20px]">
-                  <h2 className="text-[20px] font-[500] text-gray-900">
+                  <h2 className="text-sm md:text-[20px] font-[500] text-gray-900">
                     Website Views Rate
                   </h2>
                   <div className="flex items-center space-x-2">
@@ -467,7 +465,7 @@ const Dashboard: React.FC = () => {
               <UsersListSkeleton />
             ) : (
               <>
-                <h2 className="text-[20px] font-[500] text-gray-900 mb-[20px]">
+                <h2 className="text-sm md:text-[20px] font-[500] text-gray-900 mb-2 md:mb-[20px]">
                   Recent Subscriptions
                 </h2>
                 <div className="space-y-0">
@@ -486,7 +484,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+    </BasicStructureWithName>
   );
 };
 

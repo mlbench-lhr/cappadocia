@@ -1,5 +1,6 @@
 "use client";
 import AddressLocationSelector, { LocationData } from "@/components/map";
+import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import RejectVendorDialog from "@/components/RejectVendorDialog";
 import VendorDetailsSkeleton from "@/components/Skeletons/VendorDetailsSkeleton";
 import { VendorDetails } from "@/lib/mongodb/models/User";
@@ -78,31 +79,22 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
       console.log("err---", error);
     }
   };
-  const handleBack = () => {
-    router.back();
-  };
 
   if (!data || loading) {
     return <VendorDetailsSkeleton />;
   }
 
   return (
-    <div className="">
-      {/* Header */}
-      <div className="flex items-center pb-4">
-        <button onClick={handleBack} className="text-gray-800 mr-3 text-xl">
-          <FaArrowLeft className="w-4 h-4" /> {/* Arrow icon */}
-        </button>
-        <h2 className="text-2xl font-weight-600 text-gray-800 ">Details</h2>
-      </div>
-
+    <BasicStructureWithName name="Vendor Details" showBackOption>
       {/* Main Card */}
-      <div className="bg-white rounded-lg p-6 border border-gray-200">
+      <div className="bg-white rounded-lg p-2 md:p-6 border border-gray-200">
         {/* Business Name */}
-        <h2 className="text-2xl font-semibold mb-6">{data?.companyName}</h2>
+        <h2 className="text-sm md:text-lg md:text-2xl font-semibold mb-6">
+          {data?.companyName}
+        </h2>
 
         {/* Contact Information Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 mb-3 md:mb-6">
           {/* Contact Person Name */}
           <div>
             <label className="block text-sm font-semibold mb-1">
@@ -129,7 +121,7 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         </div>
 
         {/* Second Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 mb-3 md:mb-6">
           {/* Phone */}
           <div>
             <label className="block text-sm font-semibold mb-1">Phone</label>
@@ -154,7 +146,7 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         </div>
 
         {/* Third Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-6 mb-3 md:mb-6">
           {/* Registered Business Address */}
           <div>
             <label className="block text-sm font-semibold mb-1">
@@ -190,7 +182,7 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
 
         {/* Map */}
         {data?.address && (
-          <div className="mb-6 w-[400px]">
+          <div className="mb-6 w-full md:w-[400px]">
             <AddressLocationSelector
               value={data?.address as LocationData}
               readOnly={true}
@@ -202,13 +194,13 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         )}
 
         {/* About Us Section */}
-        <div className="border rounded-lg p-6 mb-6 w-[622px]">
-          <h3 className="text-lg font-semibold mb-3">About Us</h3>
+        <div className="border rounded-lg p-2 md:p-6 mb-3 md:mb-6 w-full md:w-[622px]">
+          <h3 className="text-sm md:text-lg font-semibold mb-3">About Us</h3>
           <p className="text-gray-500 leading-relaxed">{data?.aboutUs}</p>
         </div>
 
         {/* Commission Field */}
-        <div className="border rounded-lg p-6 mb-6 w-[622px]">
+        <div className="border rounded-lg p-2 md:p-6 mb-3 md:mb-6 w-full md:w-[622px]">
           <label className="block text-sm font-semibold mb-2">
             Commission (%)
           </label>
@@ -229,7 +221,7 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
         {/* Documents Uploaded */}
         <div className="mb-6 w-full">
           <h3 className="text-sm font-semibold mb-3">Documents Uploaded</h3>
-          <div className="mb-6 w-full grid grid-cols-12 gap-4">
+          <div className="mb-6 w-full grid grid-cols-4 md:grid-cols-12 gap-4">
             {data?.documents?.map((item, index) => (
               <div
                 key={index}
@@ -284,7 +276,7 @@ const VendorDetailsComp: React.FC<BusinessDetailsProps> = () => {
           </div>
         )}
       </div>
-    </div>
+    </BasicStructureWithName>
   );
 };
 

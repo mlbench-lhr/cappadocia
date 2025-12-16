@@ -93,6 +93,9 @@ export function Sidebar() {
   const desktopWidth = isCollapsed ? "w-20" : "w-[260px]";
   const userData = useAppSelector((state) => state.auth.user);
   const pathname = usePathname(); // ✅ current route
+  useEffect(() => {
+    if (pathname) dispatch(closeSidebar());
+  }, [pathname]);
 
   const isMiddleScreen = useMediaQuery({ maxWidth: 1350 }); // below 1200px
 
@@ -250,7 +253,7 @@ export function Sidebar() {
         } transform transition-transform duration-200`}
       >
         <div className="min-w-[335px] bg-white h-full shadow-xl flex flex-col">
-          <div className="pt-[40px] pb-[16px] px-[20px] flex items-start justify-between border-b flex-col gap-[12px] w-full">
+          <div className="pt-4 md:pt-[40px] pb-[16px] px-[20px] flex items-start justify-between border-b flex-col gap-[12px] w-full">
             <div className="flex justify-between items-start w-full">
               {userData?.avatar ? (
                 <Image
@@ -272,12 +275,16 @@ export function Sidebar() {
               </button>
             </div>
             <div>
-              <div className="text-md font-medium">{userData?.email}</div>
-              <div className="text-sm font-normal">{userData?.fullName}</div>
+              <div className="text-sm md:text-md font-medium">
+                {userData?.email}
+              </div>
+              <div className="text-xs md:text-sm font-normal">
+                {userData?.fullName}
+              </div>
             </div>
           </div>
 
-          <nav className="flex flex-col justify-start items-start gap-[24px] px-2 py-4 space-y-1 overflow-auto plan-text-style-4">
+          <nav className="flex flex-col justify-start items-start gap-1 md:gap-[24px] px-2 py-4 space-y-1 overflow-auto plan-text-style-4">
             {pathsArray.map((item) => {
               const Icon = item.icon;
               return (

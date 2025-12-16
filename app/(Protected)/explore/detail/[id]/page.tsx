@@ -94,7 +94,7 @@ export default function BookingsPage() {
                 <FavoriteButton _id={id} />
               </div>
             </div>
-            <h1 className="text-[20px] md:text-[26px] font-semibold mt-2">
+            <h1 className="text-sm md:text-[20px] font-semibold mt-2">
               {data.title}
             </h1>
             <ImageGallery imagesParam={data?.uploads} />
@@ -158,7 +158,7 @@ export default function BookingsPage() {
                     <span className="text-[12px] font-normal text-[#6E7070]">
                       From
                     </span>
-                    <span className="text-[20px] md:text-[26px] font-semibold text-primary">
+                    <span className="text-sm md:text-[20px] font-semibold text-primary">
                       ${data?.slots?.[0]?.adultPrice}
                     </span>
                     <span className="text-[12px] font-normal text-[#6E7070]">

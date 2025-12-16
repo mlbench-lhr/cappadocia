@@ -68,7 +68,7 @@ export default function BookingsPage() {
         <StatusBadge
           status={item.booking.paymentStatus}
           textClasses="text-xs md:text-base font-normal"
-          widthClasses="w-fit md:w-[93px]"
+          widthClasses="w-fit md:w-fit md:w-[93px]"
         />
       ),
     },
