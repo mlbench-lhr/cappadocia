@@ -74,7 +74,7 @@ export default function Section3() {
             </span>
           </div>
         </div>
-        <div className="w-full grid grid-cols-4 xl:grid-cols-16 gap-6 xl:gap-4 h-fit relative">
+        <div className="w-full grid grid-cols-4 xl:grid-cols-16 gap-6 xl:gap-4 h-fit relative bg-red-400">
           <div className="w-full relative h-[600px] md:h-[350px] xl:h-[516px] col-span-4 xl:col-span-10 [@media(min-width:1350px)]:col-span-9 flex flex-col md:flex-row justify-start items-center gap-3.5">
             <Image
               src={mainImages[0]}
