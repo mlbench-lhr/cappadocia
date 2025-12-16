@@ -9,7 +9,7 @@ export default function BecomeVendorCard({
   icon,
 }: BecomeVendorCardType) {
   return (
-    <div className="w-full flex-1 h-full flex flex-col justify-between gap-[20px] items-start rounded-[10px] border py-4 px-5.5">
+    <div className="w-full flex-1 h-full flex flex-col justify-between gap-3 md:gap-[20px] items-start rounded-[10px] border py-3 md:py-4 px-3 md:px-5.5">
       <div className="flex justify-center items-center w-[50px] h-[50px] rounded-full bg-[#FFEAF4]">
         {icon}
       </div>

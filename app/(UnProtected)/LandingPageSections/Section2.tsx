@@ -17,7 +17,8 @@ export default function Section2() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [currentPopularSlide, setCurrentPopularSlide] = useState<number>(0);
   const [currentRatedSlide, setCurrentRatedSlide] = useState<number>(0);
-  const [currentRecommendedSlide, setCurrentRecommendedSlide] = useState<number>(0);
+  const [currentRecommendedSlide, setCurrentRecommendedSlide] =
+    useState<number>(0);
   const displayExploreItems = useAppSelector(
     (s) => s.general.displayExploreItems
   );
@@ -116,7 +117,10 @@ export default function Section2() {
     }
   };
   const handleNextRecommended = () => {
-    if (recommendedItems && currentRecommendedSlide < recommendedItems.length - 1) {
+    if (
+      recommendedItems &&
+      currentRecommendedSlide < recommendedItems.length - 1
+    ) {
       setCurrentRecommendedSlide(currentRecommendedSlide + 1);
     }
   };
@@ -131,7 +135,7 @@ export default function Section2() {
   return (
     <div className="w-full h-fit">
       <div className="w-full flex flex-col items-center justify-center h-fit px-[20px] lg:px-[80px] 2xl:px-[90px] gap-12">
-        <div className="w-full flex flex-col md:flex-row justify-between items-start h-fit gap-4 md:gap-0">
+        <div className="w-full flex flex-col md:flex-row justify-between items-start h-fit gap-0 md:gap-0">
           <div className="w-full md:w-fit h-fit flex flex-col-reverse sm:flex-row md:flex-col justify-between md:justify-start gap-3 sm:gap-6 items-center md:items-start">
             <h1 className="font-semibold text-lg md:text-3xl">
               Book Your Adventure <br className="hidden md:block" /> Now
@@ -140,8 +144,8 @@ export default function Section2() {
               <Link href={"/explore"}>Explore Tours</Link>
             </Button>
           </div>
-          <div className="w-full md:w-[415px] h-fit">
-            <span className="font-normal text-lg md:text-[16px] text-[rgba(9,9,9,0.50)] leading-tight">
+          <div className="w-full md:w-[415px] h-fit text-center md:text-start">
+            <span className="font-normal text-sm md:text-[16px] text-[rgba(9,9,9,0.50)] text-center md:text-start leading-tight">
               Choose your date, select your favorite tour, and get ready to
               explore the skies and valleys of Cappadocia. Booking is fast,
               easy, and secure.
@@ -150,8 +154,8 @@ export default function Section2() {
         </div>
         <div className="w-full md:hidden">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-semibold text-base">Latest Tours</h2>
-            <Button variant={"outline"} asChild>
+            <h2 className="font-semibold text-sm">Latest Tours</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -205,8 +209,8 @@ export default function Section2() {
         {/* Popular (Mobile) */}
         <div className="w-full md:hidden">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-semibold text-base">Most Popular</h2>
-            <Button variant={"outline"} asChild>
+            <h2 className="font-semibold text-sm">Most Popular</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -265,8 +269,8 @@ export default function Section2() {
         {/* Top Rated (Mobile) */}
         <div className="w-full md:hidden">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-semibold text-base">Top Rated</h2>
-            <Button variant={"outline"} asChild>
+            <h2 className="font-semibold text-sm">Top Rated</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -321,11 +325,13 @@ export default function Section2() {
             </div>
           </div>
         </div>
-        {/* Recommended by Cappadocia platform (Mobile) */}
+        {/* Recommended by Cappadocia Platform (Mobile) */}
         <div className="w-full md:hidden">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-semibold text-base">Recommended by Cappadocia platform</h2>
-            <Button variant={"outline"} asChild>
+            <h2 className="font-semibold text-sm">
+              Recommended by Cappadocia Platform
+            </h2>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -333,7 +339,9 @@ export default function Section2() {
             <div className="overflow-hidden">
               <div
                 className="flex transition-transform duration-300 ease-in-out"
-                style={{ transform: `translateX(-${currentRecommendedSlide * 100}%)` }}
+                style={{
+                  transform: `translateX(-${currentRecommendedSlide * 100}%)`,
+                }}
               >
                 {recommendedItems?.map((item, index) => (
                   <div key={index} className="w-full flex-shrink-0 px-2">
@@ -354,7 +362,9 @@ export default function Section2() {
                 </button>
                 <button
                   onClick={handleNextRecommended}
-                  disabled={currentRecommendedSlide === recommendedItems.length - 1}
+                  disabled={
+                    currentRecommendedSlide === recommendedItems.length - 1
+                  }
                   className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
                   aria-label="Next slide"
                 >
@@ -368,7 +378,9 @@ export default function Section2() {
                   key={index}
                   onClick={() => setCurrentRecommendedSlide(index)}
                   className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentRecommendedSlide ? "bg-gray-300 w-6" : "bg-gray-300"
+                    index === currentRecommendedSlide
+                      ? "bg-gray-300 w-6"
+                      : "bg-gray-300"
                   }`}
                   aria-label={`Go to slide ${index + 1}`}
                 />
@@ -379,7 +391,7 @@ export default function Section2() {
         <div className="hidden md:flex w-full flex-col gap-3">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-lg">Latest Tours</h2>
-            <Button variant={"outline"} asChild>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -398,7 +410,7 @@ export default function Section2() {
         <div className="hidden md:flex w-full flex-col gap-3">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-lg">Most Popular</h2>
-            <Button variant={"outline"} asChild>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -417,7 +429,7 @@ export default function Section2() {
         <div className="hidden md:flex w-full flex-col gap-3">
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-lg">Top Rated</h2>
-            <Button variant={"outline"} asChild>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
@@ -431,11 +443,13 @@ export default function Section2() {
                 ))}
           </div>
         </div>
-        {/* Recommended by Cappadocia platform */}
+        {/* Recommended by Cappadocia Platform */}
         <div className="hidden md:flex w-full flex-col gap-3">
           <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-lg">Recommended by Cappadocia platform</h2>
-            <Button variant={"outline"} asChild>
+            <h2 className="font-semibold text-lg">
+              Recommended by Cappadocia Platform
+            </h2>
+            <Button variant={"outline"} asChild size={"sm"}>
               <Link href={"/explore/tours"}>View All</Link>
             </Button>
           </div>
