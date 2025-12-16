@@ -35,15 +35,21 @@ export async function GET(req: NextRequest) {
     for (const b of inProgress) {
       try {
         const act = await ToursAndActivity.findById(b.activity)
-          .select("slots")
+          .select("slots durationEndTime")
           .lean();
         if (!act || !Array.isArray(act.slots)) continue;
         const slot = (act.slots as any[]).find(
           (s) => s && String(s._id) === String(b.slotId)
         );
         if (!slot || !slot.endDate) continue;
-        const slotEnd = moment(slot.endDate);
-        if (slotEnd.isBefore(now)) {
+        const [ehh = "0", emm = "0", ess = "0"] = String(
+          (act as any).durationEndTime || "23:59:59"
+        ).split(":");
+        const endMoment = moment(slot.endDate)
+          .set("hour", parseInt(ehh))
+          .set("minute", parseInt(emm))
+          .set("second", parseInt(ess));
+        if (endMoment.isBefore(now)) {
           completeIds.push(String(b._id));
         }
       } catch {}
@@ -63,8 +69,12 @@ export async function GET(req: NextRequest) {
       selectDate: { $in: [todayStr, next24h.format("YYYY-MM-DD")] },
     })
       .select(
-        "user vendor activity selectDate pickupLocation paymentStatus bookingId _id"
+        "user vendor activity selectDate pickupLocation paymentStatus bookingId _id slotId"
       )
+      .populate({
+        path: "activity",
+        select: "durationStartTime durationEndTime slots title",
+      })
       .lean();
 
     let userRemindersSent = 0;
@@ -74,8 +84,20 @@ export async function GET(req: NextRequest) {
     const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
     for (const b of candidates) {
-      const startOfDay = moment(b.selectDate, "YYYY-MM-DD").startOf("day");
-      const diffHours = startOfDay.diff(now, "hours");
+      let diffHours = Infinity;
+      try {
+        const act: any = (b as any).activity;
+        const slots: any[] = act?.slots || [];
+        const slot = slots.find((s) => s && String(s._id) === String((b as any).slotId));
+        if (slot && slot.startDate) {
+          const [shh = "0", smm = "0", sss = "0"] = String(act?.durationStartTime || "00:00:00").split(":");
+          const startMoment = moment(slot.startDate)
+            .set("hour", parseInt(shh))
+            .set("minute", parseInt(smm))
+            .set("second", parseInt(sss));
+          diffHours = startMoment.diff(now, "hours");
+        }
+      } catch {}
 
       if (diffHours >= 0 && diffHours < 24) {
         const exists = await Notification.findOne({
@@ -99,7 +121,11 @@ export async function GET(req: NextRequest) {
           message,
           link: `/bookings/detail/${b._id.toString()}`,
           relatedId: b._id.toString(),
-          endDate: startOfDay.toDate(),
+          endDate: moment((b as any).activity?.slots?.find((s: any) => String(s._id) === String((b as any).slotId))?.startDate)
+            .set("hour", parseInt(String((b as any).activity?.durationStartTime || "00:00:00").split(":")[0] || "0"))
+            .set("minute", parseInt(String((b as any).activity?.durationStartTime || "00:00:00").split(":")[1] || "0"))
+            .set("second", parseInt(String((b as any).activity?.durationStartTime || "00:00:00").split(":")[2] || "0"))
+            .toDate(),
         });
         if (resend) {
           try {
@@ -108,17 +134,17 @@ export async function GET(req: NextRequest) {
               .lean();
             const to = u?.email;
             if (to) {
-              const subject = "Booking Reminder: 24 hours remaining";
-              const html = `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 24px;"><h2 style="color: #000;">Hello ${
-                u?.fullName || "Traveler"
-              },</h2><p style="color: #000;">${message} for booking <strong>#${
-                b.bookingId
-              }</strong>.</p><p style="color: #000;">View details: <a href="https://cappadocia-alpha.vercel.app/bookings/detail/${b._id.toString()}" style="color:#555">Open booking</a></p></div>`;
-              await resend.emails.send({ from: EMAIL_FROM, to, subject, html });
-            }
-          } catch {}
-        }
-        userRemindersSent++;
+            const subject = "Booking Reminder: 24 hours remaining";
+            const html = `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 24px;"><h2 style="color: #000;">Hello ${
+              u?.fullName || "Traveler"
+            },</h2><p style="color: #000;">${message} for booking <strong>#${
+              b.bookingId
+            }</strong>.</p><p style="color: #000;">View details: <a href="https://cappadocia-alpha.vercel.app/bookings/detail/${b._id.toString()}" style="color:#555">Open booking</a></p></div>`;
+            await resend.emails.send({ from: EMAIL_FROM, to, subject, html });
+          }
+        } catch {}
+      }
+      userRemindersSent++;
       }
     }
 
@@ -126,21 +152,29 @@ export async function GET(req: NextRequest) {
     const upcomingTours = await ToursAndActivity.find({
       "slots.startDate": { $gte: now.toDate(), $lte: next24h.toDate() },
     })
-      .select("vendor title slots _id")
+      .select("vendor title slots durationStartTime _id")
       .lean();
 
     let vendorRemindersSent = 0;
 
     for (const t of upcomingTours) {
-      const slotsInWindow = (t.slots || []).filter((s: any) =>
-        moment(s.startDate).isBetween(now, next24h, undefined, "[]")
-      );
+      const slotsInWindow = (t.slots || []).filter((s: any) => {
+        const [shh = "0", smm = "0", sss = "0"] = String(
+          (t as any).durationStartTime || "00:00:00"
+        ).split(":");
+        const startMoment = moment(s.startDate)
+          .set("hour", parseInt(shh))
+          .set("minute", parseInt(smm))
+          .set("second", parseInt(sss));
+        return startMoment.isBetween(now, next24h, undefined, "[]");
+      });
       if (slotsInWindow.length < 1) continue;
 
-      const earliestSlot = slotsInWindow.sort(
-        (a: any, b: any) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      )[0];
+      const earliestSlot = slotsInWindow
+        .sort(
+          (a: any, b: any) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        )[0];
 
       const exists = await Notification.findOne({
         userId: t.vendor,
@@ -149,6 +183,14 @@ export async function GET(req: NextRequest) {
       }).lean();
       if (exists) continue;
 
+      const [vh = "0", vm = "0", vs = "0"] = String(
+        (t as any).durationStartTime || "00:00:00"
+      ).split(":");
+      const vendorStart = moment(earliestSlot.startDate)
+        .set("hour", parseInt(vh))
+        .set("minute", parseInt(vm))
+        .set("second", parseInt(vs))
+        .toDate();
       await sendNotification({
         recipientId: t.vendor.toString(),
         name: "Upcoming Tour Reminder",
@@ -156,7 +198,7 @@ export async function GET(req: NextRequest) {
         message: `Your tour "${t.title}" starts within 24 hours`,
         link: "/vendor/tours-and-activities",
         relatedId: t._id.toString(),
-        endDate: new Date(earliestSlot.startDate),
+        endDate: vendorStart,
       });
       vendorRemindersSent++;
     }
