@@ -14,7 +14,7 @@ export default function ReservationPageSkeleton() {
 
             <div className="border rounded-xl p-4 mt-3">
               <div className="flex flex-col md:flex-row gap-4">
-                <Skeleton className="w-full md:w-[200px] h-[160px] rounded-2xl" />
+                <Skeleton className="w-full md:w-[100px] h-[100px] rounded-2xl" />
                 <div className="flex flex-col w-full gap-2">
                   <Skeleton className="w-3/4 h-5" />
                   <Skeleton className="w-1/2 h-4" />

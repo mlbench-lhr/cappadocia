@@ -55,6 +55,7 @@ export async function GET(req: NextRequest) {
         "completed",
         "cancelled",
         "missed",
+        "in-progress",
       ];
       const validFilters = filterArray.filter((f) => validStatuses.includes(f));
       if (validFilters.length > 0) {

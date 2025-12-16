@@ -32,6 +32,12 @@ export interface BookingWithPopulatedData {
   adultsCount: number;
   childrenCount: number;
   paymentStatus: "paid" | "pending" | "refunded";
-  status: "pending" | "upcoming" | "completed" | "cancelled" | "missed";
+  status:
+    | "pending"
+    | "upcoming"
+    | "completed"
+    | "cancelled"
+    | "missed"
+    | "in-progress";
   review?: ReviewsType | undefined | null;
 }

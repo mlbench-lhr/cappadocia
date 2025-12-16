@@ -196,7 +196,7 @@ export default function BookingsPage() {
                     src={data?.activity?.uploads?.[0]}
                     width={200}
                     height={200}
-                    className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center rounded-2xl"
+                    className="w-full md:w-[200px] h-auto md:h-[200px] object-cover object-center rounded-2xl"
                   />
                   <div className="grid grid-cols-2 gap-2 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
                     <h1 className="col-span-2 text-base font-semibold text-black leading-tight line-clamp-1">

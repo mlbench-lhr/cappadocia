@@ -129,17 +129,7 @@ export default function BookingsPage() {
               if (filter === "all") {
                 setFilters(["all"]);
               } else {
-                setFilters((prev) => {
-                  const withoutAll = prev.filter((f) => f !== "all");
-                  if (withoutAll.includes(filter.toLowerCase() as any)) {
-                    const updated = withoutAll.filter(
-                      (f) => f !== filter.toLowerCase()
-                    );
-                    return updated.length === 0 ? ["all"] : updated;
-                  } else {
-                    return [...withoutAll, filter.toLowerCase()];
-                  }
-                });
+                setFilters([filter.toLowerCase()]);
               }
             };
 

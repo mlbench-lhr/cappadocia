@@ -17,13 +17,17 @@ import { percentage } from "@/lib/helper/smallHelpers";
 import ReservationPageSkeleton from "@/components/Skeletons/ReservationPageSkeleton";
 import { formatPricing } from "@/lib/helper/textsFormat";
 import { getPartOfDay } from "@/lib/helper/timeFunctions";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Swal from "sweetalert2";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery({ maxWidth: 1350 });
   const { id }: { id: string } = useParams();
+  const [reload, setReload] = useState<number>(0);
   console.log("id-----", id);
-
+  const [startLoading, setStartLoading] = useState<boolean>(false);
   useEffect(() => {
     if (isMobile) dispatch(closeSidebar());
   }, []);
@@ -47,12 +51,30 @@ export default function BookingsPage() {
       }
     };
     getData();
-  }, []);
+  }, [reload]);
 
   if (!data) {
     return <ReservationPageSkeleton />;
   }
-
+  const handleStartBooking = async () => {
+    if (!data?._id) return;
+    try {
+      setStartLoading(true);
+      await axios.patch(`/api/booking/update/${data._id}`, {
+        status: "in-progress",
+      });
+      await Swal.fire("Started!", "Booking started successfully.", "success");
+      setReload(reload + 1);
+    } catch (error) {
+      await Swal.fire(
+        "Failed",
+        "Failed to cancel booking. Please try again.",
+        "error"
+      );
+    } finally {
+      setStartLoading(false);
+    }
+  };
   return (
     <BasicStructureWithName name="Details" showBackOption>
       <div className="flex flex-col justify-start items-start w-full lg:w-[95%] xl:w-[90%] 2xl:w-[80%] gap-3 h-fit pb-8">
@@ -68,10 +90,28 @@ export default function BookingsPage() {
                     <span className="text-primary"> #{data.bookingId}</span>
                   </div>
                 }
-                rightSideLink={
-                  "/vendor/tours-and-activities/detail/" + data.activity._id
+                rightSideComponent={
+                  <div className="flex justify-start items-center gap-2">
+                    <Button variant={"green_secondary_button"} size={"sm"}>
+                      <Link
+                        href={
+                          "/vendor/tours-and-activities/detail/" +
+                          data.activity._id
+                        }
+                      >
+                        View Tour Details
+                      </Link>
+                    </Button>
+                    <Button
+                      variant={"main_green_button"}
+                      size={"sm"}
+                      onClick={handleStartBooking}
+                      loading={startLoading}
+                    >
+                      Start Tour
+                    </Button>
+                  </div>
                 }
-                rightSideLabel="Activity Details"
                 textClasses=" text-[18px] font-semibold "
               >
                 <BoxProviderWithName textClasses=" text-[18px] font-semibold">
@@ -82,14 +122,15 @@ export default function BookingsPage() {
                         alt=""
                         width={200}
                         height={200}
-                        className="w-full md:w-[200px] h-auto md:h-auto object-cover object-center rounded-2xl"
+                        className="w-full md:w-[100px] h-auto md:h-[100px] object-cover object-center rounded-2xl"
                       />
-                      <div className="w-full flex justify-center items-start flex-col ">
+                      <div className="w-[calc(100%-110px)] flex justify-center items-start flex-col ">
                         <h2 className="text-base font-semibold">
                           {data.activity.title}
                         </h2>
                         <h3 className="text-sm font-normal">
-                          Duration: {getPartOfDay(data.selectDate)} ({data.activity.duration} hours)
+                          Duration: {getPartOfDay(data.selectDate)} (
+                          {data.activity.duration} hours)
                         </h3>
                         <h4 className="text-sm font-normal">
                           {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
