@@ -27,6 +27,35 @@ export async function GET(req: NextRequest) {
       },
       { $set: { status: "missed" } }
     );
+    const inProgress = await Booking.find({ status: "in-progress" })
+      .select("_id activity slotId bookingId")
+      .lean();
+
+    const completeIds: string[] = [];
+    for (const b of inProgress) {
+      try {
+        const act = await ToursAndActivity.findById(b.activity)
+          .select("slots")
+          .lean();
+        if (!act || !Array.isArray(act.slots)) continue;
+        const slot = (act.slots as any[]).find(
+          (s) => s && String(s._id) === String(b.slotId)
+        );
+        if (!slot || !slot.endDate) continue;
+        const slotEnd = moment(slot.endDate);
+        if (slotEnd.isBefore(now)) {
+          completeIds.push(String(b._id));
+        }
+      } catch {}
+    }
+    let completedResultCount = 0;
+    if (completeIds.length > 0) {
+      const res = await Booking.updateMany(
+        { _id: { $in: completeIds } },
+        { $set: { status: "completed", completedAt: now.toDate() } }
+      );
+      completedResultCount = res.modifiedCount || 0;
+    }
 
     // 2–4) Send user reminders for bookings within next 24 hours (only one per booking)
     const candidates = await Booking.find({
@@ -136,6 +165,7 @@ export async function GET(req: NextRequest) {
       ok: true,
       stats: {
         bookingsMarkedMissed: missedResult.modifiedCount || 0,
+        inProgressMarkedCompleted: completedResultCount,
         userRemindersSent,
         vendorRemindersSent,
       },
