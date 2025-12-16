@@ -142,6 +142,7 @@ export default function BookingsPage() {
             "completed",
             "cancelled",
             "missed",
+            "in-progress",
           ].map((filter) => {
             const isActive =
               (filter === "all" && filters.includes("all")) ||

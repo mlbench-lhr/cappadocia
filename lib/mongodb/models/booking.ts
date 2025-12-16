@@ -55,7 +55,13 @@ export interface Booking {
   childrenCount: number;
   completedAt: Date;
   paymentStatus: "paid" | "pending" | "refunded";
-  status: "pending" | "upcoming" | "completed" | "cancelled" | "missed";
+  status:
+    | "pending"
+    | "upcoming"
+    | "completed"
+    | "cancelled"
+    | "missed"
+    | "in-progress";
 }
 
 export interface BookingDocument extends Booking, Document {
@@ -111,7 +117,14 @@ const BookingSchema = new Schema<Booking>(
 
     status: {
       type: String,
-      enum: ["pending", "upcoming", "completed", "cancelled", "missed"],
+      enum: [
+        "pending",
+        "upcoming",
+        "completed",
+        "cancelled",
+        "missed",
+        "in-progress",
+      ],
       default: "pending",
     },
   },

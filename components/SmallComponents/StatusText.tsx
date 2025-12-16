@@ -1,5 +1,6 @@
 const variants: any = {
   upcoming: { text: "#008EFF" },
+  "in-progress": { text: "#008EFF" },
   completed: { text: "#4A9E35" },
   Eligible: { text: "#4A9E35" },
   "Not Eligible": { text: "#F5A903" },
