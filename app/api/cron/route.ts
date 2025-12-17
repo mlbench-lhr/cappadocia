@@ -37,18 +37,22 @@ export async function GET(req: NextRequest) {
         const act = await ToursAndActivity.findById(b.activity)
           .select("slots durationEndTime")
           .lean();
+        console.log("act-----", act);
         if (!act || !Array.isArray(act.slots)) continue;
         const slot = (act.slots as any[]).find(
           (s) => s && String(s._id) === String(b.slotId)
         );
+        console.log("slot-----", slot);
         if (!slot || !slot.endDate) continue;
         const [ehh = "0", emm = "0", ess = "0"] = String(
           (act as any).durationEndTime || "23:59:59"
         ).split(":");
+        console.log("[]-----", [ehh, emm, ess]);
         const endMoment = moment(slot.endDate)
           .set("hour", parseInt(ehh))
           .set("minute", parseInt(emm))
           .set("second", parseInt(ess));
+        console.log("endMoment", endMoment);
         if (endMoment.isBefore(now)) {
           completeIds.push(String(b._id));
         }
@@ -61,6 +65,7 @@ export async function GET(req: NextRequest) {
         { _id: { $in: completeIds } },
         { $set: { status: "completed", completedAt: now.toDate() } }
       );
+      console.log("res", res);
       completedResultCount = res.modifiedCount || 0;
     }
     console.log("completedResultCount-----", completedResultCount);
