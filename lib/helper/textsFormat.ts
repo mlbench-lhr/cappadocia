@@ -16,3 +16,29 @@ export function formatPricing(data: BookingWithPopulatedData) {
   }
   return `${parts.join(" + ")} = ${currency}${data.paymentDetails.amount}`;
 }
+
+export function getParticipantsText({
+  adultsCount = 0,
+  childrenCount = 0,
+  writeParticipants = true,
+}: any) {
+  const parts = [];
+
+  if (adultsCount > 0) {
+    parts.push(`${adultsCount} ${adultsCount === 1 ? "Adult" : "Adults"}`);
+  }
+
+  if (childrenCount > 0) {
+    parts.push(
+      `${childrenCount} ${childrenCount === 1 ? "Child" : "Children"}`
+    );
+  }
+
+  if (writeParticipants) {
+    return parts.length
+      ? `Participants: ${parts.join(", ")}`
+      : "Participants: None";
+  } else {
+    return parts.length ? `${parts.join(", ")}` : "None";
+  }
+}

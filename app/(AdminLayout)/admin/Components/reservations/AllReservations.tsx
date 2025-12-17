@@ -17,6 +17,7 @@ import ReservationsListSkeleton from "@/components/Skeletons/ReservationsListSke
 import { Column, DynamicTable } from "../Table/page";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { StatusText } from "@/components/SmallComponents/StatusText";
+import { getParticipantsText } from "@/lib/helper/textsFormat";
 export type DashboardCardProps = {
   image: string;
   title: string;
@@ -65,12 +66,30 @@ export default function BookingsPage() {
     {
       header: "Tour Title",
       accessor: "activity.title",
+      render: (item) => {
+        console.log("item-----", item);
+        return (
+          <div className="w-[350px] md:w-fit">
+            <ProfileBadge
+              size="small"
+              title={item?.activity?.title || ""}
+              subTitle={moment(item?.activity?.createdAt).format("DD MMM YYYY")}
+              image={item?.activity?.uploads?.[0] || "/placeholderDp.png"}
+            />
+          </div>
+        );
+      },
     },
     {
       header: "Tour Status",
       accessor: "status",
       render: (item) => (
-        <>{`Participants: ${item?.adultsCount} Adults, ${item.childrenCount} Children `}</>
+        <>
+          {getParticipantsText({
+            adultCount: item.adultsCount || 0,
+            childrenCount: item.childrenCount || 0,
+          })}
+        </>
       ),
     },
     {

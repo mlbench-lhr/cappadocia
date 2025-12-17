@@ -64,6 +64,7 @@ import moment from "moment";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import AdminReservationPageSkeleton from "@/components/Skeletons/AdminReservationPageSkeleton";
+import { getParticipantsText } from "@/lib/helper/textsFormat";
 
 // Main App Component
 const ReservationDetails: React.FC = () => {
@@ -156,7 +157,10 @@ const ReservationDetails: React.FC = () => {
               />
               <IconAndTextTab
                 icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
-                text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
+                text={getParticipantsText({
+                  adultCount: data.adultsCount || 0,
+                  childrenCount: data.childrenCount || 0,
+                })}
               />
               <IconAndTextTab
                 icon={<BookingIcon size="14" color="rgba(0, 0, 0, 0.5)" />}

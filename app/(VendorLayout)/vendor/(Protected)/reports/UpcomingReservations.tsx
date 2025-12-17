@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import ReservationsListSkeleton from "@/components/Skeletons/ReservationsListSkeleton";
+import { getParticipantsText } from "@/lib/helper/textsFormat";
 
 export const UpcomingReservations = () => {
   const [toursAndActivity, setToursAndActivity] =
@@ -141,8 +142,11 @@ export const UpcomingReservations = () => {
                           Participants
                         </span>
                         <span className="text-xs font-semibold">
-                          {item.adultsCount} Adults, {item.childrenCount}{" "}
-                          Children
+                          {getParticipantsText({
+                            adultCount: item.adultsCount || 0,
+                            childrenCount: item.childrenCount || 0,
+                            writeParticipants: false,
+                          })}
                         </span>
                       </div>
                       <div className="flex flex-col justify-start items-start mt-4">

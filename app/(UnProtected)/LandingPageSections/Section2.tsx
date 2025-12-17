@@ -152,185 +152,182 @@ export default function Section2() {
             </span>
           </div>
         </div>
-        {displayExploreItems && displayExploreItems?.length > 0 && (
-          <div className="w-full md:hidden">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="font-semibold text-sm">Latest Tours</h2>
-              <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore"}>View All</Link>
-              </Button>
-            </div>
-            <div className="relative">
-              <div className="overflow-hidden">
-                <div
-                  className="flex transition-transform duration-300 ease-in-out"
-                  style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                >
-                  {displayExploreItems?.map((item, index) => (
-                    <div key={index} className="w-full flex-shrink-0 px-2">
-                      <TourCard {...item} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {displayExploreItems && (
-                <>
-                  <button
-                    onClick={handlePrev}
-                    disabled={currentSlide === 0}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    aria-label="Previous slide"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-gray-700" />
-                  </button>
-                  <button
-                    onClick={handleNext}
-                    disabled={currentSlide === displayExploreItems.length - 1}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    aria-label="Next slide"
-                  >
-                    <ChevronRight className="w-5 h-5 text-gray-700" />
-                  </button>
-                </>
-              )}
-              <div className="flex justify-center gap-2 mt-4">
-                {displayExploreItems?.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentSlide ? "bg-gray-300 w-6" : "bg-gray-300"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
+
+        <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-sm">Latest Tours</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
+              <Link href={"/explore"}>View All</Link>
+            </Button>
+          </div>
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {displayExploreItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
                 ))}
               </div>
             </div>
+            {displayExploreItems && (
+              <>
+                <button
+                  onClick={handlePrev}
+                  disabled={currentSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNext}
+                  disabled={currentSlide === displayExploreItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
+            <div className="flex justify-center gap-2 mt-4">
+              {displayExploreItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentSlide ? "bg-gray-300 w-6" : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        )}
+        </div>
+
         {/* Popular (Mobile) */}
-        {popularItems && popularItems?.length > 0 && (
-          <div className="w-full md:hidden">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="font-semibold text-sm">Most Popular</h2>
-              <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore"}>View All</Link>
-              </Button>
-            </div>
-            <div className="relative">
-              <div className="overflow-hidden">
-                <div
-                  className="flex transition-transform duration-300 ease-in-out"
-                  style={{
-                    transform: `translateX(-${currentPopularSlide * 100}%)`,
-                  }}
-                >
-                  {popularItems?.map((item, index) => (
-                    <div key={index} className="w-full flex-shrink-0 px-2">
-                      <TourCard {...item} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {popularItems && popularItems.length > 0 && (
-                <>
-                  <button
-                    onClick={handlePrevPopular}
-                    disabled={currentPopularSlide === 0}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    aria-label="Previous slide"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-gray-700" />
-                  </button>
-                  <button
-                    onClick={handleNextPopular}
-                    disabled={currentPopularSlide === popularItems.length - 1}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    aria-label="Next slide"
-                  >
-                    <ChevronRight className="w-5 h-5 text-gray-700" />
-                  </button>
-                </>
-              )}
-              <div className="flex justify-center gap-2 mt-4">
-                {popularItems?.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentPopularSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentPopularSlide
-                        ? "bg-gray-300 w-6"
-                        : "bg-gray-300"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
+
+        <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-sm">Most Popular</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
+              <Link href={"/explore"}>View All</Link>
+            </Button>
+          </div>
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentPopularSlide * 100}%)`,
+                }}
+              >
+                {popularItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
                 ))}
               </div>
             </div>
+            {popularItems && popularItems.length > 0 && (
+              <>
+                <button
+                  onClick={handlePrevPopular}
+                  disabled={currentPopularSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextPopular}
+                  disabled={currentPopularSlide === popularItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
+            <div className="flex justify-center gap-2 mt-4">
+              {popularItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentPopularSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentPopularSlide
+                      ? "bg-gray-300 w-6"
+                      : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        )}
+        </div>
+
         {/* Top Rated (Mobile) */}
-        {topRatedItems && topRatedItems?.length > 0 && (
-          <div className="w-full md:hidden">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="font-semibold text-sm">Top Rated</h2>
-              <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore"}>View All</Link>
-              </Button>
-            </div>
-            <div className="relative">
-              <div className="overflow-hidden">
-                <div
-                  className="flex transition-transform duration-300 ease-in-out"
-                  style={{
-                    transform: `translateX(-${currentRatedSlide * 100}%)`,
-                  }}
-                >
-                  {topRatedItems?.map((item, index) => (
-                    <div key={index} className="w-full flex-shrink-0 px-2">
-                      <TourCard {...item} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              {topRatedItems && topRatedItems.length > 0 && (
-                <>
-                  <button
-                    onClick={handlePrevRated}
-                    disabled={currentRatedSlide === 0}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    aria-label="Previous slide"
-                  >
-                    <ChevronLeft className="w-5 h-5 text-gray-700" />
-                  </button>
-                  <button
-                    onClick={handleNextRated}
-                    disabled={currentRatedSlide === topRatedItems.length - 1}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
-                    aria-label="Next slide"
-                  >
-                    <ChevronRight className="w-5 h-5 text-gray-700" />
-                  </button>
-                </>
-              )}
-              <div className="flex justify-center gap-2 mt-4">
-                {topRatedItems?.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentRatedSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentRatedSlide
-                        ? "bg-gray-300 w-6"
-                        : "bg-gray-300"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
+        <div className="w-full md:hidden">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-semibold text-sm">Top Rated</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
+              <Link href={"/explore"}>View All</Link>
+            </Button>
+          </div>
+          <div className="relative">
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-300 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentRatedSlide * 100}%)`,
+                }}
+              >
+                {topRatedItems?.map((item, index) => (
+                  <div key={index} className="w-full flex-shrink-0 px-2">
+                    <TourCard {...item} />
+                  </div>
                 ))}
               </div>
             </div>
+            {topRatedItems && topRatedItems.length > 0 && (
+              <>
+                <button
+                  onClick={handlePrevRated}
+                  disabled={currentRatedSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextRated}
+                  disabled={currentRatedSlide === topRatedItems.length - 1}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+              </>
+            )}
+            <div className="flex justify-center gap-2 mt-4">
+              {topRatedItems?.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentRatedSlide(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentRatedSlide
+                      ? "bg-gray-300 w-6"
+                      : "bg-gray-300"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
-        )}
-        {/* Recommended by Cappadocia Platform (Mobile) */}
+        </div>
         {recommendedItems && recommendedItems?.length > 0 && (
           <div className="w-full md:hidden">
             <div className="flex items-center justify-between mb-2">
@@ -395,65 +392,57 @@ export default function Section2() {
             </div>
           </div>
         )}
-        {displayExploreItems && displayExploreItems?.length > 0 && (
-          <div className="hidden md:flex w-full flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-lg">Latest Tours</h2>
-              <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore"}>View All</Link>
-              </Button>
-            </div>
-            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-              {loading
-                ? [0, 1, 2, 3]?.map((item) => (
-                    <LandingTourCardSkeleton key={item} />
-                  ))
-                : displayExploreItems?.map((item, index) => (
-                    <TourCard key={index} {...item} />
-                  ))}
-            </div>
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Latest Tours</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
+              <Link href={"/explore"}>View All</Link>
+            </Button>
           </div>
-        )}
-        {popularItems && popularItems?.length > 0 && (
-          <div className="hidden md:flex w-full flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-lg">Most Popular</h2>
-              <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore"}>View All</Link>
-              </Button>
-            </div>
-            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-              {popularLoading
-                ? [0, 1, 2, 3]?.map((item) => (
-                    <LandingTourCardSkeleton key={item} />
-                  ))
-                : popularItems?.map((item, index) => (
-                    <TourCard key={index} {...item} />
-                  ))}
-            </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {loading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : displayExploreItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
           </div>
-        )}
-
-        {/* Top Rated */}
-        {topRatedItems && topRatedItems?.length > 0 && (
-          <div className="hidden md:flex w-full flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-lg">Top Rated</h2>
-              <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore"}>View All</Link>
-              </Button>
-            </div>
-            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-              {ratedLoading
-                ? [0, 1, 2, 3]?.map((item) => (
-                    <LandingTourCardSkeleton key={item} />
-                  ))
-                : topRatedItems?.map((item, index) => (
-                    <TourCard key={index} {...item} />
-                  ))}
-            </div>
+        </div>
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Most Popular</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
+              <Link href={"/explore"}>View All</Link>
+            </Button>
           </div>
-        )}
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {popularLoading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : popularItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
+        </div>
+        <div className="hidden md:flex w-full flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-lg">Top Rated</h2>
+            <Button variant={"outline"} asChild size={"sm"}>
+              <Link href={"/explore"}>View All</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+            {ratedLoading
+              ? [0, 1, 2, 3]?.map((item) => (
+                  <LandingTourCardSkeleton key={item} />
+                ))
+              : topRatedItems?.map((item, index) => (
+                  <TourCard key={index} {...item} />
+                ))}
+          </div>
+        </div>
         {/* Recommended by Cappadocia Platform */}
         {recommendedItems && recommendedItems?.length > 0 && (
           <div className="hidden md:flex w-full flex-col gap-3">

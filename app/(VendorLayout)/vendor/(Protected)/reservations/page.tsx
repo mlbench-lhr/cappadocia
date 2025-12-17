@@ -14,6 +14,7 @@ import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import moment from "moment";
 import ReservationsListSkeleton from "@/components/Skeletons/ReservationsListSkeleton";
+import { getParticipantsText } from "@/lib/helper/textsFormat";
 export type DashboardCardProps = {
   image: string;
   title: string;
@@ -156,8 +157,11 @@ export default function BookingsPage() {
                                 Participants
                               </span>
                               <span className="text-xs font-semibold">
-                                {item.adultsCount} Adults, {item.childrenCount}{" "}
-                                Children
+                                {getParticipantsText({
+                                  adultCount: item.adultsCount || 0,
+                                  childrenCount: item.childrenCount || 0,
+                                  writeParticipants: false,
+                                })}
                               </span>
                             </div>
                           </div>

@@ -388,6 +388,7 @@ export default function BookingsPage() {
                     }
                     required
                     error={errors.travelers?.[index]?.dob?.message}
+                    max={new Date().toISOString().split("T")[0]}
                   />
                   <TextInputComponent
                     label="Nationality"

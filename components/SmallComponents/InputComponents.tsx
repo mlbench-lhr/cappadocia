@@ -118,8 +118,10 @@ export const TextInputComponent = ({
   onChange,
   type = "text",
   error,
+  max,
 }: BaseInputProps & {
   type?: "text" | "email" | "number" | "tel" | "password" | "date";
+  max?: string;
 }) => {
   const placeholderTemp = placeholder || "Enter " + label;
   return (
@@ -129,6 +131,7 @@ export const TextInputComponent = ({
         {required && <span className="text-red-500 ml-1">*</span>}
       </Label>
       <Input
+        max={max}
         type={type}
         placeholder={placeholderTemp}
         className={`bg-white ${

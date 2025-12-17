@@ -89,7 +89,47 @@ export default function BookingsPage() {
       console.log("Copy failed:", err);
     }
   };
+  const startStripeCheckout = async () => {
+    try {
+      // DUMMY TEST DATA
+      const dummyPayload = {
+        items: [
+          {
+            id: data?._id,
+            name: data?.activity.title,
+            quantity: 1,
+            price: data?.paymentDetails?.amount,
+          },
+        ],
+        bookingId: data?.bookingId,
+        customerEmail: data?.user?.email,
+        currency: data?.paymentDetails?.currency,
+        total: data?.paymentDetails?.amount,
+      };
+      console.log("dummyPayload--------", dummyPayload);
 
+      const res = await fetch("/api/checkout/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(dummyPayload),
+      });
+
+      const response = await res.json();
+
+      if (!res.ok) {
+        throw new Error(response?.error || "Failed to start checkout");
+      }
+
+      if (response.url) {
+        window.location.href = response.url;
+      } else {
+        throw new Error("Stripe checkout URL not available");
+      }
+    } catch (err: any) {
+      console.log("err-------", err);
+    }
+  };
   if (loading) {
     return <BookingConfirmPageSkeleton />;
   }
@@ -142,7 +182,12 @@ export default function BookingsPage() {
                     )}
                     <Forward onClick={handleShare} className="cursor-pointer" />
                   </div>
-                  <Button variant={"main_green_button"}>Pay Now</Button>
+                  <Button
+                    variant={"main_green_button"}
+                    onClick={startStripeCheckout}
+                  >
+                    Pay Now
+                  </Button>
                 </div>
                 <div className="col-span-12 md:col-span-6 flex flex-col gap-2 items-start justify-start">
                   <BoxProviderWithName name="Vendor / Operator Information">

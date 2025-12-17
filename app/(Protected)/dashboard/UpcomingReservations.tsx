@@ -9,6 +9,7 @@ import moment from "moment";
 import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import { HorizontalTourCardSkeleton } from "@/components/Skeletons/HorizontalTourCardSkeleton";
+import { getParticipantsText } from "@/lib/helper/textsFormat";
 
 export const UpcomingReservations = () => {
   const [toursAndActivity, setToursAndActivity] =
@@ -69,8 +70,10 @@ export const UpcomingReservations = () => {
                     <div className="flex justify-start items-center gap-1">
                       <PeopleIcon color="rgba(0, 0, 0, 0.5)" />
                       <span className="">
-                        Participants: {item?.adultsCount} Adults,{" "}
-                        {item.childrenCount} Children
+                        {getParticipantsText({
+                          adultCount: item.adultsCount || 0,
+                          childrenCount: item.childrenCount || 0,
+                        })}
                       </span>
                     </div>
                     <div className="flex justify-start items-center gap-1">

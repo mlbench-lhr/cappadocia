@@ -40,6 +40,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { ReviewModal } from "@/components/SmallComponents/ReviewModal";
 import Rating from "@/components/SmallComponents/RatingField";
 import Swal from "sweetalert2";
+import { getParticipantsText } from "@/lib/helper/textsFormat";
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();
@@ -213,7 +214,10 @@ export default function BookingsPage() {
                     <div className="col-span-2 md:col-span-1">
                       <IconAndTextTab
                         icon={<PeopleIcon color="rgba(0, 0, 0, 0.5)" />}
-                        text={`Participants: ${data.adultsCount} Adults, ${data.childrenCount} Children `}
+                        text={getParticipantsText({
+                          adultCount: data.adultsCount || 0,
+                          childrenCount: data.childrenCount || 0,
+                        })}
                       />
                     </div>
                     <div className="col-span-2 md:col-span-1">
