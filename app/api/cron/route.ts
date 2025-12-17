@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     const inProgress = await Booking.find({ status: "in-progress" })
       .select("_id activity slotId bookingId")
       .lean();
-
+    console.log("inProgress-----", inProgress);
     const completeIds: string[] = [];
     for (const b of inProgress) {
       try {
@@ -54,6 +54,7 @@ export async function GET(req: NextRequest) {
         }
       } catch {}
     }
+    console.log("completeIds-----", completeIds);
     let completedResultCount = 0;
     if (completeIds.length > 0) {
       const res = await Booking.updateMany(
@@ -62,6 +63,7 @@ export async function GET(req: NextRequest) {
       );
       completedResultCount = res.modifiedCount || 0;
     }
+    console.log("completedResultCount-----", completedResultCount);
 
     // 2–4) Send user reminders for bookings within next 24 hours (only one per booking)
     const candidates = await Booking.find({
@@ -88,9 +90,13 @@ export async function GET(req: NextRequest) {
       try {
         const act: any = (b as any).activity;
         const slots: any[] = act?.slots || [];
-        const slot = slots.find((s) => s && String(s._id) === String((b as any).slotId));
+        const slot = slots.find(
+          (s) => s && String(s._id) === String((b as any).slotId)
+        );
         if (slot && slot.startDate) {
-          const [shh = "0", smm = "0", sss = "0"] = String(act?.durationStartTime || "00:00:00").split(":");
+          const [shh = "0", smm = "0", sss = "0"] = String(
+            act?.durationStartTime || "00:00:00"
+          ).split(":");
           const startMoment = moment(slot.startDate)
             .set("hour", parseInt(shh))
             .set("minute", parseInt(smm))
@@ -121,10 +127,35 @@ export async function GET(req: NextRequest) {
           message,
           link: `/bookings/detail/${b._id.toString()}`,
           relatedId: b._id.toString(),
-          endDate: moment((b as any).activity?.slots?.find((s: any) => String(s._id) === String((b as any).slotId))?.startDate)
-            .set("hour", parseInt(String((b as any).activity?.durationStartTime || "00:00:00").split(":")[0] || "0"))
-            .set("minute", parseInt(String((b as any).activity?.durationStartTime || "00:00:00").split(":")[1] || "0"))
-            .set("second", parseInt(String((b as any).activity?.durationStartTime || "00:00:00").split(":")[2] || "0"))
+          endDate: moment(
+            (b as any).activity?.slots?.find(
+              (s: any) => String(s._id) === String((b as any).slotId)
+            )?.startDate
+          )
+            .set(
+              "hour",
+              parseInt(
+                String(
+                  (b as any).activity?.durationStartTime || "00:00:00"
+                ).split(":")[0] || "0"
+              )
+            )
+            .set(
+              "minute",
+              parseInt(
+                String(
+                  (b as any).activity?.durationStartTime || "00:00:00"
+                ).split(":")[1] || "0"
+              )
+            )
+            .set(
+              "second",
+              parseInt(
+                String(
+                  (b as any).activity?.durationStartTime || "00:00:00"
+                ).split(":")[2] || "0"
+              )
+            )
             .toDate(),
         });
         if (resend) {
@@ -134,17 +165,17 @@ export async function GET(req: NextRequest) {
               .lean();
             const to = u?.email;
             if (to) {
-            const subject = "Booking Reminder: 24 hours remaining";
-            const html = `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 24px;"><h2 style="color: #000;">Hello ${
-              u?.fullName || "Traveler"
-            },</h2><p style="color: #000;">${message} for booking <strong>#${
-              b.bookingId
-            }</strong>.</p><p style="color: #000;">View details: <a href="https://cappadocia-alpha.vercel.app/bookings/detail/${b._id.toString()}" style="color:#555">Open booking</a></p></div>`;
-            await resend.emails.send({ from: EMAIL_FROM, to, subject, html });
-          }
-        } catch {}
-      }
-      userRemindersSent++;
+              const subject = "Booking Reminder: 24 hours remaining";
+              const html = `<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 24px;"><h2 style="color: #000;">Hello ${
+                u?.fullName || "Traveler"
+              },</h2><p style="color: #000;">${message} for booking <strong>#${
+                b.bookingId
+              }</strong>.</p><p style="color: #000;">View details: <a href="https://cappadocia-alpha.vercel.app/bookings/detail/${b._id.toString()}" style="color:#555">Open booking</a></p></div>`;
+              await resend.emails.send({ from: EMAIL_FROM, to, subject, html });
+            }
+          } catch {}
+        }
+        userRemindersSent++;
       }
     }
 
@@ -170,11 +201,10 @@ export async function GET(req: NextRequest) {
       });
       if (slotsInWindow.length < 1) continue;
 
-      const earliestSlot = slotsInWindow
-        .sort(
-          (a: any, b: any) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-        )[0];
+      const earliestSlot = slotsInWindow.sort(
+        (a: any, b: any) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      )[0];
 
       const exists = await Notification.findOne({
         userId: t.vendor,
