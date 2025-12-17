@@ -173,7 +173,7 @@ export default function BookingsPage() {
                     <Skeleton className="h-[90px] md:h-[180px] w-[90px] md:w-[180px] object-cover object-center rounded-full ring-2 ring-white"></Skeleton>
                   ) : (
                     <Image
-                      src={data.avatar || "/placeholderDp.png"}
+                      src={userData?.avatar || "/placeholderDp.png"}
                       alt=""
                       width={100}
                       height={100}
