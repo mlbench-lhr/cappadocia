@@ -77,33 +77,26 @@ export async function GET(req: NextRequest) {
     // 3️⃣ Apply advanced filters (only if JSON was valid)
     // after parsing `parsed` as in your previous code:
     if (parsed.length > 0) {
-      // Build a single slot constraint that combines all price & duration constraints
-      const slotCondition: any = {};
+      const slotConditions: any[] = [];
 
       parsed.forEach((f: any) => {
+        const singleSlotCondition: any = {};
         if (f.duration) {
           // require slot start >= from AND slot end <= to
           const from = new Date(f.duration.from);
           const to = new Date(f.duration.to);
-          // if startDate constraint already exists, merge with $gte/$lte appropriately
-          slotCondition.startDate = Object.assign(
-            {},
-            slotCondition.startDate || {},
-            { $gte: from }
-          );
-          slotCondition.endDate = Object.assign(
-            {},
-            slotCondition.endDate || {},
-            { $lte: to }
-          );
+          singleSlotCondition.startDate = { $lte: to };
+          singleSlotCondition.endDate = { $gte: from };
         }
 
         if (f.priceRange) {
-          slotCondition.adultPrice = Object.assign(
-            {},
-            slotCondition.adultPrice || {},
-            { $gte: f.priceRange.min, $lte: f.priceRange.max }
-          );
+          singleSlotCondition.adultPrice = {
+            $gte: f.priceRange.min,
+            $lte: f.priceRange.max,
+          };
+        }
+        if (Object.keys(singleSlotCondition).length > 0) {
+          slotConditions.push(singleSlotCondition);
         }
 
         if (typeof f.rating === "number") {
@@ -112,13 +105,36 @@ export async function GET(req: NextRequest) {
         }
       });
 
-      // If we collected any slot constraints, require at least one slot matching them
-      if (Object.keys(slotCondition).length > 0) {
-        query.slots = { $elemMatch: slotCondition };
+      // If we have multiple slot conditions, we need slots that match ALL of them
+      if (slotConditions.length > 0) {
+        if (slotConditions.length === 1) {
+          // Single condition - simple $elemMatch
+          query.slots = { $elemMatch: slotConditions[0] };
+        } else {
+          // Multiple conditions - need slots matching all conditions
+          // This means we need a slot that satisfies all constraints simultaneously
+          const combinedSlotCondition: any = {};
+          slotConditions.forEach((condition) => {
+            Object.keys(condition).forEach((key) => {
+              if (!combinedSlotCondition[key]) {
+                combinedSlotCondition[key] = condition[key];
+              } else {
+                // Merge conditions (handle $gte, $lte, etc.)
+                if (typeof condition[key] === "object") {
+                  combinedSlotCondition[key] = {
+                    ...combinedSlotCondition[key],
+                    ...condition[key],
+                  };
+                }
+              }
+            });
+          });
+
+          query.slots = { $elemMatch: combinedSlotCondition };
+        }
       }
     }
   }
-
   const skip = (page - 1) * limit;
 
   let items: any[] = [];
