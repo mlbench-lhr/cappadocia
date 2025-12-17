@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       { $set: { status: "missed" } }
     );
     const inProgress = await Booking.find({ status: "in-progress" })
-      .select("_id activity slotId bookingId")
+      .select("_id activity slotId bookingId selectDate")
       .lean();
     console.log("inProgress-----", inProgress);
     const completeIds: string[] = [];
@@ -43,20 +43,22 @@ export async function GET(req: NextRequest) {
           (s) => s && String(s._id) === String(b.slotId)
         );
         console.log("slot-----", slot);
-        if (!slot || !slot.endDate) continue;
-        const [ehh = "0", emm = "0", ess = "0"] = String(
+        if (!slot || !b.selectDate) {
+          continue;
+        }
+        const [ehh = "23", emm = "59", ess = "59"] = String(
           (act as any).durationEndTime || "23:59:59"
         ).split(":");
-        console.log("[]-----", [ehh, emm, ess]);
-        const endMoment = moment(slot.endDate)
+        const endMoment = moment(b.selectDate)
           .set("hour", parseInt(ehh))
           .set("minute", parseInt(emm))
           .set("second", parseInt(ess));
-        console.log("endMoment", endMoment);
         if (endMoment.isBefore(now)) {
           completeIds.push(String(b._id));
         }
-      } catch {}
+      } catch (err) {
+        console.error("Error processing booking:", err);
+      }
     }
     console.log("completeIds-----", completeIds);
     let completedResultCount = 0;
