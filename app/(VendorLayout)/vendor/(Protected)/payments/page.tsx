@@ -30,7 +30,9 @@ const BookingsLoadingSkeleton = () => (
 );
 
 // No data component
-const NoBookingsFound = () => <NoDataComponent text="No Data Found" />;
+const NoBookingsFound = () => (
+  <NoDataComponent text="No Booking Payment Done Yet" />
+);
 export interface VendorInvoice {
   _id: string;
   booking: { _id: string };

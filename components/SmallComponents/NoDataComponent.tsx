@@ -10,7 +10,7 @@ export const NoDataComponent = ({
   const ActionComponent = actionComponent;
   return (
     <div
-      className={`leading-tight text-base text-black/70 font-medium flex flex-col justify-center items-center gap-2`}
+      className={`leading-tight text-xs md:text-base text-black/70 font-medium flex flex-col justify-center items-center gap-2`}
     >
       <Image
         src={"/noDataFoundIcon.png"}

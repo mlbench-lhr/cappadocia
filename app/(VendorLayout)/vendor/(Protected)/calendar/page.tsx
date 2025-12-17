@@ -5,6 +5,7 @@ import axios from "axios";
 import CalendarGrid from "@/components/Calendar/page";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
 import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 
 type Slot = {
   startDate: Date;
@@ -31,32 +32,36 @@ export default function CalendarPage() {
 
   return (
     <BasicStructureWithName name="Vendor Calendar" showBackOption>
-      <div className="flex flex-col justify-start items-start w-full gap-5 h-fit">
-        {tours.map((t, idx) => {
-          const slots: Slot[] = Array.isArray(t.slots)
-            ? t.slots.map((s: any) => ({
-                startDate: new Date(s.startDate),
-                endDate: new Date(s.endDate),
-                adultPrice: Number(s.adultPrice) || 0,
-                childPrice: Number(s.childPrice) || 0,
-                seatsAvailable: Number(s.seatsAvailable) || 0,
-              }))
-            : [];
-          const stops: Date[] = Array.isArray(t.stopBookingDates)
-            ? t.stopBookingDates.map((d: any) => new Date(d))
-            : [];
-          return (
-            <BoxProviderWithName key={t._id || idx} name={t.title || "Tour"}>
-              <CalendarGrid
-                title={t.title}
-                defaultSlots={slots}
-                defaultStopBookingDates={stops}
-                readOnly={true}
-              />
-            </BoxProviderWithName>
-          );
-        })}
-      </div>
+      {tours?.length > 0 ? (
+        <div className="flex flex-col justify-start items-start w-full gap-5 h-fit">
+          {tours.map((t, idx) => {
+            const slots: Slot[] = Array.isArray(t.slots)
+              ? t.slots.map((s: any) => ({
+                  startDate: new Date(s.startDate),
+                  endDate: new Date(s.endDate),
+                  adultPrice: Number(s.adultPrice) || 0,
+                  childPrice: Number(s.childPrice) || 0,
+                  seatsAvailable: Number(s.seatsAvailable) || 0,
+                }))
+              : [];
+            const stops: Date[] = Array.isArray(t.stopBookingDates)
+              ? t.stopBookingDates.map((d: any) => new Date(d))
+              : [];
+            return (
+              <BoxProviderWithName key={t._id || idx} name={t.title || "Tour"}>
+                <CalendarGrid
+                  title={t.title}
+                  defaultSlots={slots}
+                  defaultStopBookingDates={stops}
+                  readOnly={true}
+                />
+              </BoxProviderWithName>
+            );
+          })}
+        </div>
+      ) : (
+        <NoDataComponent text="No Calendar Events Found Yet" />
+      )}
     </BasicStructureWithName>
   );
 }

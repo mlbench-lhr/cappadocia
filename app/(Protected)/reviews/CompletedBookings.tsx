@@ -44,7 +44,9 @@ const BookingsLoadingSkeleton = () => (
 );
 
 // No data component
-const NoBookingsFound = () => <NoDataComponent text="No Data Found" />;
+const NoBookingsFound = () => (
+  <NoDataComponent text="No Completed Bookings Found" />
+);
 
 export default function CompletedBookings({
   searchQuery = "",

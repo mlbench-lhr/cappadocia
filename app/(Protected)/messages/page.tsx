@@ -13,6 +13,7 @@ import axios from "axios";
 import { useAppSelector } from "@/lib/store/hooks";
 import { pusherClient } from "@/lib/pusher/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 
 const Messages = () => {
   const router = useRouter();
@@ -226,6 +227,8 @@ const Messages = () => {
                     </div>
                   </div>
                 ))
+              ) : filteredConversations.length < 1 ? (
+                <NoDataComponent text="No Chat Found" />
               ) : (
                 filteredConversations.map((c: any) => {
                   const other = (c.participants || []).find(
@@ -267,10 +270,13 @@ const Messages = () => {
                               : other?.fullName || "User"}
                           </h1>
                           <span className="text-sm font-normal text-black/70">
-                            {new Date(c.latestMessageAt).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {new Date(c.latestMessageAt).toLocaleTimeString(
+                              [],
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
                           </span>
                         </div>
                         <span className="text-[12px] font-normal text-black/70">
@@ -291,7 +297,7 @@ const Messages = () => {
         >
           <div className="w-full h-[100px] flex flex-col justify-start items-start ">
             <div className="w-full border-b px-2 lg:px-4 xl:px-6 py-4 text-sm font-semibold flex justify-start items-center gap-2">
-              {loadingMessages || !selectedOther ? (
+              {loadingMessages ? (
                 <>
                   <Skeleton className="w-[35px] h-[35px] rounded-[8px]" />
                   <Skeleton className="h-4 w-40" />
@@ -316,7 +322,7 @@ const Messages = () => {
                   <span className="text-sm font-semibold">
                     {selectedOther?.role === "admin"
                       ? "Cappadocia Platform"
-                      : selectedOther?.fullName || "Messages"}
+                      : selectedOther?.fullName || "----"}
                   </span>
                 </>
               )}
@@ -327,15 +333,23 @@ const Messages = () => {
               {loadingMessages ? (
                 Array.from({ length: 8 }).map((_, i) => (
                   <div key={i} className="w-full flex flex-col gap-1">
-                    <div className={`${i % 2 === 0 ? "self-start" : "self-end"}`}>
-                      <Skeleton className={`${i % 2 === 0 ? "w-2/3" : "w-1/2"} h-10 rounded-2xl`} />
+                    <div
+                      className={`${i % 2 === 0 ? "self-start" : "self-end"}`}
+                    >
+                      <Skeleton
+                        className={`${
+                          i % 2 === 0 ? "w-2/3" : "w-1/2"
+                        } h-10 rounded-2xl`}
+                      />
                     </div>
-                    <div className={`${i % 2 === 0 ? "self-start" : "self-end"}`}>
+                    <div
+                      className={`${i % 2 === 0 ? "self-start" : "self-end"}`}
+                    >
                       <Skeleton className="w-12 h-3" />
                     </div>
                   </div>
                 ))
-              ) : (
+              ) : messages.length < 1 ? null : (
                 <>
                   {messages.map((item: any, index: number) => (
                     <div

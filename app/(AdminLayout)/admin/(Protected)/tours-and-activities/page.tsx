@@ -28,7 +28,7 @@ const BookingsLoadingSkeleton = () => (
 );
 
 // No data component
-const NoBookingsFound = () => <NoDataComponent text="No Data Found" />;
+const NoBookingsFound = () => <NoDataComponent text="No Tours Added Yet" />;
 
 export default function BookingsPage() {
   const dispatch = useAppDispatch();

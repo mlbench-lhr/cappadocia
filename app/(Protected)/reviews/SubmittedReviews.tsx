@@ -34,7 +34,9 @@ const BookingsLoadingSkeleton = () => (
 );
 
 // No data component
-const NoBookingsFound = () => <NoDataComponent text="No Data Found" />;
+const NoBookingsFound = () => (
+  <NoDataComponent text="No Reviews Submitted Yet" />
+);
 
 export default function SubmittedReviews({
   searchQuery = "",
