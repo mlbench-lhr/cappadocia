@@ -76,14 +76,14 @@ const pathsArray: { name: string; link: string; icon: any }[] = [
     icon: BlogIcon,
   },
   {
-    name: "Settings",
-    link: "/settings",
-    icon: SettingsIcon,
-  },
-  {
     name: "Support Requests",
     link: "/support",
     icon: MessageIcon,
+  },
+  {
+    name: "Settings",
+    link: "/settings",
+    icon: SettingsIcon,
   },
 ];
 

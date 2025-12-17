@@ -101,7 +101,7 @@ export default function BookingsPage() {
       name="Vendor Applications"
       subHeading={"Total Applications: " + totalItems}
       rightSideComponent={
-        <div className="flex justify-start items-center gap-2 w-full">
+        <div className="flex justify-start items-center gap-2 w-full md:w-fit">
           <SearchComponent
             searchQuery={searchQuery}
             onChangeFunc={setSearchQuery}

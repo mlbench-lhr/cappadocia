@@ -58,7 +58,7 @@ export default function App() {
                 width={70}
                 height={70}
                 alt=""
-                className="h-[70px] w-[70px] rounded-full "
+                className="h-[70px] w-[70px] rounded-full object-cover"
               />
               <h2 className="text-base font-semibold mt-2">
                 {userData?.fullName}

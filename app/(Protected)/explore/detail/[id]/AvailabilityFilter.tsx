@@ -149,7 +149,7 @@ export const AvailabilityFilter = () => {
       <div className="flex justify-start items-start md:items-center flex-col md:flex-row gap-2 md:gap-5 mt-4">
         {selectedSlot === undefined ? null : selectedSlot === null ? (
           <>
-            <span className="text-primary text-[18px] font-semibold">
+            <span className="text-primary text-base font-semibold">
               {errorMsg ||
                 "Sorry, this date is not available. Please select another date."}
             </span>
@@ -165,7 +165,7 @@ export const AvailabilityFilter = () => {
           </>
         ) : (
           <>
-            <span className="text-primary text-[18px] font-semibold">
+            <span className="text-primary text-base font-semibold">
               Available — {vendorDetails?.paymentInfo?.currency || "€"}
               {selectedSlot?.[0]?.adultPrice} per person
             </span>
@@ -181,12 +181,15 @@ export const AvailabilityFilter = () => {
                   const dateStr = selectedDate
                     ? new Date(selectedDate).toISOString().split("T")[0]
                     : "";
-                    const count = (participants?.adult || 0) + (participants?.child || 0);
-                    const qs = new URLSearchParams();
-                    if (dateStr) qs.set("date", dateStr);
-                    if (count > 0) qs.set("participants", String(count));
-                    const href = `/bookings/book/${id}` + (qs.toString() ? `?${qs.toString()}` : "");
-                    window.location.href = href;
+                  const count =
+                    (participants?.adult || 0) + (participants?.child || 0);
+                  const qs = new URLSearchParams();
+                  if (dateStr) qs.set("date", dateStr);
+                  if (count > 0) qs.set("participants", String(count));
+                  const href =
+                    `/bookings/book/${id}` +
+                    (qs.toString() ? `?${qs.toString()}` : "");
+                  window.location.href = href;
                 }
               }}
             >
@@ -198,31 +201,35 @@ export const AvailabilityFilter = () => {
 
       <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
         <DialogContent className="max-w-md">
-          {authTab === "login" ? (
-            (() => {
-              const dateStr = selectedDate
-                ? new Date(selectedDate).toISOString().split("T")[0]
-                : "";
-              const count = (participants?.adult || 0) + (participants?.child || 0);
-              const qs = new URLSearchParams();
-              if (dateStr) qs.set("date", dateStr);
-              if (count > 0) qs.set("participants", String(count));
-              const redirectTo = `/bookings/book/${id}` + (qs.toString() ? `?${qs.toString()}` : "");
-              return <LoginForm redirectTo={redirectTo} />;
-            })()
-          ) : (
-            (() => {
-              const dateStr = selectedDate
-                ? new Date(selectedDate).toISOString().split("T")[0]
-                : "";
-              const count = (participants?.adult || 0) + (participants?.child || 0);
-              const qs = new URLSearchParams();
-              if (dateStr) qs.set("date", dateStr);
-              if (count > 0) qs.set("participants", String(count));
-              const redirectTo = `/bookings/book/${id}` + (qs.toString() ? `?${qs.toString()}` : "");
-              return <SignupForm redirectTo={redirectTo} />;
-            })()
-          )}
+          {authTab === "login"
+            ? (() => {
+                const dateStr = selectedDate
+                  ? new Date(selectedDate).toISOString().split("T")[0]
+                  : "";
+                const count =
+                  (participants?.adult || 0) + (participants?.child || 0);
+                const qs = new URLSearchParams();
+                if (dateStr) qs.set("date", dateStr);
+                if (count > 0) qs.set("participants", String(count));
+                const redirectTo =
+                  `/bookings/book/${id}` +
+                  (qs.toString() ? `?${qs.toString()}` : "");
+                return <LoginForm redirectTo={redirectTo} />;
+              })()
+            : (() => {
+                const dateStr = selectedDate
+                  ? new Date(selectedDate).toISOString().split("T")[0]
+                  : "";
+                const count =
+                  (participants?.adult || 0) + (participants?.child || 0);
+                const qs = new URLSearchParams();
+                if (dateStr) qs.set("date", dateStr);
+                if (count > 0) qs.set("participants", String(count));
+                const redirectTo =
+                  `/bookings/book/${id}` +
+                  (qs.toString() ? `?${qs.toString()}` : "");
+                return <SignupForm redirectTo={redirectTo} />;
+              })()}
         </DialogContent>
       </Dialog>
     </BoxProviderWithName>
