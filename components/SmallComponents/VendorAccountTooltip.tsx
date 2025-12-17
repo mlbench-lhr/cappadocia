@@ -21,8 +21,8 @@ export function VendorAccountTooltip() {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="text-xs md:text-sm">
-        Your vendor account has not been approved yet. All your tours will not
-        become public till then.
+        Your vendor account is pending approval. All tours will remain hidden
+        until it’s approved.
       </PopoverContent>
     </Popover>
   );
