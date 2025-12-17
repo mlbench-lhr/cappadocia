@@ -76,6 +76,9 @@ export default function BookingsPage() {
   console.log("bookingState:", bookingState, id);
   const [addPickupNow, setAddPickupNow] = useState(true);
   const userId = useAppSelector((s) => s.auth.user?.id);
+  const userData = useAppSelector((s) => s.auth.user);
+  console.log("userData----", userData);
+
   const [radiusCenter, setRadiusCenter] = useState<{
     lat: number;
     lng: number;
@@ -171,7 +174,17 @@ export default function BookingsPage() {
       setValue("participants", String(count) as any);
     }
   }, []);
-
+  useEffect(() => {
+    if (!userData?.email && !userData?.fullName && !userData?.phoneNumber) {
+      return;
+    }
+    dispatch(setField({ field: "email", value: userData?.email }));
+    setValue("email", userData?.email);
+    dispatch(setField({ field: "fullName", value: userData?.fullName }));
+    setValue("fullName", userData?.fullName);
+    dispatch(setField({ field: "phoneNumber", value: userData?.phoneNumber }));
+    setValue("phoneNumber", userData?.phoneNumber);
+  }, [userData?.email, userData?.fullName, userData?.phoneNumber]);
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
     const adultsCount = data.travelers.filter(
@@ -483,7 +496,9 @@ export default function BookingsPage() {
                   )}
                 />
               ) : (
-                <div className="text-sm text-gray-600">Loading location constraints...</div>
+                <div className="text-sm text-gray-600">
+                  Loading location constraints...
+                </div>
               )}
               {errors.pickupLocation?.coordinates?.message && (
                 <p className="text-sm text-red-500 mt-1">

@@ -17,6 +17,7 @@ import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
+import { ProfileBadge } from "@/components/SmallComponents/ProfileBadge";
 
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
@@ -45,6 +46,18 @@ export default function BookingsPage() {
     {
       header: "Tour Title",
       accessor: "title",
+      render: (item) => {
+        return (
+          <div className="w-[350px] md:w-fit">
+            <ProfileBadge
+              size="medium"
+              title={item?.title || ""}
+              subTitle={moment(item?.createdAt).format("DD MMM YYYY")}
+              image={item?.uploads?.[0] || "/placeholderDp.png"}
+            />
+          </div>
+        );
+      },
     },
     {
       header: "Vendor",
@@ -95,7 +108,7 @@ export default function BookingsPage() {
       name="Tours & Activities"
       subHeading={"Total Applications: " + totalItems}
       rightSideComponent={
-        <div className="w-full flex justify-start items-center gap-2">
+        <div className="w-full md:w-fit flex justify-start items-center gap-2">
           <SearchComponent
             searchQuery={searchQuery}
             onChangeFunc={setSearchQuery}
