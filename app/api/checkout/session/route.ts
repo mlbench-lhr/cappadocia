@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const origin = req.nextUrl.origin;
+    const origin = process.env.NEXT_PUBLIC_BASE_URL || req.nextUrl.origin;
     const orderNumber = `ORDER-${Date.now()}`;
 
     // Build line items
