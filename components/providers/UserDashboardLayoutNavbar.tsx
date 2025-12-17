@@ -28,6 +28,7 @@ import {
 import { pusherClient } from "@/lib/pusher/client";
 import axios from "axios";
 import moment from "moment";
+import { VendorAccountTooltip } from "../SmallComponents/VendorAccountTooltip";
 
 function ProfileMenu() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -146,6 +147,7 @@ export function Navbar() {
     dispatch(setHasNew(false));
     axios.put("/api/notifications/markRead").catch(() => {});
   }, [open]);
+  console.log("userData-----", userData?.isRoleVerified);
 
   return (
     <header className="w-full bg-white border-b h-[78px] flex justify-end items-center">
@@ -159,7 +161,6 @@ export function Navbar() {
               height={32}
               className="flex md:hidden w-[140px] h-auto"
             />
-
             <button
               onClick={() => dispatch(toggleCollapse())}
               className={`hidden ${
@@ -168,17 +169,26 @@ export function Navbar() {
             >
               <Menu className="h-[16px] w-[16px]" />
             </button>
-
             {/* Mobile menu button: toggles sidebar sheet */}
-            <button
-              onClick={() => dispatch(toggleSidebar())}
-              className="p-2 md:hidden rounded-md hover:bg-secondary h-[36px]"
-              aria-label="Toggle menu"
-            >
-              <IconMenu className="h-5 w-5" />
-            </button>
+            <div className="flex justify-start items-center gap-0">
+              <div className="md:hidden flex">
+                {userData?.role === "vendor" &&
+                  userData?.isRoleVerified == false && <VendorAccountTooltip />}
+              </div>{" "}
+              <button
+                onClick={() => dispatch(toggleSidebar())}
+                className="p-2 md:hidden rounded-md hover:bg-secondary h-[36px]"
+                aria-label="Toggle menu"
+              >
+                <IconMenu className="h-5 w-5" />
+              </button>
+            </div>
           </div>
           <div className="flex items-center gap-3">
+            <div className="hidden md:flex">
+              {userData?.role === "vendor" &&
+                userData?.isRoleVerified == false && <VendorAccountTooltip />}
+            </div>
             <div className="hidden md:block">
               <div className="text-[14px] font-medium">
                 {userData?.fullName}

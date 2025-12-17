@@ -10,6 +10,11 @@ export interface User {
   fullName: string;
   avatar?: string;
   isEmailVerified: boolean;
+  isRoleVerified: boolean;
+  roleRejected: {
+    isRoleRejected: boolean;
+    reason?: string;
+  };
   createdAt?: string;
   updatedAt?: string;
   phoneNumber: string;
