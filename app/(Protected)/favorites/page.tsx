@@ -33,9 +33,9 @@ const BookingsLoadingSkeleton = () => (
 const NoBookingsFound = () => (
   <NoDataComponent
     text="No Data Found"
-    actionComponent={
-      <Button variant={"main_green_button"}>Start Exploring Now</Button>
-    }
+    // actionComponent={
+    //   <Button variant={"main_green_button"}>Start Exploring Now</Button>
+    // }
   />
 );
 
@@ -61,7 +61,7 @@ export default function BookingsPage() {
           searchQuery={searchQuery}
           onChangeFunc={setSearchQuery}
         />
-        <Button className="" variant={"main_green_button"}>
+        <Button asChild className="" variant={"main_green_button"}>
           <Link href={"/explore"}>Explore More</Link>
         </Button>
       </div>

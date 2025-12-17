@@ -344,7 +344,7 @@ export function EditProfile({
   };
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-4 h-[calc(100vh-250px)] overflow-y-auto ">
       {/* Basic Information Section */}
       <div className="space-y-4">
         <h3 className="text-lg font-semibold pb-2">Basic Information</h3>

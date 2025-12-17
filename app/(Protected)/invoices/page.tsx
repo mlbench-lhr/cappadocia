@@ -56,8 +56,8 @@ export default function BookingsPage() {
       accessor: "booking.paymentDetails.amount",
       render: (item) => (
         <span>
-          {item.booking.paymentDetails.currency +
-            item.booking.paymentDetails.amount}
+          {item?.booking?.paymentDetails?.currency +
+            item?.booking?.paymentDetails?.amount}
         </span>
       ),
     },
@@ -66,7 +66,7 @@ export default function BookingsPage() {
       accessor: "booking.paymentStatus",
       render: (item) => (
         <StatusBadge
-          status={item.booking.paymentStatus}
+          status={item?.booking?.paymentStatus}
           textClasses="text-xs md:text-base font-normal"
           widthClasses="w-fit md:w-fit md:w-[93px]"
         />
@@ -77,7 +77,9 @@ export default function BookingsPage() {
       accessor: "createdAt",
       render: (item) => {
         return (
-          <span>{moment(item.createdAt).format("MMM DD, YYYY | hh:mm A")}</span>
+          <span>
+            {moment(item?.createdAt).format("MMM DD, YYYY | hh:mm A")}
+          </span>
         );
       },
     },
@@ -86,7 +88,7 @@ export default function BookingsPage() {
       accessor: "role",
       render: (item) => (
         <Link
-          href={`/invoices/detail/${item._id}`}
+          href={`/invoices/detail/${item?._id}`}
           className="text-[#B32053] underline"
         >
           View Details
