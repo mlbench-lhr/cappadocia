@@ -129,7 +129,10 @@ export default function Section1() {
         } else if (s.section1Slides?.length) {
           setSlidesImages(s.section1Slides);
           setSlidesData((prev) =>
-            prev.map((p, i) => ({ ...p, image: s.section1Slides[i] || p.image }))
+            prev.map((p, i) => ({
+              ...p,
+              image: s.section1Slides[i] || p.image,
+            }))
           );
         }
       } catch (e) {}
@@ -227,16 +230,13 @@ export default function Section1() {
         </div>
         <div
           className="h-fit md:h-fit w-[93%] md:w-[80%] pt-3 pb-3 px-3 md:pt-3.5 md:pb-[21px] md:px-7 rounded-[14px] border shadow-[0_4px_4.7px_3px_rgba(0,0,0,0.11)] bg-white flex flex-col items-start justify-start text-center translate-y-[-60px] gap-2"
-          style={{ zIndex: 0 }}
+          style={{ zIndex: 2220 }}
         >
           {searchSuggestions &&
             activitySearch &&
             searchSuggestions?.length > 0 && (
-              <div className="w-full h-[300px] overflow-auto absolute top-[100%] mt-1 left-0">
-                <div
-                  className="w-full h-fit border bg-white rounded-[14px] py-2 px-3 flex flex-col justify-start items-start gap-2"
-                  style={{ zIndex: 2220 }}
-                >
+              <div className="w-full h-[250px] bg-white overflow-auto absolute top-[100%] mt-1 left-0">
+                <div className="w-full h-fit border bg-white rounded-[14px] py-2 px-3 flex flex-col justify-start items-start gap-2">
                   {searchSuggestions.map((item) => (
                     <Link
                       href={`/explore/detail/${item._id}`}
