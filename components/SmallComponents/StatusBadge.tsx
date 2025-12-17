@@ -11,7 +11,7 @@ const variants: any = {
 };
 export const StatusBadge = ({
   status,
-  textClasses = "text-xs font-medium",
+  textClasses = " text-xs font-medium ",
   widthClasses = "w-fit",
 }: {
   status: string;

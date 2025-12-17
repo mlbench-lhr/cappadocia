@@ -1,4 +1,3 @@
-import { StarIcon } from "@/public/allIcons/page";
 import Image from "next/image";
 
 const imageSizes: Record<string, string> = {
@@ -17,9 +16,9 @@ const headingTextSize: Record<string, string> = {
 
 const descTextSize: Record<string, string> = {
   small: " text-[8px] ",
-  medium: " text-[13px] ",
-  large: " text-[12px] ",
-  custom: " text-[14px] ",
+  medium: " text-xs md:text-[11px] ",
+  large: " text-xs md:text-[12px] ",
+  custom: " text-xs md:text-[14px] ",
 };
 
 export const ProfileBadge = ({

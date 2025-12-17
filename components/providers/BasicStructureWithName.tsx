@@ -32,7 +32,7 @@ export const BasicStructureWithName = ({
             </div>
           )}
           <div className="">
-            <h1 className="text-base md:text-[22px] font-[600] capitalize">
+            <h1 className="text-base md:text-[20px] font-[600] capitalize">
               {name}
             </h1>
             <span className="text-xs md:text-base font-[400] capitalize">

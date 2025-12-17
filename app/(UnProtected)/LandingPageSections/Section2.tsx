@@ -157,7 +157,7 @@ export default function Section2() {
             <div className="flex items-center justify-between mb-2">
               <h2 className="font-semibold text-sm">Latest Tours</h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="relative">
@@ -214,7 +214,7 @@ export default function Section2() {
             <div className="flex items-center justify-between mb-2">
               <h2 className="font-semibold text-sm">Most Popular</h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="relative">
@@ -275,7 +275,7 @@ export default function Section2() {
             <div className="flex items-center justify-between mb-2">
               <h2 className="font-semibold text-sm">Top Rated</h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="relative">
@@ -338,7 +338,7 @@ export default function Section2() {
                 Recommended by Cappadocia Platform
               </h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="relative">
@@ -400,7 +400,7 @@ export default function Section2() {
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-lg">Latest Tours</h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
@@ -419,7 +419,7 @@ export default function Section2() {
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-lg">Most Popular</h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
@@ -440,7 +440,7 @@ export default function Section2() {
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-lg">Top Rated</h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
@@ -462,7 +462,7 @@ export default function Section2() {
                 Recommended by Cappadocia Platform
               </h2>
               <Button variant={"outline"} asChild size={"sm"}>
-                <Link href={"/explore/tours"}>View All</Link>
+                <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
             <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">

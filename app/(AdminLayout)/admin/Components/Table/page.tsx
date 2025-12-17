@@ -141,7 +141,7 @@ export function DynamicTable({
             {columns.map((column, i) => (
               <TableHead
                 key={i}
-                className={"text-sm md:text-[20px] font-[500]"}
+                className={"text-sm md:text-lg font-[500]"}
                 style={{ width: column.width }}
               >
                 {column.header}
