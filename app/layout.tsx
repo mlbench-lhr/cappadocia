@@ -10,7 +10,7 @@ import { ReduxProvider } from "@/components/providers/redux-provider";
 import LoadingScreen from "@/components/Skeletons/LoadingScreen";
 
 export const metadata: Metadata = {
-  title: "Cappadocia",
+  title: "Cappadocia Platform",
   description:
     "A platform to discover and book tours, activities, and local experiences in Cappadocia, Turkey.",
 };
