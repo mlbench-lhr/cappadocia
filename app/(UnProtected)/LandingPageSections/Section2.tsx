@@ -31,7 +31,7 @@ export default function Section2() {
     const getData = async () => {
       try {
         setLoading(true);
-        let response = await axios.get(`/api/toursAndActivity/getAll?limit=4`);
+        let response = await axios.get(`/api/toursAndActivity/getAll?limit=8`);
         console.log("response----", response);
 
         if (response.data?.data) {
@@ -46,7 +46,7 @@ export default function Section2() {
       try {
         setPopularLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=4&sortBy=popular`
+          `/api/toursAndActivity/getAll?limit=8&sortBy=popular`
         );
         if (resp.data?.data) setPopularItems(resp.data.data);
       } catch (e) {
@@ -59,7 +59,7 @@ export default function Section2() {
       try {
         setRatedLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=4&sortBy=rating`
+          `/api/toursAndActivity/getAll?limit=8&sortBy=rating`
         );
         if (resp.data?.data) setTopRatedItems(resp.data.data);
       } catch (e) {
@@ -72,7 +72,7 @@ export default function Section2() {
       try {
         setRecommendedLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=4&recommended=true`
+          `/api/toursAndActivity/getAll?limit=8&recommended=true`
         );
         if (resp.data?.data) setRecommendedItems(resp.data.data);
       } catch (e) {

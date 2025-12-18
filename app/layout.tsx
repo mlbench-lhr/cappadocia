@@ -12,7 +12,7 @@ import LoadingScreen from "@/components/Skeletons/LoadingScreen";
 export const metadata: Metadata = {
   title: "Cappadocia",
   description:
-    "A comprehensive educational platform for students, teachers, and administrators",
+    "A platform to discover and book tours, activities, and local experiences in Cappadocia, Turkey.",
 };
 
 const inter = Inter({
