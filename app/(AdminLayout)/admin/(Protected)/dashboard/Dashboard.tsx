@@ -2,26 +2,11 @@
 
 // Dashboard.tsx
 import React, { useState, useEffect, useMemo } from "react";
-import {
-  Users,
-  Sprout,
-  Trophy,
-  ChevronDown,
-  Triangle,
-  User,
-  Newspaper,
-  View,
-  Eye,
-  UserPlus,
-  User2,
-  UserCheck,
-  UserCog,
-} from "lucide-react";
+import { Users, Newspaper, View, Eye, UserPlus, UserCog } from "lucide-react";
 import Image from "next/image";
 import greenGraphLine from "@/public/green graph line.svg";
 import redGraphLine from "@/public/red graph line.svg";
 
-import LoginStatistics from "./LoginStatistics";
 import {
   Select,
   SelectContent,
@@ -29,8 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChartPieDonutText } from "./DonutChart";
-import { ChartAreaGradient } from "./AreaChart";
 import axios from "axios";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setBlogsCompletion, setOverview } from "@/lib/store/slices/adminSlice";

@@ -14,23 +14,6 @@ export function HeroSection() {
         <h1 className="text-[16px] md:text-[28px] font-[600] leading-[20px] md:leading-[40px]">
           Discover the Best Tours & Activities in Cappadocia
         </h1>
-        {/* <div className="w-fit rounded-[8px] flex justify-start md:justify-center items-center gap-3 flex-wrap">
-          <Image
-            width={100}
-            height={100}
-            src={
-              "/blogs imgs/source/ben-den-engelsen-7TU5JJAwPyU-unsplash1.jpg"
-            }
-            alt=""
-            className="w-[26px] h-[26px] md:w-[36px] md:h-[36px] rounded-full"
-          />
-          <h2 className="font-[500] text-sm md:text-[16px] text-[#97989F]">
-            Jason Francisco
-          </h2>
-          <h2 className="m-0 md:ms-2 font-[400] text-sm md:text-[16px] text-[#97989F]">
-            January 20, 2024
-          </h2>
-        </div> */}
       </div>
     </section>
   );

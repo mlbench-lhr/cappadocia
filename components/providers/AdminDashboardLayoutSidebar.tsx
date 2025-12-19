@@ -4,7 +4,6 @@ import type React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import logo from "@/public/logo.png";
-import bell from "@/public/bell.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
 import { closeSidebar, toggleCollapse } from "@/lib/store/slices/sidebarSlice";
@@ -17,11 +16,7 @@ import { useMediaQuery } from "react-responsive";
 import {
   ReservationIcon,
   DashboardIcon,
-  FavoritesIcon,
-  HelpIcon,
-  InvoiceIcon,
   MessageIcon,
-  ReviewsIcon,
   SettingsIcon,
   TourIcon,
   VendorIcon,

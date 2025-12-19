@@ -4,12 +4,11 @@ import type React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import logo from "@/public/logo.png";
-import bell from "@/public/bell.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
 import { closeSidebar, toggleCollapse } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
-import { BadgeDollarSign, LayoutDashboard, Lock, User, X } from "lucide-react";
+import { BadgeDollarSign, Lock, X } from "lucide-react";
 import LogoutDialog from "../LogoutDialog";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,17 +16,11 @@ import { useMediaQuery } from "react-responsive";
 import {
   ReservationIcon,
   DashboardIcon,
-  FavoritesIcon,
-  HelpIcon,
-  InvoiceIcon,
   MessageIcon,
-  ReviewsIcon,
   SettingsIcon,
   TourIcon,
   StarIcon,
   CalendarIcon,
-  PaymentIcon2,
-  PaymentIcon3,
   ReportsIcon,
   UserIcon,
 } from "@/public/allIcons/page";

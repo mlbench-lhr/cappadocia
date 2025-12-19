@@ -3,7 +3,6 @@ import { authSlice } from "./slices/authSlice";
 import sidebarSlice from "./slices/sidebarSlice";
 import generalSlice from "./slices/generalSlice";
 import adminSlice from "./slices/adminSlice";
-import opportunitySlice from "./slices/opportunitySlice";
 import blogSlice from "./slices/blogSlice";
 import vendorSlice from "./slices/vendorSlice";
 import addBookingSlice from "./slices/addbooking";
@@ -17,7 +16,6 @@ export const store = configureStore({
     sidebar: sidebarSlice,
     general: generalSlice,
     admin: adminSlice,
-    opportunity: opportunitySlice,
     blog: blogSlice,
     addBooking: addBookingSlice,
     calendar: calendarSlice,
