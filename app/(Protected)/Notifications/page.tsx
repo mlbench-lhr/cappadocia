@@ -6,8 +6,6 @@ import { closeSidebar } from "@/lib/store/slices/sidebarSlice";
 import { useCallback, useEffect, useState } from "react";
 import { Bell, ChevronLeft, Users, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import notIcon1 from "@/public/notIcon.svg";
-import notIcon2 from "@/public/notIcon Blog.svg";
 import Image from "next/image";
 import axios from "axios";
 import { pusherClient } from "@/lib/pusher/client";
@@ -280,7 +278,8 @@ const NotificationBox = ({ item }: { item: Notification }) => {
           ) : (
             <>
               <span className="w-fit lg:w-[100%] leading-[20px] text-[14px]">
-                Your {item.type} deadline is {moment(item.endDate).format("MMM DD, YYYY")}.
+                Your {item.type} deadline is{" "}
+                {moment(item.endDate).format("MMM DD, YYYY")}.
               </span>
               <span className="text-[#51606E] text-[12px]">
                 {moment(item.createdAt).format("MMM DD, YYYY")}
@@ -291,7 +290,9 @@ const NotificationBox = ({ item }: { item: Notification }) => {
       </div>
       <div className="flex items-center gap-2">
         {item.link ? (
-          <a href={item.link} className="text-primary text-sm">Open</a>
+          <a href={item.link} className="text-primary text-sm">
+            Open
+          </a>
         ) : null}
         <X
           size={20}

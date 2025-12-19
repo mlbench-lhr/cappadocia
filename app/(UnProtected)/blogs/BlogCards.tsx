@@ -1,5 +1,4 @@
 "use client";
-import commasIcon from "@/public/Text.svg";
 import moment from "moment";
 import Image from "next/image";
 import Link from "next/link";

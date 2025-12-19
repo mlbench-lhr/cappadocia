@@ -165,13 +165,11 @@
 //         </button>
 //       </nav>
 
-
 //     </div>
 //   );
 // };
 
 // export default Sidebar;
-
 
 "use client";
 
@@ -226,7 +224,6 @@ const Sidebar = () => {
               height={24}
             />
           }
-
           text="Edit Profile"
           href="/admin/settings/editProfile"
           isActive={pathname === "/admin/settings/editProfile"}

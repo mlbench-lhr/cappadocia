@@ -7,7 +7,6 @@ import logo from "@/public/logo.png";
 import bell from "@/public/bell.svg";
 import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import type { RootState } from "@/lib/store/store";
-import pencil from "@/public/pencil.svg";
 import { closeSidebar, toggleCollapse } from "@/lib/store/slices/sidebarSlice";
 import Image from "next/image";
 import { BadgeDollarSign, LayoutDashboard, Lock, User, X } from "lucide-react";

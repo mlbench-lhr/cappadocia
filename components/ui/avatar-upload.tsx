@@ -6,7 +6,6 @@ import { useState, useRef, Dispatch, SetStateAction } from "react";
 import { Camera, Loader, Pencil, Sprout, Trophy, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import pencil from "@/public/pencil.svg";
 import { uploadFile } from "@/lib/utils/upload";
 
 interface AvatarUploadProps {
