@@ -31,7 +31,9 @@ export default function Section2() {
     const getData = async () => {
       try {
         setLoading(true);
-        let response = await axios.get(`/api/toursAndActivity/getAll?limit=8`);
+        let response = await axios.get(
+          `/api/toursAndActivity/getAll?limit=8&isLandingPage=false`
+        );
         console.log("response----", response);
 
         if (response.data?.data) {
@@ -46,13 +48,13 @@ export default function Section2() {
       try {
         setPopularLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=20&popular=true`
+          `/api/toursAndActivity/getAll?limit=20&popular=true&isLandingPage=true`
         );
         if (resp.data?.data && resp.data.data.length > 0) {
           setPopularItems(resp.data.data);
         } else {
           const fallback = await axios.get(
-            `/api/toursAndActivity/getAll?limit=8&sortBy=popular`
+            `/api/toursAndActivity/getAll?limit=8&sortBy=popular&isLandingPage=true`
           );
           if (fallback.data?.data) setPopularItems(fallback.data.data);
         }
@@ -66,13 +68,13 @@ export default function Section2() {
       try {
         setRatedLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=20&topRated=true`
+          `/api/toursAndActivity/getAll?limit=20&topRated=true&isLandingPage=true`
         );
         if (resp.data?.data && resp.data.data.length > 0) {
           setTopRatedItems(resp.data.data);
         } else {
           const fallback = await axios.get(
-            `/api/toursAndActivity/getAll?limit=8&sortBy=rating`
+            `/api/toursAndActivity/getAll?limit=8&sortBy=rating&isLandingPage=true`
           );
           if (fallback.data?.data) setTopRatedItems(fallback.data.data);
         }
@@ -86,7 +88,7 @@ export default function Section2() {
       try {
         setRecommendedLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=8&recommended=true`
+          `/api/toursAndActivity/getAll?limit=8&recommended=true&isLandingPage=true`
         );
         if (resp.data?.data) setRecommendedItems(resp.data.data);
       } catch (e) {

@@ -17,12 +17,14 @@ export async function GET(req: NextRequest) {
   const status = url.searchParams.get("status") || "";
   const category = url.searchParams.get("category");
   const filters = url.searchParams.get("filters") || "";
+  const isLandingPage = url.searchParams.get("isLandingPage") || "";
   const alternativeOf = url.searchParams.get("alternativeOf") || "";
   const sortBy = url.searchParams.get("sortBy") || "latest"; // latest | popular | rating
   const recommendedParam = url.searchParams.get("recommended");
   const popularParam = url.searchParams.get("popular");
   const topRatedParam = url.searchParams.get("topRated");
-
+  const selectItems =
+    isLandingPage === "true" ? "uploads title slots rating _id createdAt" : "";
   const query: any = {};
 
   if (payload && payload.role === "vendor") {
@@ -192,12 +194,14 @@ export async function GET(req: NextRequest) {
       .populate("vendor")
       .skip(skip)
       .limit(limit)
+      .select(selectItems)
       .sort({ "rating.average": -1, "rating.total": -1, createdAt: -1 });
   } else {
     items = await ToursAndActivity.find(query)
       .populate("vendor")
       .skip(skip)
       .limit(limit)
+      .select(selectItems)
       .sort({ createdAt: -1 });
   }
 
