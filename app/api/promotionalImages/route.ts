@@ -42,6 +42,7 @@ export async function PUT(req: NextRequest) {
   if (body.section6Image !== undefined) updatePayload.section6Image = body.section6Image;
   if (body.section7Image !== undefined) updatePayload.section7Image = body.section7Image;
   if (body.section8Background !== undefined) updatePayload.section8Background = body.section8Background;
+  if (body.authImages) updatePayload.authImages = body.authImages;
 
   const updated = await AdminSettings.findOneAndUpdate(
     {},

@@ -13,6 +13,7 @@ export interface AdminSettingsType extends Document {
   section6Image: string;
   section7Image: string;
   section8Background: string;
+  authImages?: string[];
   discount?: {
     percentage: number;
     text: string;
@@ -44,6 +45,7 @@ const AdminSettingSchema = new Schema<AdminSettingsType>(
     section6Image: { type: String },
     section7Image: { type: String },
     section8Background: { type: String },
+    authImages: [{ type: String }],
     discount: new Schema(
       {
         percentage: { type: Number },

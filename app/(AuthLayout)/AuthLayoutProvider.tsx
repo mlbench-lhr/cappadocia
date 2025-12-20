@@ -1,4 +1,8 @@
+"use client";
 import { SwitchRoles } from "@/components/SmallComponents/SwitchRoles";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useMediaQuery } from "react-responsive";
 
 export function AuthLayoutProvider({
   children,
@@ -9,6 +13,26 @@ export function AuthLayoutProvider({
   showImage1?: boolean;
   isVendor?: boolean;
 }) {
+  const [authImages, setAuthImages] = useState<string[]>([
+    "/loginPageImage.png",
+    "/authPageImage2.png",
+    "/vendorAuthPageImage.png",
+  ]);
+  const isMobile = useMediaQuery({ maxWidth: 1023 });
+
+  useEffect(() => {
+    async function fetchSettings() {
+      try {
+        const res = await axios.get("/api/promotionalImages");
+        const s = (await res.data)?.data || {};
+        if (s.authImages?.length) setAuthImages(s.authImages);
+      } catch (e) {}
+    }
+    fetchSettings();
+  }, []);
+
+  const bgIndex = isVendor ? 2 : showImage1 ? 0 : 1;
+  const bgImage = authImages[bgIndex] || authImages[0];
   return (
     <div className="h-full w-full flex justify-between">
       <div
@@ -19,6 +43,7 @@ export function AuthLayoutProvider({
             ? "auth-bg-image-1"
             : "auth-bg-image-2"
         } hidden lg:flex w-[50%] min-h-screen max-h-full`}
+        style={{ backgroundImage: `url(${bgImage})` }}
       ></div>
       <div
         className={`bgWhiteImp w-full lg:w-1/2 ${
@@ -28,6 +53,7 @@ export function AuthLayoutProvider({
             ? "auth-bg-image-1m"
             : "auth-bg-image-2m"
         } `}
+        style={{ backgroundImage: isMobile ? `url(${bgImage})` : "none" }}
       >
         {showImage1 && <SwitchRoles />}
         <div

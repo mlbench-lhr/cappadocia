@@ -70,6 +70,12 @@ export function Promotions() {
     "/landing page/image 6.png"
   );
 
+  const [authImages, setAuthImages] = useState<string[]>([
+    "/loginPageImage.png",
+    "/authPageImage2.png",
+    "/vendorAuthPageImage.png",
+  ]);
+
   useEffect(() => {
     async function fetchSettings() {
       try {
@@ -94,6 +100,7 @@ export function Promotions() {
         if (s.section6Image) setSection6Image(s.section6Image);
         if (s.section7Image) setSection7Image(s.section7Image);
         if (s.section8Background) setSection8Background(s.section8Background);
+        if (s.authImages?.length) setAuthImages(s.authImages);
       } catch (err) {
       } finally {
         setLoading(false);
@@ -115,6 +122,7 @@ export function Promotions() {
         section6Image,
         section7Image,
         section8Background,
+        authImages,
       });
       await res.data;
 
@@ -176,6 +184,10 @@ export function Promotions() {
         setSection7Image(url);
       } else if (key === "section8Background") {
         setSection8Background(url);
+      } else if (key === "authImages") {
+        const arr = [...authImages];
+        arr[index!] = url;
+        setAuthImages(arr);
       }
     } finally {
       setIsUploading(null);
@@ -464,6 +476,44 @@ export function Promotions() {
             </div>
           </div>
         </div>
+
+        <div className="w-full">
+          <h2 className="text-base font-semibold mb-3">Authentication Pages</h2>
+          <div className="grid grid-cols-2 [@media(min-width:480px)]:grid-cols-3 gap-[20px]">
+            {authImages.map((item, index) => (
+              <div key={index} className="w-full h-fit relative">
+                <LightboxProvider images={[item]}>
+                  {isUploading === `authImages-${index}` ? (
+                    <Skeleton className="w-full h-[160px] object-cover object-center rounded-[10px]"></Skeleton>
+                  ) : (
+                    <Image
+                      src={item}
+                      alt=""
+                      width={100}
+                      height={100}
+                      className="w-full h-[160px] object-cover object-center rounded-[10px]"
+                    />
+                  )}
+                </LightboxProvider>
+                <label
+                  className="w-fit h-fit p-2 rounded-full bg-white absolute cursor-pointer -top-4 -right-4 shadow-lg"
+                  htmlFor={`upload-auth-${index}`}
+                >
+                  <Pencil size={20} color="#B32053" />
+                </label>
+                <input
+                  type="file"
+                  accept=".jpg,.jpeg,.png"
+                  onChange={(e) => handleUpload(e, "authImages", index)}
+                  disabled={isSubmitting}
+                  className="hidden"
+                  id={`upload-auth-${index}`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
 
       <Button
