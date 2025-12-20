@@ -54,6 +54,7 @@ const tourFormSchema = z.object({
   duration: z.number().min(1, "Duration must be at least 1 hour"),
   languages: z.array(z.string()).min(1, "At least one language is required"),
   pickupAvailable: z.boolean(),
+  kidsAllowed: z.boolean().default(true),
   cancellationPolicy: z.string().min(1, "Cancellation policy is required"),
   included: z.array(z.string()).min(1, "At least one item must be included"),
   notIncluded: z
@@ -112,6 +113,10 @@ export default function BookingsPage() {
       duration: toursState.duration || 1,
       languages: toursState.languages || [],
       pickupAvailable: toursState.pickupAvailable || false,
+      kidsAllowed:
+        typeof toursState.kidsAllowed === "boolean"
+          ? toursState.kidsAllowed
+          : true,
       cancellationPolicy: toursState.cancellationPolicy || "",
       included: toursState.included || [],
       notIncluded: toursState.notIncluded || [],
@@ -147,6 +152,10 @@ export default function BookingsPage() {
           value: watchedValues.pickupAvailable,
         })
       );
+    if (watchedValues.kidsAllowed !== undefined)
+      dispatch(
+        setField({ field: "kidsAllowed", value: watchedValues.kidsAllowed })
+      );
     if (watchedValues.location)
       dispatch(setField({ field: "location", value: watchedValues.location }));
   }, [
@@ -155,6 +164,7 @@ export default function BookingsPage() {
     watchedValues.description,
     watchedValues.duration,
     watchedValues.pickupAvailable,
+    watchedValues.kidsAllowed,
     watchedValues.location,
     dispatch,
   ]);
@@ -470,12 +480,18 @@ export default function BookingsPage() {
         childPrice: s.childPrice,
         seatsAvailable: s.seatsAvailable,
       }));
+      const requireChild = !!toursState.kidsAllowed;
       const hasValidSlot = cleanedSlots.some(
-        (s) => s.adultPrice > 0 && s.childPrice > 0 && s.seatsAvailable > 0
+        (s) =>
+          s.adultPrice > 0 &&
+          (requireChild ? s.childPrice > 0 : true) &&
+          s.seatsAvailable > 0
       );
       if (!hasValidSlot) {
         setCalendarError(
-          "Please add at least one slot with non-zero price and seats."
+          requireChild
+            ? "Please add at least one slot with non-zero adult, child price and seats."
+            : "Please add at least one slot with non-zero adult price and seats."
         );
         setLoading(false);
         return;
@@ -900,6 +916,27 @@ export default function BookingsPage() {
                     setValue("pickupAvailable", isAvailable);
                   }}
                 />
+                <div className="space-y-2 mt-2">
+                  <Label className="text-[14px] font-semibold">
+                    Kids Allowed
+                  </Label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      id="kidsAllowed"
+                      type="checkbox"
+                      checked={!!toursState.kidsAllowed}
+                      onChange={(e) => {
+                        const v = e.target.checked;
+                        dispatch(setField({ field: "kidsAllowed", value: v }));
+                        setValue("kidsAllowed", v);
+                      }}
+                      className="w-4 h-4"
+                    />
+                    <Label htmlFor="kidsAllowed" className="text-sm">
+                      Allow children for this tour/activity
+                    </Label>
+                  </div>
+                </div>
               </div>
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-[12px] text-black/60">
@@ -1162,6 +1199,7 @@ export default function BookingsPage() {
         {step === 2 && (
           <div className="w-full overflow-auto">
             <CalendarGrid
+              kidsAllowed={!!toursState.kidsAllowed}
               onDataChange={(data) => {
                 const cleanedSlots = data.slots.map((s) => ({
                   startDate: s.startDate,

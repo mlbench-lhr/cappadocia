@@ -54,6 +54,7 @@ export default function CalendarPage() {
                   defaultSlots={slots}
                   defaultStopBookingDates={stops}
                   readOnly={true}
+                  kidsAllowed={!!t.kidsAllowed}
                 />
               </BoxProviderWithName>
             );

@@ -24,6 +24,7 @@ type CalendarGridProps = {
   defaultStopBookingDates?: Date[];
   readOnly?: boolean;
   title?: string;
+  kidsAllowed?: boolean;
 };
 
 export default function CalendarGrid({
@@ -32,6 +33,7 @@ export default function CalendarGrid({
   defaultStopBookingDates,
   readOnly,
   title,
+  kidsAllowed = true,
 }: CalendarGridProps) {
   const [windowSize, setWindowSize] = useState(14);
   const [startOffset, setStartOffset] = useState(0);
@@ -53,7 +55,7 @@ export default function CalendarGrid({
   const rows = [
     { id: "stop", name: "Stop Booking" },
     { id: "adult", name: "Adult Price (EUR)" },
-    { id: "child", name: "Child Price (EUR)" },
+    ...(kidsAllowed ? [{ id: "child", name: "Child Price (EUR)" }] : []),
     { id: "seats", name: "Seats Available" },
   ];
 
@@ -154,10 +156,12 @@ export default function CalendarGrid({
       if (slotDays.has(ms)) {
         const v = slotDays.get(ms)!;
         nextValues["adult"][d.label] = String(v.adultPrice);
-        nextValues["child"][d.label] = String(v.childPrice);
+        if (kidsAllowed)
+          nextValues["child"][d.label] = String(v.childPrice);
         nextValues["seats"][d.label] = String(v.seatsAvailable);
         if (String(v.adultPrice) !== "0") nextDirty.add(`adult||${d.label}`);
-        if (String(v.childPrice) !== "0") nextDirty.add(`child||${d.label}`);
+        if (kidsAllowed && String(v.childPrice) !== "0")
+          nextDirty.add(`child||${d.label}`);
         if (String(v.seatsAvailable) !== "0")
           nextDirty.add(`seats||${d.label}`);
       }
@@ -331,9 +335,9 @@ export default function CalendarGrid({
 
   const isCompleteDay = (label: string) => {
     const ap = Number(values.adult[label]);
-    const cp = Number(values.child[label]);
+    const cp = Number(values.child?.[label] ?? 0);
     const seats = Number(values.seats[label]);
-    return ap > 0 && cp > 0 && seats > 0;
+    return kidsAllowed ? ap > 0 && cp > 0 && seats > 0 : ap > 0 && seats > 0;
   };
 
   const emitData = () => {
@@ -379,7 +383,7 @@ export default function CalendarGrid({
     const isModifiedDay = (label: string) => {
       return (
         dirty.has(`adult||${label}`) ||
-        dirty.has(`child||${label}`) ||
+        (kidsAllowed && dirty.has(`child||${label}`)) ||
         dirty.has(`seats||${label}`)
       );
     };
@@ -389,7 +393,7 @@ export default function CalendarGrid({
       const label = d.label;
       if (!isCompleteDay(label)) continue;
       const ap = Number(values.adult[label]);
-      const cp = Number(values.child[label]);
+      const cp = Number(values.child?.[label] ?? 0);
       const seats = Number(values.seats[label]);
 
       if (!current) {

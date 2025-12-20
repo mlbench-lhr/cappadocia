@@ -13,6 +13,7 @@ export interface ToursAndActivity {
   uploads: string[];
   languages: string[];
   pickupAvailable: boolean;
+  kidsAllowed?: boolean;
   allowPayLater?: boolean;
   included: string[];
   notIncluded: string[];
@@ -35,7 +36,7 @@ export interface ToursAndActivity {
       startDate: Date;
       endDate: Date;
       adultPrice: number;
-      childPrice: number;
+      childPrice?: number;
       seatsAvailable: number;
     }
   ];
@@ -56,6 +57,7 @@ export interface ToursAndActivityWithVendor {
   uploads: string[];
   languages: string[];
   pickupAvailable: boolean;
+  kidsAllowed?: boolean;
   allowPayLater?: boolean;
   included: string[];
   notIncluded: string[];
@@ -78,7 +80,7 @@ export interface ToursAndActivityWithVendor {
       startDate: Date;
       endDate: Date;
       adultPrice: number;
-      childPrice: number;
+      childPrice?: number;
       seatsAvailable: number;
     }
   ];
@@ -117,6 +119,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     uploads: { type: [String], default: [] },
     languages: { type: [String], default: [] },
     pickupAvailable: { type: Boolean, default: false },
+    kidsAllowed: { type: Boolean, default: true },
     allowPayLater: { type: Boolean, default: false },
     included: { type: [String], default: [] },
     notIncluded: { type: [String], default: [] },
@@ -140,7 +143,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
         startDate: { type: Date, required: true },
         endDate: { type: Date, required: true },
         adultPrice: { type: Number, required: true },
-        childPrice: { type: Number, required: true },
+        childPrice: { type: Number, required: false, default: 0 },
         seatsAvailable: { type: Number, required: true },
       },
     ],
