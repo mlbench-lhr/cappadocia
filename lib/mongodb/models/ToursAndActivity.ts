@@ -13,6 +13,7 @@ export interface ToursAndActivity {
   uploads: string[];
   languages: string[];
   pickupAvailable: boolean;
+  allowPayLater?: boolean;
   included: string[];
   notIncluded: string[];
   itinerary: string[];
@@ -53,6 +54,7 @@ export interface ToursAndActivityWithVendor {
   uploads: string[];
   languages: string[];
   pickupAvailable: boolean;
+  allowPayLater?: boolean;
   included: string[];
   notIncluded: string[];
   itinerary: string[];
@@ -111,6 +113,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     uploads: { type: [String], default: [] },
     languages: { type: [String], default: [] },
     pickupAvailable: { type: Boolean, default: false },
+    allowPayLater: { type: Boolean, default: false },
     included: { type: [String], default: [] },
     notIncluded: { type: [String], default: [] },
     itinerary: { type: [String], default: [] },

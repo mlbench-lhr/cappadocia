@@ -148,7 +148,7 @@ export default function BookingsPage() {
                     <ProfileBadge
                       size="custom"
                       title="Payment Options"
-                      subTitle={"Book Now, Pay Later Available"}
+                      subTitle={data?.allowPayLater ? "Book Now, Pay Later Available" : "Book Now, Pay Later Not Available"}
                       icon={<PaymentIcon />}
                     />
                   </div>

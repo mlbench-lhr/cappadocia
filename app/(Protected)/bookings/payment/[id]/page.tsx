@@ -132,64 +132,73 @@ export default function BookingsPage() {
             textClasses=" text-[18px] font-semibold "
           >
             <div>
-              <RadioGroup
-                value={
-                  payNow
-                    ? "Book Now (Pay Immediately)"
-                    : "Reserve Now, Pay Later"
-                }
-                onValueChange={(e) => {
-                  setPayNow(e === "Book Now (Pay Immediately)");
-                }}
-                className="flex gap-4 flex-col justify-start items-start mt-4 flex-wrap"
-              >
-                <div className="px-3 py-2 flex items-center justify-start gap-4 border rounded-2xl">
-                  <RadioGroupItem
-                    value={"Book Now (Pay Immediately)"}
-                    id={"Book Now (Pay Immediately)"}
-                  />
-                  <div className="flex flex-col justify-center gap-1 items-start">
-                    <Label
-                      className="font-semibold"
-                      htmlFor={"Book Now (Pay Immediately)"}
-                    >
-                      {"Book Now (Pay Immediately)"}
-                    </Label>
-                    <span className="text-sm font-normal">
-                      Secure your booking instantly with online payment.
-                    </span>
-                    <Link
-                      href={"/Cancellation-Policy"}
-                      className="text-sm -mt-1 font-normal underline hover:no-underline text-primary"
-                    >
-                      Cancellation Policy
-                    </Link>
+              {(() => {
+                const allowPayLater = !!data?.activity?.allowPayLater;
+                return (
+                <RadioGroup
+                  value={
+                    payNow
+                      ? "Book Now (Pay Immediately)"
+                    : allowPayLater
+                    ? "Reserve Now, Pay Later"
+                    : "Book Now (Pay Immediately)"
+                  }
+                  onValueChange={(e) => {
+                    setPayNow(e === "Book Now (Pay Immediately)");
+                  }}
+                  className="flex gap-4 flex-col justify-start items-start mt-4 flex-wrap"
+                >
+                  <div className="px-3 py-2 flex items-center justify-start gap-4 border rounded-2xl">
+                    <RadioGroupItem
+                      value={"Book Now (Pay Immediately)"}
+                      id={"Book Now (Pay Immediately)"}
+                    />
+                    <div className="flex flex-col justify-center gap-1 items-start">
+                      <Label
+                        className="font-semibold"
+                        htmlFor={"Book Now (Pay Immediately)"}
+                      >
+                        {"Book Now (Pay Immediately)"}
+                      </Label>
+                      <span className="text-sm font-normal">
+                        Secure your booking instantly with online payment.
+                      </span>
+                      <Link
+                        href={"/Cancellation-Policy"}
+                        className="text-sm -mt-1 font-normal underline hover:no-underline text-primary"
+                      >
+                        Cancellation Policy
+                      </Link>
+                    </div>
                   </div>
-                </div>
-                <div className="px-3 py-2 flex items-center justify-start gap-4 border rounded-2xl">
-                  <RadioGroupItem
-                    value={"Reserve Now, Pay Later"}
-                    id={"Reserve Now, Pay Later"}
-                  />
-                  <div className="flex flex-col justify-center gap-1 items-start">
-                    <Label
-                      className="font-semibold"
-                      htmlFor={"Reserve Now, Pay Later"}
-                    >
-                      {"Reserve Now, Pay Later"}
-                    </Label>
-                    <span className="text-sm font-normal">
-                      Lock your spot today without immediate payment.
-                    </span>
-                    <Link
-                      href={"/Learn-More"}
-                      className="text-sm -mt-1 font-normal underline hover:no-underline text-primary"
-                    >
-                      Learn More
-                    </Link>
-                  </div>
-                </div>
-              </RadioGroup>
+                  {allowPayLater && (
+                    <div className="px-3 py-2 flex items-center justify-start gap-4 border rounded-2xl">
+                      <RadioGroupItem
+                        value={"Reserve Now, Pay Later"}
+                        id={"Reserve Now, Pay Later"}
+                      />
+                      <div className="flex flex-col justify-center gap-1 items-start">
+                        <Label
+                          className="font-semibold"
+                          htmlFor={"Reserve Now, Pay Later"}
+                        >
+                          {"Reserve Now, Pay Later"}
+                        </Label>
+                        <span className="text-sm font-normal">
+                          Lock your spot today without immediate payment.
+                        </span>
+                        <Link
+                          href={"/Learn-More"}
+                          className="text-sm -mt-1 font-normal underline hover:no-underline text-primary"
+                        >
+                          Learn More
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </RadioGroup>
+                );
+              })()}
             </div>
           </BoxProviderWithName>
         </div>

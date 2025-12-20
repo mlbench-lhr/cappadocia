@@ -48,6 +48,7 @@ const tourFormSchema = z.object({
   duration: z.number().min(1, "Duration must be at least 1 hour"),
   languages: z.array(z.string()).min(1, "At least one language is required"),
   pickupAvailable: z.boolean(),
+  allowPayLater: z.boolean().default(false),
   cancellationPolicy: z.string().min(1, "Cancellation policy is required"),
   included: z.array(z.string()).min(1, "At least one item must be included"),
   notIncluded: z
@@ -99,6 +100,7 @@ export default function BookingsPage() {
       duration: toursState.duration || 1,
       languages: toursState.languages || [],
       pickupAvailable: toursState.pickupAvailable || false,
+      allowPayLater: toursState.allowPayLater || false,
       cancellationPolicy: toursState.cancellationPolicy || "",
       included: toursState.included || [],
       notIncluded: toursState.notIncluded || [],
@@ -131,6 +133,13 @@ export default function BookingsPage() {
           value: watchedValues.pickupAvailable,
         })
       );
+    if (watchedValues.allowPayLater !== undefined)
+      dispatch(
+        setField({
+          field: "allowPayLater",
+          value: watchedValues.allowPayLater,
+        })
+      );
     if (watchedValues.location)
       dispatch(setField({ field: "location", value: watchedValues.location }));
   }, [
@@ -139,6 +148,7 @@ export default function BookingsPage() {
     watchedValues.description,
     watchedValues.duration,
     watchedValues.pickupAvailable,
+    watchedValues.allowPayLater,
     watchedValues.location,
     dispatch,
   ]);
@@ -578,6 +588,27 @@ export default function BookingsPage() {
                 setValue("pickupAvailable", isAvailable);
               }}
             />
+            <div className="space-y-2">
+              <Label className="text-[14px] font-semibold">
+                Payment Option
+              </Label>
+              <div className="flex items-center gap-2">
+                <input
+                  id="allowPayLater"
+                  type="checkbox"
+                  checked={!!toursState.allowPayLater}
+                  onChange={(e) => {
+                    const v = e.target.checked;
+                    dispatch(setField({ field: "allowPayLater", value: v }));
+                    setValue("allowPayLater", v);
+                  }}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="allowPayLater" className="text-sm">
+                  Enable "Book now, pay later" for this tour/activity
+                </Label>
+              </div>
+            </div>
           </div>
         </BoxProviderWithName>
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">

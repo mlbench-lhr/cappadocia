@@ -19,6 +19,7 @@ export interface ToursAndActivityState {
   uploads: string[];
   languages: string[];
   pickupAvailable: boolean;
+  allowPayLater: boolean;
   included: string[];
   notIncluded: string[];
   itinerary: string[];
@@ -42,6 +43,7 @@ const initialState: ToursAndActivityState = {
   uploads: [],
   languages: [],
   pickupAvailable: false,
+  allowPayLater: false,
   included: [],
   notIncluded: [],
   itinerary: [],
