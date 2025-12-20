@@ -28,6 +28,9 @@ export async function GET(req: NextRequest) {
   } else {
     query.isVerified = true;
   }
+  if (!payload || payload.role === "user") {
+    query.active = true;
+  }
   if (status) {
     query.status = status;
   }

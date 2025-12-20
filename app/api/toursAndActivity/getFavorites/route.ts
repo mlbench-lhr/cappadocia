@@ -27,6 +27,8 @@ export async function GET(req: NextRequest) {
     .select("favorites -_id")
     .lean();
   const query: any = {};
+  query.active = true;
+  query.isVerified = true;
   if (filters) {
     const filterArray = filters
       .replace("tour", "Tour")

@@ -24,6 +24,7 @@ export interface ToursAndActivity {
     address: string;
     coordinates: { lat: number; lng: number } | null;
   };
+  active: boolean;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
@@ -63,6 +64,7 @@ export interface ToursAndActivityWithVendor {
     address: string;
     coordinates: { lat: number; lng: number } | null;
   };
+  active: boolean;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   slots: [
     {
@@ -99,6 +101,7 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     vendor: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String, required: true },
     category: { type: String },
+    active: { type: Boolean, default: true },
     status: {
       type: String,
       enum: ["pending admin approval", "active", "rejected", "upcoming"],

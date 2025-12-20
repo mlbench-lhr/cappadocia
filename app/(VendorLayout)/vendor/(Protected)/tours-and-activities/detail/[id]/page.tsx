@@ -37,6 +37,7 @@ import { useParams } from "next/navigation";
 import { ToursAndActivityWithVendor } from "@/lib/mongodb/models/ToursAndActivity";
 import BookingPageSkeleton from "@/components/Skeletons/BookingPageSkeleton";
 import Swal from "sweetalert2";
+import { Switch } from "@/components/ui/switch";
 
 export interface UserResponse {
   id: string;
@@ -126,36 +127,6 @@ export default function BookingsPage() {
     };
     getData();
   }, [refreshData]);
-  const handleDelete = async (id: string) => {
-    Swal.fire({
-      title: "Delete Activity",
-      text: "Are you sure you want to delete this Activity?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#B32053",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Delete",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await fetch(`/api/toursAndActivity/delete/${id}`, {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (res.ok) {
-            console.log(`Milestone ${id} marked as skipped`);
-          } else {
-            console.error("Failed to skip milestone");
-          }
-        } catch (err) {
-          console.error("Error skipping milestone:", err);
-        } finally {
-          setRefreshData(refreshData + 1);
-        }
-      }
-    });
-  };
   const updateActivity = async (payload: Record<string, any>) => {
     try {
       setUpdateLoading(true);
@@ -375,6 +346,30 @@ export default function BookingsPage() {
               )}
             </BoxProviderWithName>
             <BoxProviderWithName
+              name="Active status"
+              className="text-base mt-2"
+              rightSideComponent={
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={!!data?.active}
+                    onCheckedChange={(checked) => {
+                      updateActivity({ active: checked });
+                      setData((prev) =>
+                        prev ? { ...prev, active: checked } : prev
+                      );
+                    }}
+                  />
+                  <span className="text-sm">
+                    {data?.active ? "Active" : "Inactive"}
+                  </span>
+                </div>
+              }
+            >
+              <span className="text-[12px] md:text-[14px]">
+                Toggle to show or hide this tour from users.
+              </span>
+            </BoxProviderWithName>
+            <BoxProviderWithName
               name="About this tour:"
               className="text-base !p-0 mt-2"
               noBorder={true}
@@ -484,15 +479,6 @@ export default function BookingsPage() {
               </div>
             </BoxProviderWithName>
           </div>
-          {/* <div className="flex gap-3">
-            <button
-              onClick={() => data?._id && handleDelete(data?._id)}
-              disabled={actionLoading}
-              className="bg-red-600 hover:bg-red-700 py-1 text-sm text-white px-8 rounded-lg font-semibold"
-            >
-              {actionLoading ? "Deleting" : `Delete This ${data?.category}`}
-            </button>
-          </div> */}
         </BoxProviderWithName>
       </div>
     </BasicStructureWithName>

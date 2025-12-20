@@ -151,6 +151,30 @@ export default function BookingsPage() {
               isUploading={isUploading}
             />
             <BoxProviderWithName
+              name="Active status"
+              className="text-base mt-2"
+              rightSideComponent={
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={!!data?.active}
+                    onCheckedChange={(checked) => {
+                      updateActivity({ active: checked });
+                      setData((prev) =>
+                        prev ? { ...prev, active: checked } : prev
+                      );
+                    }}
+                  />
+                  <span className="text-sm">
+                    {data?.active ? "Active" : "Inactive"}
+                  </span>
+                </div>
+              }
+            >
+              <span className="text-xs md:text-[14px] -mt-2 md:mt-0 fot-normal leading-normal md:leading-[14px]">
+                Toggle to show or hide this activity from users.
+              </span>
+            </BoxProviderWithName>
+            <BoxProviderWithName
               name="Trip Description:"
               className="text-base mt-2"
               rightSideComponent={

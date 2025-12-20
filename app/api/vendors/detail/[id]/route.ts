@@ -37,7 +37,7 @@ export async function GET(
     // active tours
     const activeTours = await ToursAndActivity.countDocuments({
       vendor: id,
-      status: "active",
+      active: true,
     });
 
     // -----------------------------------------------------------

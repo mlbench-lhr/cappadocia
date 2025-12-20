@@ -29,6 +29,7 @@ export interface ToursAndActivityState {
   slots: Slot[];
   stopBookingDates: Date[];
   location?: LocationData;
+  active: boolean;
   status: "pending admin approval" | "active" | "rejected" | "upcoming";
   rating: { average: number | 0; total: number | 0 };
 }
@@ -44,6 +45,7 @@ const initialState: ToursAndActivityState = {
   included: [],
   notIncluded: [],
   itinerary: [],
+  active: true,
   status: "pending admin approval",
   cancellationPolicy: "",
   duration: 0,

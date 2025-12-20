@@ -13,6 +13,8 @@ export async function GET(req: NextRequest) {
   const filterDate = url.searchParams.get("date"); // Expected format: ISO date string
 
   const query: any = {};
+  query.active = true;
+  query.isVerified = true;
 
   // Text search filter
   if (searchTerm) {

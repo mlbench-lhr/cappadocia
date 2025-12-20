@@ -32,5 +32,16 @@ export async function GET(
     }
   }
 
+  if (!item.active) {
+    const vendorId = (item.vendor as any)?._id
+      ? (item.vendor as any)._id.toString()
+      : (item.vendor as any).toString();
+    const isOwner = !!payload && payload.userId === vendorId;
+    const isAdmin = !!payload && payload.role === "admin";
+    if (!isOwner && !isAdmin) {
+      return NextResponse.json({ message: "Not found" }, { status: 404 });
+    }
+  }
+
   return NextResponse.json({ data: item });
 }

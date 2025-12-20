@@ -27,7 +27,7 @@ export async function PUT(
     if (payload.userId !== vendorId)
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-    const allowed = ["title", "category", "description", "uploads"] as const;
+    const allowed = ["title", "category", "description", "uploads", "active"] as const;
     const filtered: Record<string, any> = {};
     for (const key of allowed) {
       if (key in body) filtered[key] = body[key];
@@ -44,6 +44,8 @@ export async function PUT(
       if (filtered.uploads.length < 4 || filtered.uploads.length > 10)
         return NextResponse.json({ error: "Uploads must be 4-10 images" }, { status: 400 });
     }
+    if ("active" in filtered && typeof filtered.active !== "boolean")
+      return NextResponse.json({ error: "Invalid active value" }, { status: 400 });
 
     const updated = await ToursAndActivity.findByIdAndUpdate(
       params.id,

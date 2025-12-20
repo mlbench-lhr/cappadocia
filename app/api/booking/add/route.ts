@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (activity.status !== "active") {
+    if (!activity.active || activity.status !== "active") {
       await session.abortTransaction();
       return NextResponse.json(
         { error: "Activity is not active" },
