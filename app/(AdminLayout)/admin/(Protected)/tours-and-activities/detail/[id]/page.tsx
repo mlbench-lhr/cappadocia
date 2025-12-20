@@ -243,6 +243,56 @@ export default function BookingsPage() {
               </span>
             </BoxProviderWithName>
             <BoxProviderWithName
+              name="Most Popular"
+              className="text-base mt-0 md:mt-2"
+              rightSideComponent={
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={!!data?.popular}
+                    onCheckedChange={(checked) => {
+                      updateActivity({ popular: checked });
+                      setData((prev) =>
+                        prev ? { ...prev, popular: checked } : prev
+                      );
+                    }}
+                  />
+                  <span className="text-sm">
+                    {data?.popular ? "Marked as Popular" : "Mark as Popular"}
+                  </span>
+                </div>
+              }
+            >
+              <span className="text-xs md:text-[14px] -mt-2 md:mt-0 fot-normal leading-normal md:leading-[14px]">
+                Toggle to include this activity in Most Popular on home page.
+              </span>
+            </BoxProviderWithName>
+            <BoxProviderWithName
+              name="Top Rated"
+              className="text-base mt-0 md:mt-2"
+              rightSideComponent={
+                <div className="flex items-center gap-2">
+                  <Switch
+                    checked={!!data?.topRated}
+                    onCheckedChange={(checked) => {
+                      updateActivity({ topRated: checked });
+                      setData((prev) =>
+                        prev ? { ...prev, topRated: checked } : prev
+                      );
+                    }}
+                  />
+                  <span className="text-sm">
+                    {data?.topRated
+                      ? "Marked as Top Rated"
+                      : "Mark as Top Rated"}
+                  </span>
+                </div>
+              }
+            >
+              <span className="text-xs md:text-[14px] -mt-2 md:mt-0 fot-normal leading-normal md:leading-[14px]">
+                Toggle to include this activity in Top Rated on home page.
+              </span>
+            </BoxProviderWithName>
+            <BoxProviderWithName
               name="About this tour:"
               className="text-base !p-0 mt-0 md:mt-2"
               noBorder={true}

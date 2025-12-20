@@ -47,6 +47,8 @@ export interface ToursAndActivity {
     reason?: string;
   };
   recommended?: boolean;
+  popular?: boolean;
+  topRated?: boolean;
   rating: { average: number | 0; total: number | 0 };
 }
 export interface ToursAndActivityWithVendor {
@@ -96,6 +98,8 @@ export interface ToursAndActivityWithVendor {
     vendorDetails: VendorDetails;
   };
   recommended?: boolean;
+  popular?: boolean;
+  topRated?: boolean;
   rating: { average: number | 0; total: number | 0 };
 }
 export interface ToursAndActivityDocument extends ToursAndActivity, Document {
@@ -158,6 +162,8 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
       total: { type: Number, default: 0 },
     },
     recommended: { type: Boolean, default: false },
+    popular: { type: Boolean, default: false },
+    topRated: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

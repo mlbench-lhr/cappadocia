@@ -20,6 +20,8 @@ export async function GET(req: NextRequest) {
   const alternativeOf = url.searchParams.get("alternativeOf") || "";
   const sortBy = url.searchParams.get("sortBy") || "latest"; // latest | popular | rating
   const recommendedParam = url.searchParams.get("recommended");
+  const popularParam = url.searchParams.get("popular");
+  const topRatedParam = url.searchParams.get("topRated");
 
   const query: any = {};
 
@@ -47,6 +49,18 @@ export async function GET(req: NextRequest) {
     const val = recommendedParam?.toLowerCase();
     if (val === "true" || val === "false") {
       query.recommended = val === "true";
+    }
+  }
+  if (popularParam !== null) {
+    const val = popularParam?.toLowerCase();
+    if (val === "true" || val === "false") {
+      query.popular = val === "true";
+    }
+  }
+  if (topRatedParam !== null) {
+    const val = topRatedParam?.toLowerCase();
+    if (val === "true" || val === "false") {
+      query.topRated = val === "true";
     }
   }
   if (filters) {

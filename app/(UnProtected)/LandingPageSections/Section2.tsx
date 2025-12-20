@@ -46,9 +46,16 @@ export default function Section2() {
       try {
         setPopularLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=8&sortBy=popular`
+          `/api/toursAndActivity/getAll?limit=20&popular=true`
         );
-        if (resp.data?.data) setPopularItems(resp.data.data);
+        if (resp.data?.data && resp.data.data.length > 0) {
+          setPopularItems(resp.data.data);
+        } else {
+          const fallback = await axios.get(
+            `/api/toursAndActivity/getAll?limit=8&sortBy=popular`
+          );
+          if (fallback.data?.data) setPopularItems(fallback.data.data);
+        }
       } catch (e) {
         console.log("popular err---", e);
       } finally {
@@ -59,9 +66,16 @@ export default function Section2() {
       try {
         setRatedLoading(true);
         const resp = await axios.get(
-          `/api/toursAndActivity/getAll?limit=8&sortBy=rating`
+          `/api/toursAndActivity/getAll?limit=20&topRated=true`
         );
-        if (resp.data?.data) setTopRatedItems(resp.data.data);
+        if (resp.data?.data && resp.data.data.length > 0) {
+          setTopRatedItems(resp.data.data);
+        } else {
+          const fallback = await axios.get(
+            `/api/toursAndActivity/getAll?limit=8&sortBy=rating`
+          );
+          if (fallback.data?.data) setTopRatedItems(fallback.data.data);
+        }
       } catch (e) {
         console.log("rated err---", e);
       } finally {
@@ -131,6 +145,21 @@ export default function Section2() {
   };
 
   console.log("toursAndActivity---", displayExploreItems);
+
+  const popularSlides = popularItems.reduce(
+    (acc: any[], _curr: any, idx: number) => {
+      if (idx % 4 === 0) acc.push(popularItems.slice(idx, idx + 4));
+      return acc;
+    },
+    []
+  );
+  const ratedSlides = topRatedItems.reduce(
+    (acc: any[], _curr: any, idx: number) => {
+      if (idx % 4 === 0) acc.push(topRatedItems.slice(idx, idx + 4));
+      return acc;
+    },
+    []
+  );
 
   return (
     <div className="w-full h-fit">
@@ -416,15 +445,54 @@ export default function Section2() {
               <Link href={"/explore"}>View All</Link>
             </Button>
           </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-            {popularLoading
-              ? [0, 1, 2, 3]?.map((item) => (
-                  <LandingTourCardSkeleton key={item} />
-                ))
-              : popularItems?.map((item, index) => (
-                  <TourCard key={index} {...item} />
-                ))}
-          </div>
+          {popularLoading ? (
+            <div className="grid grid-cols-4 gap-4">
+              {[0, 1, 2, 3]?.map((item) => (
+                <LandingTourCardSkeleton key={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="relative w-full">
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-300 ease-in-out"
+                  style={{
+                    transform: `translateX(-${currentPopularSlide * 100}%)`,
+                  }}
+                >
+                  {popularSlides.map((group, gi) => (
+                    <div key={gi} className="w-full flex-shrink-0">
+                      <div className="grid grid-cols-4 gap-4 px-2">
+                        {group.map((item: any, index: number) => (
+                          <TourCard key={index} {...item} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {popularSlides && popularSlides.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevPopular}
+                    disabled={currentPopularSlide === 0}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    onClick={handleNextPopular}
+                    disabled={currentPopularSlide === popularSlides.length - 1}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
         <div className="hidden md:flex w-full flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -433,15 +501,54 @@ export default function Section2() {
               <Link href={"/explore"}>View All</Link>
             </Button>
           </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-            {ratedLoading
-              ? [0, 1, 2, 3]?.map((item) => (
-                  <LandingTourCardSkeleton key={item} />
-                ))
-              : topRatedItems?.map((item, index) => (
-                  <TourCard key={index} {...item} />
-                ))}
-          </div>
+          {ratedLoading ? (
+            <div className="grid grid-cols-4 gap-4">
+              {[0, 1, 2, 3]?.map((item) => (
+                <LandingTourCardSkeleton key={item} />
+              ))}
+            </div>
+          ) : (
+            <div className="relative w-full">
+              <div className="overflow-hidden">
+                <div
+                  className="flex transition-transform duration-300 ease-in-out"
+                  style={{
+                    transform: `translateX(-${currentRatedSlide * 100}%)`,
+                  }}
+                >
+                  {ratedSlides.map((group, gi) => (
+                    <div key={gi} className="w-full flex-shrink-0">
+                      <div className="grid grid-cols-4 gap-4 px-2">
+                        {group.map((item: any, index: number) => (
+                          <TourCard key={index} {...item} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {ratedSlides && ratedSlides.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevRated}
+                    disabled={currentRatedSlide === 0}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    onClick={handleNextRated}
+                    disabled={currentRatedSlide === ratedSlides.length - 1}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                  </button>
+                </>
+              )}
+            </div>
+          )}
         </div>
         {/* Recommended by Cappadocia Platform */}
         {recommendedItems && recommendedItems?.length > 0 && (
