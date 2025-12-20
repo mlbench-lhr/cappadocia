@@ -16,6 +16,8 @@ export interface ToursAndActivity {
   allowPayLater?: boolean;
   included: string[];
   notIncluded: string[];
+  notSuitableFor?: string[];
+  importantInformation?: string[];
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
@@ -57,6 +59,8 @@ export interface ToursAndActivityWithVendor {
   allowPayLater?: boolean;
   included: string[];
   notIncluded: string[];
+  notSuitableFor?: string[];
+  importantInformation?: string[];
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
@@ -116,6 +120,8 @@ const ToursAndActivitySchema = new Schema<ToursAndActivity>(
     allowPayLater: { type: Boolean, default: false },
     included: { type: [String], default: [] },
     notIncluded: { type: [String], default: [] },
+    notSuitableFor: { type: [String], default: [] },
+    importantInformation: { type: [String], default: [] },
     itinerary: { type: [String], default: [] },
     cancellationPolicy: { type: String, required: true },
     duration: { type: Number, required: true },

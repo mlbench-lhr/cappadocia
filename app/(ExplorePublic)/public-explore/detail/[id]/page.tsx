@@ -143,7 +143,11 @@ export default function PublicExploreDetailPage() {
                     <ProfileBadge
                       size="custom"
                       title="Payment Options"
-                      subTitle={data?.allowPayLater ? "Book Now, Pay Later Available" : "Book Now, Pay Later Not Available"}
+                      subTitle={
+                        data?.allowPayLater
+                          ? "Book Now, Pay Later Available"
+                          : "Book Now, Pay Later Not Available"
+                      }
                       icon={<PaymentIcon />}
                     />
                   </div>
@@ -197,6 +201,38 @@ export default function PublicExploreDetailPage() {
                     <IconAndTextTab2
                       key={index}
                       icon={<CrossIcon />}
+                      text={item}
+                      textClasses="text-black text-[14px] font-normal"
+                    />
+                  ))}
+                </div>
+              </BoxProviderWithName>
+            </div>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-3.5 mt-2">
+              <BoxProviderWithName
+                name="Who Is This Not Suitable For?"
+                className="text-base"
+              >
+                <div className="w-full flex-col flex justify-start items-start gap-5">
+                  {data?.notSuitableFor?.map((item, index) => (
+                    <IconAndTextTab2
+                      key={index}
+                      icon={<CrossIcon />}
+                      text={item}
+                      textClasses="text-black text-[14px] font-normal"
+                    />
+                  ))}
+                </div>
+              </BoxProviderWithName>
+              <BoxProviderWithName
+                name="Important Information"
+                className="text-base"
+              >
+                <div className="w-full flex-col flex justify-start items-start gap-5">
+                  {data?.importantInformation?.map((item, index) => (
+                    <IconAndTextTab2
+                      key={index}
+                      icon={<CheckIcon />}
                       text={item}
                       textClasses="text-black text-[14px] font-normal"
                     />

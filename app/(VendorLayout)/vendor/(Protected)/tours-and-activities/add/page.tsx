@@ -59,6 +59,8 @@ const tourFormSchema = z.object({
   notIncluded: z
     .array(z.string())
     .min(1, "At least one item must be not included"),
+  notSuitableFor: z.array(z.string()).optional().default([]),
+  importantInformation: z.array(z.string()).optional().default([]),
   itinerary: z
     .array(z.string())
     .min(1, "At least one itinerary stop is required"),
@@ -90,6 +92,9 @@ export default function BookingsPage() {
   const [newIncluded, setNewIncluded] = useState<string>("");
   const [newNotIncluded, setNewNotIncluded] = useState<string>("");
   const [newItinerary, setNewItinerary] = useState<string>("");
+  const [newNotSuitableFor, setNewNotSuitableFor] = useState<string>("");
+  const [newImportantInformation, setNewImportantInformation] =
+    useState<string>("");
   const router = useRouter();
   const {
     control,
@@ -110,6 +115,8 @@ export default function BookingsPage() {
       cancellationPolicy: toursState.cancellationPolicy || "",
       included: toursState.included || [],
       notIncluded: toursState.notIncluded || [],
+      notSuitableFor: toursState.notSuitableFor || [],
+      importantInformation: toursState.importantInformation || [],
       itinerary: toursState.itinerary || [],
       uploads: toursState.uploads || [],
       location: toursState.location || {
@@ -304,6 +311,15 @@ export default function BookingsPage() {
     dispatch(setField({ field: "uploads", value: data.uploads }));
     dispatch(setField({ field: "included", value: data.included }));
     dispatch(setField({ field: "notIncluded", value: data.notIncluded }));
+    dispatch(
+      setField({ field: "notSuitableFor", value: data.notSuitableFor || [] })
+    );
+    dispatch(
+      setField({
+        field: "importantInformation",
+        value: data.importantInformation || [],
+      })
+    );
     dispatch(setField({ field: "itinerary", value: data.itinerary }));
     dispatch(setField({ field: "languages", value: selectedLanguages }));
     setStep(2);
@@ -380,6 +396,51 @@ export default function BookingsPage() {
     setValue(
       "notIncluded",
       toursState.notIncluded.filter((_, i) => i !== index)
+    );
+  };
+
+  const handleAddNotSuitableFor = () => {
+    if (newNotSuitableFor.trim()) {
+      dispatch(
+        addArrayItem({ field: "notSuitableFor", value: newNotSuitableFor })
+      );
+      setValue("notSuitableFor", [
+        ...toursState.notSuitableFor,
+        newNotSuitableFor,
+      ]);
+      setNewNotSuitableFor("");
+    }
+  };
+
+  const handleRemoveNotSuitableFor = (index: number) => {
+    dispatch(deleteArrayItem({ field: "notSuitableFor", index }));
+    setValue(
+      "notSuitableFor",
+      toursState.notSuitableFor.filter((_, i) => i !== index)
+    );
+  };
+
+  const handleAddImportantInformation = () => {
+    if (newImportantInformation.trim()) {
+      dispatch(
+        addArrayItem({
+          field: "importantInformation",
+          value: newImportantInformation,
+        })
+      );
+      setValue("importantInformation", [
+        ...toursState.importantInformation,
+        newImportantInformation,
+      ]);
+      setNewImportantInformation("");
+    }
+  };
+
+  const handleRemoveImportantInformation = (index: number) => {
+    dispatch(deleteArrayItem({ field: "importantInformation", index }));
+    setValue(
+      "importantInformation",
+      toursState.importantInformation.filter((_, i) => i !== index)
     );
   };
 
@@ -999,6 +1060,94 @@ export default function BookingsPage() {
                       <button
                         type="button"
                         onClick={() => handleRemoveItinerary(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </BoxProviderWithName>
+            </div>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+              <BoxProviderWithName
+                name="Who Is This Not Suitable For?"
+                textClasses=" text-[14px] font-semibold "
+              >
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-10">
+                    <input
+                      type="text"
+                      placeholder="Enter audience not suitable"
+                      value={newNotSuitableFor}
+                      onChange={(e) => setNewNotSuitableFor(e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <Button
+                      variant="green_secondary_button"
+                      className="h-[44px] w-full"
+                      size="lg"
+                      type="button"
+                      onClick={handleAddNotSuitableFor}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {toursState.notSuitableFor.map((item, index) => (
+                    <div
+                      key={index}
+                      className="col-span-12 flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
+                      <span className="text-sm">{item}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveNotSuitableFor(index)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </BoxProviderWithName>
+              <BoxProviderWithName
+                name="Important Information"
+                textClasses=" text-[14px] font-semibold "
+              >
+                <div className="grid grid-cols-12 gap-4">
+                  <div className="col-span-10">
+                    <input
+                      type="text"
+                      placeholder="Enter important note"
+                      value={newImportantInformation}
+                      onChange={(e) =>
+                        setNewImportantInformation(e.target.value)
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-[14px]"
+                    />
+                  </div>
+                  <div className="col-span-2">
+                    <Button
+                      variant="green_secondary_button"
+                      className="h-[44px] w-full"
+                      size="lg"
+                      type="button"
+                      onClick={handleAddImportantInformation}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  {toursState.importantInformation.map((item, index) => (
+                    <div
+                      key={index}
+                      className="col-span-12 flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
+                      <span className="text-sm">{item}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImportantInformation(index)}
                         className="text-red-500 hover:text-red-700"
                       >
                         <X className="h-4 w-4" />

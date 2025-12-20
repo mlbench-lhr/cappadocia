@@ -22,6 +22,8 @@ export interface ToursAndActivityState {
   allowPayLater: boolean;
   included: string[];
   notIncluded: string[];
+  notSuitableFor: string[];
+  importantInformation: string[];
   itinerary: string[];
   cancellationPolicy: string;
   duration: number;
@@ -46,6 +48,8 @@ const initialState: ToursAndActivityState = {
   allowPayLater: false,
   included: [],
   notIncluded: [],
+  notSuitableFor: [],
+  importantInformation: [],
   itinerary: [],
   active: true,
   status: "pending admin approval",
@@ -76,7 +80,9 @@ type ArrayFieldKey =
   | "languages"
   | "included"
   | "notIncluded"
-  | "itinerary";
+  | "itinerary"
+  | "notSuitableFor"
+  | "importantInformation";
 
 // Payload Types
 interface SetFieldPayload {
