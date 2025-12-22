@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { uploadFile } from "@/lib/utils/upload";
 import Swal from "sweetalert2";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 
 export default function Section8(props?: { editorMode?: boolean }) {
   const editorMode = props?.editorMode || false;
@@ -22,12 +23,21 @@ export default function Section8(props?: { editorMode?: boolean }) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState(false);
   useEffect(() => {
+    const cached = readCache<any>("promotionalImages");
+    if (cached) {
+      const s = cached || {};
+      if (s.section8Background) setBackground(s.section8Background);
+      if (s.section8Heading) setHeading(s.section8Heading);
+      prefetchImages([s.section8Background].filter(Boolean) as string[]);
+    }
     async function fetchSettings() {
       try {
         const res = await axios.get("/api/promotionalImages");
         const s = (await res.data)?.data || {};
         if (s.section8Background) setBackground(s.section8Background);
         if (s.section8Heading) setHeading(s.section8Heading);
+        writeCache("promotionalImages", s);
+        prefetchImages([s.section8Background].filter(Boolean) as string[]);
       } catch (e) {}
     }
     fetchSettings();
@@ -38,7 +48,9 @@ export default function Section8(props?: { editorMode?: boolean }) {
       setIsUploading(true);
       const url = await uploadFile(file, "promotionalImages");
       setBackground(url);
-      await axios.put("/api/promotionalImages", { section8Background: url });
+      const resp = await axios.put("/api/promotionalImages", { section8Background: url });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       Swal.fire({
         icon: "success",
         title: "Updated",
@@ -59,7 +71,9 @@ export default function Section8(props?: { editorMode?: boolean }) {
 
   const saveHeading = async () => {
     try {
-      await axios.put("/api/promotionalImages", { section8Heading: heading });
+      const resp = await axios.put("/api/promotionalImages", { section8Heading: heading });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       setEditOpen(false);
       Swal.fire({
         icon: "success",
@@ -85,6 +99,7 @@ export default function Section8(props?: { editorMode?: boolean }) {
             alt=""
             width={100}
             height={100}
+            priority
             className="w-full h-[650px] md:h-[753px] object-cover object-start absolute top-0 left-0"
           />
           {editorMode && (

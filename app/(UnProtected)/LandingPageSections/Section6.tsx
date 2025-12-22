@@ -7,6 +7,7 @@ import { Pencil } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { uploadFile } from "@/lib/utils/upload";
 import Swal from "sweetalert2";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 
 export default function Section6(props?: { editorMode?: boolean }) {
   const editorMode = props?.editorMode || false;
@@ -15,12 +16,21 @@ export default function Section6(props?: { editorMode?: boolean }) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState(false);
   useEffect(() => {
+    const cached = readCache<any>("promotionalImages");
+    if (cached) {
+      const s = cached || {};
+      if (s.section6Image) setImage(s.section6Image);
+      if (s.section6Heading) setHeading(s.section6Heading);
+      prefetchImages([s.section6Image].filter(Boolean) as string[]);
+    }
     async function fetchSettings() {
       try {
         const res = await axios.get("/api/promotionalImages");
         const s = (await res.data)?.data || {};
         if (s.section6Image) setImage(s.section6Image);
         if (s.section6Heading) setHeading(s.section6Heading);
+        writeCache("promotionalImages", s);
+        prefetchImages([s.section6Image].filter(Boolean) as string[]);
       } catch (e) {}
     }
     fetchSettings();
@@ -31,7 +41,9 @@ export default function Section6(props?: { editorMode?: boolean }) {
       setIsUploading(true);
       const url = await uploadFile(file, "promotionalImages");
       setImage(url);
-      await axios.put("/api/promotionalImages", { section6Image: url });
+      const resp = await axios.put("/api/promotionalImages", { section6Image: url });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       Swal.fire({ icon: "success", title: "Updated", timer: 1200, showConfirmButton: false });
     } catch {
       Swal.fire({ icon: "error", title: "Upload failed", timer: 1200, showConfirmButton: false });
@@ -42,7 +54,9 @@ export default function Section6(props?: { editorMode?: boolean }) {
 
   const saveHeading = async () => {
     try {
-      await axios.put("/api/promotionalImages", { section6Heading: heading });
+      const resp = await axios.put("/api/promotionalImages", { section6Heading: heading });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       setEditOpen(false);
       Swal.fire({ icon: "success", title: "Saved", timer: 1200, showConfirmButton: false });
     } catch {
@@ -69,6 +83,7 @@ export default function Section6(props?: { editorMode?: boolean }) {
               alt=""
               width={100}
               height={100}
+              priority
               className="w-full lg:w-[410px] h-[400px] md:h-[500px] object-cover object-center rounded-[12px] z-[1]"
             />
             {editorMode && (

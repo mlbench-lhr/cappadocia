@@ -6,6 +6,7 @@ import Link from "next/link";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Pencil } from "lucide-react";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 import {
   Dialog,
   DialogContent,
@@ -67,6 +68,24 @@ export default function Section3(props?: { editorMode?: boolean }) {
   const [editCardDescription, setEditCardDescription] = useState("");
 
   useEffect(() => {
+    const cached = readCache<any>("promotionalImages");
+    if (cached) {
+      const s = cached || {};
+      if (s.section3MainImages?.length) setMainImages(s.section3MainImages);
+      if (s.section3TabData?.length) setTabData(s.section3TabData);
+      else if (s.section3TabIcons?.length) {
+        setTabData((prev) =>
+          prev.map((p, i) => ({ ...p, image: s.section3TabIcons[i] || p.image }))
+        );
+      }
+      if (s.section3Heading) setHeading(s.section3Heading);
+      if (s.section3Description) setDescription(s.section3Description);
+      prefetchImages([
+        ...(s.section3MainImages || []),
+        ...((s.section3TabData || []).map((t: any) => t.image) || []),
+        ...(s.section3TabIcons || []),
+      ]);
+    }
     async function fetchSettings() {
       try {
         const res = await axios.get("/api/promotionalImages");
@@ -83,6 +102,12 @@ export default function Section3(props?: { editorMode?: boolean }) {
         }
         if (s.section3Heading) setHeading(s.section3Heading);
         if (s.section3Description) setDescription(s.section3Description);
+        writeCache("promotionalImages", s);
+        prefetchImages([
+          ...(s.section3MainImages || []),
+          ...((s.section3TabData || []).map((t: any) => t.image) || []),
+          ...(s.section3TabIcons || []),
+        ]);
       } catch (e) {}
     }
     fetchSettings();
@@ -215,13 +240,15 @@ export default function Section3(props?: { editorMode?: boolean }) {
               className="w-full xl:w-[323px] h-[300px] md:h-[350px] xl:h-[516px] object-cover object-center rounded-[10px]"
               width={323}
               height={516}
+              priority
             />
-            <Image
+          <Image
               src={mainImages[1]}
               alt="Cappadocia cave dwellings"
               className="w-full xl:w-[319px] h-[300px] md:h-[350px] xl:h-[414px] object-cover object-center rounded-[10px]"
               width={319}
               height={414}
+              priority
             />
           </div>
           <div className="w-full xl:w-[40%] [@media(min-width:1370px)]:w-[45%] relative xl:absolute top-1/2 right-0 -translate-y-1/2 h-fit col-span-4 xl:col-span-6 [@media(min-width:1350px)]:col-span-7 flex flex-col justify-start items-center gap-4 xl:gap-8 w-[calc(100%-80px)]:gap-10">

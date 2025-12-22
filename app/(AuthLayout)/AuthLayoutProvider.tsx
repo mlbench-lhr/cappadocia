@@ -3,6 +3,7 @@ import { SwitchRoles } from "@/components/SmallComponents/SwitchRoles";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useMediaQuery } from "react-responsive";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 
 export function AuthLayoutProvider({
   children,
@@ -13,19 +14,22 @@ export function AuthLayoutProvider({
   showImage1?: boolean;
   isVendor?: boolean;
 }) {
-  const [authImages, setAuthImages] = useState<string[]>([
-    "/loginPageImage.png",
-    "/authPageImage2.png",
-    "/vendorAuthPageImage.png",
-  ]);
+  const [authImages, setAuthImages] = useState<string[]>(["", "", ""]);
   const isMobile = useMediaQuery({ maxWidth: 1023 });
 
   useEffect(() => {
+    const cached = readCache<any>("promotionalImages");
+    if (cached && cached.authImages?.length) {
+      setAuthImages(cached.authImages);
+      prefetchImages(cached.authImages);
+    }
     async function fetchSettings() {
       try {
         const res = await axios.get("/api/promotionalImages");
         const s = (await res.data)?.data || {};
         if (s.authImages?.length) setAuthImages(s.authImages);
+        writeCache("promotionalImages", s);
+        if (s.authImages?.length) prefetchImages(s.authImages);
       } catch (e) {}
     }
     fetchSettings();

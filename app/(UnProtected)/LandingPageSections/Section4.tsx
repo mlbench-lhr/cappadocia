@@ -6,6 +6,7 @@ import { Pencil } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { uploadFile } from "@/lib/utils/upload";
 import Swal from "sweetalert2";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 
 export default function Section4(props?: { editorMode?: boolean }) {
   const editorMode = props?.editorMode || false;
@@ -24,6 +25,15 @@ export default function Section4(props?: { editorMode?: boolean }) {
   const [editOpen, setEditOpen] = useState(false);
 
   useEffect(() => {
+    const cached = readCache<any>("promotionalImages");
+    if (cached) {
+      const s = cached || {};
+      if (s.section4Background) setBackground(s.section4Background);
+      if (s.section4Thumbs?.length) setThumbs(s.section4Thumbs);
+      if (s.section4Heading) setHeading(s.section4Heading);
+      if (s.section4Description) setDescription(s.section4Description);
+      prefetchImages([s.section4Background, ...(s.section4Thumbs || [])].filter(Boolean) as string[]);
+    }
     async function fetchSettings() {
       try {
         const res = await axios.get("/api/promotionalImages");
@@ -32,6 +42,8 @@ export default function Section4(props?: { editorMode?: boolean }) {
         if (s.section4Thumbs?.length) setThumbs(s.section4Thumbs);
         if (s.section4Heading) setHeading(s.section4Heading);
         if (s.section4Description) setDescription(s.section4Description);
+        writeCache("promotionalImages", s);
+        prefetchImages([s.section4Background, ...(s.section4Thumbs || [])].filter(Boolean) as string[]);
       } catch (e) {}
     }
     fetchSettings();
@@ -42,7 +54,9 @@ export default function Section4(props?: { editorMode?: boolean }) {
       setIsUploading("bg");
       const url = await uploadFile(file, "promotionalImages");
       setBackground(url);
-      await axios.put("/api/promotionalImages", { section4Background: url });
+      const resp = await axios.put("/api/promotionalImages", { section4Background: url });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       Swal.fire({ icon: "success", title: "Updated", timer: 1200, showConfirmButton: false });
     } catch {
       Swal.fire({ icon: "error", title: "Upload failed", timer: 1200, showConfirmButton: false });
@@ -57,7 +71,9 @@ export default function Section4(props?: { editorMode?: boolean }) {
       const url = await uploadFile(file, "promotionalImages");
       const updated = thumbs.map((t, i) => (i === index ? url : t));
       setThumbs(updated);
-      await axios.put("/api/promotionalImages", { section4Thumbs: updated });
+      const resp = await axios.put("/api/promotionalImages", { section4Thumbs: updated });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       Swal.fire({ icon: "success", title: "Updated", timer: 1200, showConfirmButton: false });
     } catch {
       Swal.fire({ icon: "error", title: "Upload failed", timer: 1200, showConfirmButton: false });
@@ -68,7 +84,9 @@ export default function Section4(props?: { editorMode?: boolean }) {
 
   const saveText = async () => {
     try {
-      await axios.put("/api/promotionalImages", { section4Heading: heading, section4Description: description });
+      const resp = await axios.put("/api/promotionalImages", { section4Heading: heading, section4Description: description });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       setEditOpen(false);
       Swal.fire({ icon: "success", title: "Saved", timer: 1200, showConfirmButton: false });
     } catch {
@@ -85,6 +103,7 @@ export default function Section4(props?: { editorMode?: boolean }) {
             alt=""
             width={100}
             height={100}
+            priority
             className="w-full h-[653px] object-cover object-center"
           />
           {editorMode && (
@@ -125,6 +144,7 @@ export default function Section4(props?: { editorMode?: boolean }) {
                 alt=""
                 width={223}
                 height={179}
+                priority
                 className="w-[223px] h-[150px] md:h-[179px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               {editorMode && (
@@ -141,6 +161,7 @@ export default function Section4(props?: { editorMode?: boolean }) {
                 alt=""
                 width={233}
                 height={200}
+                priority
                 className="w-[233px] h-[170px] md:h-[200px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               {editorMode && (
@@ -157,6 +178,7 @@ export default function Section4(props?: { editorMode?: boolean }) {
                 alt=""
                 width={233}
                 height={237}
+                priority
                 className="w-[233px] h-[200px] md:h-[237px] object-cover object-center rounded-[15px] overflow-hidden"
               />
               {editorMode && (

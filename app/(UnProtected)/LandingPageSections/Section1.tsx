@@ -14,6 +14,7 @@ import { ChevronLeft, ChevronRight, Search, Pencil } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 import {
   Dialog,
   DialogContent,
@@ -131,6 +132,21 @@ export default function Section1(props?: { editorMode?: boolean }) {
   const [editSubtitle, setEditSubtitle] = useState("");
 
   useEffect(() => {
+    const cached = readCache<any>("promotionalImages");
+    if (cached) {
+      const s = cached || {};
+      if (s.section1SlidesData?.length) {
+        setSlidesData(s.section1SlidesData);
+        setSlidesImages(s.section1SlidesData.map((d: any) => d.image));
+        prefetchImages(s.section1SlidesData.map((d: any) => d.image));
+      } else if (s.section1Slides?.length) {
+        setSlidesImages(s.section1Slides);
+        setSlidesData((prev) =>
+          prev.map((p, i) => ({ ...p, image: s.section1Slides[i] || p.image }))
+        );
+        prefetchImages(s.section1Slides);
+      }
+    }
     async function fetchSettings() {
       try {
         const res = await axios.get("/api/promotionalImages");
@@ -139,6 +155,8 @@ export default function Section1(props?: { editorMode?: boolean }) {
         if (s.section1SlidesData?.length) {
           setSlidesData(s.section1SlidesData);
           setSlidesImages(s.section1SlidesData.map((d: any) => d.image));
+          writeCache("promotionalImages", s);
+          prefetchImages(s.section1SlidesData.map((d: any) => d.image));
         } else if (s.section1Slides?.length) {
           setSlidesImages(s.section1Slides);
           setSlidesData((prev) =>
@@ -147,6 +165,8 @@ export default function Section1(props?: { editorMode?: boolean }) {
               image: s.section1Slides[i] || p.image,
             }))
           );
+          writeCache("promotionalImages", s);
+          prefetchImages(s.section1Slides);
         }
       } catch (e) {}
     }
@@ -185,9 +205,11 @@ export default function Section1(props?: { editorMode?: boolean }) {
       );
       setSlidesData(updated);
       setSlidesImages(updated.map((d) => d.image));
-      await axios.put("/api/promotionalImages", {
+      const resp = await axios.put("/api/promotionalImages", {
         section1SlidesData: updated,
       });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       Swal.fire({
         icon: "success",
         title: "Updated",
@@ -220,9 +242,11 @@ export default function Section1(props?: { editorMode?: boolean }) {
           : s
       );
       setSlidesData(updated);
-      await axios.put("/api/promotionalImages", {
+      const resp = await axios.put("/api/promotionalImages", {
         section1SlidesData: updated,
       });
+      const payload = (await resp.data)?.data || {};
+      writeCache("promotionalImages", payload);
       setEditTextOpen(false);
       Swal.fire({
         icon: "success",
@@ -257,6 +281,7 @@ export default function Section1(props?: { editorMode?: boolean }) {
                 alt={slide.title}
                 width={100}
                 height={100}
+                priority={index === currentSlide}
                 className="w-full h-[500px] md:h-[653px] object-cover object-left"
               />
               {editorMode && (
