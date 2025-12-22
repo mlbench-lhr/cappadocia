@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
 import { setDisplayExploreItems } from "@/lib/store/slices/generalSlice";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LandingTourCardSkeleton from "@/components/Skeletons/LandingTourCardSkeleton";
+import { readCache, writeCache, prefetchImages } from "@/lib/utils/cache";
 
 export default function Section2() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -36,6 +37,33 @@ export default function Section2() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    const cachedLatest = readCache<any[]>("landing_latest");
+    const cachedPopular = readCache<any[]>("landing_popular");
+    const cachedRated = readCache<any[]>("landing_topRated");
+    const cachedRecommended = readCache<any[]>("landing_recommended");
+    if (cachedLatest && cachedLatest.length) {
+      dispatch(setDisplayExploreItems(cachedLatest));
+      setLoading(false);
+      prefetchImages(cachedLatest.map((i) => i?.uploads?.[0]).filter(Boolean));
+    }
+    if (cachedPopular && cachedPopular.length) {
+      setPopularItems(cachedPopular);
+      setPopularLoading(false);
+      prefetchImages(cachedPopular.map((i) => i?.uploads?.[0]).filter(Boolean));
+    }
+    if (cachedRated && cachedRated.length) {
+      setTopRatedItems(cachedRated);
+      setRatedLoading(false);
+      prefetchImages(cachedRated.map((i) => i?.uploads?.[0]).filter(Boolean));
+    }
+    if (cachedRecommended && cachedRecommended.length) {
+      setRecommendedItems(cachedRecommended);
+      setRecommendedLoading(false);
+      prefetchImages(
+        cachedRecommended.map((i) => i?.uploads?.[0]).filter(Boolean)
+      );
+    }
+
     const getData = async () => {
       try {
         setLoading(true);
@@ -46,6 +74,10 @@ export default function Section2() {
 
         if (response.data?.data) {
           dispatch(setDisplayExploreItems(response.data?.data));
+          writeCache("landing_latest", response.data.data, 10 * 60 * 1000);
+          prefetchImages(
+            response.data.data.map((i: any) => i?.uploads?.[0]).filter(Boolean)
+          );
         }
         setLoading(false);
       } catch (error) {
@@ -60,11 +92,23 @@ export default function Section2() {
         );
         if (resp.data?.data && resp.data.data.length > 0) {
           setPopularItems(resp.data.data);
+          writeCache("landing_popular", resp.data.data, 10 * 60 * 1000);
+          prefetchImages(
+            resp.data.data.map((i: any) => i?.uploads?.[0]).filter(Boolean)
+          );
         } else {
           const fallback = await axios.get(
             `/api/toursAndActivity/getAll?limit=8&sortBy=popular&isLandingPage=true`
           );
-          if (fallback.data?.data) setPopularItems(fallback.data.data);
+          if (fallback.data?.data) {
+            setPopularItems(fallback.data.data);
+            writeCache("landing_popular", fallback.data.data, 10 * 60 * 1000);
+            prefetchImages(
+              fallback.data.data
+                .map((i: any) => i?.uploads?.[0])
+                .filter(Boolean)
+            );
+          }
         }
       } catch (e) {
         console.log("popular err---", e);
@@ -80,11 +124,27 @@ export default function Section2() {
         );
         if (resp.data?.data && resp.data.data.length > 0) {
           setTopRatedItems(resp.data.data);
+          writeCache("landing_topRated", resp.data.data, 10 * 60 * 1000);
+          prefetchImages(
+            resp.data.data.map((i: any) => i?.uploads?.[0]).filter(Boolean)
+          );
         } else {
           const fallback = await axios.get(
             `/api/toursAndActivity/getAll?limit=8&sortBy=rating&isLandingPage=true`
           );
-          if (fallback.data?.data) setTopRatedItems(fallback.data.data);
+          if (fallback.data?.data) {
+            setTopRatedItems(fallback.data.data);
+            writeCache(
+              "landing_topRated",
+              fallback.data.data,
+              10 * 60 * 1000
+            );
+            prefetchImages(
+              fallback.data.data
+                .map((i: any) => i?.uploads?.[0])
+                .filter(Boolean)
+            );
+          }
         }
       } catch (e) {
         console.log("rated err---", e);
@@ -98,7 +158,17 @@ export default function Section2() {
         const resp = await axios.get(
           `/api/toursAndActivity/getAll?limit=8&recommended=true&isLandingPage=true`
         );
-        if (resp.data?.data) setRecommendedItems(resp.data.data);
+        if (resp.data?.data) {
+          setRecommendedItems(resp.data.data);
+          writeCache(
+            "landing_recommended",
+            resp.data.data,
+            10 * 60 * 1000
+          );
+          prefetchImages(
+            resp.data.data.map((i: any) => i?.uploads?.[0]).filter(Boolean)
+          );
+        }
       } catch (e) {
         console.log("recommended err---", e);
       } finally {

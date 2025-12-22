@@ -9,6 +9,7 @@ import Image from "next/image";
 import LightboxProvider from "@/components/providers/LightBoxProvider";
 import { Pencil } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { writeCache, prefetchImages } from "@/lib/utils/cache";
 
 export function Promotions() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -124,7 +125,19 @@ export function Promotions() {
         section8Background,
         authImages,
       });
-      await res.data;
+      const updated = (await res.data)?.data || {};
+      writeCache("promotionalImages", updated);
+      prefetchImages([
+        ...section1Slides,
+        ...section3MainImages,
+        ...section3TabIcons,
+        section4Background,
+        ...section4Thumbs,
+        section6Image,
+        section7Image,
+        section8Background,
+        ...authImages,
+      ].filter(Boolean));
 
       Swal.fire({
         icon: "success",
