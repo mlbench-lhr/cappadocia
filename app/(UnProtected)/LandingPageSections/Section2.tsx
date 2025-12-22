@@ -19,6 +19,14 @@ export default function Section2() {
   const [currentRatedSlide, setCurrentRatedSlide] = useState<number>(0);
   const [currentRecommendedSlide, setCurrentRecommendedSlide] =
     useState<number>(0);
+  const [currentLatestDesktopSlide, setCurrentLatestDesktopSlide] =
+    useState<number>(0);
+  const [currentPopularDesktopSlide, setCurrentPopularDesktopSlide] =
+    useState<number>(0);
+  const [currentRatedDesktopSlide, setCurrentRatedDesktopSlide] =
+    useState<number>(0);
+  const [currentRecommendedDesktopSlide, setCurrentRecommendedDesktopSlide] =
+    useState<number>(0);
   const displayExploreItems = useAppSelector(
     (s) => s.general.displayExploreItems
   );
@@ -146,6 +154,63 @@ export default function Section2() {
     }
   };
 
+  const handleNextLatestDesktop = () => {
+    if (
+      latestSlides &&
+      currentLatestDesktopSlide < latestSlides.length - 1
+    ) {
+      setCurrentLatestDesktopSlide(currentLatestDesktopSlide + 1);
+    }
+  };
+  const handlePrevLatestDesktop = () => {
+    if (currentLatestDesktopSlide > 0) {
+      setCurrentLatestDesktopSlide(currentLatestDesktopSlide - 1);
+    }
+  };
+  const handleNextPopularDesktop = () => {
+    if (
+      popularSlides &&
+      currentPopularDesktopSlide < popularSlides.length - 1
+    ) {
+      setCurrentPopularDesktopSlide(currentPopularDesktopSlide + 1);
+    }
+  };
+  const handlePrevPopularDesktop = () => {
+    if (currentPopularDesktopSlide > 0) {
+      setCurrentPopularDesktopSlide(currentPopularDesktopSlide - 1);
+    }
+  };
+  const handleNextRatedDesktop = () => {
+    if (
+      ratedSlides &&
+      currentRatedDesktopSlide < ratedSlides.length - 1
+    ) {
+      setCurrentRatedDesktopSlide(currentRatedDesktopSlide + 1);
+    }
+  };
+  const handlePrevRatedDesktop = () => {
+    if (currentRatedDesktopSlide > 0) {
+      setCurrentRatedDesktopSlide(currentRatedDesktopSlide - 1);
+    }
+  };
+  const handleNextRecommendedDesktop = () => {
+    if (
+      recommendedSlides &&
+      currentRecommendedDesktopSlide < recommendedSlides.length - 1
+    ) {
+      setCurrentRecommendedDesktopSlide(
+        currentRecommendedDesktopSlide + 1
+      );
+    }
+  };
+  const handlePrevRecommendedDesktop = () => {
+    if (currentRecommendedDesktopSlide > 0) {
+      setCurrentRecommendedDesktopSlide(
+        currentRecommendedDesktopSlide - 1
+      );
+    }
+  };
+
   console.log("toursAndActivity---", displayExploreItems);
 
   const popularSlides = popularItems.reduce(
@@ -158,6 +223,22 @@ export default function Section2() {
   const ratedSlides = topRatedItems.reduce(
     (acc: any[], _curr: any, idx: number) => {
       if (idx % 4 === 0) acc.push(topRatedItems.slice(idx, idx + 4));
+      return acc;
+    },
+    []
+  );
+  const latestSlides = (displayExploreItems || []).reduce(
+    (acc: any[], _curr: any, idx: number) => {
+      if (idx % 4 === 0)
+        acc.push((displayExploreItems || []).slice(idx, idx + 4));
+      return acc;
+    },
+    []
+  );
+  const recommendedSlides = recommendedItems.reduce(
+    (acc: any[], _curr: any, idx: number) => {
+      if (idx % 4 === 0)
+        acc.push(recommendedItems.slice(idx, idx + 4));
       return acc;
     },
     []
@@ -430,14 +511,54 @@ export default function Section2() {
               <Link href={"/explore"}>View All</Link>
             </Button>
           </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-            {loading
-              ? [0, 1, 2, 3]?.map((item) => (
-                  <LandingTourCardSkeleton key={item} />
-                ))
-              : displayExploreItems?.map((item, index) => (
-                  <TourCard key={index} {...item} />
-                ))}
+          <div className="relative">
+            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+              {loading
+                ? [0, 1, 2, 3]?.map((item) => (
+                    <LandingTourCardSkeleton key={item} />
+                  ))
+                : latestSlides?.[currentLatestDesktopSlide]?.map(
+                    (item: any, index: number) => (
+                      <TourCard key={index} {...item} />
+                    )
+                  )}
+            </div>
+            {latestSlides && latestSlides.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevLatestDesktop}
+                  disabled={currentLatestDesktopSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextLatestDesktop}
+                  disabled={
+                    currentLatestDesktopSlide === latestSlides.length - 1
+                  }
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+                <div className="flex justify-center gap-2 mt-4">
+                  {latestSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentLatestDesktopSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentLatestDesktopSlide
+                          ? "bg-gray-300 w-6"
+                          : "bg-gray-300"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="hidden md:flex w-full flex-col gap-3">
@@ -447,14 +568,54 @@ export default function Section2() {
               <Link href={"/explore"}>View All</Link>
             </Button>
           </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-            {popularLoading
-              ? [0, 1, 2, 3]?.map((item) => (
-                  <LandingTourCardSkeleton key={item} />
-                ))
-              : popularItems?.map((item, index) => (
-                  <TourCard key={index} {...item} />
-                ))}
+          <div className="relative">
+            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+              {popularLoading
+                ? [0, 1, 2, 3]?.map((item) => (
+                    <LandingTourCardSkeleton key={item} />
+                  ))
+                : popularSlides?.[currentPopularDesktopSlide]?.map(
+                    (item: any, index: number) => (
+                      <TourCard key={index} {...item} />
+                    )
+                  )}
+            </div>
+            {popularSlides && popularSlides.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevPopularDesktop}
+                  disabled={currentPopularDesktopSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextPopularDesktop}
+                  disabled={
+                    currentPopularDesktopSlide === popularSlides.length - 1
+                  }
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+                <div className="flex justify-center gap-2 mt-4">
+                  {popularSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentPopularDesktopSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentPopularDesktopSlide
+                          ? "bg-gray-300 w-6"
+                          : "bg-gray-300"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
         <div className="hidden md:flex w-full flex-col gap-3">
@@ -464,14 +625,54 @@ export default function Section2() {
               <Link href={"/explore"}>View All</Link>
             </Button>
           </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-            {ratedLoading
-              ? [0, 1, 2, 3]?.map((item) => (
-                  <LandingTourCardSkeleton key={item} />
-                ))
-              : topRatedItems?.map((item, index) => (
-                  <TourCard key={index} {...item} />
-                ))}
+          <div className="relative">
+            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+              {ratedLoading
+                ? [0, 1, 2, 3]?.map((item) => (
+                    <LandingTourCardSkeleton key={item} />
+                  ))
+                : ratedSlides?.[currentRatedDesktopSlide]?.map(
+                    (item: any, index: number) => (
+                      <TourCard key={index} {...item} />
+                    )
+                  )}
+            </div>
+            {ratedSlides && ratedSlides.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevRatedDesktop}
+                  disabled={currentRatedDesktopSlide === 0}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Previous slide"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                </button>
+                <button
+                  onClick={handleNextRatedDesktop}
+                  disabled={
+                    currentRatedDesktopSlide === ratedSlides.length - 1
+                  }
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                  aria-label="Next slide"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                </button>
+                <div className="flex justify-center gap-2 mt-4">
+                  {ratedSlides.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setCurrentRatedDesktopSlide(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentRatedDesktopSlide
+                          ? "bg-gray-300 w-6"
+                          : "bg-gray-300"
+                      }`}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
         {/* Recommended by Cappadocia Platform */}
@@ -485,14 +686,57 @@ export default function Section2() {
                 <Link href={"/explore"}>View All</Link>
               </Button>
             </div>
-            <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
-              {recommendedLoading
-                ? [0, 1, 2, 3]?.map((item) => (
-                    <LandingTourCardSkeleton key={item} />
-                  ))
-                : recommendedItems?.map((item, index) => (
-                    <TourCard key={index} {...item} />
-                  ))}
+            <div className="relative">
+              <div className="grid grid-cols-4 md:grid-cols-8 [@media(min-width:1350px)]:grid-cols-16 gap-4">
+                {recommendedLoading
+                  ? [0, 1, 2, 3]?.map((item) => (
+                      <LandingTourCardSkeleton key={item} />
+                    ))
+                  : recommendedSlides?.[currentRecommendedDesktopSlide]?.map(
+                      (item: any, index: number) => (
+                        <TourCard key={index} {...item} />
+                      )
+                    )}
+              </div>
+              {recommendedSlides && recommendedSlides.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevRecommendedDesktop}
+                    disabled={currentRecommendedDesktopSlide === 0}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    aria-label="Previous slide"
+                  >
+                    <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <button
+                    onClick={handleNextRecommendedDesktop}
+                    disabled={
+                      currentRecommendedDesktopSlide ===
+                      recommendedSlides.length - 1
+                    }
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 bg-white rounded-full p-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed z-10"
+                    aria-label="Next slide"
+                  >
+                    <ChevronRight className="w-5 h-5 text-gray-700" />
+                  </button>
+                  <div className="flex justify-center gap-2 mt-4">
+                    {recommendedSlides.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() =>
+                          setCurrentRecommendedDesktopSlide(index)
+                        }
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          index === currentRecommendedDesktopSlide
+                            ? "bg-gray-300 w-6"
+                            : "bg-gray-300"
+                        }`}
+                        aria-label={`Go to slide ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
