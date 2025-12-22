@@ -9,6 +9,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Controller, Control, FieldPath, FieldValues } from "react-hook-form";
+import DeadlinePicker from "../ui/datePicker";
 
 interface BaseInputProps {
   label: string;
@@ -130,18 +131,35 @@ export const TextInputComponent = ({
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </Label>
-      <Input
-        max={max}
-        type={type}
-        placeholder={placeholderTemp}
-        className={`bg-white ${
-          error ? "border-red-500 focus-visible:ring-red-500" : ""
-        }`}
-        required={required}
-        disabled={disabled}
-        value={value || ""}
-        onChange={(e) => onChange?.(e.target.value)}
-      />
+      {type === "date" ? (
+        <div
+          className={`overflow-hidden flex justify-start items-center h-[36px] file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[#F3F3F3] md:text-xs ${
+            error ? "border-red-500" : ""
+          }`}
+        >
+          <DeadlinePicker
+            date={value}
+            setDate={(val: string) => onChange?.(val)}
+            onRemove={() => onChange?.("")}
+            textClass={" text-[14px] "}
+            maxDate={max ? new Date(max) : undefined}
+            disabled={disabled}
+          />
+        </div>
+      ) : (
+        <Input
+          max={max}
+          type={type}
+          placeholder={placeholderTemp}
+          className={`bg-white ${
+            error ? "border-red-500 focus-visible:ring-red-500" : ""
+          }`}
+          required={required}
+          disabled={disabled}
+          value={value || ""}
+          onChange={(e) => onChange?.(e.target.value)}
+        />
+      )}
       {error && <p className="text-sm text-red-500 mt-1">{error}</p>}
     </div>
   );
@@ -198,16 +216,41 @@ export function FormTextInput<T extends FieldValues>({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <TextInputComponent
-          label={label}
-          placeholder={placeholder}
-          disabled={disabled}
-          required={required}
-          type={type}
-          value={field.value}
-          onChange={field.onChange}
-          error={error?.message}
-        />
+        type === "date" ? (
+          <div className="space-y-1 col-span-1">
+            <Label className="text-[14px] font-semibold">
+              {label}
+              {required && <span className="text-red-500 ml-1">*</span>}
+            </Label>
+            <div
+              className={`overflow-hidden flex justify-start items-center h-[36px] file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-sm shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-[#F3F3F3] md:text-xs ${
+                error ? "border-red-500" : ""
+              }`}
+            >
+              <DeadlinePicker
+                date={field.value}
+                setDate={(val: string) => field.onChange(val)}
+                onRemove={() => field.onChange("")}
+                textClass={" text-[14px] "}
+                disabled={disabled}
+              />
+            </div>
+            {error?.message && (
+              <p className="text-sm text-red-500 mt-1">{error.message}</p>
+            )}
+          </div>
+        ) : (
+          <TextInputComponent
+            label={label}
+            placeholder={placeholder}
+            disabled={disabled}
+            required={required}
+            type={type}
+            value={field.value}
+            onChange={field.onChange}
+            error={error?.message}
+          />
+        )
       )}
     />
   );

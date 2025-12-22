@@ -14,11 +14,19 @@ export default function DeadlinePicker({
   setDate,
   onRemove,
   textClass = " text-[12px] ",
+  minDate,
+  maxDate,
+  disabledPredicate,
+  disabled = false,
 }: {
-  date: Date | undefined;
+  date: Date | string | undefined;
   setDate: any;
   onRemove: any;
   textClass?: string;
+  minDate?: Date;
+  maxDate?: Date;
+  disabledPredicate?: (date: Date) => boolean;
+  disabled?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-[10px] w-full relative">
@@ -27,6 +35,7 @@ export default function DeadlinePicker({
           <PopoverTrigger asChild>
             <Button
               variant="outline"
+              disabled={disabled}
               className={`w-full justify-between text-left font-medium ${textClass} flex items-center border-none shadow-none h-[37px] ps-0 px-0 hover:bg-transparent leading-tight ${
                 !date && "text-muted-foreground"
               }`}
@@ -47,14 +56,30 @@ export default function DeadlinePicker({
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={date}
+            selected={date ? new Date(date) : undefined}
             onSelect={(d) =>
               d && setDate(moment(d).format("YYYY-MM-DDTHH:mm:ss.SSSZ"))
             }
             initialFocus
-            disabled={(date) =>
-              date < new Date(new Date().setHours(0, 0, 0, 0))
-            }
+            disabled={(d) => {
+              const today = new Date(new Date().setHours(0, 0, 0, 0));
+              let isDisabled = false;
+              if (!minDate && !maxDate && !disabledPredicate) {
+                isDisabled = d < today;
+              }
+              if (minDate) {
+                const min = new Date(new Date(minDate).setHours(0, 0, 0, 0));
+                if (d < min) isDisabled = true;
+              }
+              if (maxDate) {
+                const max = new Date(new Date(maxDate).setHours(23, 59, 59, 999));
+                if (d > max) isDisabled = true;
+              }
+              if (disabledPredicate && disabledPredicate(d)) {
+                isDisabled = true;
+              }
+              return isDisabled;
+            }}
           />
         </PopoverContent>
       </Popover>
