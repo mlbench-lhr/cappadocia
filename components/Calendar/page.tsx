@@ -45,6 +45,8 @@ export default function CalendarGrid({
   const [windowSize, setWindowSize] = useState(14);
   const [startOffset, setStartOffset] = useState(0);
   const [userSelectedWindowSize, setUserSelectedWindowSize] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const lastPointer = useRef<{ x: number; y: number } | null>(null);
 
   const generateDates = () => {
     const items: { label: string; date: Date }[] = [];
@@ -196,6 +198,7 @@ export default function CalendarGrid({
     isDragging.current = true;
     selectedRowRef.current = rowId;
     setSelectedKeys(new Set([k]));
+    lastPointer.current = { x: e.clientX, y: e.clientY };
   };
 
   const handleMouseEnter = (rowId: string, dateLabel: string) => {
@@ -232,11 +235,67 @@ export default function CalendarGrid({
       }
     };
     window.addEventListener("touchend", onTouchEnd);
+    const autoScrollAndSelect = (x: number, y: number) => {
+      if (!isDragging.current) return;
+      if (readOnly) return;
+      const div = containerRef.current;
+      if (!div) return;
+      const rect = div.getBoundingClientRect();
+      const threshold = 28;
+      const canScrollRight = div.scrollLeft + div.clientWidth < div.scrollWidth;
+      const canScrollLeft = div.scrollLeft > 0;
+      const stickyEl =
+        div.querySelector("th.sticky.left-0") ||
+        div.querySelector("td.sticky.left-0");
+      const stickyWidth = stickyEl
+        ? (stickyEl as HTMLElement).getBoundingClientRect().width
+        : 0;
+      const leftEdge = rect.left + stickyWidth;
+      if (x > rect.right - threshold && canScrollRight) {
+        div.scrollLeft = Math.min(
+          div.scrollLeft + 36,
+          div.scrollWidth - div.clientWidth
+        );
+      } else if (x < leftEdge + threshold && canScrollLeft) {
+        div.scrollLeft = Math.max(div.scrollLeft - 36, 0);
+      }
+      const elem = document.elementFromPoint(x, y);
+      if (!elem) return;
+      const td = elem.closest("td") as HTMLTableCellElement | null;
+      if (!td) return;
+      const rid = td.getAttribute("data-rowid");
+      const label = td.getAttribute("data-label");
+      if (!rid || !label) return;
+      if (selectedRowRef.current && selectedRowRef.current !== rid) return;
+      const k = keyFor(rid, label);
+      setSelectedKeys((prev) => {
+        const next = new Set(prev);
+        next.add(k);
+        return next;
+      });
+    };
+    const onMouseMoveWindow = (e: MouseEvent) => {
+      if (!isDragging.current) return;
+      lastPointer.current = { x: e.clientX, y: e.clientY };
+      autoScrollAndSelect(e.clientX, e.clientY);
+    };
+    const onTouchMoveWindow = (e: TouchEvent) => {
+      if (!isDragging.current) return;
+      const t = e.touches[0];
+      if (!t) return;
+      lastPointer.current = { x: t.clientX, y: t.clientY };
+      if (windowSize <= 7) return;
+      autoScrollAndSelect(t.clientX, t.clientY);
+    };
+    window.addEventListener("mousemove", onMouseMoveWindow);
+    window.addEventListener("touchmove", onTouchMoveWindow, { passive: true });
     return () => {
       window.removeEventListener("mouseup", onMouseUp);
       window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("mousemove", onMouseMoveWindow);
+      window.removeEventListener("touchmove", onTouchMoveWindow as any);
     };
-  }, [selectedKeys]);
+  }, [selectedKeys, readOnly, windowSize]);
 
   const handleTouchStart = (
     rowId: string,
@@ -260,12 +319,30 @@ export default function CalendarGrid({
     if (readOnly) return;
     if (windowSize <= 7) return;
     const touch = e.touches[0];
-    if (touchStartPos.current) {
-      const dx = Math.abs(touch.clientX - touchStartPos.current.x);
-      const dy = Math.abs(touch.clientY - touchStartPos.current.y);
-      if (dx > 8 || dy > 8) {
-        isDragging.current = false;
-        return;
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const threshold = 28;
+      const canScrollRight =
+        containerRef.current.scrollLeft + containerRef.current.clientWidth <
+        containerRef.current.scrollWidth;
+      const canScrollLeft = containerRef.current.scrollLeft > 0;
+      const stickyEl =
+        containerRef.current.querySelector("th.sticky.left-0") ||
+        containerRef.current.querySelector("td.sticky.left-0");
+      const stickyWidth = stickyEl
+        ? (stickyEl as HTMLElement).getBoundingClientRect().width
+        : 0;
+      const leftEdge = rect.left + stickyWidth;
+      if (touch.clientX > rect.right - threshold && canScrollRight) {
+        containerRef.current.scrollLeft = Math.min(
+          containerRef.current.scrollLeft + 36,
+          containerRef.current.scrollWidth - containerRef.current.clientWidth
+        );
+      } else if (touch.clientX < leftEdge + threshold && canScrollLeft) {
+        containerRef.current.scrollLeft = Math.max(
+          containerRef.current.scrollLeft - 36,
+          0
+        );
       }
     }
     const elem = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -526,7 +603,10 @@ export default function CalendarGrid({
           </Select>
         </div>
       </div>
-      <div className="relative rounded-md border overflow-x-auto">
+      <div
+        ref={containerRef}
+        className="relative rounded-md border overflow-x-auto"
+      >
         <table className="border-collapse min-w-[720px] w-full text-xs md:text-sm">
           <thead>
             <tr>
