@@ -181,7 +181,7 @@ export default function BookingsPage() {
     if (isMobile) dispatch(closeSidebar());
   }, [isMobile, dispatch]);
 
-  const [step, setStep] = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2>(2);
   const [calendarData, setCalendarData] = useState<{
     slots: {
       startDate: Date;

@@ -14,7 +14,12 @@ import { ChevronLeft, ChevronRight, Search, Pencil } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { uploadFile } from "@/lib/utils/upload";
 import Swal from "sweetalert2";
 
@@ -150,12 +155,14 @@ export default function Section1(props?: { editorMode?: boolean }) {
   const slides = slidesData;
 
   // Auto-play slider every 5 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
+  if (!editorMode) {
+    useEffect(() => {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % slides.length);
+      }, 5000);
+      return () => clearInterval(timer);
+    }, [slides.length]);
+  }
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -178,10 +185,22 @@ export default function Section1(props?: { editorMode?: boolean }) {
       );
       setSlidesData(updated);
       setSlidesImages(updated.map((d) => d.image));
-      await axios.put("/api/promotionalImages", { section1SlidesData: updated });
-      Swal.fire({ icon: "success", title: "Updated", timer: 1200, showConfirmButton: false });
+      await axios.put("/api/promotionalImages", {
+        section1SlidesData: updated,
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Updated",
+        timer: 1200,
+        showConfirmButton: false,
+      });
     } catch {
-      Swal.fire({ icon: "error", title: "Upload failed", timer: 1200, showConfirmButton: false });
+      Swal.fire({
+        icon: "error",
+        title: "Upload failed",
+        timer: 1200,
+        showConfirmButton: false,
+      });
     } finally {
       setIsUploading(null);
     }
@@ -196,14 +215,28 @@ export default function Section1(props?: { editorMode?: boolean }) {
   const saveHeroText = async () => {
     try {
       const updated = slidesData.map((s, i) =>
-        i === currentSlide ? { ...s, title: editTitle, subtitle: editSubtitle } : s
+        i === currentSlide
+          ? { ...s, title: editTitle, subtitle: editSubtitle }
+          : s
       );
       setSlidesData(updated);
-      await axios.put("/api/promotionalImages", { section1SlidesData: updated });
+      await axios.put("/api/promotionalImages", {
+        section1SlidesData: updated,
+      });
       setEditTextOpen(false);
-      Swal.fire({ icon: "success", title: "Saved", timer: 1200, showConfirmButton: false });
+      Swal.fire({
+        icon: "success",
+        title: "Saved",
+        timer: 1200,
+        showConfirmButton: false,
+      });
     } catch {
-      Swal.fire({ icon: "error", title: "Save failed", timer: 1200, showConfirmButton: false });
+      Swal.fire({
+        icon: "error",
+        title: "Save failed",
+        timer: 1200,
+        showConfirmButton: false,
+      });
     }
   };
 
@@ -415,10 +448,18 @@ export default function Section1(props?: { editorMode?: boolean }) {
               placeholder="Subtitle"
             />
             <div className="flex justify-end gap-2">
-              <Button variant={"outline"} type="button" onClick={() => setEditTextOpen(false)}>
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={() => setEditTextOpen(false)}
+              >
                 Cancel
               </Button>
-              <Button variant={"main_green_button"} type="button" onClick={saveHeroText}>
+              <Button
+                variant={"main_green_button"}
+                type="button"
+                onClick={saveHeroText}
+              >
                 Save
               </Button>
             </div>

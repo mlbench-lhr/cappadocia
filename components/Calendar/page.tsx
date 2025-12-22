@@ -2,6 +2,13 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type CalendarGridProps = {
   onDataChange?: (data: {
@@ -37,6 +44,7 @@ export default function CalendarGrid({
 }: CalendarGridProps) {
   const [windowSize, setWindowSize] = useState(14);
   const [startOffset, setStartOffset] = useState(0);
+  const [userSelectedWindowSize, setUserSelectedWindowSize] = useState(false);
 
   const generateDates = () => {
     const items: { label: string; date: Date }[] = [];
@@ -77,6 +85,7 @@ export default function CalendarGrid({
 
   useEffect(() => {
     const compute = () => {
+      if (userSelectedWindowSize) return;
       const w = window.innerWidth;
       if (w < 640) setWindowSize(7);
       else if (w < 1280) setWindowSize(14);
@@ -85,7 +94,7 @@ export default function CalendarGrid({
     compute();
     window.addEventListener("resize", compute);
     return () => window.removeEventListener("resize", compute);
-  }, []);
+  }, [userSelectedWindowSize]);
 
   useEffect(() => {
     setValues((prev) => {
@@ -156,8 +165,7 @@ export default function CalendarGrid({
       if (slotDays.has(ms)) {
         const v = slotDays.get(ms)!;
         nextValues["adult"][d.label] = String(v.adultPrice);
-        if (kidsAllowed)
-          nextValues["child"][d.label] = String(v.childPrice);
+        if (kidsAllowed) nextValues["child"][d.label] = String(v.childPrice);
         nextValues["seats"][d.label] = String(v.seatsAvailable);
         if (String(v.adultPrice) !== "0") nextDirty.add(`adult||${d.label}`);
         if (kidsAllowed && String(v.childPrice) !== "0")
@@ -492,8 +500,30 @@ export default function CalendarGrid({
             <RotateCcw className="size-4" />
           </Button>
         </div>
-        <div className="text-xs text-muted-foreground">
-          {dates[0].label} – {dates[dates.length - 1].label}
+        <div className="flex items-center gap-2">
+          <div className="text-xs text-muted-foreground">
+            {dates[0].label} – {dates[dates.length - 1].label}
+          </div>
+          <Select
+            value={userSelectedWindowSize ? String(windowSize) : undefined}
+            onValueChange={(v) => {
+              setWindowSize(Number(v));
+              setUserSelectedWindowSize(true);
+            }}
+            disabled={!!readOnly}
+          >
+            <SelectTrigger size="sm">
+              <SelectValue placeholder="14" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="15">15</SelectItem>
+              <SelectItem value="30">30</SelectItem>
+              <SelectItem value="45">45</SelectItem>
+              <SelectItem value="60">60</SelectItem>
+              <SelectItem value="75">75</SelectItem>
+              <SelectItem value="90">90</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <div className="relative rounded-md border overflow-x-auto">
