@@ -75,6 +75,7 @@ export default function BookingsPage() {
   const bookingState = useAppSelector((s) => s.addBooking);
   console.log("bookingState:", bookingState, id);
   const [addPickupNow, setAddPickupNow] = useState(true);
+  const [kidsAllowed, setKidsAllowed] = useState<boolean>(true);
   const userId = useAppSelector((s) => s.auth.user?.id);
   const userData = useAppSelector((s) => s.auth.user);
   console.log("userData----", userData);
@@ -89,6 +90,8 @@ export default function BookingsPage() {
     formState: { errors },
     setValue,
     watch,
+    setError,
+    clearErrors,
   } = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -126,6 +129,9 @@ export default function BookingsPage() {
         const response = await axios.get(`/api/toursAndActivity/detail/${id}`);
         const activity = response?.data?.data;
         const tourCoords = activity?.location?.coordinates;
+        if (typeof activity?.kidsAllowed === "boolean") {
+          setKidsAllowed(activity.kidsAllowed);
+        }
         if (
           tourCoords &&
           typeof tourCoords.lat === "number" &&
@@ -147,6 +153,30 @@ export default function BookingsPage() {
     };
     fetchActivity();
   }, [id]);
+
+  const travelersWatch = watch("travelers");
+  useEffect(() => {
+    if (!Array.isArray(travelersWatch)) return;
+    if (kidsAllowed) {
+      travelersWatch.forEach((_, index) => {
+        clearErrors(`travelers.${index}.dob` as any);
+      });
+      return;
+    }
+    travelersWatch.forEach((traveler, index) => {
+      const dobVal = traveler?.dob;
+      if (!dobVal) return;
+      const age = moment().diff(dobVal, "years");
+      if (age < 12) {
+        setError(`travelers.${index}.dob` as any, {
+          type: "validate",
+          message: "Children under 12 are not allowed for this activity",
+        });
+      } else {
+        clearErrors(`travelers.${index}.dob` as any);
+      }
+    });
+  }, [kidsAllowed, travelersWatch]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
@@ -191,6 +221,23 @@ export default function BookingsPage() {
       (p) => moment().diff(p.dob, "years") >= 18
     ).length;
     const childrenCount = data.travelers.length - adultsCount;
+    if (!kidsAllowed) {
+      const hasUnderTwelve = data.travelers.some(
+        (p) => moment().diff(p.dob, "years") < 12
+      );
+      if (hasUnderTwelve) {
+        data.travelers.forEach((p, index) => {
+          if (moment().diff(p.dob, "years") < 12) {
+            setError(`travelers.${index}.dob` as any, {
+              type: "validate",
+              message: "Children under 12 are not allowed for this activity",
+            });
+          }
+        });
+        setIsSubmitting(false);
+        return;
+      }
+    }
     try {
       if (!userId) {
         throw new Error("User not authenticated");
