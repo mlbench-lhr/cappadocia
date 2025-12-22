@@ -10,12 +10,16 @@ import {
   setDisplayExploreItems,
 } from "@/lib/store/slices/generalSlice";
 import axios from "axios";
-import { ChevronLeft, ChevronRight, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, Pencil } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { uploadFile } from "@/lib/utils/upload";
+import Swal from "sweetalert2";
 
-export default function Section1() {
+export default function Section1(props?: { editorMode?: boolean }) {
+  const editorMode = props?.editorMode || false;
   const [loading, setLoading] = useState<boolean>(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [searchSuggestions, setSearchSuggestions] = useState<
@@ -116,6 +120,10 @@ export default function Section1() {
         "Enjoy curated excursions, cultural tours, and fun activities — all together here.",
     },
   ]);
+  const [isUploading, setIsUploading] = useState<string | null>(null);
+  const [editTextOpen, setEditTextOpen] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const [editSubtitle, setEditSubtitle] = useState("");
 
   useEffect(() => {
     async function fetchSettings() {
@@ -161,6 +169,44 @@ export default function Section1() {
     setCurrentSlide(index);
   };
 
+  const handleHeroImageUpload = async (file: File) => {
+    try {
+      setIsUploading(`section1-${currentSlide}`);
+      const url = await uploadFile(file, "promotionalImages");
+      const updated = slidesData.map((s, i) =>
+        i === currentSlide ? { ...s, image: url } : s
+      );
+      setSlidesData(updated);
+      setSlidesImages(updated.map((d) => d.image));
+      await axios.put("/api/promotionalImages", { section1SlidesData: updated });
+      Swal.fire({ icon: "success", title: "Updated", timer: 1200, showConfirmButton: false });
+    } catch {
+      Swal.fire({ icon: "error", title: "Upload failed", timer: 1200, showConfirmButton: false });
+    } finally {
+      setIsUploading(null);
+    }
+  };
+
+  const openEditText = () => {
+    setEditTitle(slidesData[currentSlide]?.title || "");
+    setEditSubtitle(slidesData[currentSlide]?.subtitle || "");
+    setEditTextOpen(true);
+  };
+
+  const saveHeroText = async () => {
+    try {
+      const updated = slidesData.map((s, i) =>
+        i === currentSlide ? { ...s, title: editTitle, subtitle: editSubtitle } : s
+      );
+      setSlidesData(updated);
+      await axios.put("/api/promotionalImages", { section1SlidesData: updated });
+      setEditTextOpen(false);
+      Swal.fire({ icon: "success", title: "Saved", timer: 1200, showConfirmButton: false });
+    } catch {
+      Swal.fire({ icon: "error", title: "Save failed", timer: 1200, showConfirmButton: false });
+    }
+  };
+
   return (
     <div className="w-full h-fit">
       <div className="w-full flex flex-col items-center justify-center h-fit relative z-0">
@@ -180,10 +226,30 @@ export default function Section1() {
                 height={100}
                 className="w-full h-[500px] md:h-[653px] object-cover object-left"
               />
+              {editorMode && (
+                <div className="absolute top-4 right-4 z-30">
+                  <label
+                    htmlFor={`upload-hero-${index}`}
+                    className="w-fit h-fit p-2 rounded-full bg-white cursor-pointer shadow-lg inline-flex"
+                  >
+                    <Pencil size={18} color="#B32053" />
+                  </label>
+                  <input
+                    id={`upload-hero-${index}`}
+                    type="file"
+                    accept=".jpg,.jpeg,.png"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) handleHeroImageUpload(f);
+                    }}
+                    disabled={isUploading !== null}
+                  />
+                </div>
+              )}
             </div>
           ))}
 
-          {/* Overlay Content */}
           <div className="w-full flex flex-col items-center text-center absolute top-1/2 translate-y-[-55%] left-0 justify-center gap-2 z-10">
             <h1 className="font-bold text-3xl md:text-[42px] w-[90%] md:w-[485px] text-white leading-tight transition-all duration-500">
               {slides[currentSlide].title}
@@ -194,6 +260,15 @@ export default function Section1() {
             <Button asChild variant={"main_green_button"} className="mt-2">
               <Link href="/explore">Get Started</Link>
             </Button>
+            {editorMode && (
+              <button
+                onClick={openEditText}
+                className="absolute top-[-32px] right-4 bg-white/80 hover:bg-white rounded-full p-2 shadow"
+                aria-label="Edit hero text"
+              >
+                <Pencil size={18} color="#B32053" />
+              </button>
+            )}
           </div>
 
           {/* Navigation Arrows */}
@@ -319,6 +394,37 @@ export default function Section1() {
           </div>
         </div>
       </div>
+
+      <Dialog open={editTextOpen} onOpenChange={setEditTextOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Hero Text</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <input
+              type="text"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="w-full h-[40px] px-3 py-2 rounded-[8px] border"
+              placeholder="Title"
+            />
+            <textarea
+              value={editSubtitle}
+              onChange={(e) => setEditSubtitle(e.target.value)}
+              className="w-full min-h-[70px] px-3 py-2 rounded-[8px] border"
+              placeholder="Subtitle"
+            />
+            <div className="flex justify-end gap-2">
+              <Button variant={"outline"} type="button" onClick={() => setEditTextOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant={"main_green_button"} type="button" onClick={saveHeroText}>
+                Save
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

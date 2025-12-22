@@ -10,6 +10,7 @@ import {
   EditIcon,
   Lock,
   LogOut,
+  Pencil,
 } from "lucide-react";
 import { SettingProvider } from "./SettingProvider";
 import { Terms } from "./Terms-and-conditions/page";
@@ -32,6 +33,7 @@ import { z } from "zod";
 import PhoneNumberInput from "@/components/PhoneNumberInput";
 import { updateUser } from "@/lib/store/slices/authSlice";
 import { AvatarUpload } from "@/components/ui/avatar-upload";
+import Link from "next/link";
 
 function AdminEditProfile() {
   const userData = useAppSelector((state) => state.auth.user);
@@ -203,20 +205,32 @@ export default function App() {
     name:
       | "Profile"
       | "Change Password"
-      | "Promotions"
+      | "Lading Page Editor"
+      | "Auth Images Editor"
       | "Notifications"
       | "Discounts";
+    link?: "/admin/settings/LandingEditor" | "/admin/settings/AuthImages";
   }[] = [
     { icons: EditIcon, name: "Profile" },
     { icons: Lock, name: "Change Password" },
-    { icons: Bell, name: "Promotions" },
+    {
+      icons: Pencil,
+      name: "Lading Page Editor",
+      link: "/admin/settings/LandingEditor",
+    },
+    {
+      icons: Pencil,
+      name: "Auth Images Editor",
+      link: "/admin/settings/AuthImages",
+    },
     { icons: DollarSign, name: "Discounts" },
     { icons: Bell, name: "Notifications" },
   ];
   const components = {
     Profile: <AdminEditProfile />,
     "Change Password": <ChangePass />,
-    Promotions: <Promotions />,
+    "Lading Page Editor": null,
+    "Auth Images Editor": null,
     Discounts: <Discounts />,
     Notifications: <NotificationSettings />,
   };
@@ -224,7 +238,8 @@ export default function App() {
   const [activeComp, setActiveComp] = useState<
     | "Profile"
     | "Change Password"
-    | "Promotions"
+    | "Lading Page Editor"
+    | "Auth Images Editor"
     | "Notifications"
     | "Discounts"
   >("Profile");
@@ -251,30 +266,59 @@ export default function App() {
               <div className="w-fit lg:w-full flex flex-row lg:flex-col justify-start items-start gap-3 pt-4 snap-x snap-mandatory">
                 {options.map((item, index) => {
                   let Icon = item.icons;
-                  return (
-                    <div
-                      key={index}
-                      className={`w-fit lg:w-full flex justify-between items-center shrink-0 snap-start cursor-pointer`}
-                      onClick={() => {
-                        setActiveComp(item.name);
-                      }}
-                    >
-                      <div
-                        className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 ${
-                          item.name === activeComp && "text-primary"
-                        }`}
+                  if (
+                    (item.name === "Lading Page Editor" ||
+                      item.name === "Auth Images Editor") &&
+                    item?.link
+                  ) {
+                    return (
+                      <Link
+                        href={item.link}
+                        key={index}
+                        className={`w-fit lg:w-full flex justify-between items-center shrink-0 snap-start cursor-pointer`}
                       >
-                        <Icon size={16} className="hidden lg:block" />
-                        <div className="w-fit">{item.name}</div>
+                        <div
+                          className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 ${
+                            item.name === activeComp && "text-primary"
+                          }`}
+                        >
+                          <Icon size={14} className="hidden lg:block" />
+                          <div className="w-fit">{item.name}</div>
+                        </div>
+                        <ChevronRight
+                          size={20}
+                          className={`hidden lg:block ${
+                            item.name === activeComp && "text-primary"
+                          }`}
+                        />
+                      </Link>
+                    );
+                  } else {
+                    return (
+                      <div
+                        key={index}
+                        className={`w-fit lg:w-full flex justify-between items-center shrink-0 snap-start cursor-pointer`}
+                        onClick={() => {
+                          setActiveComp(item.name);
+                        }}
+                      >
+                        <div
+                          className={`w-fit text-sm lg:text-base font-medium flex justify-start items-center gap-2 ${
+                            item.name === activeComp && "text-primary"
+                          }`}
+                        >
+                          <Icon size={16} className="hidden lg:block" />
+                          <div className="w-fit">{item.name}</div>
+                        </div>
+                        <ChevronRight
+                          size={20}
+                          className={`hidden lg:block ${
+                            item.name === activeComp && "text-primary"
+                          }`}
+                        />
                       </div>
-                      <ChevronRight
-                        size={20}
-                        className={`hidden lg:block ${
-                          item.name === activeComp && "text-primary"
-                        }`}
-                      />
-                    </div>
-                  );
+                    );
+                  }
                 })}
                 <LogoutDialog
                   triggerComponent={

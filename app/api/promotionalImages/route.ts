@@ -37,11 +37,19 @@ export async function PUT(req: NextRequest) {
   if (body.section1SlidesData) updatePayload.section1SlidesData = body.section1SlidesData;
   if (body.section3MainImages) updatePayload.section3MainImages = body.section3MainImages;
   if (body.section3TabIcons) updatePayload.section3TabIcons = body.section3TabIcons;
+  if (body.section3Heading !== undefined) updatePayload.section3Heading = body.section3Heading;
+  if (body.section3Description !== undefined) updatePayload.section3Description = body.section3Description;
+  if (body.section3TabData) updatePayload.section3TabData = body.section3TabData;
   if (body.section4Background !== undefined) updatePayload.section4Background = body.section4Background;
   if (body.section4Thumbs) updatePayload.section4Thumbs = body.section4Thumbs;
+  if (body.section4Heading !== undefined) updatePayload.section4Heading = body.section4Heading;
+  if (body.section4Description !== undefined) updatePayload.section4Description = body.section4Description;
   if (body.section6Image !== undefined) updatePayload.section6Image = body.section6Image;
+  if (body.section6Heading !== undefined) updatePayload.section6Heading = body.section6Heading;
   if (body.section7Image !== undefined) updatePayload.section7Image = body.section7Image;
+  if (body.section7Text !== undefined) updatePayload.section7Text = body.section7Text;
   if (body.section8Background !== undefined) updatePayload.section8Background = body.section8Background;
+  if (body.section8Heading !== undefined) updatePayload.section8Heading = body.section8Heading;
   if (body.authImages) updatePayload.authImages = body.authImages;
 
   const updated = await AdminSettings.findOneAndUpdate(

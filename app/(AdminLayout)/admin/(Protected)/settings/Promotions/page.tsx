@@ -196,6 +196,14 @@ export function Promotions() {
 
   return (
     <div className="w-full h-[calc(100vh-300px)] flex justify-between overflow-y-auto items-end flex-col gap-6">
+      <div className="w-full flex justify-end gap-2">
+        <Button asChild variant={"outline"}>
+          <a href="/admin/settings/LandingEditor">Open Landing Editor</a>
+        </Button>
+        <Button asChild variant={"outline"}>
+          <a href="/admin/settings/AuthImages">Open Auth Images Editor</a>
+        </Button>
+      </div>
       <div className="w-full space-y-6">
         <div className="w-full">
           <h2 className="text-base font-semibold mb-3">
