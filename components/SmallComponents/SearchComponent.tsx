@@ -20,10 +20,12 @@ export const SearchComponent = ({
   return (
     <div
       className={`${width} ${
-        searchButton ? "h-[55px]" : "h-[44px]"
-      } relative border rounded-[10px] flex items-center justify-start ps-2 text-black/50`}
+        searchButton
+          ? "ps-3 rounded-xl h-[55px]"
+          : "ps-2 rounded-[10px] h-[44px]"
+      } relative border flex items-center justify-start text-black/50`}
     >
-      <Search className="size-4 md:size-5.5" />
+      <Search className="size-4 md:size-5" />
       <Input
         value={searchQuery}
         onChange={(e) => {
@@ -38,7 +40,7 @@ export const SearchComponent = ({
         <Button
           variant={"main_green_button"}
           className={`absolute right-2 top-1/2 -translate-y-1/2 ${
-            searchButton && "w-[130px]"
+            searchButton && "w-fit md:w-[130px]"
           }`}
           onClick={onClickAction}
         >

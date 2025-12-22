@@ -128,19 +128,17 @@ export default function ExplorePage({
       showBackOption
     >
       <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
-        <div className="flex justify-center items-center w-full h-fit">
-          <div className="flex justify-center items-center w-fit relative h-fit">
-            <SearchComponent
-              placeholder="Search tours and activities"
-              searchQuery={tempSearchQuery}
-              onChangeFunc={setTempSearchQuery}
-              searchButton={true}
-              width={" w-full lg:w-[950px] "}
-              onClickAction={() => {
-                setSearchQuery(tempSearchQuery);
-              }}
-            />
-          </div>
+        <div className="flex justify-center items-center w-full h-fit pb-4 md:pb-2">
+          <SearchComponent
+            placeholder="Search tours and activities"
+            searchQuery={tempSearchQuery}
+            onChangeFunc={setTempSearchQuery}
+            searchButton={true}
+            width={" w-full lg:w-[950px] "}
+            onClickAction={() => {
+              setSearchQuery(tempSearchQuery);
+            }}
+          />
         </div>
         <div className="flex justify-start items-start w-full gap-1.5 h-fit flex-wrap md:flex-nowrap">
           <div
