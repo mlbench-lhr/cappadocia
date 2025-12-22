@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { useAppSelector } from "@/lib/store/hooks";
+import { Menu, X } from "lucide-react";
 
 export function Navigation() {
   const [pathname, setPathname] = useState("");
@@ -18,8 +19,8 @@ export function Navigation() {
         href="/"
         className={
           pathname === "home"
-            ? "font-[600] text-[16px]"
-            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
+            ? "font-[600] text-sm lg:text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-sm lg:text-[16px] font-[500]"
         }
         onClick={() => {
           setIsMobileMenuOpen(false);
@@ -32,8 +33,8 @@ export function Navigation() {
         href="/blogs"
         className={
           pathname.includes("blogs")
-            ? "font-[600] text-[16px]"
-            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
+            ? "font-[600] text-sm lg:text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-sm lg:text-[16px] font-[500]"
         }
         onClick={() => {
           setIsMobileMenuOpen(false);
@@ -46,8 +47,8 @@ export function Navigation() {
         href="/#About"
         className={
           pathname.includes("About")
-            ? "font-[600] text-[16px]"
-            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
+            ? "font-[600] text-sm lg:text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-sm lg:text-[16px] font-[500]"
         }
         onClick={() => {
           setIsMobileMenuOpen(false);
@@ -60,8 +61,8 @@ export function Navigation() {
         href="/explore"
         className={
           pathname.includes("/ToursAndActivities")
-            ? "font-[600] text-[16px]"
-            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
+            ? "font-[600] text-sm lg:text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-sm lg:text-[16px] font-[500]"
         }
         onClick={() => {
           setIsMobileMenuOpen(false);
@@ -74,8 +75,8 @@ export function Navigation() {
         href="/#Contact"
         className={
           pathname.includes("Contact")
-            ? "font-[600] text-[16px]"
-            : "text-[rgba(0,0,0,0.60)] text-[16px] font-[500]"
+            ? "font-[600] text-sm lg:text-[16px]"
+            : "text-[rgba(0,0,0,0.60)] text-sm lg:text-[16px] font-[500]"
         }
         onClick={() => {
           setIsMobileMenuOpen(false);
@@ -96,14 +97,6 @@ export function Navigation() {
         {/* Logo */}
 
         <div className="flex items-center justify-start gap-0">
-          <div className="md:hidden flex items-center">
-            {/* <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="focus:outline-none cursor-pointer"
-            >
-              {<Menu size={28} />}
-            </button> */}
-          </div>
           <Link href="/" className="flex items-center">
             {/* <Image
               width={200}
@@ -118,7 +111,7 @@ export function Navigation() {
 
         {/* Desktop Nav */}
         <div className="flex justify-end items-center gap-0 md:gap-6 lg:gap-[100px]">
-          <div className="hidden md:flex gap-6 lg:gap-[48px] items-center">
+          <div className="hidden md:flex gap-4.5 lg:gap-[48px] items-center">
             {navLinks}
           </div>
 
@@ -139,6 +132,14 @@ export function Navigation() {
                 {user_id ? "Get Started" : "Login Now"}
               </Link>
             </Button>
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="focus:outline-none cursor-pointer"
+              >
+                {<Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
         {/* Hamburger (Mobile) */}
@@ -153,10 +154,16 @@ export function Navigation() {
 
       {/* Mobile Menu (Left Drawer) */}
       <div
-        className={`fixed top-0 left-0 h-full pt-[60px] w-[90%] bg-white shadow-lg border-r border-gray-200 transform transition-transform duration-300 ease-in-out z-[110] md:hidden
-  ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed top-0 right-0 h-full pt-[60px] w-[90%] bg-white shadow-lg border-r border-gray-200 transform transition-transform duration-300 ease-in-out z-[110] md:hidden
+  ${isMobileMenuOpen ? "translate-x-0" : "translate-x-full"}`}
       >
-        <div className="flex flex-col items-start px-6 space-y-6 py-6">
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="focus:outline-none cursor-pointer top-4 left-5 absolute"
+        >
+          {<X size={24} />}
+        </button>
+        <div className="flex flex-col items-start px-6 space-y-4 py-2">
           {navLinks}
         </div>
       </div>
