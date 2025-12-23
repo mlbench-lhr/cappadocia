@@ -20,9 +20,7 @@ export const SearchComponent = ({
   return (
     <div
       className={`${width} ${
-        searchButton
-          ? "ps-3 rounded-xl h-[55px]"
-          : "ps-2 rounded-[10px] h-[44px]"
+        searchButton ? "ps-3 rounded-md h-[55px]" : "ps-2 rounded-md h-[44px]"
       } relative border flex items-center justify-start text-black/50`}
     >
       <Search className="size-4 md:size-5" />
@@ -32,7 +30,7 @@ export const SearchComponent = ({
           onChangeFunc(e.target.value);
         }}
         className={`w-full ${
-          searchButton ? "h-[55px]" : "h-[44px]"
+          searchButton ? "h-[53px]" : "h-[44px]"
         } border-none absolute top-0 left-0 ps-8 md:ps-10`}
         placeholder={placeholder}
       />

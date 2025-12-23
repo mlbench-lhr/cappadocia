@@ -30,6 +30,19 @@ export async function POST(req: NextRequest) {
     }
 
     const dateObj = selectedDate ? new Date(selectedDate) : null;
+    if (dateObj && tour.stopBookingDates?.length > 0) {
+      const isDateStopped = tour.stopBookingDates.some(
+        (stoppedDate: Date) =>
+          new Date(stoppedDate).toDateString() === dateObj.toDateString()
+      );
+      if (isDateStopped) {
+        return NextResponse.json({
+          tourId,
+          matchingSlots: [],
+          message: "Booking is not available for the selected date.",
+        });
+      }
+    }
 
     const matchingSlots = tour.slots.filter((slot: any) => {
       let isValid = true;
