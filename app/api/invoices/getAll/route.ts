@@ -44,10 +44,11 @@ export async function GET(req: NextRequest) {
 
   const [items, total] = await Promise.all([
     Invoice.find(query)
-      .populate("booking")
-      .populate("activity")
-      .populate("vendor")
-      .populate("user")
+      .populate({
+        path: "booking",
+        select:
+          "bookingId paymentDetails.amount paymentDetails.currency paymentStatus",
+      })
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 }),

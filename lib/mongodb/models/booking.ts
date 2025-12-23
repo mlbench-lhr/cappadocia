@@ -32,6 +32,7 @@ const TravelerSchema = new Schema<Traveler>(
 // ----------- Main Schema -----------
 
 export interface Booking {
+  _id: string;
   bookingId: string;
   slotId: Types.ObjectId;
   activity: Types.ObjectId;

@@ -370,7 +370,7 @@ export default function BookingsPage() {
                           <IconAndTextTab2
                             icon={<LocationIcon />}
                             text={`Location: ${data.vendor.vendorDetails.address.address}`}
-                            textClasses=" text-[12px] font-medium leading-[10px] text-black/70"
+                            textClasses=" text-[12px] font-medium leading-normal text-black/70"
                           />
                           {data.pickupLocation && (
                             <AddressLocationSelector

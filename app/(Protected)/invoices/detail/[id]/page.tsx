@@ -17,32 +17,32 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 export type InvoiceData = {
   invoice: {
-    invoiceNumber: string;
-    invoiceDate: Date | null; // ISO date string (YYYY-MM-DD)
-    bookingId: string;
+    "invoice Number": string;
+    "invoice Date": Date | null; // ISO date string (YYYY-MM-DD)
+    "booking Id": string;
   };
   tourDetails: {
     title: string;
-    dateTime: string; // ISO date-time string
+    "date Time": string; // ISO date-time string
     participants: {
       adults: number;
       children: number;
     };
-    durationHours: number;
-    meetingPoint: string;
+    "duration Hours": number;
+    "meeting Point": string;
   };
   travelerInformation: {
-    fullName: string;
-    passportNumber: string;
+    "full Name": string;
+    "passport Number": string;
     nationality: string;
     contact: string;
     email: string;
   };
   paymentDetails: {
-    method: string;
-    transactionId: string;
+    method?: string;
+    "transaction Id": string;
     currency: string;
-    amountPaid: number;
+    "amount Paid": number;
     status: string;
   };
   priceBreakdown: {
@@ -67,7 +67,7 @@ export type InvoiceData = {
   };
   vendorInformation: {
     operator: string;
-    tursabNumber: string;
+    "tursab Number": string;
     contact: string;
     email: string;
   };
@@ -106,32 +106,32 @@ export default function BookingsPage() {
   const invoiceData: InvoiceData = useMemo(() => {
     return {
       invoice: {
-        invoiceNumber: data?.invoicesId || "",
-        invoiceDate: data?.createdAt || null,
-        bookingId: data?.booking.bookingId || "",
+        "invoice Number": data?.invoicesId || "",
+        "invoice Date": data?.createdAt || null,
+        "booking Id": data?.booking.bookingId || "",
       },
       tourDetails: {
         title: data?.activity.title || "",
-        dateTime: data?.booking.selectDate || "",
+        "date Time": data?.booking.selectDate || "",
         participants: {
           adults: data?.booking.adultsCount || 0,
           children: data?.booking.childrenCount || 0,
         },
-        durationHours: data?.activity.duration || 0,
-        meetingPoint: data?.booking.pickupLocation?.address || "",
+        "duration Hours": data?.activity.duration || 0,
+        "meeting Point": data?.booking.pickupLocation?.address || "",
       },
       travelerInformation: {
-        fullName: data?.booking.travelers[0].fullName || "",
-        passportNumber: data?.booking.travelers[0].passport || "",
+        "full Name": data?.booking.travelers[0].fullName || "",
+        "passport Number": data?.booking.travelers[0].passport || "",
         nationality: data?.booking.travelers[0].nationality || "",
         contact: data?.user?.phoneNumber || "",
         email: data?.user.email || "",
       },
       paymentDetails: {
-        method: "MasterCard **** 4421",
-        transactionId: data?.booking.paymentDetails.paymentIntentId || "",
+        // method: "MasterCard **** 4421",
+        "transaction Id": data?.booking.paymentDetails.paymentIntentId || "",
         currency: data?.booking.paymentDetails.currency || "",
-        amountPaid: data?.booking.paymentDetails.amount || 0,
+        "amount Paid": data?.booking.paymentDetails.amount || 0,
         status: data?.booking.paymentStatus || "",
       },
       priceBreakdown: {
@@ -158,7 +158,7 @@ export default function BookingsPage() {
       },
       vendorInformation: {
         operator: data?.vendor?.vendorDetails?.contactPersonName || "",
-        tursabNumber: data?.vendor?.vendorDetails?.tursabNumber || "",
+        "tursab Number": data?.vendor?.vendorDetails?.tursabNumber || "",
         contact: data?.vendor?.vendorDetails?.contactPhoneNumber || "",
         email: data?.vendor?.vendorDetails?.businessEmail || "",
       },
