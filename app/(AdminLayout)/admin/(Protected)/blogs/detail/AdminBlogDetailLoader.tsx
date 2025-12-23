@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const AdminBlogDetailSkeleton = () => {
   return (
@@ -12,7 +12,7 @@ const AdminBlogDetailSkeleton = () => {
           </div>
           <div className="h-9 w-48 bg-gray-200 rounded"></div>
         </div>
-        
+
         {/* Right side - Action buttons */}
         <div className="flex justify-end gap-[10px] items-center">
           <div className="h-10 w-24 bg-gray-200 rounded"></div>
@@ -24,18 +24,18 @@ const AdminBlogDetailSkeleton = () => {
       <div className="py-[24px] px-[16px] flex justify-start flex-col md:flex-row items-center gap-4 w-full bg-[#F0F1F3] rounded">
         {/* Image skeleton */}
         <div className="h-[200px] md:h-[150px] w-full md:w-[200px] bg-gray-200 rounded-2xl"></div>
-        
+
         {/* Title and metadata skeleton */}
         <div className="px-0 md:px-[16px] flex flex-col justify-start items-start w-full gap-3">
           {/* "Title" label */}
           <div className="h-8 w-20 bg-gray-200 rounded"></div>
-          
+
           {/* Actual title (2 lines) */}
           <div className="w-full space-y-2">
             <div className="h-7 bg-gray-200 rounded w-full"></div>
             <div className="h-7 bg-gray-200 rounded w-3/4"></div>
           </div>
-          
+
           {/* Published date */}
           <div className="h-6 w-56 bg-gray-200 rounded"></div>
         </div>

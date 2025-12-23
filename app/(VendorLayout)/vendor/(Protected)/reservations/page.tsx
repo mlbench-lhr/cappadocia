@@ -37,7 +37,7 @@ export type bookingProps = {
 
 // Loading skeleton component
 const BookingsLoadingSkeleton = () => (
-  <div className="w-full space-y-4 animate-pulse">
+  <div className="w-full space-y-2 animate-pulse">
     {[...Array(4)].map((_, i) => (
       <ReservationsListSkeleton />
     ))}
@@ -78,7 +78,7 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
-        <BoxProviderWithName noBorder={true}>
+        <BoxProviderWithName noBorder={true} className="p-0!">
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<BookingWithPopulatedData>
             apiEndpoint="/api/booking/getAll"

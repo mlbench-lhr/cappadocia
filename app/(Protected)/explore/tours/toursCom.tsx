@@ -35,7 +35,7 @@ export default function ExploreTours({
 
   return (
     <BoxProviderWithName
-      className="!py-0"
+      className="!py-0 !p-0"
       noBorder={true}
       name="Popular Tours"
       rightSideLink={type === "both" ? "/explore/tours" : undefined}

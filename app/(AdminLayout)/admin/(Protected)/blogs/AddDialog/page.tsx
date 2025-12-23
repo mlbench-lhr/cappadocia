@@ -125,7 +125,7 @@ const RichTextEditor = ({
         >
           <Italic size={18} />
         </button>
-        <div className="w-px bg-gray-300 mx-1" />
+        <div className="w-px bg-gray-200 mx-1" />
         <button
           type="button"
           onClick={() =>
@@ -150,7 +150,7 @@ const RichTextEditor = ({
         >
           <Heading2 size={18} />
         </button>
-        <div className="w-px bg-gray-300 mx-1" />
+        <div className="w-px bg-gray-200 mx-1" />
         <button
           type="button"
           onClick={addImage}
@@ -257,12 +257,15 @@ export default function AddDialog({
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
         {edit ? (
-          <Button className="flex text-white bg-[#38B89A] text-[20px] px-[20px]">
+          <Button className="flex text-white bg-[#38B89A] text-[20px] px-[20px] h-[50px]">
             <PencilLine size={26} />
             Edit
           </Button>
         ) : (
-          <Button variant={"main_green_button"} className="w-full md:w-fit">
+          <Button
+            variant={"main_green_button"}
+            className="w-full md:w-fit h-[50px]"
+          >
             Add Blog
           </Button>
         )}

@@ -40,6 +40,7 @@ export const SearchComponent = ({
           className={`absolute right-2 top-1/2 -translate-y-1/2 ${
             searchButton && "w-fit md:w-[130px]"
           }`}
+          disabled={!searchQuery?.trim()}
           onClick={onClickAction}
         >
           Search

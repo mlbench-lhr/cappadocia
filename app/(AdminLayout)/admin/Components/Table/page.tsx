@@ -118,9 +118,9 @@ export function DynamicTable({
     }
   };
 
-  if (isLoading) {
-    return <TableSkeleton columns={4} />;
-  }
+  // if (isLoading) {
+  //   return <TableSkeleton columns={4} />;
+  // }
   console.log("currentData---", currentData);
 
   if (currentData?.length < 1) {

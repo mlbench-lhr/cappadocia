@@ -34,7 +34,7 @@ export default function ExploreActivities({
 
   return (
     <BoxProviderWithName
-      className="!py-0"
+      className="!py-0 !p-0"
       noBorder={true}
       name="Popular Activities"
       rightSideLink={type === "both" ? "/explore/activity" : undefined}

@@ -117,7 +117,7 @@ export default function BookingsPage() {
       }
     >
       <div className="flex flex-col justify-start items-start w-full gap-0 md:gap-3 h-fit">
-        <BoxProviderWithName noBorder={true}>
+        <BoxProviderWithName noBorder={true} className="p-0!">
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<InvoicePopulated>
             apiEndpoint="/api/invoices/getAll" // Your API endpoint

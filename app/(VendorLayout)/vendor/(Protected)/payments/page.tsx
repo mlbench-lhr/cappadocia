@@ -22,7 +22,7 @@ import { createOnboardingLink } from "@/lib/utils/stripeConnnect";
 import { useRouter } from "next/navigation";
 
 const BookingsLoadingSkeleton = () => (
-  <div className="w-full space-y-4 animate-pulse">
+  <div className="w-full space-y-2 animate-pulse">
     {[...Array(7)].map((_, i) => (
       <div key={i} className="h-10 md:h-16 bg-gray-200 rounded-lg" />
     ))}
@@ -318,7 +318,11 @@ export default function PaymentsPage() {
             </div>
           </div>
         </BoxProviderWithName>
-        <BoxProviderWithName noBorder={true} name="Payout Details">
+        <BoxProviderWithName
+          noBorder={true}
+          name="Payout Details"
+          className="p-0!"
+        >
           {/* Server Pagination Provider wraps the table */}
           <ServerPaginationProvider<VendorInvoice>
             apiEndpoint="/api/payments/getVendorPayments" // Your API endpoint

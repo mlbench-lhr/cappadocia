@@ -12,7 +12,7 @@ export function TourAndActivityCardSkeleton() {
             <Skeleton className="w-6 h-6 rounded-full" />
           </div>
 
-          <div className="w-full h-[25px] flex justify-between items-center mb-2 px-1.5 bg-gray-300">
+          <div className="w-full h-[25px] flex justify-between items-center mb-2 px-1.5 bg-gray-200">
             <Skeleton className="w-12 h-3" />
             <Skeleton className="w-12 h-3" />
           </div>

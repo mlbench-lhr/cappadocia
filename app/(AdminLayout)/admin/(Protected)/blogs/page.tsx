@@ -94,9 +94,11 @@ export default function AllBlogs() {
   ];
 
   return (
-    <BasicStructureWithName name="Blogs" showBackOption>
-      <div className="w-full mx-auto">
-        <div className="w-full mb-4 flex justify-between items-center flex-wrap gap-y-2">
+    <BasicStructureWithName
+      name="Blogs"
+      showBackOption
+      rightSideComponent={
+        <div className="w-full mb-4 flex justify-end items-center flex-wrap gap-y-2">
           <div className="flex justify-start items-center md:gap-x-4 gap-y-2 flex-wrap w-fit">
             <div className="relative w-full md:w-[325px] h-[50px]">
               <Search className="absolute left-3 top-[17px] h-4 w-4 text-muted-foreground" />
@@ -110,6 +112,9 @@ export default function AllBlogs() {
             <AddDialog setRefreshData={setRefreshData} />
           </div>
         </div>
+      }
+    >
+      <div className="w-full mx-auto">
         <DynamicTable
           data={data.blogs}
           columns={columns}
