@@ -26,7 +26,7 @@ export function FileUpload({
   onFileRemove,
   multiple = false,
   accept = "image/*,.pdf",
-  maxSize = 10,
+  maxSize = 25,
   className,
   label = "Upload Files",
   description = "Drag and drop files here or click to browse",
@@ -141,7 +141,7 @@ export function FileUpload({
                 : "Click to upload or drag and drop"}
             </p>
             <p className="plan-text-style-3">
-              PDF, JPG or PNG ( Maximum size 25MB )
+              PDF, JPG or PNG ( Maximum size {maxSize}MB )
             </p>
           </div>
         </div>

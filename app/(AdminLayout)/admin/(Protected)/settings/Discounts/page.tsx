@@ -89,7 +89,7 @@ export function Discounts() {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) return;
+    if (file.size > 25 * 1024 * 1024) return;
     try {
       setIsUploading(true);
       const url = await uploadFile(file, "discountImages");

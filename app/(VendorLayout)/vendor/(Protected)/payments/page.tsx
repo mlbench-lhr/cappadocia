@@ -121,14 +121,17 @@ export default function PaymentsPage() {
           <div
             className="w-fit text-primary underline hover:no-underline text-xs font-normal cursor-pointer"
             onClick={() => {
+              const pct = Number(userData?.vendorDetails?.commission ?? 0);
+              const commissionAmount = percentage(pct, item.amount);
+              const vendorNet = item.amount - commissionAmount;
               addPayment({
                 booking: item.booking._id,
                 activity: item.activity._id,
                 vendor: userData?.id,
                 user: item.user,
                 total: item.amount,
-                vendorPayment: percentage(15, item.amount),
-                commission: 15,
+                vendorPayment: vendorNet,
+                commission: pct,
               });
             }}
           >

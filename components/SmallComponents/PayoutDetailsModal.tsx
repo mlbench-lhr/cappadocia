@@ -20,6 +20,7 @@ interface ReviewButtonProps {
         totalAmount: number;
         vendorPayable: number;
         commission: number;
+        currency: string;
       };
     };
   };
@@ -51,8 +52,8 @@ export const PayoutDetailsModal = ({
         body: JSON.stringify({
           payment_id: data._id,
           stripeAccountId,
-          amount: 10,
-          currency: "eur",
+          amount: Math.round(data.booking.paymentDetails.vendorPayable * 100),
+          currency: data.booking.paymentDetails.currency || "usd",
         }),
       });
 
@@ -88,19 +89,19 @@ export const PayoutDetailsModal = ({
               </h4>
             </div>
             <div className="flex flex-col gap-1 justify-start items-start w-1/2">
-              <h4 className="text-sm font-semibold text-black">Total Amount</h4>
-              <h4 className="text-sm font-medium text-black/70">
+          <h4 className="text-sm font-semibold text-black">Total Amount</h4>
+          <h4 className="text-sm font-medium text-black/70">
                 {data.booking.paymentDetails.totalAmount}
-              </h4>
-            </div>
-            <div className="flex flex-col gap-1 justify-start items-start w-1/2">
-              <h4 className="text-sm font-semibold text-black">
-                Vendor Net Payable
-              </h4>
-              <h4 className="text-sm font-medium text-black/70">
+          </h4>
+        </div>
+        <div className="flex flex-col gap-1 justify-start items-start w-1/2">
+          <h4 className="text-sm font-semibold text-black">
+            Vendor Net Payable
+          </h4>
+          <h4 className="text-sm font-medium text-black/70">
                 {data.booking.paymentDetails.vendorPayable.toFixed(2)}
-              </h4>
-            </div>
+          </h4>
+        </div>
             <div className="flex flex-col gap-1 justify-start items-start w-1/2">
               <h4 className="text-sm font-semibold text-black">
                 Commission (%)

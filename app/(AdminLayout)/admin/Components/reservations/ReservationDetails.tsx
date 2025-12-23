@@ -180,7 +180,13 @@ const ReservationDetails: React.FC = () => {
               />
               <IconAndTextTab
                 icon={<PricePerPerson color="rgba(0, 0, 0, 0.5)" />}
-                text={`Price per Person: ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
+                text={`Price per Person: ${
+                  data.paymentDetails.currency
+                } ${
+                  data.activity.slots?.[0]?.adultPrice
+                }/Adult,  ${data.paymentDetails.currency} ${
+                  data.activity.slots?.[0]?.childPrice
+                }/Child`}
               />
               <IconAndTextTab
                 icon={<TotalPrice color="rgba(0, 0, 0, 0.5)" />}

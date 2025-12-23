@@ -29,6 +29,7 @@ export const ProfileBadge = ({
   icon,
   extraComponent,
   isTitleLink = false,
+  fullWidth = false,
 }: {
   image?: string;
   title: string;
@@ -37,11 +38,12 @@ export const ProfileBadge = ({
   size?: "small" | "medium" | "large" | "custom";
   extraComponent?: React.ReactNode | React.ComponentType<any>;
   isTitleLink?: boolean;
+  fullWidth?: boolean;
 }) => {
   const ExtraComponent = extraComponent;
   return (
     <div
-      className={`flex justify-start items-center ${
+      className={`${fullWidth && "w-full"} flex justify-start items-center ${
         size === "custom" ? "gap-3.5" : "gap-1.5"
       }`}
     >
@@ -55,7 +57,11 @@ export const ProfileBadge = ({
         />
       )}
       {icon && icon}
-      <div className={`flex flex-col justify-start leading-tight items-start`}>
+      <div
+        className={`${
+          fullWidth && "w-[calc(100%-32px)]"
+        } flex flex-col justify-start leading-tight items-start`}
+      >
         <h4
           className={`${headingTextSize[size]} ${
             isTitleLink && "hover:underline"

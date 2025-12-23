@@ -166,7 +166,7 @@ export function Promotions() {
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) return;
+    if (file.size > 25 * 1024 * 1024) return;
     try {
       setIsUploading(`${key}-${index ?? 0}`);
       const url = await uploadFile(file, "promotionalImages");

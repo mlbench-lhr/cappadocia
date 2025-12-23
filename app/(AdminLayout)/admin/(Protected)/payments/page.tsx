@@ -112,6 +112,10 @@ export default function BookingsPage() {
       render: (item: ReviewWithPopulatedData) => {
         console.log("item------", item);
 
+        const pct = Number(item?.vendor?.vendorDetails?.commission ?? 0);
+        const totalAmount = Number(item?.booking?.paymentDetails?.amount ?? 0);
+        const commissionAmount = percentage(pct, totalAmount);
+        const vendorNet = totalAmount - commissionAmount;
         return (
           <PayoutDetailsModal
             stripeAccountId={item?.vendor?.vendorDetails?.stripeAccountId}
@@ -122,12 +126,10 @@ export default function BookingsPage() {
               },
               booking: {
                 paymentDetails: {
-                  totalAmount: item?.booking?.paymentDetails?.amount,
-                  vendorPayable: percentage(
-                    85,
-                    item?.booking?.paymentDetails?.amount
-                  ),
-                  commission: 15,
+                  totalAmount: totalAmount,
+                  vendorPayable: vendorNet,
+                  commission: pct,
+                  currency: item?.booking?.paymentDetails?.currency || "usd",
                 },
               },
             }}

@@ -91,7 +91,7 @@ export default function BookingsPage() {
                           Duration: {getPartOfDay(data.selectDate)} ({data.activity.duration} hours)
                         </h3>
                         <h4 className="text-sm font-normal">
-                          {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Child`}
+                          {`From : ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.adultPrice}/Adult,  ${data.paymentDetails.currency} ${data.activity.slots?.[0]?.childPrice}/Child`}
                         </h4>
                       </div>
                     </div>
@@ -179,11 +179,16 @@ export default function BookingsPage() {
                   </div>
                   <div className="w-full flex justify-between items-center">
                     <span className="text-sm md:text-base font-medium">
-                      Commission (Platform 15%):
+                      {`Commission (Platform ${
+                        Number(data.vendor.vendorDetails?.commission ?? 0)
+                      }%)`}
                     </span>
                     <span className="text-sm md:text-base font-medium">
                       {data.paymentDetails.currency}
-                      {percentage(15, data.paymentDetails.amount)}
+                      {percentage(
+                        Number(data.vendor.vendorDetails?.commission ?? 0),
+                        data.paymentDetails.amount
+                      )}
                     </span>
                   </div>
                   <div className="w-full flex justify-between items-center">

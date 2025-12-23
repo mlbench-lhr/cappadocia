@@ -211,8 +211,8 @@ export default function BookingsPage() {
     }
 
     for (const file of Array.from(files)) {
-      if (file.size > 5 * 1024 * 1024) {
-        setUploadError("Image size should be less than 5MB.");
+      if (file.size > 25 * 1024 * 1024) {
+        setUploadError("Image size should be less than 25MB.");
         return;
       }
     }

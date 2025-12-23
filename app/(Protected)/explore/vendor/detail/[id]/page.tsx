@@ -176,10 +176,13 @@ export default function VendorDetailPage() {
                       icon={<MailIcon color="rgba(0, 0, 0, 0.5)" />}
                     />
                     <ProfileBadge
+                      fullWidth={true}
                       size="custom"
                       title="Location"
                       subTitle={data.vendorDetails.address.address}
-                      icon={<LocationIcon color="rgba(0, 0, 0, 0.5)" />}
+                      icon={
+                        <LocationIcon size={"18"} color="rgba(0, 0, 0, 0.5)" />
+                      }
                     />
                     <AddressLocationSelector
                       value={data.vendorDetails.address}

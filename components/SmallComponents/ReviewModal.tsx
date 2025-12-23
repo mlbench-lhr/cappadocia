@@ -107,9 +107,9 @@ export const ReviewModal = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file size (5MB limit for avatars)
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Image size should be less than 5MB.");
+    // Validate file size (25MB limit)
+    if (file.size > 25 * 1024 * 1024) {
+      alert("Image size should be less than 25MB.");
       return;
     }
 
