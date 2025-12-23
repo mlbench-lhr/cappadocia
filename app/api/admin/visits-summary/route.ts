@@ -17,7 +17,14 @@ export async function GET() {
   const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
   const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
   try {
-    // ----------- APP & BLOG PAGE STATS -----------
+    const allTimeVisits = await Visits.aggregate([
+      {
+        $group: {
+          _id: "$path",
+          total: { $sum: "$count" },
+        },
+      },
+    ]);
     const current = await Visits.aggregate([
       {
         $match: {
@@ -54,6 +61,7 @@ export async function GET() {
     const paths = ["app", "blog"];
 
     paths.forEach((p) => {
+      const allTimeTotal = allTimeVisits.find((c) => c._id === p)?.total || 0;
       const currentTotal = current.find((c) => c._id === p)?.total || 0;
       const lastTotal = last.find((c) => c._id === p)?.total || 0;
 
@@ -61,13 +69,14 @@ export async function GET() {
         lastTotal === 0 ? 100 : ((currentTotal - lastTotal) / lastTotal) * 100;
 
       summary[p] = {
-        total: currentTotal,
+        total: allTimeTotal,
         percentageChange: Math.abs(Number(change.toFixed(2))),
         incremented: currentTotal >= lastTotal,
       };
     });
 
     // ----------- BLOG COLLECTION STATS (CMS POSTS) -----------
+    const allTimeBlogs = await Blog.countDocuments();
     const currentMonthBlogs = await Blog.aggregate([
       {
         $match: {
@@ -96,11 +105,12 @@ export async function GET() {
         : ((currentBlogsCount - lastBlogsCount) / lastBlogsCount) * 100;
 
     summary["blogs"] = {
-      total: currentBlogsCount,
+      total: allTimeBlogs,
       percentageChange: Math.abs(Number(blogsChange.toFixed(2))),
       incremented: currentBlogsCount >= lastBlogsCount,
     };
     // ----------- USERS STATS -----------
+    const allTimeUsers = await User.countDocuments();
     const currentMonthUsers = await User.countDocuments({
       createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
     });
@@ -115,11 +125,14 @@ export async function GET() {
         : ((currentMonthUsers - lastMonthUsers) / lastMonthUsers) * 100;
 
     summary["users"] = {
-      total: currentMonthUsers,
+      total: allTimeUsers,
       percentageChange: Math.abs(Number(usersChange.toFixed(2))),
       incremented: currentMonthUsers >= lastMonthUsers,
     };
     // ----------- VENDORS STATS -----------
+    const allTimeVendors = await User.countDocuments({
+      role: "vendor",
+    });
     const currentMonthVendors = await User.countDocuments({
       role: "vendor",
       createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
@@ -136,12 +149,13 @@ export async function GET() {
         : ((currentMonthVendors - lastMonthVendors) / lastMonthVendors) * 100;
 
     summary["vendors"] = {
-      total: currentMonthVendors,
+      total: allTimeVendors,
       percentageChange: Math.abs(Number(vendorsChange.toFixed(2))),
       incremented: currentMonthVendors >= lastMonthVendors,
     };
 
     // ----------- BOOKINGS STATS -----------
+    const allTimeBookings = await Booking.countDocuments();
     const currentMonthBookings = await Booking.countDocuments({
       createdAt: { $gte: startOfCurrentMonth, $lt: startOfNextMonth },
     });
@@ -157,8 +171,9 @@ export async function GET() {
           100;
 
     summary["bookings"] = {
-      total: currentMonthBookings,
-      percentageChange: Math.abs(Number(bookingsChange.toFixed(2))),
+      total: allTimeBookings,
+      percentageChange:
+        allTimeBookings > 0 ? Math.abs(Number(bookingsChange.toFixed(2))) : 0,
       incremented: currentMonthBookings >= lastMonthBookings,
     };
 

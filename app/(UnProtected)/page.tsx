@@ -1,4 +1,3 @@
-"use client";
 import Section1 from "./LandingPageSections/Section1";
 import Section2 from "./LandingPageSections/Section2";
 import Section3 from "./LandingPageSections/Section3";

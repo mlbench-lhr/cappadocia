@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { uploadFile } from "@/lib/utils/upload";
 import Swal from "sweetalert2";
+import useTrackVisit from "@/hooks/useTrackVisit";
 
 export default function Section1(props?: { editorMode?: boolean }) {
   const editorMode = props?.editorMode || false;
@@ -35,6 +36,7 @@ export default function Section1(props?: { editorMode?: boolean }) {
   const activityFilterDate = useAppSelector(
     (s) => s.general.activityFilterDate
   );
+  useTrackVisit("app", null);
   const dispatch = useAppDispatch();
   const handleSearch = async () => {
     try {
