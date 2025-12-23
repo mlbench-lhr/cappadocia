@@ -10,6 +10,7 @@ import { StatusBadge } from "@/components/SmallComponents/StatusBadge";
 import { BookingWithPopulatedData } from "@/lib/types/booking";
 import { HorizontalTourCardSkeleton } from "@/components/Skeletons/HorizontalTourCardSkeleton";
 import { getParticipantsText } from "@/lib/helper/textsFormat";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 
 export const UpcomingReservations = () => {
   const [toursAndActivity, setToursAndActivity] =
@@ -37,62 +38,64 @@ export const UpcomingReservations = () => {
   return (
     <BoxProviderWithName name="Upcoming Reservations">
       <div className="w-full space-y-3">
-        {loading
-          ? [...Array(2)].map((item, index) => (
-              <HorizontalTourCardSkeleton key={index} />
-            ))
-          : toursAndActivity?.map((item, index) => (
-              <BoxProviderWithName
-                key={index}
-                noBorder={true}
-                className="!border !px-3.5"
-              >
-                <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
-                  <Image
-                    alt=""
-                    src={item.activity.uploads?.[0]}
-                    width={120}
-                    height={120}
-                    className="w-full md:w-[120px] h-[120px] object-cover object-center rounded-xl"
-                  />
-                  <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
-                    <h1 className="text-base font-semibold text-black leading-tight line-clamp-1">
-                      {item.activity.title}
-                    </h1>
-                    <div className="flex justify-start items-center gap-1">
-                      <ClockIcon color="rgba(0, 0, 0, 0.5)" />
-                      <span className="">
-                        {moment(item.selectDate).format(
-                          "MMM DD, YYYY | hh:mm A"
-                        )}
-                      </span>
-                    </div>
-                    <div className="flex justify-start items-center gap-1">
-                      <PeopleIcon color="rgba(0, 0, 0, 0.5)" />
-                      <span className="">
-                        {getParticipantsText({
-                          adultCount: item.adultsCount || 0,
-                          childrenCount: item.childrenCount || 0,
-                        })}
-                      </span>
-                    </div>
-                    <div className="flex justify-start items-center gap-1">
-                      <BookingIcon color="rgba(0, 0, 0, 0.5)" size="15" />
-                      <span className="">Booking ID: #{item.bookingId} </span>
-                    </div>
-                    <div className="w-full flex justify-between items-center mt-2">
-                      <StatusBadge status={item.paymentStatus} />
-                      <Link
-                        href={`/bookings/detail/${item._id}`}
-                        className="text-primary underline hover:no-underline text-xs font-normal"
-                      >
-                        View Details
-                      </Link>
-                    </div>
+        {loading ? (
+          [...Array(2)].map((item, index) => (
+            <HorizontalTourCardSkeleton key={index} />
+          ))
+        ) : toursAndActivity && toursAndActivity?.length < 1 ? (
+          <NoDataComponent text="No Upcoming Reservations Yet" />
+        ) : (
+          toursAndActivity?.map((item, index) => (
+            <BoxProviderWithName
+              key={index}
+              noBorder={true}
+              className="!border !px-3.5"
+            >
+              <div className="flex justify-start items-center gap-2 flex-col md:flex-row">
+                <Image
+                  alt=""
+                  src={item.activity.uploads?.[0]}
+                  width={120}
+                  height={120}
+                  className="w-full md:w-[120px] h-[120px] object-cover object-center rounded-xl"
+                />
+                <div className="space-y-1 w-full md:w-[calc(100%-128px)] text-[rgba(34,30,31,0.50)] text-xs font-normal leading-0">
+                  <h1 className="text-base font-semibold text-black leading-tight line-clamp-1">
+                    {item.activity.title}
+                  </h1>
+                  <div className="flex justify-start items-center gap-1">
+                    <ClockIcon color="rgba(0, 0, 0, 0.5)" />
+                    <span className="">
+                      {moment(item.selectDate).format("MMM DD, YYYY | hh:mm A")}
+                    </span>
+                  </div>
+                  <div className="flex justify-start items-center gap-1">
+                    <PeopleIcon color="rgba(0, 0, 0, 0.5)" />
+                    <span className="">
+                      {getParticipantsText({
+                        adultCount: item.adultsCount || 0,
+                        childrenCount: item.childrenCount || 0,
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex justify-start items-center gap-1">
+                    <BookingIcon color="rgba(0, 0, 0, 0.5)" size="15" />
+                    <span className="">Booking ID: #{item.bookingId} </span>
+                  </div>
+                  <div className="w-full flex justify-between items-center mt-2">
+                    <StatusBadge status={item.paymentStatus} />
+                    <Link
+                      href={`/bookings/detail/${item._id}`}
+                      className="text-primary underline hover:no-underline text-xs font-normal"
+                    >
+                      View Details
+                    </Link>
                   </div>
                 </div>
-              </BoxProviderWithName>
-            ))}
+              </div>
+            </BoxProviderWithName>
+          ))
+        )}
       </div>
     </BoxProviderWithName>
   );
