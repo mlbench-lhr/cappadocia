@@ -1183,6 +1183,9 @@ button {
   font-weight: 600;
   line-height: 100%; /* 26px */
 }
+.zoom-out-class {
+  zoom: 0.75;
+}
 
 @media (max-width: 768px) {
   .title-heading {

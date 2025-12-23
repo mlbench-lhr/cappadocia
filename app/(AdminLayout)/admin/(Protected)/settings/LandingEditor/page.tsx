@@ -13,33 +13,35 @@ import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName"
 
 export default function LandingEditor() {
   return (
-    <BasicStructureWithName
-      name="Landing Page Editor"
-      subHeading="Click the edit icons on images and texts"
-      showBackOption
-    >
-      <BoxProviderWithName noBorder={true} className="!p-0">
-        <div className="w-full h-fit">
+    <div className="zoom-out-class">
+      <BasicStructureWithName
+        name="Landing Page Editor"
+        subHeading="Click the edit icons on images and texts"
+        showBackOption
+      >
+        <BoxProviderWithName noBorder={true} className="!p-0">
           <div className="w-full h-fit">
-            {/* Hero */}
-            <Section1 editorMode={true} />
-            {/* Explore lists */}
-            <Section2 />
-            {/* Why choose */}
-            <Section3 editorMode={true} />
-            {/* Gallery */}
-            <Section4 editorMode={true} />
-            {/* Vendor CTA */}
-            <Section5 />
-            {/* Contact */}
-            <Section6 editorMode={true} />
-            {/* Testimonials */}
-            <Section8 editorMode={true} />
-            {/* About */}
-            <Section7 editorMode={true} />
+            <div className="w-full h-fit">
+              {/* Hero */}
+              <Section1 editorMode={true} />
+              {/* Explore lists */}
+              <Section2 />
+              {/* Why choose */}
+              <Section3 editorMode={true} />
+              {/* Gallery */}
+              <Section4 editorMode={true} />
+              {/* Vendor CTA */}
+              <Section5 />
+              {/* Contact */}
+              <Section6 editorMode={true} />
+              {/* Testimonials */}
+              <Section8 editorMode={true} />
+              {/* About */}
+              <Section7 editorMode={true} />
+            </div>
           </div>
-        </div>
-      </BoxProviderWithName>
-    </BasicStructureWithName>
+        </BoxProviderWithName>
+      </BasicStructureWithName>
+    </div>
   );
 }
