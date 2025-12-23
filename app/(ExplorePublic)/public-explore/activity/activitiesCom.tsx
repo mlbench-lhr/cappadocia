@@ -48,7 +48,7 @@ export default function ExploreActivities({
         }}
         LoadingComponent={TourAndActivityCardSkeleton}
         NoDataComponent={NoBookingsFound}
-        itemsPerPage={type === "both" ? 4 : 7}
+        itemsPerPage={type === "both" ? 8 : 8}
         fixedLimit={type === "both" ? true : false}
       >
         {(data, isLoading, refetch) => (
