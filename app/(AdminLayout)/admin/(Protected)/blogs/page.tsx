@@ -11,22 +11,12 @@ import moment from "moment";
 import Link from "next/link";
 import AddDialog from "./AddDialog/page";
 import { BasicStructureWithName } from "@/components/providers/BasicStructureWithName";
+import { ServerPaginationProvider } from "@/components/providers/PaginationProvider";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
+import { BoxProviderWithName } from "@/components/providers/BoxProviderWithName";
 
 export default function AllBlogs() {
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<{
-    blogs: any[];
-    total: number;
-    page: number;
-    limit: number;
-    totalPages: number;
-  }>({
-    blogs: [],
-    total: 0,
-    page: 1,
-    limit: 9,
-    totalPages: 0,
-  });
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [refreshData, setRefreshData] = useState(1);
@@ -41,27 +31,6 @@ export default function AllBlogs() {
 
     return () => clearTimeout(timer);
   }, [searchTerm]);
-
-  useEffect(() => {
-    async function getblogs() {
-      try {
-        setLoading(true);
-        const params = new URLSearchParams({
-          page: currentPage.toString(),
-          limit: "10",
-          ...(debouncedSearch && { search: debouncedSearch }),
-        });
-
-        let allblogs = await axios.get(`/api/admin/blogs?${params.toString()}`);
-        setData(allblogs.data);
-        setLoading(false);
-      } catch (error) {
-        console.log("error----", error);
-        setLoading(false);
-      }
-    }
-    getblogs();
-  }, [currentPage, refreshData, debouncedSearch]);
 
   const columns: Column[] = [
     {
@@ -93,6 +62,14 @@ export default function AllBlogs() {
     },
   ];
 
+  const BookingsLoadingSkeleton = () => (
+    <div className="w-full space-y-2 animate-pulse">
+      {[...Array(7)].map((_, i) => (
+        <div key={i} className="h-10 md:h-16 bg-gray-200 rounded-lg" />
+      ))}
+    </div>
+  );
+  const NoBookingsFound = () => <NoDataComponent text="No Blogs Added Yet" />;
   return (
     <BasicStructureWithName
       name="Blogs"
@@ -114,23 +91,39 @@ export default function AllBlogs() {
         </div>
       }
     >
-      <div className="w-full mx-auto">
-        <DynamicTable
-          data={data.blogs}
-          columns={columns}
-          itemsPerPage={7}
-          onRowClick={(item) => console.log("Clicked:", item)}
-          isLoading={loading}
-          showImage
-          // Server-side pagination props
-          serverPagination={{
-            currentPage: currentPage,
-            totalPages: data.totalPages,
-            onPageChange: setCurrentPage,
-          }}
-          type="Blogs"
-        />
-      </div>
+      <ServerPaginationProvider<{
+        data: any[];
+        pagination: {
+          total: number;
+          page: number;
+          totalPages: number;
+        };
+      }>
+        apiEndpoint="/api/admin/blogs" // Your API endpoint
+        queryParams={{
+          search: searchTerm,
+        }}
+        LoadingComponent={BookingsLoadingSkeleton}
+        NoDataComponent={NoBookingsFound}
+        itemsPerPage={7}
+        refreshData={refreshData}
+      >
+        {(data, isLoading, refetch) => {
+          return (
+            <BoxProviderWithName name="">
+              <DynamicTable
+                data={data}
+                columns={columns}
+                itemsPerPage={7}
+                onRowClick={(item) => console.log("Clicked:", item)}
+                isLoading={loading}
+                showImage
+                type="Blogs"
+              />
+            </BoxProviderWithName>
+          );
+        }}
+      </ServerPaginationProvider>
     </BasicStructureWithName>
   );
 }

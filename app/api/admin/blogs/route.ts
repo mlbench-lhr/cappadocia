@@ -29,11 +29,13 @@ export async function GET(req: Request) {
       srNo: skip + index + 1,
     }));
     return NextResponse.json({
-      blogs: blogsWithSrNo,
-      total: totalBlogs,
-      page: page,
-      limit: limit,
-      totalPages: Math.ceil(totalBlogs / limit),
+      data: blogsWithSrNo,
+      pagination: {
+        total: totalBlogs,
+        page: page,
+        limit: limit,
+        totalPages: Math.ceil(totalBlogs / limit),
+      },
     });
   } catch (error) {
     console.error("Admin blogs API error:", error);

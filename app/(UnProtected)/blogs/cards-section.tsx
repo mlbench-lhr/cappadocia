@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BlogCardsGridSkeleton } from "./BlogCardsLoader";
 import Image from "next/image";
+import { NoDataComponent } from "@/components/SmallComponents/NoDataComponent";
 
 export function CardSection() {
   const [loading, setLoading] = useState(true);
@@ -17,12 +18,12 @@ export function CardSection() {
 
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [data, setData] = useState<{
-    blogs: any[];
+    data: any[];
     total: number;
     page: number;
     totalPages: number;
   }>({
-    blogs: [],
+    data: [],
     total: 0,
     page: 1,
     totalPages: 0,
@@ -81,20 +82,12 @@ export function CardSection() {
           <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {loading ? (
               <BlogCardsGridSkeleton />
-            ) : data?.blogs?.length < 1 ? (
+            ) : data?.data?.length < 1 ? (
               <div className="col-span-3 mx-auto flex flex-col justify-center items-center gap-4">
-                <Image
-                  src={"/blogs imgs/blogPlaceholder.png"}
-                  alt=""
-                  width={317}
-                  height={257}
-                />
-                <span className="text-sm md:text-[24px] text-[#7B849A]">
-                  No blogs added yet
-                </span>
+                <NoDataComponent text="No Blogs Added Yet" />
               </div>
             ) : (
-              data?.blogs.map((testimonial, index) => (
+              data?.data?.map((testimonial, index) => (
                 <TestimonialCard
                   key={index}
                   img={testimonial.coverImage}

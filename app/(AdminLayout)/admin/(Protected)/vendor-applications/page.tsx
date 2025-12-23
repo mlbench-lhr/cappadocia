@@ -121,7 +121,7 @@ export default function BookingsPage() {
                 onClick={() => setFilters([filter])}
                 className={`cursor-pointer ${
                   isActive ? "bg-secondary text-primary" : "border"
-                } px-2 md:px-4 py-1 md:py-3 leading-tight rounded-[14px] text-xs md:text-[12px] font-medium transition`}
+                } px-2 md:px-4 py-1 md:py-3 leading-tight rounded-[14px] text-xs md:text-[12px] font-medium transition capitalize`}
               >
                 {filter}
               </div>
